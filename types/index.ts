@@ -4,8 +4,11 @@ export interface AppCard {
   id: string;
   title: string;
   author: string;
-  model: ModelName;
-  thumbnail: string;
+  modelA: ModelName;
+  modelB: ModelName;
+  thumbnailA: string;
+  thumbnailB: string;
+  category: string;
   likes: number;
 }
 

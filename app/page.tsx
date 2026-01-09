@@ -14,48 +14,66 @@ const mockApps: AppCardType[] = [
     id: '1',
     title: 'Gravity Data Sim',
     author: 'phys_wiz',
-    model: 'Claude 3.5',
-    thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7alA6GSnzYKzv_iaaBMefKcuGt-BkmdeBPvOY92u9GY-TmgSU5wEb_P42t8BvLMnNxVJx-okzDsQsMjXxc09WcJ8ejLlUQOk2yNkF8h4v6fnhSpIssjEf4WtTUFM2MpEhSgXUfpiwH9Fjjqg-jb6K0ssOJ7vwYjJne-U--Sz3Vbd6rKGoz5gEpbsr1-AbjiQ-TsguOACGmJ1s4ZWzTyj4ADWizlpFjLRqpsX6jPszN2reOc53QZUGnC9MzuCQrr3ptjpMn8epE_Q',
+    modelA: 'Claude 3.5',
+    modelB: 'GPT-4o',
+    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7alA6GSnzYKzv_iaaBMefKcuGt-BkmdeBPvOY92u9GY-TmgSU5wEb_P42t8BvLMnNxVJx-okzDsQsMjXxc09WcJ8ejLlUQOk2yNkF8h4v6fnhSpIssjEf4WtTUFM2MpEhSgXUfpiwH9Fjjqg-jb6K0ssOJ7vwYjJne-U--Sz3Vbd6rKGoz5gEpbsr1-AbjiQ-TsguOACGmJ1s4ZWzTyj4ADWizlpFjLRqpsX6jPszN2reOc53QZUGnC9MzuCQrr3ptjpMn8epE_Q',
+    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7alA6GSnzYKzv_iaaBMefKcuGt-BkmdeBPvOY92u9GY-TmgSU5wEb_P42t8BvLMnNxVJx-okzDsQsMjXxc09WcJ8ejLlUQOk2yNkF8h4v6fnhSpIssjEf4WtTUFM2MpEhSgXUfpiwH9Fjjqg-jb6K0ssOJ7vwYjJne-U--Sz3Vbd6rKGoz5gEpbsr1-AbjiQ-TsguOACGmJ1s4ZWzTyj4ADWizlpFjLRqpsX6jPszN2reOc53QZUGnC9MzuCQrr3ptjpMn8epE_Q',
+    category: 'Website',
     likes: 1200,
   },
   {
     id: '2',
     title: 'Snake 3D Remake',
     author: 'retro_dev',
-    model: 'GPT-4o',
-    thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFRFUClCq6ybiXEKjq22HMXbWLz4q_L7gbZYs4SxYwIfzFWWZzJMvUD2YSPIWrNwmdCPqareipI9KHu79oNhUyKy3C5v6fVVToev9lceJHNFMTfwtkxmF3Jc-HIgBWfkwvdqJe9hz9D43JIAXX7XNdedPoseJ7andHLaf8IqFIJF1f0plJpbg5qwWJgcfToO-hRadiE7RzszYTN3O1-mHoUKPLyPesFlUWWYjT-RQdX9NvJ4FYQIcIdk1IXBd9Bp9Pf4S7Wk0hu_U',
+    modelA: 'GPT-4o',
+    modelB: 'Claude 3.5',
+    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFRFUClCq6ybiXEKjq22HMXbWLz4q_L7gbZYs4SxYwIfzFWWZzJMvUD2YSPIWrNwmdCPqareipI9KHu79oNhUyKy3C5v6fVVToev9lceJHNFMTfwtkxmF3Jc-HIgBWfkwvdqJe9hz9D43JIAXX7XNdedPoseJ7andHLaf8IqFIJF1f0plJpbg5qwWJgcfToO-hRadiE7RzszYTN3O1-mHoUKPLyPesFlUWWYjT-RQdX9NvJ4FYQIcIdk1IXBd9Bp9Pf4S7Wk0hu_U',
+    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFRFUClCq6ybiXEKjq22HMXbWLz4q_L7gbZYs4SxYwIfzFWWZzJMvUD2YSPIWrNwmdCPqareipI9KHu79oNhUyKy3C5v6fVVToev9lceJHNFMTfwtkxmF3Jc-HIgBWfkwvdqJe9hz9D43JIAXX7XNdedPoseJ7andHLaf8IqFIJF1f0plJpbg5qwWJgcfToO-hRadiE7RzszYTN3O1-mHoUKPLyPesFlUWWYjT-RQdX9NvJ4FYQIcIdk1IXBd9Bp9Pf4S7Wk0hu_U',
+    category: 'Game',
     likes: 850,
   },
   {
     id: '3',
     title: 'Particle Controller',
     author: 'threejs_god',
-    model: 'Claude 3.5',
-    thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnVMAVAfPY-z3xydBc4GuaP646hDi3d0JTEOxFh4-ZISxgrX6llG36-AbgsYvMAcVmhbmGPu9Ib2YmWNrnhIjyHaE47I6trYyJ1xk44D_rNQbSMISFwY7PQIixZpaQm3yCOVoTSrMpGz9fNxWFgG4CRvdywfL0CHUqGjSlYhgI4Z5Ptir0riDNgj7NA6ATgdvUqn-PeOsK6K17fbusw3Duq7cNHdEnVM6Ygca472YCz2ilhlw66GskDBlY-KGIDmBZTeZea-tQwdE',
+    modelA: 'Claude 3.5',
+    modelB: 'Llama 3',
+    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnVMAVAfPY-z3xydBc4GuaP646hDi3d0JTEOxFh4-ZISxgrX6llG36-AbgsYvMAcVmhbmGPu9Ib2YmWNrnhIjyHaE47I6trYyJ1xk44D_rNQbSMISFwY7PQIixZpaQm3yCOVoTSrMpGz9fNxWFgG4CRvdywfL0CHUqGjSlYhgI4Z5Ptir0riDNgj7NA6ATgdvUqn-PeOsK6K17fbusw3Duq7cNHdEnVM6Ygca472YCz2ilhlw66GskDBlY-KGIDmBZTeZea-tQwdE',
+    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnVMAVAfPY-z3xydBc4GuaP646hDi3d0JTEOxFh4-ZISxgrX6llG36-AbgsYvMAcVmhbmGPu9Ib2YmWNrnhIjyHaE47I6trYyJ1xk44D_rNQbSMISFwY7PQIixZpaQm3yCOVoTSrMpGz9fNxWFgG4CRvdywfL0CHUqGjSlYhgI4Z5Ptir0riDNgj7NA6ATgdvUqn-PeOsK6K17fbusw3Duq7cNHdEnVM6Ygca472YCz2ilhlw66GskDBlY-KGIDmBZTeZea-tQwdE',
+    category: '3D Scene',
     likes: 2100,
   },
   {
     id: '4',
     title: 'Cloth Physics Demo',
     author: 'sim_master',
-    model: 'Llama 3',
-    thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAg6VNqDZan7bxkNmvSno_pJ8p0TnF1grXxABXL15oRk9NOwgMdo8XfzjhW0r_m8DnbE35YCB-BD9NJz6fCInZO_OxnHjuzQOOSy9OlPA_ntO-sybaPiBoN4--WOGOsHdFxLkgqENco3GUHeJ9UzDbZqbggbEXfPGlWCjGgoK8C7ScTWMrLg6s3hv6DWlQm_trv-P87NW5EufWTgfxUq42ZETz2C9OSR_edIX9uS3f6zoF8fTI_w-_X5q7yIQBDYQOAEiTdQBGRV-Y',
+    modelA: 'Llama 3',
+    modelB: 'GPT-4o',
+    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAg6VNqDZan7bxkNmvSno_pJ8p0TnF1grXxABXL15oRk9NOwgMdo8XfzjhW0r_m8DnbE35YCB-BD9NJz6fCInZO_OxnHjuzQOOSy9OlPA_ntO-sybaPiBoN4--WOGOsHdFxLkgqENco3GUHeJ9UzDbZqbggbEXfPGlWCjGgoK8C7ScTWMrLg6s3hv6DWlQm_trv-P87NW5EufWTgfxUq42ZETz2C9OSR_edIX9uS3f6zoF8fTI_w-_X5q7yIQBDYQOAEiTdQBGRV-Y',
+    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAg6VNqDZan7bxkNmvSno_pJ8p0TnF1grXxABXL15oRk9NOwgMdo8XfzjhW0r_m8DnbE35YCB-BD9NJz6fCInZO_OxnHjuzQOOSy9OlPA_ntO-sybaPiBoN4--WOGOsHdFxLkgqENco3GUHeJ9UzDbZqbggbEXfPGlWCjGgoK8C7ScTWMrLg6s3hv6DWlQm_trv-P87NW5EufWTgfxUq42ZETz2C9OSR_edIX9uS3f6zoF8fTI_w-_X5q7yIQBDYQOAEiTdQBGRV-Y',
+    category: 'Physics',
     likes: 932,
   },
   {
     id: '5',
     title: 'Fluid Rain Sim',
     author: 'weather_ai',
-    model: 'GPT-4o',
-    thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDilnTv7FHR-fvz6wlAd_WKWQAS5SD4MRnAQc9LdcYWGZa58a1laOPLNAN1vk2hS5NUhh0I-gaps1OyZa8PtqePVPsrC77fZH6v6IDwy0u5sz3OCOT92TmQEjz02MSJEQkWqshsPKJwaDnB5_f1hkpgz_P4Gi0bEj80qXVKzunBQNVsdbiVq32DZFIuujk9oz7xKjfcPz_YLWbe4TCAKRREy-8XxRaZk9jfNXFpgNycSfbZ6eiArosR6jonNsFkhmyEsZy9us9uPcc',
+    modelA: 'GPT-4o',
+    modelB: 'Claude 3.5',
+    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDilnTv7FHR-fvz6wlAd_WKWQAS5SD4MRnAQc9LdcYWGZa58a1laOPLNAN1vk2hS5NUhh0I-gaps1OyZa8PtqePVPsrC77fZH6v6IDwy0u5sz3OCOT92TmQEjz02MSJEQkWqshsPKJwaDnB5_f1hkpgz_P4Gi0bEj80qXVKzunBQNVsdbiVq32DZFIuujk9oz7xKjfcPz_YLWbe4TCAKRREy-8XxRaZk9jfNXFpgNycSfbZ6eiArosR6jonNsFkhmyEsZy9us9uPcc',
+    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDilnTv7FHR-fvz6wlAd_WKWQAS5SD4MRnAQc9LdcYWGZa58a1laOPLNAN1vk2hS5NUhh0I-gaps1OyZa8PtqePVPsrC77fZH6v6IDwy0u5sz3OCOT92TmQEjz02MSJEQkWqshsPKJwaDnB5_f1hkpgz_P4Gi0bEj80qXVKzunBQNVsdbiVq32DZFIuujk9oz7xKjfcPz_YLWbe4TCAKRREy-8XxRaZk9jfNXFpgNycSfbZ6eiArosR6jonNsFkhmyEsZy9us9uPcc',
+    category: 'Visual Effect',
     likes: 4500,
   },
   {
     id: '6',
     title: 'Pong: Neon Edition',
     author: 'arcade_lover',
-    model: 'Claude 3.5',
-    thumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAqGBqc3-YVTMgfmeXXMm0pYx7umPRuT7qhMosgCoIcST2TVDPSMj9utb4wMAKBjGe6VLGpb4Zf_obyAMMBZnz1GMiCxYQa2lF0ROOrde9p249X2LZKU_oxxfK0MVYD8DVGwcH9krPGaCppv4XIfN5lpUVm5Sc33xvUJRO8Ntn8oe0bKwNOG9RJd5OxGhlA5ExhFsJqxNH4gWkEoUkvygtsLr8_WYim4Ffe9FP_d3_ynSDocCxXazq85J43B5as87Z8fULoji_P6aI',
+    modelA: 'Claude 3.5',
+    modelB: 'GPT-4o',
+    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAqGBqc3-YVTMgfmeXXMm0pYx7umPRuT7qhMosgCoIcST2TVDPSMj9utb4wMAKBjGe6VLGpb4Zf_obyAMMBZnz1GMiCxYQa2lF0ROOrde9p249X2LZKU_oxxfK0MVYD8DVGwcH9krPGaCppv4XIfN5lpUVm5Sc33xvUJRO8Ntn8oe0bKwNOG9RJd5OxGhlA5ExhFsJqxNH4gWkEoUkvygtsLr8_WYim4Ffe9FP_d3_ynSDocCxXazq85J43B5as87Z8fULoji_P6aI',
+    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAqGBqc3-YVTMgfmeXXMm0pYx7umPRuT7qhMosgCoIcST2TVDPSMj9utb4wMAKBjGe6VLGpb4Zf_obyAMMBZnz1GMiCxYQa2lF0ROOrde9p249X2LZKU_oxxfK0MVYD8DVGwcH9krPGaCppv4XIfN5lpUVm5Sc33xvUJRO8Ntn8oe0bKwNOG9RJd5OxGhlA5ExhFsJqxNH4gWkEoUkvygtsLr8_WYim4Ffe9FP_d3_ynSDocCxXazq85J43B5as87Z8fULoji_P6aI',
+    category: 'Game',
     likes: 156,
   },
 ];
@@ -63,11 +81,7 @@ const mockApps: AppCardType[] = [
 const categories = [
   { name: 'Trending', icon: TrendingUp },
   { name: 'Newest', icon: Clock },
-  { name: 'Physics', icon: Beaker },
-  { name: '3D Scenes', icon: Box },
 ];
-
-const models: ModelName[] = ['Claude 3.5', 'GPT-4o'];
 
 const modes = [
   { label: 'Website', icon: Code, color: 'bg-teal-400/80' },
@@ -313,27 +327,14 @@ export default function HomePage() {
                   </Button>
                 );
               })}
-
-              <Separator orientation="vertical" className="h-6 mx-2" />
-
-              {models.map((model) => (
-                <Button
-                  key={model}
-                  variant="outline"
-                  className="gap-2 shrink-0 bg-accent/10 text-accent hover:bg-accent/20"
-                  size="sm"
-                >
-                  {model}
-                </Button>
-              ))}
             </div>
           </div>
         </section>
 
         {/* Gallery Grid */}
-        <section className="bg-muted/30 pb-20 pt-8">
+        <section className="bg-muted/30 pb-20 pt-4">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {mockApps.map((app) => (
                 <AppCard key={app.id} app={app} />
               ))}
@@ -351,7 +352,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="mt-auto border-t py-8 text-center text-sm text-muted-foreground">
-        <p>© 2024 Battles.ai. All rights reserved.</p>
+        <p>© 2026 novita.ai. All rights reserved.</p>
       </footer>
     </div>
   );
