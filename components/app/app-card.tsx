@@ -1,8 +1,10 @@
+'use client';
+
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Heart, GitFork, Copy, Code, Gamepad2, Box, Sparkles, Image as ImageIcon, Video, PenTool, Zap } from 'lucide-react';
 import { AppCard as AppCardType } from '@/types';
 import { ModelBadge } from './model-badge';
+import { useRouter } from 'next/navigation';
 
 interface AppCardProps {
   app: AppCardType;
@@ -20,8 +22,13 @@ const categoryIcons: Record<string, React.ElementType> = {
 };
 
 export function AppCard({ app }: AppCardProps) {
+  const router = useRouter();
+
   return (
-    <Card className="group relative flex flex-col overflow-hidden py-0 border-0 bg-card gap-4 rounded-2xl shadow-lg shadow-black/5 transition-all duration-300 hover:shadow-xl hover:shadow-black/10 cursor-pointer ring-1 ring-border/50">
+    <Card 
+      onClick={() => router.push('/playground')}
+      className="group relative flex flex-col overflow-hidden py-0 border-0 bg-card gap-4 rounded-2xl shadow-lg shadow-black/5 transition-all duration-300 hover:shadow-xl hover:shadow-black/10 cursor-pointer ring-1 ring-border/50"
+    >
       <div className="relative aspect-[8/3] w-full overflow-hidden bg-muted flex">
         {/* Left Side - Model A */}
         <div className="relative w-1/2 h-full border-r-[1px] border-white/20 overflow-hidden">
@@ -77,7 +84,7 @@ export function AppCard({ app }: AppCardProps) {
             {app.title}
           </h3>
           <p className="text-xs font-medium text-muted-foreground/60 flex items-center gap-1">
-            by <span className="cursor-pointer hover:underline hover:text-foreground transition-colors">@{app.author}</span>
+            by <span className="cursor-pointer hover:underline hover:text-foreground transition-colors" onClick={(e) => e.stopPropagation()}>@{app.author}</span>
           </p>
         </div>
         
@@ -85,12 +92,22 @@ export function AppCard({ app }: AppCardProps) {
           <button 
             className="group/copy flex items-center gap-1.5 text-muted-foreground/70 transition-colors hover:text-foreground cursor-pointer px-2 py-1 rounded-lg hover:bg-foreground/5 -ml-2"
             title="Copy Prompt"
+            onClick={(e) => {
+              e.stopPropagation();
+              // Add copy logic here if needed
+            }}
           >
             <Copy className="h-3.5 w-3.5" />
             <span className="text-xs font-semibold">Copy</span>
           </button>
 
-          <button className="group/like flex items-center gap-1.5 text-muted-foreground/70 transition-colors hover:text-rose-500 cursor-pointer px-2 py-1 rounded-lg hover:bg-rose-500/5 -mr-2">
+          <button 
+            className="group/like flex items-center gap-1.5 text-muted-foreground/70 transition-colors hover:text-rose-500 cursor-pointer px-2 py-1 rounded-lg hover:bg-rose-500/5 -mr-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              // Add like logic here if needed
+            }}
+          >
             <Heart className="h-3.5 w-3.5 group-hover/like:fill-current transition-colors" />
             <span className="text-xs font-semibold tabular-nums">
               {app.likes >= 1000 ? `${(app.likes / 1000).toFixed(1)}k` : app.likes}
