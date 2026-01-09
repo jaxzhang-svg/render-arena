@@ -61,6 +61,13 @@ public/           # Static assets (SVG icons, images)
 - Readonly props pattern: `interface Props { readonly children: ReactNode }`
 - Server Components by default (no `"use client"` unless needed)
 
+### UI/UX Guidelines
+- **Interactive Elements**: All clickable elements (buttons, chips, cards) MUST have:
+  - `cursor-pointer` class to show the hand cursor.
+  - Distinct `hover:` states (e.g., color change, scale, opacity) for visual feedback.
+  - `active:` states for click feedback where appropriate.
+- **Visual Consistency**: Adhere to the design system tokens in `globals.css` (primary colors, OKLCH values).
+
 ### Code Quality Rules
 **IMPORTANT**: Run `npm run lint` after each feature or bugfix to ensure code quality and catch issues early. All code must pass linting before being considered complete.
 

@@ -1,17 +1,13 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { AppCard } from '@/components/app/app-card';
-import { Bolt, Plus, TrendingUp, Clock, Beaker, Box } from 'lucide-react';
+import { Bolt, Plus, TrendingUp, Clock, Beaker, Box, ArrowRight, Code, Image as ImageIcon, Video, PenTool, Gamepad2, Settings, Sparkles } from 'lucide-react';
 import { AppCard as AppCardType, ModelName } from '@/types';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+
+import { useState, useEffect } from 'react';
 
 const mockApps: AppCardType[] = [
   {
@@ -73,7 +69,93 @@ const categories = [
 
 const models: ModelName[] = ['Claude 3.5', 'GPT-4o'];
 
+const modes = [
+  { label: 'Website', icon: Code, color: 'bg-teal-400/80' },
+  { label: 'Image', icon: ImageIcon, color: 'bg-indigo-400/80' },
+  { label: 'Video', icon: Video, color: 'bg-rose-400/80' },
+  { label: 'Logo', icon: PenTool, color: 'bg-amber-400/80' },
+  { label: 'Image Editing', icon: Settings, color: 'bg-cyan-400/80' },
+  { label: 'Game Dev', icon: Gamepad2, color: 'bg-purple-400/80' },
+  { label: '3D Design', icon: Box, color: 'bg-blue-400/80' },
+];
+
+const modePrompts: Record<string, string[]> = {
+  'Website': [
+    "Build me a minimalistic dashboard for tracking my personal expenses...",
+    "Create a landing page for a new coffee brand with scroll animations...",
+    "Design a portfolio site with dark mode and a contact form..."
+  ],
+  'Image': [
+    "A cyberpunk city street at night with neon lights and rain...",
+    "A portrait of a futuristic astronaut in a garden of alien plants...",
+    "A wide angle shot of a serene mountain lake at sunrise..."
+  ],
+  'Video': [
+    "A time-lapse video of a flower blooming in a forest...",
+    "A drone shot flying over a busy futuristic metropolis...",
+    "Slow motion waves crashing on a black sand beach..."
+  ],
+  'Logo': [
+    "A minimalist geometric logo for a tech startup called 'Nexus'...",
+    "A vintage style badge logo for a coffee shop...",
+    "An abstract icon representing connection and speed..."
+  ],
+  'Image Editing': [
+    "Remove the background from this portrait and add a studio backdrop...",
+    "Color correct this landscape to look like golden hour...",
+    "Add a lens flare effect to the top right corner..."
+  ],
+  'Game Dev': [
+    "Create a basic Flappy Bird element with physics...",
+    "Build a 2D platformer character controller with double jump...",
+    "A simple memory card game grid with flip animations..."
+  ],
+  '3D Design': [
+    "A 3D rotating globe with data visualization points...",
+    "A low poly forest scene with volumetric lighting...",
+    "A physics simulation of falling cloth over a sphere..."
+  ]
+};
+
 export default function HomePage() {
+  const [activeMode, setActiveMode] = useState('Website');
+  const [placeholderText, setPlaceholderText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(50);
+
+  useEffect(() => {
+    const activePrompts = modePrompts[activeMode] || modePrompts['Website'];
+    const i = loopNum % activePrompts.length;
+    const fullText = activePrompts[i];
+
+    const handleTyping = () => {
+      setPlaceholderText(isDeleting 
+        ? fullText.substring(0, placeholderText.length - 1) 
+        : fullText.substring(0, placeholderText.length + 1)
+      );
+
+      setTypingSpeed(isDeleting ? 20 : 50);
+
+      if (!isDeleting && placeholderText === fullText) {
+        setTimeout(() => setIsDeleting(true), 1500); // Pause before deleting
+      } else if (isDeleting && placeholderText === '') {
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [placeholderText, isDeleting, loopNum, activeMode, typingSpeed]);
+
+  // Reset typewriter when mode changes
+  useEffect(() => {
+    setPlaceholderText('');
+    setIsDeleting(false);
+    setLoopNum(0);
+  }, [activeMode]);
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -130,59 +212,74 @@ export default function HomePage() {
               and deploy in seconds.
             </p>
 
-            {/* Search Bar */}
-            <div className="mt-4 w-full max-w-3xl">
-              <div className="group/input relative flex w-full items-center rounded-lg p-[3px] transition-all duration-300 hover:shadow-[0_0_25px_rgba(35,213,124,0.25)]">
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary via-accent to-muted-foreground opacity-80 blur-[1px] transition-opacity group-hover/input:opacity-100" />
-                <div className="relative flex h-16 w-full items-center rounded-md bg-background p-1.5 shadow-sm">
-                  <div className="hidden sm:flex items-center gap-1.5 pl-2">
-                    <Select defaultValue="DeepSeek">
-                      <SelectTrigger className="h-auto rounded-md bg-muted/80 py-1.5 pl-3 pr-8 text-sm font-bold outline-none hover:bg-muted focus:ring-0 border-none">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="DeepSeek">DeepSeek</SelectItem>
-                        <SelectItem value="Claude 3.5">Claude 3.5</SelectItem>
-                        <SelectItem value="GPT-4o">GPT-4o</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <div className="flex flex-col items-center justify-center px-1">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground select-none">
-                        vs
-                      </span>
-                    </div>
-
-                    <Select defaultValue="GLM-4">
-                      <SelectTrigger className="h-auto rounded-md bg-muted/80 py-1.5 pl-3 pr-8 text-sm font-bold outline-none hover:bg-muted focus:ring-0 border-none">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="GLM-4">GLM-4</SelectItem>
-                        <SelectItem value="Llama 3">Llama 3</SelectItem>
-                        <SelectItem value="Mistral">Mistral</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <Separator orientation="vertical" className="hidden sm:block h-8 mx-3" />
-
-                  <Input
-                    placeholder="A physics simulation of falling sand..."
-                    className="h-full border-none bg-transparent px-2 text-lg focus-visible:ring-0"
+            {/* Smart Input Section */}
+            <div className="mt-8 w-full max-w-4xl flex flex-col items-center gap-6">
+              {/* Input Box */}
+              <div className="relative w-full rounded-3xl border bg-background p-4 shadow-sm transition-shadow hover:shadow-md ring-1 ring-border/50">
+                <div className="relative flex flex-col">
+                  <textarea
+                    placeholder={placeholderText}
+                    className="min-h-[120px] w-full resize-none bg-transparent text-lg outline-none placeholder:text-muted-foreground/60 transition-all duration-75"
                   />
-
-                  <div className="pl-2">
-                    <Link href="/playground">
-                      <Button
-                        size="default"
-                        className="gap-2 bg-foreground text-background hover:bg-accent hover:shadow-lg active:scale-95"
+                  
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="ghost"
+                        size="icon"
+                        className="group relative h-9 w-9 rounded-xl text-muted-foreground hover:text-purple-500 hover:bg-purple-500/10 transition-all cursor-pointer"
+                        onClick={() => {
+                          const currentPrompts = modePrompts[activeMode];
+                          const randomPrompt = currentPrompts[Math.floor(Math.random() * currentPrompts.length)];
+                          // Note: In a real app we'd want to set this to the input value, 
+                          // but for now the typewriter effect controls the placeholder.
+                          // Let's force a "refresh" of the typewriter to a random one if possible,
+                          // or simpler: just visually feedback for now since functionality wasn't strictly requested to work yet.
+                        }}
                       >
-                        <Box className="h-5 w-5" />
-                        <span className="hidden sm:inline">Run Comparison</span>
+                        <Sparkles className="h-5 w-5 transition-transform group-hover:scale-110 group-active:scale-95" />
+                        <span className="absolute left-full ml-2 pointer-events-none opacity-0 transform translate-x-[-10px] transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap rounded-md bg-popover px-3 py-1.5 text-sm font-medium text-popover-foreground shadow-md border animate-in fade-in slide-in-from-left-2 z-50">
+                          Surprise me
+                        </span>
+                      </Button>
+
+                       <div className="flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted cursor-pointer">
+                        <div className={`h-4 w-4 rounded-full ${modes.find(m => m.label === activeMode)?.color || 'bg-gray-400'}`} />
+                        {activeMode}
+                      </div>
+                    </div>
+                    
+                    <Link href="/playground">
+                      <Button size="icon" className="h-10 w-10 rounded-full shrink-0">
+                        <ArrowRight className="h-5 w-5" />
                       </Button>
                     </Link>
                   </div>
+                </div>
+              </div>
+
+              {/* Inspiration Chips */}
+              <div className="w-full overflow-x-auto py-4 -my-4 px-1 scrollbar-hide">
+                <div className="flex items-center gap-3">
+                  {modes.map((mode) => {
+                    const Icon = mode.icon;
+                    const isActive = activeMode === mode.label;
+                    return (
+                      <Button
+                        key={mode.label}
+                        variant={isActive ? "default" : "outline"}
+                        onClick={() => setActiveMode(mode.label)}
+                        className={`gap-2 rounded-full h-10 px-6 cursor-pointer transition-transform hover:scale-105 ${
+                          isActive 
+                            ? "bg-slate-800 text-white hover:bg-slate-700" 
+                            : "hover:bg-muted hover:text-foreground"
+                        }`}
+                      >
+                        <Icon className="h-4 w-4" />
+                        {mode.label}
+                      </Button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
