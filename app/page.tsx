@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { AppCard } from '@/components/app/app-card';
-import { Bolt, Plus, TrendingUp, Clock, Beaker, Box, ArrowRight, Code, Image as ImageIcon, Video, PenTool, Gamepad2, Settings, Sparkles } from 'lucide-react';
-import { AppCard as AppCardType, ModelName } from '@/types';
-import { Separator } from '@/components/ui/separator';
+import { UserAvatar } from '@/components/app/user-avatar';
+import { Plus, TrendingUp, Clock, Box, ArrowRight, Code, Image as ImageIcon, Video, PenTool, Gamepad2, Settings, Sparkles, FileText } from 'lucide-react';
+import { AppCard as AppCardType } from '@/types';
 
 import { useState, useEffect } from 'react';
 
@@ -165,9 +165,13 @@ export default function HomePage() {
 
   // Reset typewriter when mode changes
   useEffect(() => {
-    setPlaceholderText('');
-    setIsDeleting(false);
-    setLoopNum(0);
+    // Use a timeout to avoid synchronous setState in effect
+    const timer = setTimeout(() => {
+      setPlaceholderText('');
+      setIsDeleting(false);
+      setLoopNum(0);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [activeMode]);
 
   return (
@@ -177,21 +181,14 @@ export default function HomePage() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <div className="flex items-center justify-center text-primary">
-              <img className="h-8 w-8" src="/logo/logo-wordmark.svg" />
+              <img className="h-8 w-8" src="/logo/logo-wordmark.svg" alt="Novita Arena Logo" />
             </div>
             <h2 className="text-xl font-bold leading-tight tracking-tight">
               Novita Arena
             </h2>
           </Link>
           <div className="flex items-center gap-6">
-            <div className="h-10 w-10 overflow-hidden rounded-full border border-border bg-muted ring-2 ring-transparent transition-all hover:ring-primary cursor-pointer">
-              {/* Mock Avatar Image */}
-              <img 
-                src="https://i.pravatar.cc/150?u=novita" 
-                alt="User" 
-                className="h-full w-full object-cover"
-              />
-            </div>
+            <UserAvatar />
           </div>
         </div>
       </header>
@@ -243,12 +240,7 @@ export default function HomePage() {
                         size="icon"
                         className="group relative h-9 w-9 rounded-xl text-muted-foreground hover:text-purple-500 hover:bg-purple-500/10 transition-all cursor-pointer"
                         onClick={() => {
-                          const currentPrompts = modePrompts[activeMode];
-                          const randomPrompt = currentPrompts[Math.floor(Math.random() * currentPrompts.length)];
-                          // Note: In a real app we'd want to set this to the input value, 
-                          // but for now the typewriter effect controls the placeholder.
-                          // Let's force a "refresh" of the typewriter to a random one if possible,
-                          // or simpler: just visually feedback for now since functionality wasn't strictly requested to work yet.
+                          // TODO: Implement random prompt selection
                         }}
                       >
                         <Sparkles className="h-5 w-5 transition-transform group-hover:scale-110 group-active:scale-95" />
@@ -331,6 +323,53 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Hackathon Banner */}
+        <section className="px-6 py-4">
+          <div className="mx-auto max-w-7xl">
+            <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary/20 via-primary/10 to-background border border-primary/20 p-6">
+              {/* Decorative Elements */}
+              <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+
+              <div className="relative flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex-1 space-y-2">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/20 border border-primary/30">
+                    <TrendingUp className="h-3.5 w-3.5 text-primary" />
+                    <span className="text-xs font-bold text-primary">Limited Time</span>
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-black tracking-tight">
+                    AI Hackathon 2024
+                  </h2>
+                  <p className="text-sm text-muted-foreground max-w-2xl">
+                    Join the AI generation challenge with developers worldwide. Win prizes and exclusive rewards!
+                  </p>
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="h-3.5 w-3.5" />
+                      <span>15 days left</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Box className="h-3.5 w-3.5" />
+                      <span>1,234 participants</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 shrink-0">
+                  <Button size="default" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-sm px-6 h-10">
+                    Join Now
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="default" className="gap-2 font-medium text-sm px-6 h-10">
+                    <FileText className="h-4 w-4" />
+                    Learn More
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Gallery Grid */}
         <section className="bg-muted/30 pb-20 pt-4">
           <div className="mx-auto max-w-7xl px-6">
@@ -349,11 +388,6 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="mt-auto border-t py-8 text-center text-sm text-muted-foreground">
-        <p>© 2026 novita.ai. All rights reserved.</p>
-      </footer>
     </div>
   );
 }

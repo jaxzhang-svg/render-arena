@@ -1,7 +1,7 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { Heart, GitFork, Copy, Code, Gamepad2, Box, Sparkles, Image as ImageIcon, Video, PenTool, Zap } from 'lucide-react';
+import { Heart, Copy, Code, Gamepad2, Box, Sparkles, Image as ImageIcon, Video, PenTool, Zap } from 'lucide-react';
 import { AppCard as AppCardType } from '@/types';
 import { ModelBadge } from './model-badge';
 import { useRouter } from 'next/navigation';
