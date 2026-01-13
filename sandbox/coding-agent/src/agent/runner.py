@@ -72,40 +72,38 @@ class AgentRunner:
 
         yield self._create_started_event(user_prompt, timeout_seconds)
 
-        hooks = AgentHooks(self.event_queue)
+        hooks = AgentHooks(self.event_queue, self.workdir)
         options = self._create_agent_options(hooks)
 
-        logger.info(f"Agent configured - Max turns: 20, Timeout: {timeout_seconds}s")
+        logger.info(f"Agent configured - Max turns: 50")
 
         try:
-            async with asyncio.timeout(timeout_seconds):
-                async with ClaudeSDKClient(options=options) as client:
-                    logger.debug("Sending user prompt to agent")
-                    await client.query(user_prompt)
+            async with ClaudeSDKClient(options=options) as client:
+                logger.debug("Sending user prompt to agent")
+                await client.query(user_prompt)
 
-                    logger.debug("Receiving agent response...")
-                    response_count = 0
+                logger.debug("Receiving agent response...")
+                response_count = 0
 
-                    async for msg in client.receive_response():
-                        response_count += 1
-                        async for event in self._drain_event_queue():
+                async for msg in client.receive_response():
+                    response_count += 1
+                    async for event in self._drain_event_queue():
+                        if not self._should_filter_event(event):
                             yield event
 
-                        if response_count % 5 == 0:
-                            logger.debug(f"Received {response_count} messages so far")
+                    if response_count % 5 == 0:
+                        logger.debug(f"Received {response_count} messages so far")
 
-                        if isinstance(msg, AssistantMessage):
-                            async for event in self._process_assistant_message(msg):
+                    if isinstance(msg, AssistantMessage):
+                        async for event in self._process_assistant_message(msg):
+                            if not self._should_filter_event(event):
                                 yield event
 
-                    async for event in self._drain_event_queue():
+                async for event in self._drain_event_queue():
+                    if not self._should_filter_event(event):
                         yield event
-                    logger.info(f"Total messages received: {response_count}")
+                logger.info(f"Total messages received: {response_count}")
 
-        except TimeoutError:
-            logger.error(f"Agent execution timed out after {timeout_seconds}s")
-            yield self._create_timeout_event(timeout_seconds)
-            raise
         except Exception as e:
             logger.error(f"Agent execution failed: {type(e).__name__}: {str(e)}", exc_info=True)
             await hooks.on_error(e)
@@ -122,7 +120,7 @@ class AgentRunner:
             return prompt
         return f"{prompt[:max_length]}..."
 
-    def _create_started_event(self, user_prompt: str, timeout: int) -> AgentEvent:
+    def _create_started_event(self, user_prompt: str, timeout: int | None = None) -> AgentEvent:
         """Create the initial started event."""
         return AgentEvent(
             type=EventType.STARTED,
@@ -131,7 +129,6 @@ class AgentRunner:
                 "model": os.environ.get("ANTHROPIC_MODEL", "unknown"),
                 "prompt": user_prompt,
                 "workdir": self.workdir,
-                "timeout": timeout,
             },
         )
 
@@ -142,14 +139,38 @@ class AgentRunner:
             system_prompt=self.system_prompt,
             cwd=self.workdir,
             setting_sources=["project"],
-            allowed_tools=["Read", "Write", "Bash"],
-            permission_mode="acceptEdits",
-            max_turns=20,
+            allowed_tools=[
+                "Read",
+                "Write",
+                "Edit",
+                "Bash",
+                "Glob",
+                "Grep",
+            ],
+            permission_mode="bypassPermissions",
+            max_turns=50,
             hooks={
                 "PreToolUse": [HookMatcher(matcher=None, hooks=[hooks.on_pre_tool_use])],
                 "PostToolUse": [HookMatcher(matcher=None, hooks=[hooks.on_post_tool_use])],
             },
         )
+
+    def _should_filter_event(self, event: AgentEvent) -> bool:
+        """Check if an event should be filtered from user output."""
+        # Filter FILE_READ events
+        if event.type == EventType.FILE_READ:
+            return True
+
+        # Filter TOOL_START events for Read and Glob
+        if event.type == EventType.TOOL_START:
+            tool_name = event.data.get("tool", "")
+            if tool_name in ["Read", "Glob"]:
+                return True
+        
+        if event.type == EventType.TOOL_END:
+            return True
+
+        return False
 
     async def _drain_event_queue(self) -> AsyncIterator[AgentEvent]:
         """Drain all pending events from the queue."""
@@ -170,17 +191,6 @@ class AgentRunner:
                     timestamp=time.time(),
                     data={"content": block.text},
                 )
-
-    def _create_timeout_event(self, timeout_seconds: int) -> AgentEvent:
-        """Create a timeout error event."""
-        return AgentEvent(
-            type=EventType.ERROR,
-            timestamp=time.time(),
-            data={
-                "message": f"Agent execution timed out after {timeout_seconds}s",
-                "type": "TimeoutError",
-            },
-        )
 
     def _create_error_event(self, error: Exception) -> AgentEvent:
         """Create an error event."""

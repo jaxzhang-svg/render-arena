@@ -2,6 +2,8 @@
 
 import logging
 import time
+from asyncio import Queue
+
 from claude_agent_sdk import HookContext, HookInput, HookJSONOutput
 
 from ..models.events import AgentEvent, EventType
@@ -13,8 +15,9 @@ logger = logging.getLogger(__name__)
 class AgentHooks:
     """Claude Agent event hooks for streaming via SSE."""
 
-    def __init__(self, event_queue):
+    def __init__(self, event_queue: Queue, workdir: str):
         self.event_queue = event_queue
+        self.workdir = workdir
         self.tool_start_time: dict[str, float] = {}
         logger.debug("AgentHooks initialized")
 
@@ -31,6 +34,7 @@ class AgentHooks:
         logger.debug(f"Pre-tool use: {tool_name}")
         self.tool_start_time[tool_name] = time.time()
 
+        # Emit tool start event
         event = AgentEvent(
             type=EventType.TOOL_START,
             timestamp=time.time(),
@@ -98,7 +102,7 @@ class AgentHooks:
         """Create appropriate event based on tool type and result."""
         if tool_name == "Read":
             file_path = tool_input.get("file_path") or tool_input.get("path")
-            logger.info(f"Read file: {file_path}")
+            logger.info(f"📄 Read file: {file_path}")
             return AgentEvent(
                 type=EventType.FILE_READ,
                 timestamp=time.time(),
@@ -108,7 +112,7 @@ class AgentHooks:
         if tool_name == "Write":
             file_path = tool_input.get("file_path") or tool_input.get("path")
             content = tool_input.get("content", "")
-            logger.info(f"Write file: {file_path} ({len(content)} chars)")
+            logger.info(f"✏️  Write file: {file_path} ({len(content)} chars)")
             return AgentEvent(
                 type=EventType.FILE_WRITE,
                 timestamp=time.time(),
@@ -116,10 +120,8 @@ class AgentHooks:
             )
 
         has_error = tool_response and "error" in str(tool_response).lower()
-        if has_error:
-            logger.warning(f"Tool {tool_name} failed: {tool_response}")
-        else:
-            logger.debug(f"Tool {tool_name} succeeded")
+        status = "FAILED" if has_error else "SUCCESS"
+        logger.info(f"🔧 Tool {status}: {tool_name} - Duration: {duration * 1000:.0f}ms")
 
         return AgentEvent(
             type=EventType.TOOL_ERROR if has_error else EventType.TOOL_END,
