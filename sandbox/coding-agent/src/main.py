@@ -12,14 +12,15 @@ from typing import AsyncIterator
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
 
 from src.agent.runner import AgentRunner
 from src.models.events import AgentEvent, EventType
 
 
-load_dotenv(override=True)
+load_dotenv(override=False)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -54,6 +55,40 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+# Add CORS middleware to allow cross-origin requests from frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=[
+        "Content-Type",
+        "Accept",
+        "Accept-Language",
+        "Accept-Encoding",
+        "Cache-Control",
+        "Pragma",
+        "text/event-stream",
+        "*",
+    ],
+    expose_headers=["*"],
+    max_age=86400,  # 24 hours
+)
+
+# Explicitly handle OPTIONS requests for preflight
+@app.options("/generate")
+async def options_generate():
+    """Handle OPTIONS request for /generate endpoint."""
+    return Response(
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            # Allow all common headers including SSE-specific ones
+            "Access-Control-Allow-Headers": "Content-Type, Accept, Cache-Control, text/event-stream",
+            "Access-Control-Max-Age": "86400",
+        },
+    )
 
 
 @app.get("/")

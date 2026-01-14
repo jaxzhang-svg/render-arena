@@ -12,16 +12,13 @@ import {
   ArrowLeft,
   Wallet,
   SplitSquareHorizontal,
-  Download,
   Eye,
   EyeOff,
   Square,
 } from 'lucide-react'
-import { StepIndicator } from '@/components/app/step-indicator'
 import { ShareModal } from '@/components/app/share-modal'
 import { UserAvatar } from '@/components/app/user-avatar'
-import { FragmentWeb } from '@/components/app/fragment-web'
-import { StepConfig } from '@/types'
+import { TodoList } from '@/components/app/todo-list'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,79 +26,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { experimental_useObject as useObject } from '@ai-sdk/react'
-import { fragmentSchema, FragmentSchema } from '@/lib/schema'
 import { models, LLMModel } from '@/lib/models'
-import { ExecutionResultWeb } from '@/lib/types'
-import { DeepPartial } from 'ai'
-
-function getStepsFromFragment(
-  fragment: DeepPartial<FragmentSchema> | undefined,
-  isLoading: boolean,
-  isPreviewLoading: boolean,
-  hasResult: boolean
-): StepConfig[] {
-  if (!isLoading && !isPreviewLoading && !fragment) {
-    return [
-      { title: 'Waiting for input', status: 'pending', icon: 'hourglass' },
-    ]
-  }
-
-  const steps: StepConfig[] = []
-
-  if (fragment?.commentary) {
-    steps.push({
-      title: 'Analyzing Requirements',
-      status: 'completed',
-      icon: 'check',
-    })
-  } else if (isLoading) {
-    steps.push({
-      title: 'Analyzing Requirements',
-      status: 'in-progress',
-      icon: 'search',
-    })
-  }
-
-  if (fragment?.code) {
-    steps.push({
-      title: 'Generating Code',
-      status: 'completed',
-      icon: 'check',
-      codePreview: fragment.code.slice(0, 200) + '...',
-    })
-  } else if (isLoading && fragment?.commentary) {
-    steps.push({
-      title: 'Generating Code',
-      status: 'in-progress',
-      icon: 'code',
-    })
-  }
-
-  if (hasResult) {
-    steps.push({
-      title: 'Preview Ready',
-      status: 'completed',
-      icon: 'check',
-    })
-  } else if (isPreviewLoading) {
-    steps.push({
-      title: 'Creating Sandbox',
-      status: 'in-progress',
-      icon: 'play-circle',
-    })
-  } else if (fragment?.code && !isLoading) {
-    steps.push({
-      title: 'Creating Sandbox',
-      status: 'pending',
-      icon: 'play-circle',
-    })
-  }
-
-  return steps.length > 0
-    ? steps
-    : [{ title: 'Waiting for input', status: 'pending', icon: 'hourglass' }]
-}
+import { useSandboxAgent } from '@/hooks/use-sandbox-agent'
 
 export default function PlaygroundPage() {
   const [viewMode, setViewMode] = useState<'a' | 'b' | 'split'>('split')
@@ -115,85 +41,25 @@ export default function PlaygroundPage() {
   const [selectedModelA, setSelectedModelA] = useState<LLMModel>(models[0])
   const [selectedModelB, setSelectedModelB] = useState<LLMModel>(models[1])
 
-  const [resultA, setResultA] = useState<ExecutionResultWeb | undefined>()
-  const [resultB, setResultB] = useState<ExecutionResultWeb | undefined>()
-  const [isPreviewLoadingA, setIsPreviewLoadingA] = useState(false)
-  const [isPreviewLoadingB, setIsPreviewLoadingB] = useState(false)
-  const [errorA, setErrorA] = useState<string | undefined>()
-  const [errorB, setErrorB] = useState<string | undefined>()
-
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareMode, setShareMode] = useState<'video' | 'poster'>('poster')
 
-  const handleSandboxA = useCallback(async (fragment: FragmentSchema) => {
-    setIsPreviewLoadingA(true)
-    try {
-      const response = await fetch('/api/sandbox', {
-        method: 'POST',
-        body: JSON.stringify({ fragment }),
-      })
-      const result = await response.json()
-      setResultA(result)
-    } catch (err) {
-      console.error('Sandbox error A:', err)
-      setErrorA('Failed to create sandbox')
-    } finally {
-      setIsPreviewLoadingA(false)
-    }
-  }, [])
-
-  const handleSandboxB = useCallback(async (fragment: FragmentSchema) => {
-    setIsPreviewLoadingB(true)
-    try {
-      const response = await fetch('/api/sandbox', {
-        method: 'POST',
-        body: JSON.stringify({ fragment }),
-      })
-      const result = await response.json()
-      setResultB(result)
-    } catch (err) {
-      console.error('Sandbox error B:', err)
-      setErrorB('Failed to create sandbox')
-    } finally {
-      setIsPreviewLoadingB(false)
-    }
-  }, [])
-
+  // Model A: Sandbox flow
   const {
-    object: objectA,
-    submit: submitA,
+    mainSteps: mainStepsA,
+    agentTodos: agentTodosA,
+    agentLogs: agentLogsA,
+    previewUrl: previewUrlA,
     isLoading: isLoadingA,
-    stop: stopA,
-  } = useObject({
-    api: '/api/chat',
-    schema: fragmentSchema,
-    onError: (error: Error) => {
-      console.error('Error generating A:', error)
-      setErrorA(error.message)
+    error: errorA,
+    generate: generateA,
+    abort: abortA,
+  } = useSandboxAgent({
+    onPreviewReady: (url) => {
+      console.log('Preview ready:', url)
     },
-    onFinish: async ({ object: fragment, error }: { object: FragmentSchema | undefined; error: Error | undefined }) => {
-      if (!error && fragment) {
-        handleSandboxA(fragment)
-      }
-    },
-  })
-
-  const {
-    object: objectB,
-    submit: submitB,
-    isLoading: isLoadingB,
-    stop: stopB,
-  } = useObject({
-    api: '/api/chat',
-    schema: fragmentSchema,
-    onError: (error: Error) => {
-      console.error('Error generating B:', error)
-      setErrorB(error.message)
-    },
-    onFinish: async ({ object: fragment, error }: { object: FragmentSchema | undefined; error: Error | undefined }) => {
-      if (!error && fragment) {
-        handleSandboxB(fragment)
-      }
+    onError: (err) => {
+      console.error('Model A error:', err)
     },
   })
 
@@ -232,39 +98,15 @@ export default function PlaygroundPage() {
   const handleGenerate = () => {
     if (!prompt.trim()) return
 
-    setResultA(undefined)
-    setResultB(undefined)
-    setErrorA(undefined)
-    setErrorB(undefined)
-
-    const messages = [{ role: 'user' as const, content: prompt }]
-
-    submitA({ messages, model: selectedModelA })
-    submitB({ messages, model: selectedModelB })
+    // Only generate for Model A (sandbox flow)
+    generateA(prompt, selectedModelA.id)
   }
 
   const handleStop = () => {
-    stopA()
-    stopB()
+    abortA()
   }
 
-  const handleDownload = (modelName: string, code: string | undefined) => {
-    if (!code) return
-    const blob = new Blob([code], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${modelName.replace(/\s+/g, '-').toLowerCase()}-code.tsx`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
-
-  const stepsA = getStepsFromFragment(objectA, isLoadingA, isPreviewLoadingA, !!resultA)
-  const stepsB = getStepsFromFragment(objectB, isLoadingB, isPreviewLoadingB, !!resultB)
-
-  const isAnyLoading = isLoadingA || isLoadingB
+  const isAnyLoading = isLoadingA
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-muted/50">
@@ -352,29 +194,12 @@ export default function PlaygroundPage() {
               >
                 <div className="absolute top-0 left-0 right-0 h-10 bg-background/60 backdrop-blur border-b flex items-center justify-between px-4 z-10">
                   <div className="flex items-center gap-2">
-                    <span
-                      className={`size-2 rounded-full ${selectedModelA.color}`}
-                    />
+                    <span className={`size-2 rounded-full ${selectedModelA.color}`} />
                     <span className="text-xs font-medium text-muted-foreground">
                       {selectedModelA.name}
                     </span>
-                    {objectA?.title && (
-                      <span className="text-xs text-muted-foreground px-2 py-0.5 bg-muted/50 rounded-full">
-                        {objectA.title}
-                      </span>
-                    )}
                   </div>
                   <div className="flex items-center gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 hover:bg-foreground/10 cursor-pointer"
-                      onClick={() => handleDownload(selectedModelA.name, objectA?.code)}
-                      disabled={!objectA?.code}
-                      title="Download code"
-                    >
-                      <Download className="h-3.5 w-3.5" />
-                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
@@ -391,34 +216,34 @@ export default function PlaygroundPage() {
                   </div>
                 </div>
 
-                {resultA ? (
-                  <div className="w-full h-full pt-10">
-                    <FragmentWeb result={resultA} />
-                  </div>
+                {previewUrlA && !isLoadingA ? (
+                  <iframe
+                    src={previewUrlA}
+                    className="w-full h-full pt-10 border-0"
+                    title="Preview"
+                  />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center bg-background/50 p-8">
                     <div className="w-full max-w-sm">
                       <div className="flex items-center justify-between mb-8">
                         <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
-                          {isLoadingA || isPreviewLoadingA ? 'Processing' : 'Ready'}
+                          {isLoadingA ? 'Processing' : 'Ready'}
                         </span>
-                        {(isLoadingA || isPreviewLoadingA) && (
+                        {isLoadingA && (
                           <span className="flex size-2 relative">
                             <span
                               className={`absolute inline-flex h-full w-full rounded-full ${selectedModelA.color} opacity-75 animate-ping`}
                             />
-                            <span
-                              className={`relative inline-flex rounded-full size-2 ${selectedModelA.color}`}
-                            />
+                            <span className={`relative inline-flex rounded-full size-2 ${selectedModelA.color}`} />
                           </span>
                         )}
                       </div>
-                      <StepIndicator steps={stepsA} />
-                      {errorA && (
-                        <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm">
-                          {errorA}
-                        </div>
-                      )}
+                      <TodoList
+                        mainSteps={mainStepsA}
+                        agentTodos={agentTodosA}
+                        agentLogs={agentLogsA}
+                        error={errorA ?? undefined}
+                      />
                     </div>
                   </div>
                 )}
@@ -436,29 +261,12 @@ export default function PlaygroundPage() {
               >
                 <div className="absolute top-0 left-0 right-0 h-10 bg-background/60 backdrop-blur border-b flex items-center justify-between px-4 z-10">
                   <div className="flex items-center gap-2">
-                    <span
-                      className={`size-2 rounded-full ${selectedModelB.color}`}
-                    />
+                    <span className={`size-2 rounded-full ${selectedModelB.color}`} />
                     <span className="text-xs font-medium text-muted-foreground">
                       {selectedModelB.name}
                     </span>
-                    {objectB?.title && (
-                      <span className="text-xs text-muted-foreground px-2 py-0.5 bg-muted/50 rounded-full">
-                        {objectB.title}
-                      </span>
-                    )}
                   </div>
                   <div className="flex items-center gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 hover:bg-foreground/10 cursor-pointer"
-                      onClick={() => handleDownload(selectedModelB.name, objectB?.code)}
-                      disabled={!objectB?.code}
-                      title="Download code"
-                    >
-                      <Download className="h-3.5 w-3.5" />
-                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
@@ -475,37 +283,19 @@ export default function PlaygroundPage() {
                   </div>
                 </div>
 
-                {resultB ? (
-                  <div className="w-full h-full pt-10">
-                    <FragmentWeb result={resultB} />
-                  </div>
-                ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center bg-background/50 p-8">
-                    <div className="w-full max-w-sm">
-                      <div className="flex items-center justify-between mb-8">
-                        <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
-                          {isLoadingB || isPreviewLoadingB ? 'Processing' : 'Ready'}
-                        </span>
-                        {(isLoadingB || isPreviewLoadingB) && (
-                          <span className="flex size-2 relative">
-                            <span
-                              className={`absolute inline-flex h-full w-full rounded-full ${selectedModelB.color} opacity-75 animate-ping`}
-                            />
-                            <span
-                              className={`relative inline-flex rounded-full size-2 ${selectedModelB.color}`}
-                            />
-                          </span>
-                        )}
-                      </div>
-                      <StepIndicator steps={stepsB} />
-                      {errorB && (
-                        <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm">
-                          {errorB}
-                        </div>
-                      )}
+                <div className="w-full h-full flex flex-col items-center justify-center bg-background/50 p-8">
+                  <div className="w-full max-w-sm text-center">
+                    <div className="mb-4">
+                      <span className={`inline-flex size-2 rounded-full ${selectedModelB.color}`} />
                     </div>
+                    <p className="text-sm text-muted-foreground">
+                      Model B is temporarily disabled
+                    </p>
+                    <p className="text-xs text-muted-foreground/60 mt-2">
+                      Only Model A is active for sandbox testing
+                    </p>
                   </div>
-                )}
+                </div>
               </div>
             )}
           </div>

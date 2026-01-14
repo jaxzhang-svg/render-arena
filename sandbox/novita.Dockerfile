@@ -34,7 +34,9 @@ RUN printf "n\n" | npx create-next-app@latest . \
     --no-src-dir \
     --turbopack
 
-# Install essential npm packages (simplified list)
+# Initialize shadcn with all components for rich UI
+RUN npx shadcn@latest init -d -y
+RUN npx shadcn@latest add --all -y
 
 # Core utilities (used by many packages)
 RUN npm install --quiet --no-audit --no-fund \
@@ -78,10 +80,6 @@ RUN npm install --quiet --no-audit --no-fund \
 # Type definitions
 RUN npm install --quiet --no-audit --no-fund \
     @types/three
-
-# Initialize shadcn with all components for rich UI
-RUN npx shadcn@latest init -d -y
-RUN npx shadcn@latest add --all -y
 
 # Set up coding agent
 WORKDIR /home/user/coding-agent

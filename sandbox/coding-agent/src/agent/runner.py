@@ -14,7 +14,12 @@ from claude_agent_sdk import (
     ClaudeAgentOptions,
     ClaudeSDKClient,
     HookMatcher,
+    ResultMessage,
+    SystemMessage,
     TextBlock,
+    ThinkingBlock,
+    ToolResultBlock,
+    ToolUseBlock,
 )
 
 from .hooks import AgentHooks
@@ -52,6 +57,7 @@ class AgentRunner:
         """Run Agent and stream events."""
         start_time = time.time()
 
+        # Send started event
         yield self._create_started_event(user_prompt)
 
         hooks = AgentHooks(self.event_queue, self.workdir)
@@ -59,31 +65,36 @@ class AgentRunner:
 
         try:
             async with ClaudeSDKClient(options=options) as client:
+                # Send the query
                 await client.query(user_prompt)
 
-                response_count = 0
-
+                # Process all messages from Claude
                 async for msg in client.receive_response():
-                    response_count += 1
+                    # First, drain any hook events (tool executions)
                     async for event in self._drain_event_queue():
-                        if not self._should_filter_event(event):
-                            yield event
-
-                    if isinstance(msg, AssistantMessage):
-                        async for event in self._process_assistant_message(msg):
-                            if not self._should_filter_event(event):
-                                yield event
-
-                async for event in self._drain_event_queue():
-                    if not self._should_filter_event(event):
                         yield event
 
+                    # Then process the message based on its type
+                    if isinstance(msg, AssistantMessage):
+                        async for event in self._process_assistant_message(msg):
+                            yield event
+                    elif isinstance(msg, ResultMessage):
+                        yield self._create_result_event(msg)
+                    elif isinstance(msg, SystemMessage):
+                        yield self._create_system_event(msg)
+
+                # Final drain of any remaining hook events
+                async for event in self._drain_event_queue():
+                    yield event
+
         except Exception as e:
+            logging.error(f"Agent execution error: {type(e).__name__}: {str(e)}", exc_info=True)
             await hooks.on_error(e)
             yield self._create_error_event(e)
             raise
 
         duration = time.time() - start_time
+        logging.info(f"Agent completed in {duration:.2f}s")
         yield self._create_completed_event(duration)
 
     def _create_started_event(self, user_prompt: str) -> AgentEvent:
@@ -120,23 +131,6 @@ class AgentRunner:
             },
         )
 
-    def _should_filter_event(self, event: AgentEvent) -> bool:
-        """Check if an event should be filtered from user output."""
-        # Filter FILE_READ events
-        if event.type == EventType.FILE_READ:
-            return True
-
-        # Filter TOOL_START events for Read and Glob
-        if event.type == EventType.TOOL_START:
-            tool_name = event.data.get("tool", "")
-            if tool_name in ["Read", "Glob"]:
-                return True
-        
-        if event.type == EventType.TOOL_END:
-            return True
-
-        return False
-
     async def _drain_event_queue(self) -> AsyncIterator[AgentEvent]:
         """Drain all pending events from the queue."""
         while not self.event_queue.empty():
@@ -147,13 +141,55 @@ class AgentRunner:
                 break
 
     async def _process_assistant_message(self, msg: AssistantMessage) -> AsyncIterator[AgentEvent]:
-        """Process an assistant message and yield output events."""
+        """Process an assistant message and yield events for all content blocks.
+
+        Processes all content block types from Claude SDK:
+        - TextBlock: Claude's text response to user
+        - ThinkingBlock: Claude's internal thinking (extended thinking)
+        - ToolUseBlock: Tool invocation request
+        - ToolResultBlock: Tool execution result
+
+        Note: PreToolUse/PostToolUse hooks are separate and captured via event queue.
+        """
         for block in msg.content:
             if isinstance(block, TextBlock) and block.text:
+                # Claude's text response to the user
                 yield AgentEvent(
-                    type=EventType.OUTPUT,
+                    type=EventType.TEXT,
                     timestamp=time.time(),
-                    data={"content": block.text},
+                    data={"text": block.text},
+                )
+
+            elif isinstance(block, ThinkingBlock) and block.thinking:
+                # Claude's thinking process (extended thinking feature)
+                yield AgentEvent(
+                    type=EventType.THINKING,
+                    timestamp=time.time(),
+                    data={"thinking": block.thinking},
+                )
+
+            elif isinstance(block, ToolUseBlock):
+                # Tool being called (invocation request)
+                yield AgentEvent(
+                    type=EventType.TOOL_USE,
+                    timestamp=time.time(),
+                    data={
+                        "id": block.id,
+                        "name": block.name,
+                        "input": block.input,
+                    },
+                )
+
+            elif isinstance(block, ToolResultBlock):
+                # Result of tool execution
+                yield AgentEvent(
+                    type=EventType.TOOL_RESULT,
+                    timestamp=time.time(),
+                    data={
+                        "tool_use_id": block.tool_use_id,
+                        "content": block.content,
+                        "is_error": block.is_error,
+                    },
                 )
 
     def _create_error_event(self, error: Exception) -> AgentEvent:
@@ -170,4 +206,39 @@ class AgentRunner:
             type=EventType.COMPLETED,
             timestamp=time.time(),
             data={"success": True, "total_duration_ms": duration * 1000},
+        )
+
+    def _create_result_event(self, msg: ResultMessage) -> AgentEvent:
+        """Create a result event from ResultMessage.
+
+        ResultMessage contains final execution metadata including cost and usage.
+        """
+        return AgentEvent(
+            type=EventType.RESULT,
+            timestamp=time.time(),
+            data={
+                "subtype": msg.subtype,
+                "duration_ms": msg.duration_ms,
+                "duration_api_ms": msg.duration_api_ms,
+                "is_error": msg.is_error,
+                "num_turns": msg.num_turns,
+                "session_id": msg.session_id,
+                "total_cost_usd": msg.total_cost_usd,
+                "usage": msg.usage,
+                "result": msg.result,
+            },
+        )
+
+    def _create_system_event(self, msg: SystemMessage) -> AgentEvent:
+        """Create a system event from SystemMessage.
+
+        SystemMessage contains system metadata.
+        """
+        return AgentEvent(
+            type=EventType.SYSTEM,
+            timestamp=time.time(),
+            data={
+                "subtype": msg.subtype,
+                "data": msg.data,
+            },
         )

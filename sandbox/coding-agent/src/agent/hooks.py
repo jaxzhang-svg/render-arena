@@ -1,4 +1,9 @@
-"""Claude Agent SDK hooks for event streaming."""
+"""Claude Agent SDK hooks for event streaming.
+
+These hooks capture tool execution lifecycle events and emit them to the event queue.
+Hook events are separate from message content blocks - they capture the execution
+aspect (before/after with timing), while content blocks capture the data aspect.
+"""
 
 import time
 from asyncio import Queue
@@ -9,7 +14,12 @@ from ..models.events import AgentEvent, EventType
 
 
 class AgentHooks:
-    """Claude Agent event hooks for streaming via SSE."""
+    """Claude Agent event hooks for streaming via SSE.
+
+    Emits events for:
+    - PreToolUse: Before tool execution (with input)
+    - PostToolUse: After tool execution (with output and duration)
+    """
 
     def __init__(self, event_queue: Queue, workdir: str):
         self.event_queue = event_queue
@@ -22,17 +32,24 @@ class AgentHooks:
         tool_use_id: str | None,
         context: HookContext,
     ) -> HookJSONOutput:
-        """Hook called before tool execution."""
+        """Hook called before tool execution.
+
+        Emits pre_tool_use event with tool name and input.
+        """
         tool_name = self._extract_tool_name(input_data)
         tool_input = self._extract_tool_input(input_data)
 
         self.tool_start_time[tool_name] = time.time()
 
-        # Emit tool start event
+        # Emit pre_tool_use event
         event = AgentEvent(
-            type=EventType.TOOL_START,
+            type=EventType.PRE_TOOL_USE,
             timestamp=time.time(),
-            data={"tool": tool_name, "args": tool_input},
+            data={
+                "tool_name": tool_name,
+                "tool_input": tool_input,
+                "tool_use_id": tool_use_id,
+            },
         )
         await self.event_queue.put(event)
 
@@ -44,14 +61,28 @@ class AgentHooks:
         tool_use_id: str | None,
         context: HookContext,
     ) -> HookJSONOutput:
-        """Hook called after tool execution."""
+        """Hook called after tool execution.
+
+        Emits post_tool_use event with tool response and duration.
+        """
         tool_name = self._extract_tool_name(input_data)
         tool_input = self._extract_tool_input(input_data)
         tool_response = self._extract_tool_response(input_data)
 
         duration = time.time() - self.tool_start_time.get(tool_name, time.time())
 
-        event = self._create_tool_event(tool_name, tool_input, tool_response, duration)
+        # Emit post_tool_use event
+        event = AgentEvent(
+            type=EventType.POST_TOOL_USE,
+            timestamp=time.time(),
+            data={
+                "tool_name": tool_name,
+                "tool_input": tool_input,
+                "tool_response": tool_response,
+                "tool_use_id": tool_use_id,
+                "duration_ms": duration * 1000,
+            },
+        )
         await self.event_queue.put(event)
 
         return {}
@@ -82,40 +113,3 @@ class AgentHooks:
         if isinstance(input_data, dict):
             return input_data.get("tool_response")
         return None
-
-    def _create_tool_event(
-        self,
-        tool_name: str,
-        tool_input: dict,
-        tool_response: str | None,
-        duration: float,
-    ) -> AgentEvent:
-        """Create appropriate event based on tool type and result."""
-        if tool_name == "Read":
-            file_path = tool_input.get("file_path") or tool_input.get("path")
-            return AgentEvent(
-                type=EventType.FILE_READ,
-                timestamp=time.time(),
-                data={"path": file_path},
-            )
-
-        if tool_name == "Write":
-            file_path = tool_input.get("file_path") or tool_input.get("path")
-            content = tool_input.get("content", "")
-            return AgentEvent(
-                type=EventType.FILE_WRITE,
-                timestamp=time.time(),
-                data={"path": file_path, "size": len(content)},
-            )
-
-        has_error = tool_response and "error" in str(tool_response).lower()
-
-        return AgentEvent(
-            type=EventType.TOOL_ERROR if has_error else EventType.TOOL_END,
-            timestamp=time.time(),
-            data={
-                "tool": tool_name,
-                "duration_ms": duration * 1000,
-                "success": not has_error,
-            },
-        )
