@@ -83,7 +83,6 @@ async def event_generator(runner: AgentRunner, prompt: str) -> AsyncIterator[str
     try:
         async for event in runner.run(prompt):
             event_count += 1
-            _log_event(event, event_count)
             yield f"data: {event.model_dump_json()}\n\n"
 
     except Exception as e:
@@ -94,39 +93,6 @@ async def event_generator(runner: AgentRunner, prompt: str) -> AsyncIterator[str
             data={"message": str(e), "type": type(e).__name__},
         )
         yield f"data: {error_event.model_dump_json()}\n\n"
-
-
-def _log_event(event: AgentEvent, event_count: int) -> None:
-    """Log events based on their type."""
-    loggers = {
-        EventType.STARTED: lambda: logger.info(f"Agent started - Model: {event.data.get('model')}"),
-        EventType.COMPLETED: lambda: logger.info(
-            f"Agent completed - Success: {event.data.get('success')}, "
-            f"Duration: {event.data.get('total_duration_ms')}ms, Events: {event_count}"
-        ),
-        EventType.ERROR: lambda: logger.error(f"Agent error: {event.data.get('message')}"),
-        EventType.TOOL_START: lambda: logger.info(f"Tool started: {event.data.get('tool')}"),
-        EventType.TOOL_END: lambda: _log_tool_end(event),
-        EventType.TOOL_ERROR: lambda: logger.error(
-            f"Tool error: {event.data.get('tool')} - {event.data.get('error')}"
-        ),
-    }
-
-    log_func = loggers.get(event.type)
-    if log_func:
-        log_func()
-
-    logger.debug(f"Yielding event {event_count}: {event.type}")
-
-
-def _log_tool_end(event: AgentEvent) -> None:
-    """Log tool end event with appropriate status."""
-    duration = event.data.get("duration_ms", 0)
-    success = event.data.get("success", False)
-    tool = event.data.get("tool")
-    status = "SUCCESS" if success else "FAILED"
-    logger.info(f"Tool {status}: {tool} - Duration: {duration}ms")
-
 
 @app.post("/generate")
 async def generate(req: GenerateRequest):

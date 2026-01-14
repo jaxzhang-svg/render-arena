@@ -1,9 +1,9 @@
 """Claude Agent runner for executing coding tasks."""
 
-import asyncio
 import logging
 import os
 import queue
+import sys
 import time
 from asyncio import Queue
 from pathlib import Path
@@ -21,9 +21,6 @@ from .hooks import AgentHooks
 from ..models.events import AgentEvent, EventType
 
 
-logger = logging.getLogger(__name__)
-
-
 class AgentRunner:
     """Claude Agent runner for Next.js coding tasks."""
 
@@ -33,7 +30,6 @@ class AgentRunner:
         self.system_prompt = self._load_system_prompt()
 
         self._configure_api()
-        self._log_initialization()
 
     def _configure_api(self) -> None:
         """Configure Anthropic API environment variables."""
@@ -42,19 +38,8 @@ class AgentRunner:
         )
         os.environ["ANTHROPIC_API_KEY"] = os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
         os.environ["ANTHROPIC_MODEL"] = os.environ.get(
-            "ANTHROPIC_MODEL", "moonshotai/kimi-k2-instruct"
+            "ANTHROPIC_MODEL", ""
         )
-
-    def _log_initialization(self) -> None:
-        """Log initialization details."""
-        model = os.environ.get("ANTHROPIC_MODEL")
-        base_url = os.environ.get("ANTHROPIC_BASE_URL")
-        has_api_key = bool(os.environ.get("ANTHROPIC_API_KEY"))
-
-        logger.info(f"AgentRunner initialized - Workdir: {self.workdir}, Model: {model}")
-        logger.debug(f"API Base URL: {base_url}")
-        logger.debug(f"API Key configured: {has_api_key}")
-        logger.debug(f"System prompt loaded (length: {len(self.system_prompt)} chars)")
 
     def _load_system_prompt(self) -> str:
         """Load system prompt from file."""
@@ -66,9 +51,6 @@ class AgentRunner:
     ) -> AsyncIterator[AgentEvent]:
         """Run Agent and stream events."""
         start_time = time.time()
-        prompt_preview = self._truncate_prompt(user_prompt)
-
-        logger.info(f"Starting agent run - Prompt: {prompt_preview}")
 
         yield self._create_started_event(user_prompt)
 
@@ -77,10 +59,8 @@ class AgentRunner:
 
         try:
             async with ClaudeSDKClient(options=options) as client:
-                logger.debug("Sending user prompt to agent")
                 await client.query(user_prompt)
 
-                logger.debug("Receiving agent response...")
                 response_count = 0
 
                 async for msg in client.receive_response():
@@ -88,9 +68,6 @@ class AgentRunner:
                     async for event in self._drain_event_queue():
                         if not self._should_filter_event(event):
                             yield event
-
-                    if response_count % 5 == 0:
-                        logger.debug(f"Received {response_count} messages so far")
 
                     if isinstance(msg, AssistantMessage):
                         async for event in self._process_assistant_message(msg):
@@ -100,23 +77,14 @@ class AgentRunner:
                 async for event in self._drain_event_queue():
                     if not self._should_filter_event(event):
                         yield event
-                logger.info(f"Total messages received: {response_count}")
 
         except Exception as e:
-            logger.error(f"Agent execution failed: {type(e).__name__}: {str(e)}", exc_info=True)
             await hooks.on_error(e)
             yield self._create_error_event(e)
             raise
 
         duration = time.time() - start_time
         yield self._create_completed_event(duration)
-        logger.info(f"Agent run completed successfully in {duration:.2f}s")
-
-    def _truncate_prompt(self, prompt: str, max_length: int = 100) -> str:
-        """Truncate prompt for logging."""
-        if len(prompt) <= max_length:
-            return prompt
-        return f"{prompt[:max_length]}..."
 
     def _create_started_event(self, user_prompt: str) -> AgentEvent:
         """Create the initial started event."""
@@ -182,7 +150,6 @@ class AgentRunner:
         """Process an assistant message and yield output events."""
         for block in msg.content:
             if isinstance(block, TextBlock) and block.text:
-                logger.debug(f"Text output: {len(block.text)} chars")
                 yield AgentEvent(
                     type=EventType.OUTPUT,
                     timestamp=time.time(),

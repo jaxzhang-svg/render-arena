@@ -1,15 +1,11 @@
 """Claude Agent SDK hooks for event streaming."""
 
-import logging
 import time
 from asyncio import Queue
 
 from claude_agent_sdk import HookContext, HookInput, HookJSONOutput
 
 from ..models.events import AgentEvent, EventType
-
-
-logger = logging.getLogger(__name__)
 
 
 class AgentHooks:
@@ -19,7 +15,6 @@ class AgentHooks:
         self.event_queue = event_queue
         self.workdir = workdir
         self.tool_start_time: dict[str, float] = {}
-        logger.debug("AgentHooks initialized")
 
     async def on_pre_tool_use(
         self,
@@ -31,7 +26,6 @@ class AgentHooks:
         tool_name = self._extract_tool_name(input_data)
         tool_input = self._extract_tool_input(input_data)
 
-        logger.debug(f"Pre-tool use: {tool_name}")
         self.tool_start_time[tool_name] = time.time()
 
         # Emit tool start event
@@ -56,7 +50,6 @@ class AgentHooks:
         tool_response = self._extract_tool_response(input_data)
 
         duration = time.time() - self.tool_start_time.get(tool_name, time.time())
-        logger.debug(f"Post-tool use: {tool_name} (took {duration:.3f}s)")
 
         event = self._create_tool_event(tool_name, tool_input, tool_response, duration)
         await self.event_queue.put(event)
@@ -65,8 +58,6 @@ class AgentHooks:
 
     async def on_error(self, error: Exception) -> None:
         """Hook called when an error occurs."""
-        logger.error(f"Hooks error: {type(error).__name__}: {str(error)}")
-
         event = AgentEvent(
             type=EventType.ERROR,
             timestamp=time.time(),
@@ -102,7 +93,6 @@ class AgentHooks:
         """Create appropriate event based on tool type and result."""
         if tool_name == "Read":
             file_path = tool_input.get("file_path") or tool_input.get("path")
-            logger.info(f"📄 Read file: {file_path}")
             return AgentEvent(
                 type=EventType.FILE_READ,
                 timestamp=time.time(),
@@ -112,7 +102,6 @@ class AgentHooks:
         if tool_name == "Write":
             file_path = tool_input.get("file_path") or tool_input.get("path")
             content = tool_input.get("content", "")
-            logger.info(f"✏️  Write file: {file_path} ({len(content)} chars)")
             return AgentEvent(
                 type=EventType.FILE_WRITE,
                 timestamp=time.time(),
@@ -120,8 +109,6 @@ class AgentHooks:
             )
 
         has_error = tool_response and "error" in str(tool_response).lower()
-        status = "FAILED" if has_error else "SUCCESS"
-        logger.info(f"🔧 Tool {status}: {tool_name} - Duration: {duration * 1000:.0f}ms")
 
         return AgentEvent(
             type=EventType.TOOL_ERROR if has_error else EventType.TOOL_END,
