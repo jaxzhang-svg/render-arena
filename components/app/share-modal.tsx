@@ -12,8 +12,6 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Download, Copy, X, Edit, Twitter, Linkedin, Upload, CircleDashed, FileVideo } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { convertVideoFormat } from '@/lib/video-converter';
-
 type VideoStatus = 'generating' | 'uploading' | 'ready';
 
 interface ShareModalProps {
@@ -92,11 +90,8 @@ export function ShareModal({
 
     setIsConverting(true);
     try {
-      // Convert to MP4
-      const mp4Blob = await convertVideoFormat(videoBlob, 'mp4');
-
       // Download converted MP4
-      const url = URL.createObjectURL(mp4Blob);
+      const url = URL.createObjectURL(videoBlob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `recording-${Date.now()}.mp4`;
