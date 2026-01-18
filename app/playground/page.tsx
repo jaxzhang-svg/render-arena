@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -11,52 +11,44 @@ import {
   ArrowUp,
   ArrowLeft,
   Wallet,
-  SplitSquareHorizontal,
   Eye,
   EyeOff,
   Square,
 } from 'lucide-react'
 import { ShareModal } from '@/components/app/share-modal'
 import { UserAvatar } from '@/components/app/user-avatar'
-import { TodoList } from '@/components/app/todo-list'
+import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Separator } from '@/components/ui/separator'
 import { models, LLMModel } from '@/lib/models'
-import { useSandboxAgent } from '@/hooks/use-sandbox-agent'
+import { useHtmlGenerator } from '@/hooks/use-html-generator'
 import { useScreenRecorder } from '@/hooks/use-screen-recorder'
+
+const NOVITA_API_KEY = 'sk_Y52XftPzTCOOrx9-oWJF_cRHUPWiZqirVYvov-qxWkA'
 
 export default function PlaygroundPage() {
   const [viewMode, setViewMode] = useState<'a' | 'b' | 'split'>('split')
   const [prompt, setPrompt] = useState(
-    'Make a mobile ordering app for a coffee shop with a modern minimal white design.'
+    'create a iron man 3d model.'
   )
   const [showInputBar, setShowInputBar] = useState(true)
 
   const [selectedModelA, setSelectedModelA] = useState<LLMModel>(models[0])
   const [selectedModelB, setSelectedModelB] = useState<LLMModel>(models[1])
 
+  const [modelAView, setModelAView] = useState<'code' | 'preview'>('code')
+  const [modelBView, setModelBView] = useState<'code' | 'preview'>('code')
+
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareMode, setShareMode] = useState<'video' | 'poster'>('poster')
   const [recordedFormat, setRecordedFormat] = useState<'webm' | 'mp4' | null>(null)
 
-  // Mock thinking steps for demonstration
-  const mockThinkingSteps = [
-    { id: '1', message: 'Analyzing user request for an AI comparison interface...' },
-    { id: '2', message: 'Identifying key components: Split layout, Model selectors, Status timeline.' },
-    { id: '3', message: 'Checking UI libraries... Framer Motion for animations, Tailwind for styling.' },
-    { id: '4', message: 'Structuring the React component hierarchy.' },
-    { id: '5', message: 'Drafting the response with the requested split-screen layout.' },
-  ];
-
-  // Use screen recorder hook
   const {
     isRecording,
-    recordingTime,
     recordedBlob,
     previewContainerRef,
     startRecording,
@@ -73,22 +65,21 @@ export default function PlaygroundPage() {
     },
   })
 
-  // Model A: Sandbox flow
-  const {
-    mainSteps: mainStepsA,
-    agentTodos: agentTodosA,
-    agentLogs: agentLogsA,
-    previewUrl: previewUrlA,
-    isLoading: isLoadingA,
-    error: errorA,
-    generate: generateA,
-    abort: abortA,
-  } = useSandboxAgent({
-    onPreviewReady: (url) => {
-      console.log('Preview ready:', url)
+  const generatorA = useHtmlGenerator({
+    apiKey: NOVITA_API_KEY,
+    onError: (error) => console.error('Model A error:', error),
+    onComplete: (html) => {
+      console.log('Model A complete:', html.length)
+      setModelAView('preview')
     },
-    onError: (err) => {
-      console.error('Model A error:', err)
+  })
+
+  const generatorB = useHtmlGenerator({
+    apiKey: NOVITA_API_KEY,
+    onError: (error) => console.error('Model B error:', error),
+    onComplete: (html) => {
+      console.log('Model B complete:', html.length)
+      setModelBView('preview')
     },
   })
 
@@ -111,15 +102,18 @@ export default function PlaygroundPage() {
   const handleGenerate = () => {
     if (!prompt.trim()) return
 
-    // Only generate for Model A (sandbox flow)
-    generateA(prompt, selectedModelA.id)
+    setModelAView('code')
+    setModelBView('code')
+    generatorA.generate(prompt, selectedModelA.id)
+    generatorB.generate(prompt, selectedModelB.id)
   }
 
   const handleStop = () => {
-    abortA()
+    generatorA.abort()
+    generatorB.abort()
   }
 
-  const isAnyLoading = isLoadingA
+  const isLoading = generatorA.isLoading || generatorB.isLoading
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">
@@ -177,199 +171,179 @@ export default function PlaygroundPage() {
         </div>
       </header>
 
-      <main className="flex flex-1 relative overflow-hidden">
+      <main ref={previewContainerRef} className="flex flex-1 relative overflow-hidden">
         <div className="flex flex-1">
-          {/* Model A Panel */}
-          <div className="flex-1 flex flex-col border-r border-[#f4f4f5] bg-white relative overflow-hidden">
-            {/* Model A Header */}
-            <div className="h-16 border-b border-[#e7e6e2] flex items-center justify-between px-4 bg-white shrink-0">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="gap-2 h-8 px-3 py-1.5 bg-[#f5f5f5] rounded-lg hover:bg-[#e7e6e2] transition-colors cursor-pointer"
-                  >
-                    <span className={`size-5 rounded-sm ${selectedModelA.color}`} />
-                    <span className="text-[16px] font-medium text-[#4f4e4a] font-['TT_Interphases_Pro']">
-                      {selectedModelA.name}
-                    </span>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                      <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-56">
-                  {models.map((model) => (
-                    <DropdownMenuItem
-                      key={model.id}
-                      onClick={() => setSelectedModelA(model)}
-                      className="gap-2 cursor-pointer"
+          {viewMode !== 'b' && (
+            <div className="flex-1 flex flex-col border-r border-[#f4f4f5] bg-white relative overflow-hidden">
+              <div className="h-16 border-b border-[#e7e6e2] flex items-center justify-between px-4 bg-white shrink-0">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="gap-2 h-8 px-3 py-1.5 bg-[#f5f5f5] rounded-lg hover:bg-[#e7e6e2] transition-colors cursor-pointer"
                     >
-                      <span className={`size-5 rounded-sm ${model.color}`} />
-                      {model.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <rect x="2" y="6" width="4" height="2" rx="1" fill="#9e9c98"/>
-                    <rect x="8" y="6" width="10" height="2" rx="1" fill="#9e9c98"/>
-                    <rect x="2" y="12" width="10" height="2" rx="1" fill="#9e9c98"/>
-                    <rect x="14" y="12" width="4" height="2" rx="1" fill="#9e9c98"/>
-                  </svg>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
-                  onClick={() => setViewMode(viewMode === 'a' ? 'split' : 'a')}
-                >
-                  <Maximize className="h-4 w-4 text-[#9e9c98]" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Model A Content */}
-            <div className="flex-1 overflow-auto bg-white">
-              {previewUrlA && !isLoadingA ? (
-                <iframe
-                  ref={previewContainerRef}
-                  src={previewUrlA}
-                  className="w-full h-full border-0"
-                  title="Preview"
-                />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center p-8">
-                  <div className="w-full max-w-lg">
-                    <div className="flex items-center justify-between mb-8">
-                      <span className="text-xs text-[#cbc9c4] uppercase tracking-widest font-medium font-['TT_Interphases_Pro']">
-                        STATUS
+                      <span className={`size-5 rounded-sm ${selectedModelA.color}`} />
+                      <span className="text-[16px] font-medium text-[#4f4e4a] font-['TT_Interphases_Pro']">
+                        {selectedModelA.name}
                       </span>
-                      <span className="text-xs text-[#cbc9c4] font-medium font-['TT_Interphases_Pro']">
-                        {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
-                      </span>
-                    </div>
-                    <TodoList
-                      mainSteps={mainStepsA}
-                      agentTodos={agentTodosA}
-                      agentLogs={agentLogsA}
-                      thinkingSteps={isLoadingA ? mockThinkingSteps : []}
-                      error={errorA ?? undefined}
-                    />
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56">
+                    {models.map((model) => (
+                      <DropdownMenuItem
+                        key={model.id}
+                        onClick={() => setSelectedModelA(model)}
+                        className="gap-2 cursor-pointer"
+                      >
+                        <span className={`size-5 rounded-sm ${model.color}`} />
+                        {model.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <div className="flex items-center gap-4">
+                  <div className="flex bg-[#f5f5f5] p-0.5 rounded-lg border border-[#e7e6e2]">
+                    <button
+                      onClick={() => setModelAView('code')}
+                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+                        modelAView === 'code'
+                          ? 'bg-white text-black shadow-sm'
+                          : 'text-[#666] hover:text-black'
+                      }`}
+                    >
+                      Code
+                    </button>
+                    <button
+                      onClick={() => setModelAView('preview')}
+                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+                        modelAView === 'preview'
+                          ? 'bg-white text-black shadow-sm'
+                          : 'text-[#666] hover:text-black'
+                      }`}
+                    >
+                      Preview
+                    </button>
                   </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Model B Panel */}
-          <div className="flex-1 flex flex-col bg-[rgba(250,250,250,0.5)] relative overflow-hidden">
-            {/* Model B Header */}
-            <div className="h-16 border-b border-[#e7e6e2] flex items-center justify-between px-4 bg-transparent shrink-0">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="gap-2 h-8 px-3 py-1.5 rounded-lg hover:bg-[#f5f5f5] transition-colors cursor-pointer"
+                    size="icon"
+                    className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
+                    onClick={() => setViewMode(viewMode === 'a' ? 'split' : 'a')}
                   >
-                    <span className={`size-5 rounded-sm ${selectedModelB.color}`} />
-                    <span className="text-[16px] font-medium text-[#4f4e4a] font-['TT_Interphases_Pro']">
-                      {selectedModelB.name}
-                    </span>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                      <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    <Maximize className="h-4 w-4 text-[#9e9c98]" />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-56">
-                  {models.map((model) => (
-                    <DropdownMenuItem
-                      key={model.id}
-                      onClick={() => setSelectedModelB(model)}
-                      className="gap-2 cursor-pointer"
-                    >
-                      <span className={`size-5 rounded-sm ${model.color}`} />
-                      {model.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <rect x="2" y="6" width="4" height="2" rx="1" fill="#9e9c98"/>
-                    <rect x="8" y="6" width="10" height="2" rx="1" fill="#9e9c98"/>
-                    <rect x="2" y="12" width="10" height="2" rx="1" fill="#9e9c98"/>
-                    <rect x="14" y="12" width="4" height="2" rx="1" fill="#9e9c98"/>
-                  </svg>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
-                  onClick={() => setViewMode(viewMode === 'b' ? 'split' : 'b')}
-                >
-                  <Maximize className="h-4 w-4 text-[#9e9c98]" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Model B Content - Offline State */}
-            <div className="flex-1 flex items-center justify-center p-8">
-              <div className="text-center max-w-xs">
-                <div className="mb-4">
-                  <span className="inline-block size-2 rounded-full bg-[#2b7fff] shadow-[0_0_0_4px_#eff6ff]" />
                 </div>
-                <h3 className="text-[20px] font-semibold text-[#4f4e4a] mb-4 tracking-tight font-['TT_Interphases_Pro']">
-                  Model B is currently offline
-                </h3>
-                <p className="text-[16px] text-[#9e9c98] mb-6 leading-6 font-['TT_Interphases_Pro']">
-                  This model is undergoing maintenance. Please use {selectedModelA.name} for your current tasks.
-                </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 px-4 text-xs font-normal border-[#e7e6e2] rounded hover:bg-muted/50 cursor-pointer font-['TT_Interphases_Pro']"
-                >
-                  Check Status
-                </Button>
+              </div>
+
+              <div className="flex-1 overflow-hidden">
+                <StreamingCodeDisplay
+                  content={generatorA.htmlContent}
+                  isLoading={generatorA.isLoading}
+                  error={generatorA.error}
+                  view={modelAView}
+                />
               </div>
             </div>
-          </div>
+          )}
+
+          {viewMode !== 'a' && (
+            <div className="flex-1 flex flex-col bg-[rgba(250,250,250,0.5)] relative overflow-hidden">
+              <div className="h-16 border-b border-[#e7e6e2] flex items-center justify-between px-4 bg-transparent shrink-0">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="gap-2 h-8 px-3 py-1.5 rounded-lg hover:bg-[#f5f5f5] transition-colors cursor-pointer"
+                    >
+                      <span className={`size-5 rounded-sm ${selectedModelB.color}`} />
+                      <span className="text-[16px] font-medium text-[#4f4e4a] font-['TT_Interphases_Pro']">
+                        {selectedModelB.name}
+                      </span>
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56">
+                    {models.map((model) => (
+                      <DropdownMenuItem
+                        key={model.id}
+                        onClick={() => setSelectedModelB(model)}
+                        className="gap-2 cursor-pointer"
+                      >
+                        <span className={`size-5 rounded-sm ${model.color}`} />
+                        {model.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <div className="flex items-center gap-4">
+                  <div className="flex bg-[#f5f5f5] p-0.5 rounded-lg border border-[#e7e6e2]">
+                    <button
+                      onClick={() => setModelBView('code')}
+                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+                        modelBView === 'code'
+                          ? 'bg-white text-black shadow-sm'
+                          : 'text-[#666] hover:text-black'
+                      }`}
+                    >
+                      Code
+                    </button>
+                    <button
+                      onClick={() => setModelBView('preview')}
+                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+                        modelBView === 'preview'
+                          ? 'bg-white text-black shadow-sm'
+                          : 'text-[#666] hover:text-black'
+                      }`}
+                    >
+                      Preview
+                    </button>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
+                    onClick={() => setViewMode(viewMode === 'b' ? 'split' : 'b')}
+                  >
+                    <Maximize className="h-4 w-4 text-[#9e9c98]" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-hidden">
+                <StreamingCodeDisplay
+                  content={generatorB.htmlContent}
+                  isLoading={generatorB.isLoading}
+                  error={generatorB.error}
+                  view={modelBView}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {showInputBar && isLoadingA && (
+        {showInputBar && isLoading && (
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-[720px] z-50">
             <div className="relative rounded-2xl shadow-[0px_20px_40px_-12px_rgba(0,0,0,0.15)] bg-white/80 backdrop-blur-xl border border-white/50 overflow-hidden">
               <div className="flex flex-col gap-2 p-4">
-                {/* Message Area */}
                 <div className="flex gap-3 items-start min-h-[136px]">
                   <div className="flex-1 flex flex-col gap-2">
-                    {/* Website Badge */}
                     <div className="inline-flex items-center gap-2 px-2 py-1.5 bg-[#f1f5f9] rounded-full self-start">
                       <span className="size-2 rounded-full bg-[#2b7fff]" />
                       <span className="text-[14px] text-[#45556c] font-['TT_Interphases_Pro'] leading-5">Website</span>
                     </div>
-                    
-                    {/* Message Text */}
+
                     <div className="text-[16px] text-[#4f4e4a] leading-6 font-['TT_Interphases_Pro']">
                       {prompt || "Building your application..."}
                     </div>
                   </div>
-                  
-                  {/* Stop Button */}
+
                   <Button
                     onClick={handleStop}
                     size="icon"
@@ -379,31 +353,7 @@ export default function PlaygroundPage() {
                   </Button>
                 </div>
 
-                {/* Controls */}
                 <div className="flex items-center justify-between pt-2 border-t border-[#f4f4f5]">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-1 h-9 px-3.5 py-2.5 text-[14px] font-medium text-[#4f4e4a] border-[#e7e6e2] rounded-lg hover:bg-muted/50 cursor-pointer font-['TT_Interphases_Pro']"
-                      >
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="1" y="1" width="12" height="12" rx="2" stroke="#4f4e4a" strokeWidth="1.5"/>
-                        </svg>
-                        Image
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M4 6L8 10L12 6" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-32">
-                      <DropdownMenuItem className="cursor-pointer">Image</DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">Video</DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">Code</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
                   <Button
                     variant="ghost"
                     size="sm"
@@ -420,7 +370,7 @@ export default function PlaygroundPage() {
           </div>
         )}
 
-        {showInputBar && !isLoadingA && (
+        {showInputBar && !isLoading && (
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-[700px] z-50">
             <div className="relative rounded-2xl shadow-2xl bg-white/80 backdrop-blur-xl border border-white/20 overflow-hidden">
               <div className="flex flex-col p-4">
