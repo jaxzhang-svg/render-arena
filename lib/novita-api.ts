@@ -17,11 +17,13 @@ export async function streamChatCompletion({
   model,
   messages,
   callbacks,
+  signal,
 }: {
   apiKey: string
   model: string
   messages: Array<{ role: string; content: string }>
   callbacks: StreamCallbacks
+  signal?: AbortSignal
 }) {
   const { onChunk, onComplete, onError } = callbacks
 
@@ -38,6 +40,8 @@ export async function streamChatCompletion({
         stream: true,
         separate_reasoning: true,
       }),
+      openWhenHidden: true,
+      signal,
       async onopen(response) {
         if (response.ok && response.headers.get('content-type')?.includes('text/event-stream')) {
           return

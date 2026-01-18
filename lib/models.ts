@@ -16,13 +16,6 @@ export type LLMModelConfig = {
 
 export const models: LLMModel[] = [
   {
-    id: 'minimax/minimax-m2.1',
-    name: 'Minimax M2.1',
-    provider: 'Novita',
-    providerId: 'novita',
-    color: 'bg-emerald-500',
-  },
-  {
     id: 'zai-org/glm-4.7',
     name: 'GLM 4.7',
     provider: 'Novita',
@@ -35,6 +28,13 @@ export const models: LLMModel[] = [
     provider: 'Novita',
     providerId: 'novita',
     color: 'bg-purple-500',
+  },
+  {
+    id: 'minimax/minimax-m2.1',
+    name: 'Minimax M2.1',
+    provider: 'Novita',
+    providerId: 'novita',
+    color: 'bg-emerald-500',
   },
 ]
 
