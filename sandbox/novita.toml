@@ -1,18 +1,18 @@
 # This is a config for Novita Agent Sandbox template.
-# You can use template ID (puen69p8fnqljztn7y1j) or template name (coding-agent-nextjs-v2) to create a sandbox:
+# You can use template ID (puen69p8fnqljztn7y1j) or template name (coding-agent-nextjs) to create a sandbox:
 
 # Python SDK
 # from novita_sandbox.core import Sandbox, AsyncSandbox
-# sandbox = Sandbox.create("coding-agent-nextjs-v2") # Sync sandbox
-# sandbox = await AsyncSandbox.create("coding-agent-nextjs-v2") # Async sandbox
+# sandbox = Sandbox.create("coding-agent-nextjs") # Sync sandbox
+# sandbox = await AsyncSandbox.create("coding-agent-nextjs") # Async sandbox
 
 # JS SDK
 # import { Sandbox } from 'novita-sandbox'
-# const sandbox = await Sandbox.create('coding-agent-nextjs-v2')
+# const sandbox = await Sandbox.create('coding-agent-nextjs')
 
 team_id = "49030af9-496f-43e0-ba3c-2cfb40629784"
 memory_mb = 2_048
 cpu_count = 2
 dockerfile = "novita.Dockerfile"
-template_name = "coding-agent-nextjs-v2"
+template_name = "coding-agent-nextjs"
 template_id = "puen69p8fnqljztn7y1j"

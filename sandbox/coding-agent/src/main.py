@@ -89,14 +89,6 @@ async def get_or_create_session(prompt: str, workdir: str) -> Session:
         return session
 
 
-def get_session(session_id: str) -> Session | None:
-    """Get a session by ID."""
-    global _active_session
-    if _active_session is not None and _active_session.id == session_id:
-        return _active_session
-    return None
-
-
 # ========== Request/Response Models ==========
 
 
@@ -110,7 +102,7 @@ class GenerateRequest(BaseModel):
 class GenerateResponse(BaseModel):
     """Response model for /generate endpoint."""
 
-    sessionId: str
+    success: bool
 
 
 class DeployResponse(BaseModel):
@@ -180,8 +172,8 @@ async def root():
         "name": "Coding Agent",
         "version": "0.1.0",
         "endpoints": {
-            "POST /generate": "Start code generation (returns sessionId)",
-            "GET /stream/{sessionId}": "SSE stream of generation events",
+            "POST /generate": "Start code generation (returns success)",
+            "GET /stream": "SSE stream of generation events",
             "GET /health": "Health check",
             "POST /deploy": "Deploy to Vercel",
         },
@@ -223,7 +215,7 @@ async def run_agent_in_background(session: Session) -> None:
 async def generate(req: GenerateRequest) -> GenerateResponse:
     """Start code generation (returns immediately).
 
-    If a session is already running, returns the existing session ID.
+    If a session is already running, returns success without creating new session.
     Otherwise, creates a new session and starts generation in background.
     """
     logger.info(f"Received /generate request - Workdir: {req.workdir}")
@@ -240,20 +232,22 @@ async def generate(req: GenerateRequest) -> GenerateResponse:
         task = asyncio.create_task(run_agent_in_background(session))
         session.set_task(task)
 
-    return GenerateResponse(sessionId=session.id)
+    return GenerateResponse(success=True)
 
 
-@app.get("/stream/{session_id}")
-async def stream_session(session_id: str):
+@app.get("/stream")
+async def stream_session():
     """SSE stream for session events.
 
     Replays all historical events (10ms delay each).
     If session is running, continues streaming live events.
     If session is completed, ends stream after replay.
     """
-    session = get_session(session_id)
-    if session is None:
-        raise HTTPException(status_code=404, detail=f"Session not found: {session_id}")
+    global _active_session
+    if _active_session is None:
+        raise HTTPException(status_code=404, detail="No active session")
+
+    session = _active_session
 
     async def event_stream():
         # Replay historical events with 10ms delay
@@ -272,7 +266,7 @@ async def stream_session(session_id: str):
                     last_index += 1
                 await asyncio.sleep(0.1)  # Check for new events every 100ms
 
-        logger.info(f"Stream ended for session {session_id}")
+        logger.info(f"Stream ended for session {session.id}")
 
     return StreamingResponse(
         event_stream(),
@@ -290,6 +284,7 @@ async def deploy() -> DeployResponse:
     """Deploy the generated app to Vercel.
 
     Runs `vercel deploy --prod --yes` in the working directory.
+    According to Vercel documentation, the deployment URL is always written to stdout.
     Requires VERCEL_TOKEN environment variable.
     """
     vercel_token = os.environ.get("VERCEL_TOKEN")
@@ -305,29 +300,44 @@ async def deploy() -> DeployResponse:
     logger.info(f"Starting Vercel deployment in {workdir}")
 
     try:
-        # Set up environment with Vercel token
-        env = os.environ.copy()
-        env["VERCEL_TOKEN"] = vercel_token
-
-        # Run vercel deploy command
+        # Run vercel deploy command with explicit token
+        # Per Vercel docs: "When deploying, stdout is always the Deployment URL"
+        # Note: VERCEL_TOKEN must be passed via -t flag, not detected from env var
         result = subprocess.run(
-            ["vercel", "deploy", "--prod", "--yes"],
+            ["vercel", "-t", vercel_token, "deploy", "--prod", "--yes"],
             cwd=workdir,
             capture_output=True,
             text=True,
-            env=env,
             timeout=300,  # 5 minute timeout
         )
 
         if result.returncode != 0:
-            logger.error(f"Vercel deployment failed: {result.stderr}")
+            logger.error(f"Vercel deployment failed (exit code {result.returncode}): {result.stderr}")
             raise HTTPException(
                 status_code=500,
                 detail=f"Deployment failed: {result.stderr}",
             )
 
         # Extract deployment URL from stdout
+        # According to Vercel documentation, stdout contains ONLY the deployment URL
         vercel_url = result.stdout.strip()
+
+        # Validate URL format
+        if not vercel_url:
+            logger.error("Vercel deployment returned empty URL")
+            raise HTTPException(
+                status_code=500,
+                detail="Deployment succeeded but returned empty URL",
+            )
+
+        # Basic URL validation (should start with http:// or https://)
+        if not vercel_url.startswith(("http://", "https://")):
+            logger.error(f"Vercel deployment returned invalid URL: {vercel_url}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Deployment returned invalid URL format: {vercel_url}",
+            )
+
         logger.info(f"Deployment successful: {vercel_url}")
 
         return DeployResponse(vercelUrl=vercel_url)
@@ -335,6 +345,8 @@ async def deploy() -> DeployResponse:
     except subprocess.TimeoutExpired:
         logger.error("Vercel deployment timed out")
         raise HTTPException(status_code=500, detail="Deployment timed out after 5 minutes")
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Deployment error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Deployment error: {str(e)}")
