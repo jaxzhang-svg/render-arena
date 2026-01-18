@@ -25,10 +25,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { models, LLMModel } from '@/lib/models'
-import { useHtmlGenerator } from '@/hooks/use-html-generator'
 import { useScreenRecorder } from '@/hooks/use-screen-recorder'
+import { streamChatCompletion } from '@/lib/novita-api'
+import { extractHTMLFromMarkdown } from '@/lib/html-extractor'
 
 const NOVITA_API_KEY = 'sk_Y52XftPzTCOOrx9-oWJF_cRHUPWiZqirVYvov-qxWkA'
+
+interface ModelResponse {
+  content: string
+  reasoning?: string
+  loading: boolean
+  completed: boolean
+  html?: string
+}
 
 export default function PlaygroundPage() {
   const [viewMode, setViewMode] = useState<'a' | 'b' | 'split'>('split')
@@ -42,6 +51,19 @@ export default function PlaygroundPage() {
 
   const [modelAView, setModelAView] = useState<'code' | 'preview'>('code')
   const [modelBView, setModelBView] = useState<'code' | 'preview'>('code')
+
+  const [modelAResponse, setModelAResponse] = useState<ModelResponse>({
+    content: '',
+    reasoning: '',
+    loading: false,
+    completed: false,
+  })
+  const [modelBResponse, setModelBResponse] = useState<ModelResponse>({
+    content: '',
+    reasoning: '',
+    loading: false,
+    completed: false,
+  })
 
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareMode, setShareMode] = useState<'video' | 'poster'>('poster')
@@ -65,24 +87,6 @@ export default function PlaygroundPage() {
     },
   })
 
-  const generatorA = useHtmlGenerator({
-    apiKey: NOVITA_API_KEY,
-    onError: (error) => console.error('Model A error:', error),
-    onComplete: (html) => {
-      console.log('Model A complete:', html.length)
-      setModelAView('preview')
-    },
-  })
-
-  const generatorB = useHtmlGenerator({
-    apiKey: NOVITA_API_KEY,
-    onError: (error) => console.error('Model B error:', error),
-    onComplete: (html) => {
-      console.log('Model B complete:', html.length)
-      setModelBView('preview')
-    },
-  })
-
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
@@ -99,21 +103,105 @@ export default function PlaygroundPage() {
     }
   }
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!prompt.trim()) return
 
     setModelAView('code')
     setModelBView('code')
-    generatorA.generate(prompt, selectedModelA.id)
-    generatorB.generate(prompt, selectedModelB.id)
+
+    setModelAResponse({ content: '', reasoning: '', loading: true, completed: false })
+    setModelBResponse({ content: '', reasoning: '', loading: true, completed: false })
+
+    const messages = [
+      {
+        role: 'user',
+        content: `Create a complete HTML file for: ${prompt}. 
+Please provide the HTML code in a markdown code block with language "html". 
+The HTML should be a self-contained, complete file with all necessary CSS and JavaScript included.`,
+      },
+    ]
+
+    const modelAPromise = streamChatCompletion({
+      apiKey: NOVITA_API_KEY,
+      model: selectedModelA.id,
+      messages,
+      callbacks: {
+        onChunk: (chunk) => {
+          setModelAResponse((prev) => ({
+            ...prev,
+            content: prev.content + (chunk.content || ''),
+            reasoning: prev.reasoning + (chunk.reasoning_content || ''),
+          }))
+        },
+        onComplete: () => {
+          setModelAResponse((prev) => {
+            const html = extractHTMLFromMarkdown(prev.content)
+            return {
+              ...prev,
+              loading: false,
+              completed: true,
+              html: html || undefined,
+            }
+          })
+          if (modelBResponse.completed && modelBResponse.html) {
+            setModelAView('preview')
+            setModelBView('preview')
+          }
+        },
+        onError: (error) => {
+          console.error('Model A error:', error)
+          setModelAResponse((prev) => ({
+            ...prev,
+            loading: false,
+            completed: true,
+            content: prev.content + '\n\nError: ' + error.message,
+          }))
+        },
+      },
+    })
+
+    const modelBPromise = streamChatCompletion({
+      apiKey: NOVITA_API_KEY,
+      model: selectedModelB.id,
+      messages,
+      callbacks: {
+        onChunk: (chunk) => {
+          setModelBResponse((prev) => ({
+            ...prev,
+            content: prev.content + (chunk.content || ''),
+            reasoning: prev.reasoning + (chunk.reasoning_content || ''),
+          }))
+        },
+        onComplete: () => {
+          setModelBResponse((prev) => {
+            const html = extractHTMLFromMarkdown(prev.content)
+            return {
+              ...prev,
+              loading: false,
+              completed: true,
+              html: html || undefined,
+            }
+          })
+          if (modelAResponse.completed && modelAResponse.html) {
+            setModelAView('preview')
+            setModelBView('preview')
+          }
+        },
+        onError: (error) => {
+          console.error('Model B error:', error)
+          setModelBResponse((prev) => ({
+            ...prev,
+            loading: false,
+            completed: true,
+            content: prev.content + '\n\nError: ' + error.message,
+          }))
+        },
+      },
+    })
+
+    await Promise.allSettled([modelAPromise, modelBPromise])
   }
 
-  const handleStop = () => {
-    generatorA.abort()
-    generatorB.abort()
-  }
-
-  const isLoading = generatorA.isLoading || generatorB.isLoading
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">
@@ -240,12 +328,28 @@ export default function PlaygroundPage() {
               </div>
 
               <div className="flex-1 overflow-hidden">
-                <StreamingCodeDisplay
-                  content={generatorA.htmlContent}
-                  isLoading={generatorA.isLoading}
-                  error={generatorA.error}
-                  view={modelAView}
-                />
+                {modelAView === 'code' ? (
+                  <StreamingCodeDisplay
+                    content={modelAResponse.content}
+                    reasoning={modelAResponse.reasoning}
+                  />
+                ) : (
+                  <div className="w-full h-full">
+                    {modelAResponse.html ? (
+                      <iframe
+                        srcDoc={modelAResponse.html}
+                        className="w-full h-full border-0"
+                        title="Preview"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-muted-foreground">
+                        {modelAResponse.loading
+                          ? 'Generating HTML...'
+                          : 'No HTML available for preview'}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -317,41 +421,56 @@ export default function PlaygroundPage() {
               </div>
 
               <div className="flex-1 overflow-hidden">
-                <StreamingCodeDisplay
-                  content={generatorB.htmlContent}
-                  isLoading={generatorB.isLoading}
-                  error={generatorB.error}
-                  view={modelBView}
-                />
+                {modelBView === 'code' ? (
+                  <StreamingCodeDisplay
+                    content={modelBResponse.content}
+                    reasoning={modelBResponse.reasoning}
+                  />
+                ) : (
+                  <div className="w-full h-full">
+                    {modelBResponse.html ? (
+                      <iframe
+                        srcDoc={modelBResponse.html}
+                        className="w-full h-full border-0"
+                        title="Preview"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-muted-foreground">
+                        {modelBResponse.loading
+                          ? 'Generating HTML...'
+                          : 'No HTML available for preview'}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
 
-        {showInputBar && isLoading && (
+        {showInputBar && (
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-[720px] z-50">
             <div className="relative rounded-2xl shadow-[0px_20px_40px_-12px_rgba(0,0,0,0.15)] bg-white/80 backdrop-blur-xl border border-white/50 overflow-hidden">
-              <div className="flex flex-col gap-2 p-4">
-                <div className="flex gap-3 items-start min-h-[136px]">
-                  <div className="flex-1 flex flex-col gap-2">
-                    <div className="inline-flex items-center gap-2 px-2 py-1.5 bg-[#f1f5f9] rounded-full self-start">
-                      <span className="size-2 rounded-full bg-[#2b7fff]" />
-                      <span className="text-[14px] text-[#45556c] font-['TT_Interphases_Pro'] leading-5">Website</span>
+                <div className="flex flex-col gap-2 p-4">
+                  <div className="flex gap-3 items-start min-h-[136px]">
+                    <div className="flex-1 flex flex-col gap-2">
+                      <div className="inline-flex items-center gap-2 px-2 py-1.5 bg-[#f1f5f9] rounded-full self-start">
+                        <span className="size-2 rounded-full bg-[#2b7fff]" />
+                        <span className="text-[14px] text-[#45556c] font-['TT_Interphases_Pro'] leading-5">HTML Generation</span>
+                      </div>
+
+                      <div className="text-[16px] text-[#4f4e4a] leading-6 font-['TT_Interphases_Pro']">
+                        {prompt || "Building your HTML page..."}
+                      </div>
                     </div>
 
-                    <div className="text-[16px] text-[#4f4e4a] leading-6 font-['TT_Interphases_Pro']">
-                      {prompt || "Building your application..."}
-                    </div>
+                    {(modelAResponse.loading || modelBResponse.loading) && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground shrink-0 mt-6">
+                        <div className="animate-spin size-4 border-2 border-[#23d57c] border-t-transparent rounded-full" />
+                        Generating...
+                      </div>
+                    )}
                   </div>
-
-                  <Button
-                    onClick={handleStop}
-                    size="icon"
-                    className="size-9 rounded-xl bg-[#23d57c] hover:bg-[#23d57c]/90 shadow-[0px_10px_15px_-3px_#a4f4cf,0px_4px_6px_-4px_#a4f4cf] shrink-0 mt-6"
-                  >
-                    <Square className="h-4 w-4 text-white" />
-                  </Button>
-                </div>
 
                 <div className="flex items-center justify-between pt-2 border-t border-[#f4f4f5]">
                   <Button
@@ -370,7 +489,7 @@ export default function PlaygroundPage() {
           </div>
         )}
 
-        {showInputBar && !isLoading && (
+        {showInputBar && (
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-[700px] z-50">
             <div className="relative rounded-2xl shadow-2xl bg-white/80 backdrop-blur-xl border border-white/20 overflow-hidden">
               <div className="flex flex-col p-4">
