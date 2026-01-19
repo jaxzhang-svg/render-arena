@@ -1,19 +1,23 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#e7e6e2] bg-white py-16">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="flex items-start justify-between">
+    <footer className="relative border-t border-[#e7e6e2] bg-white">
+      <div className="mx-auto w-[1280px] px-[120px]">
+        <div className="flex items-start justify-between pt-[66px]">
           {/* Left Column - Logo and Social */}
-          <div className="flex h-91.5 w-36 flex-col justify-between">
+          <div className="flex h-[366px] w-[144px] flex-col justify-between">
             <div className="flex flex-col gap-3">
               {/* Logo */}
               <Link href="/" className="flex items-center gap-[6px]">
                 <div className="flex items-center">
-                  <svg width="24" height="15" viewBox="0 0 24 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M11.9999 0L0 14.8333H23.9998L11.9999 0Z" fill="#23D57C"/>
-                  </svg>
+                  <Image
+                    src="/logo/logo-icon.svg"
+                    alt="Novita"
+                    width={24}
+                    height={15}
+                  />
                 </div>
                 <span className="
                   font-sans text-[16px] leading-[14.286px] font-semibold
@@ -24,8 +28,8 @@ export function Footer() {
               </Link>
               
               {/* Status */}
-              <div className="flex items-center gap-3">
-                <div className="size-2 rounded-full bg-[#23d57c]" />
+              <div className="flex items-center gap-[12px]">
+                <div className="size-[8px] rounded-full bg-[#23d57c]" />
                 <span className="
                   font-mono text-[14px] leading-4 text-[#292827]
                 ">
@@ -35,7 +39,7 @@ export function Footer() {
             </div>
 
             {/* Social Icons */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-[16px]">
               <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="
                 text-[#292827] transition-colors
                 hover:text-[#23d57c]
@@ -72,34 +76,34 @@ export function Footer() {
           </div>
 
           {/* Right Column - Navigation Links */}
-          <div className="flex w-[776px] gap-4">
+          <div className="flex w-[776px] gap-[16px]">
             {/* Contact */}
-            <div className="flex w-[160px] gap-2">
+            <div className="flex w-[160px] gap-[8px]">
               <div className="h-[333px] w-px bg-[#e7e6e2]" />
-              <div className="flex w-[159px] flex-col gap-4">
+              <div className="flex w-[159px] flex-col gap-[16px]">
                 <div className="
                   font-mono text-[12px] leading-[20px] tracking-[0.24px]
                   text-[#4f4e4a]
                 ">
                   CONTACT
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-[16px]">
                   <Link href="/contact" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     Contact support
                   </Link>
                   <Link href="/demo" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     Book a demo
                   </Link>
                   <Link href="/supply" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
@@ -110,39 +114,39 @@ export function Footer() {
             </div>
 
             {/* Resources */}
-            <div className="flex w-[160px] gap-2">
+            <div className="flex w-[160px] gap-[8px]">
               <div className="h-[333px] w-px bg-[#e7e6e2]" />
-              <div className="flex w-[158px] flex-col gap-4">
+              <div className="flex w-[158px] flex-col gap-[16px]">
                 <div className="
                   font-mono text-[12px] leading-[20px] tracking-[0.24px]
                   text-[#4f4e4a]
                 ">
                   RESOURCES
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-[16px]">
                   <Link href="/docs" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     Docs
                   </Link>
                   <Link href="/pricing" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     Pricing
                   </Link>
                   <Link href="/blog" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     Blog
                   </Link>
                   <Link href="/affiliate" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
@@ -153,32 +157,32 @@ export function Footer() {
             </div>
 
             {/* Company */}
-            <div className="flex w-[160px] gap-2">
+            <div className="flex w-[160px] gap-[8px]">
               <div className="h-[333px] w-px bg-[#e7e6e2]" />
-              <div className="flex w-[159px] flex-col gap-4">
+              <div className="flex w-[159px] flex-col gap-[16px]">
                 <div className="
                   font-mono text-[12px] leading-[20px] tracking-[0.24px]
                   text-[#4f4e4a]
                 ">
                   COMPANY
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-[16px]">
                   <Link href="/about" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     About
                   </Link>
                   <Link href="/privacy" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     Privacy
                   </Link>
                   <Link href="/terms" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
@@ -189,25 +193,25 @@ export function Footer() {
             </div>
 
             {/* Partners */}
-            <div className="flex w-[160px] gap-2">
+            <div className="flex w-[160px] gap-[8px]">
               <div className="h-[333px] w-px bg-[#e7e6e2]" />
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-[16px]">
                 <div className="
                   font-mono text-[12px] leading-[20px] tracking-[0.24px]
                   text-[#4f4e4a]
                 ">
                   PARTNERS
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-[16px]">
                   <Link href="/startup" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     Startup Program
                   </Link>
                   <Link href="/become-affiliate" className="
-                    py-2 font-mono text-[14px] leading-[16px] text-[#292827]
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
@@ -220,7 +224,7 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 border-t border-[#e7e6e2] pt-6 text-center">
+        <div className="flex h-[48px] items-center justify-center pt-[48px]">
           <p className="
             font-mono text-[12px] leading-[20px] tracking-[0.24px]
             text-[#000000]

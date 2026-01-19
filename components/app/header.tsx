@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { UserAvatar } from "./user-avatar"
 
 export function Header() {
@@ -10,9 +11,13 @@ export function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-[6px]">
           <div className="flex items-center">
-            <svg width="24" height="15" viewBox="0 0 24 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M11.9999 0L0 14.8333H23.9998L11.9999 0Z" fill="#23D57C"/>
-            </svg>
+            <Image
+              src="/logo/logo-icon.svg"
+              alt="Novita"
+              width={24}
+              height={15}
+              priority
+            />
           </div>
           <span className="
             font-sans text-[16px] leading-[14.286px] font-semibold

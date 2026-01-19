@@ -1,10 +1,13 @@
 'use client';
 
+import { useState } from 'react';
+import Link from 'next/link';
 import { Popover } from '@base-ui/react/popover';
 import { Button } from '@/components/base/button';
 import { User, LogOut, FileText, Shield } from 'lucide-react';
 import { useAuth, loginWithNovita } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
+import { ArenaBattleModal } from './arena-battle-modal';
 
 interface UserAvatarProps {
   className?: string;
@@ -18,6 +21,7 @@ interface UserAvatarProps {
  */
 export function UserAvatar({ className }: UserAvatarProps) {
   const { user, loading, logout } = useAuth();
+  const [isHackathonModalOpen, setIsHackathonModalOpen] = useState(false);
 
   // 加载中状态
   if (loading) {
@@ -77,9 +81,9 @@ export function UserAvatar({ className }: UserAvatarProps) {
         </div>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Positioner>
+        <Popover.Positioner sideOffset={8}>
           <Popover.Popup className={cn(
-            "z-50 w-56 overflow-hidden rounded-lg border border-gray-200 bg-white p-0 text-gray-900 shadow-lg"
+            "z-[100] w-56 overflow-hidden rounded-lg border border-gray-200 bg-white p-0 text-gray-900 shadow-lg"
           )}>
             {/* 用户信息 */}
             <div className="border-b border-[#e7e6e2] px-4 py-3">
@@ -89,27 +93,38 @@ export function UserAvatar({ className }: UserAvatarProps) {
             </div>
 
             <div className="p-2">
-              <button className="
-                flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-                text-left transition-colors hover:bg-[#f5f5f3]
-              ">
+              <a
+                href="https://novita.ai/console"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+                  text-left transition-colors hover:bg-[#f5f5f3]
+                "
+              >
                 <User className="size-4 text-[#666]" />
                 <span className="font-mono text-sm text-[#292827]">Account</span>
-              </button>
-              <button className="
-                flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-                text-left transition-colors hover:bg-[#f5f5f3]
-              ">
+              </a>
+              <button
+                onClick={() => setIsHackathonModalOpen(true)}
+                className="
+                  flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+                  text-left transition-colors hover:bg-[#f5f5f3]
+                "
+              >
                 <FileText className="size-4 text-[#666]" />
-                <span className="font-mono text-sm text-[#292827]">Activity</span>
+                <span className="font-mono text-sm text-[#292827]">Hackathon</span>
               </button>
-              <button className="
-                flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-                text-left transition-colors hover:bg-[#f5f5f3]
-              ">
+              <Link
+                href="/privacy"
+                className="
+                  flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+                  text-left transition-colors hover:bg-[#f5f5f3]
+                "
+              >
                 <Shield className="size-4 text-[#666]" />
                 <span className="font-mono text-sm text-[#292827]">Privacy</span>
-              </button>
+              </Link>
 
               <div className="mx-2 my-1 h-px bg-[#e7e6e2]" />
 
@@ -127,6 +142,10 @@ export function UserAvatar({ className }: UserAvatarProps) {
           </Popover.Popup>
         </Popover.Positioner>
       </Popover.Portal>
+      <ArenaBattleModal
+        open={isHackathonModalOpen}
+        onOpenChange={setIsHackathonModalOpen}
+      />
     </Popover.Root>
   );
 }

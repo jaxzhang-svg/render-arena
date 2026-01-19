@@ -60,7 +60,9 @@ export default function RootLayout({
           antialiased
         `}
       >
+        <div className="root">
         {children}
+        </div>
       </body>
     </html>
   );

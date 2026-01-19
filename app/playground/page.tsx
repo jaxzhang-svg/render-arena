@@ -489,18 +489,6 @@ export default function PlaygroundPage() {
             <Share className="size-4" />
           </Button>
 
-          <div className="
-            flex items-center gap-2 rounded-lg border border-[#e7e6e2]
-            bg-[#f5f5f5] px-3 py-2
-          ">
-            <Wallet className="size-4 text-[#3f3f46]" />
-            <span className="
-              text-sm font-semibold tracking-tight text-[#3f3f46]
-            ">
-              $1,250.00
-            </span>
-          </div>
-
           <UserAvatar />
         </div>
       </header>
