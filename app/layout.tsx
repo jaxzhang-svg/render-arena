@@ -54,7 +54,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${interphases.variable} ${interphasesMono.variable} antialiased`}
+        className={`
+          ${interphases.variable}
+          ${interphasesMono.variable}
+          antialiased
+        `}
       >
         {children}
       </body>

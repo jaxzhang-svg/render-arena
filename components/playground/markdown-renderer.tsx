@@ -25,11 +25,16 @@ interface CodeBlockProps {
 // 使用 memo 包装 CodeBlock，避免不必要的重渲染
 const CodeBlock = memo(function CodeBlock({ language, codeString, onPreview }: CodeBlockProps) {
   return (
-    <div className="my-3 rounded-lg border border-gray-200 overflow-hidden shadow-sm">
-      <div className="flex items-center justify-between px-3 py-1.5 bg-gray-50/80 border-b border-gray-200">
+    <div className="
+      my-3 overflow-hidden rounded-lg border border-gray-200 shadow-sm
+    ">
+      <div className="
+        flex items-center justify-between border-b border-gray-200 bg-gray-50/80
+        px-3 py-1.5
+      ">
         <div className="flex items-center gap-1.5">
-          <Code2 className="h-3.5 w-3.5 text-gray-500" />
-          <span className="text-xs text-gray-700 font-medium capitalize">
+          <Code2 className="size-3.5 text-gray-500" />
+          <span className="text-xs font-medium text-gray-700 capitalize">
             {language}
           </span>
         </div>
@@ -37,9 +42,14 @@ const CodeBlock = memo(function CodeBlock({ language, codeString, onPreview }: C
           <Button
             onClick={() => onPreview(codeString)}
             size="sm"
-            className="flex items-center gap-1 px-2 py-0.5 text-xs bg-primary text-white rounded-md hover:bg-pr transition-colors"
+            className="
+              bg-primary
+              hover:bg-pr
+              flex items-center gap-1 rounded-md px-2 py-0.5 text-xs text-white
+              transition-colors
+            "
           >
-            <Eye className="h-3 w-3" />
+            <Eye className="size-3" />
             Preview
           </Button>
         )}
@@ -81,7 +91,10 @@ const createMarkdownComponents = (onPreview?: (html: string) => void) => ({
     if (isInlineCode) {
       return (
         <code
-          className="px-2 py-1 bg-gray-100 rounded-md text-sm font-mono text-gray-800 break-words"
+          className="
+            rounded-md bg-gray-100 px-2 py-1 font-mono text-sm wrap-break-word
+            text-gray-800
+          "
           {...rest}
         >
           {children}
@@ -103,37 +116,39 @@ const createMarkdownComponents = (onPreview?: (html: string) => void) => ({
     )
   },
   p: ({ children, ...props }: any) => (
-    <p className="text-gray-700 leading-7 mb-3" {...props}>
+    <p className="mb-3 leading-7 text-gray-700" {...props}>
       {children}
     </p>
   ),
   h1: ({ children, ...props }: any) => (
-    <h1 className="text-2xl font-bold text-gray-900 mb-3 mt-5" {...props}>
+    <h1 className="mt-5 mb-3 text-2xl font-bold text-gray-900" {...props}>
       {children}
     </h1>
   ),
   h2: ({ children, ...props }: any) => (
-    <h2 className="text-xl font-semibold text-gray-900 mb-2 mt-4" {...props}>
+    <h2 className="mt-4 mb-2 text-xl font-semibold text-gray-900" {...props}>
       {children}
     </h2>
   ),
   h3: ({ children, ...props }: any) => (
-    <h3 className="text-lg font-medium text-gray-900 mb-2 mt-3" {...props}>
+    <h3 className="mt-3 mb-2 text-lg font-medium text-gray-900" {...props}>
       {children}
     </h3>
   ),
   ul: ({ children, ...props }: any) => (
-    <ul className="list-disc list-inside text-gray-700 space-y-0.5 mb-3" {...props}>
+    <ul className="mb-3 list-inside list-disc space-y-0.5 text-gray-700" {...props}>
       {children}
     </ul>
   ),
   ol: ({ children, ...props }: any) => (
-    <ol className="list-decimal list-inside text-gray-700 space-y-0.5 mb-3" {...props}>
+    <ol className="mb-3 list-inside list-decimal space-y-0.5 text-gray-700" {...props}>
       {children}
     </ol>
   ),
   blockquote: ({ children, ...props }: any) => (
-    <blockquote className="border-l-4 border-blue-300 pl-4 italic text-gray-700 mb-3" {...props}>
+    <blockquote className="
+      mb-3 border-l-4 border-blue-300 pl-4 text-gray-700 italic
+    " {...props}>
       {children}
     </blockquote>
   ),
@@ -159,20 +174,27 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
   return (
     <div className="w-full space-y-4">
       {reasoning && (
-        <div className="bg-white rounded-xl border border-gray-200/60 shadow-sm overflow-hidden">
+        <div className="
+          overflow-hidden rounded-xl border border-gray-200/60 bg-white
+          shadow-sm
+        ">
           <button
             onClick={() => setShowReasoning(!showReasoning)}
-            className="flex items-center gap-2 px-4 py-3 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50/50 transition-colors cursor-pointer w-full text-left"
+            className="
+              flex w-full cursor-pointer items-center gap-2 px-4 py-3 text-left
+              text-sm font-medium text-gray-700 transition-colors
+              hover:bg-gray-50/50 hover:text-gray-900
+            "
           >
             {showReasoning ? (
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="size-4" />
             ) : (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="size-4" />
             )}
             <span>Thinking</span>
           </button>
           {showReasoning && (
-            <div className="border-t border-gray-100 p-4 bg-gray-50/30">
+            <div className="border-t border-gray-100 bg-gray-50/30 p-4">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={components}

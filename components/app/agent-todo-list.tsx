@@ -20,11 +20,14 @@ export function AgentTodoList({ todos, title = 'TODO' }: AgentTodoListProps) {
   return (
     <div className="w-full">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[14px] font-semibold text-[#364153] font-['Inter'] uppercase tracking-wider">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="
+          font-['Inter'] text-[14px] font-semibold tracking-wider text-[#364153]
+          uppercase
+        ">
           {title}
         </h3>
-        <span className="text-[12px] text-[#99a1af] font-['Inter']">
+        <span className="font-['Inter'] text-[12px] text-[#99a1af]">
           {todos.filter(t => t.status === 'completed').length}/{todos.length}
         </span>
       </div>
@@ -35,31 +38,33 @@ export function AgentTodoList({ todos, title = 'TODO' }: AgentTodoListProps) {
           <div
             key={todo.id}
             className={cn(
-              'flex items-start gap-3 p-3 rounded-xl border transition-all',
-              todo.status === 'completed' && 'bg-white border-[#e5e7eb] opacity-60',
-              todo.status === 'in-progress' && 'bg-[#f0fdf4] border-[#86efac]',
-              todo.status === 'pending' && 'bg-white border-[#e5e7eb]'
+              'flex items-start gap-3 rounded-xl border p-3 transition-all',
+              todo.status === 'completed' && `
+                border-[#e5e7eb] bg-white opacity-60
+              `,
+              todo.status === 'in-progress' && 'border-[#86efac] bg-[#f0fdf4]',
+              todo.status === 'pending' && 'border-[#e5e7eb] bg-white'
             )}
           >
             {/* Status Icon */}
-            <div className="shrink-0 mt-0.5">
+            <div className="mt-0.5 shrink-0">
               {todo.status === 'completed' && (
-                <CheckCircle2 className="w-4 h-4 text-[#22c55e]" />
+                <CheckCircle2 className="size-4 text-[#22c55e]" />
               )}
               {todo.status === 'in-progress' && (
-                <Loader2 className="w-4 h-4 text-[#22c55e] animate-spin" />
+                <Loader2 className="size-4 animate-spin text-[#22c55e]" />
               )}
               {todo.status === 'pending' && (
-                <Circle className="w-4 h-4 text-[#d1d5dc]" />
+                <Circle className="size-4 text-[#d1d5dc]" />
               )}
             </div>
 
             {/* Todo Text */}
             <p
               className={cn(
-                'text-[13px] font-["Inter"] leading-[20px] flex-1',
+                'flex-1 font-["Inter"] text-[13px] leading-[20px]',
                 todo.status === 'completed' && 'text-[#6b7280] line-through',
-                todo.status === 'in-progress' && 'text-[#374151] font-medium',
+                todo.status === 'in-progress' && 'font-medium text-[#374151]',
                 todo.status === 'pending' && 'text-[#6b7280]'
               )}
             >

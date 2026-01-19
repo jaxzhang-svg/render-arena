@@ -19,20 +19,27 @@ const modelColors: Record<ModelName, string> = {
 
 export function ModelInfoCard({ model, tokens, time }: ModelInfoCardProps) {
   return (
-    <div className="absolute bottom-4 left-4 rounded-lg bg-white/95 p-3 shadow-lg border border-border backdrop-blur-md dark:bg-black/80 flex flex-col gap-1 min-w-[200px]">
-      <div className="flex items-center gap-2 mb-1">
-        <div className={cn('w-2 h-2 rounded-full', modelColors[model])} />
-        <span className="text-xs font-bold uppercase tracking-wide">
+    <div className="
+      border-border absolute bottom-4 left-4 flex min-w-[200px] flex-col gap-1
+      rounded-lg border bg-white/95 p-3 shadow-lg backdrop-blur-md
+      dark:bg-black/80
+    ">
+      <div className="mb-1 flex items-center gap-2">
+        <div className={cn('size-2 rounded-full', modelColors[model])} />
+        <span className="text-xs font-bold tracking-wide uppercase">
           {model}
         </span>
       </div>
-      <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
+      <div className="
+        text-muted-foreground flex items-center justify-between font-mono
+        text-xs
+      ">
         <div className="flex items-center gap-1">
-          <Coins className="h-3.5 w-3.5" />
+          <Coins className="size-3.5" />
           <span>{tokens}</span>
         </div>
         <div className="flex items-center gap-1">
-          <Timer className="h-3.5 w-3.5" />
+          <Timer className="size-3.5" />
           <span>{time}</span>
         </div>
       </div>

@@ -83,7 +83,7 @@ export function TodoList({
   error,
 }: TodoListProps) {
   return (
-    <div className="space-y-4 relative">
+    <div className="relative space-y-4">
       {mainSteps.map((step, index) => {
         const isLast = index === mainSteps.length - 1;
         const isActive = step.status === 'in-progress';
@@ -92,25 +92,31 @@ export function TodoList({
 
         return (
           <div key={step.id} className="relative">
-            <div className="flex gap-4 items-start">
+            <div className="flex items-start gap-4">
               {/* Connector line container */}
-              <div className="flex flex-col items-center shrink-0">
+              <div className="flex shrink-0 flex-col items-center">
                 {/* Icon Container */}
                 <div
                   className={cn(
-                    'flex h-10 w-10 items-center justify-center rounded-2xl border shadow-sm z-10',
-                    isCompleted && 'bg-[#f9fafb] border-[#e5e7eb]',
-                    isActive && 'bg-[#caf6e0] border-[#caf6e0] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)]',
-                    step.status === 'pending' && 'bg-white border-[#f3f4f6]',
-                    isError && 'bg-red-50 border-red-200'
+                    `
+                      z-10 flex size-10 items-center justify-center rounded-2xl
+                      border shadow-sm
+                    `,
+                    isCompleted && 'border-[#e5e7eb] bg-[#f9fafb]',
+                    isActive && `
+                      border-[#caf6e0] bg-[#caf6e0]
+                      shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)]
+                    `,
+                    step.status === 'pending' && 'border-[#f3f4f6] bg-white',
+                    isError && 'border-red-200 bg-red-50'
                   )}
                 >
                   {isActive ? (
-                    <Loader2 className="h-5 w-5 text-[#23d57c] animate-spin" />
+                    <Loader2 className="size-5 animate-spin text-[#23d57c]" />
                   ) : (
                     <step.icon
                       className={cn(
-                        'h-5 w-5',
+                        'size-5',
                         isCompleted && 'text-[#9ca3af]',
                         isActive && 'text-[#23d57c]',
                         step.status === 'pending' && 'text-[#d1d5dc]',
@@ -122,7 +128,7 @@ export function TodoList({
 
                 {/* Connector line */}
                 {!isLast && (
-                  <div className="w-px flex-1 bg-[#f3f4f6] mt-2" style={{ minHeight: isActive && step.id === 'building' ? '400px' : '30px' }} />
+                  <div className="mt-2 w-px flex-1 bg-[#f3f4f6]" style={{ minHeight: isActive && step.id === 'building' ? '400px' : '30px' }} />
                 )}
               </div>
 
@@ -130,15 +136,24 @@ export function TodoList({
               <div className="flex-1 pb-4">
                 <div
                   className={cn(
-                    'flex items-center gap-3 h-[46px] rounded-2xl border bg-white px-4 shadow-sm',
-                    isActive && 'shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] border-[#e5e7eb]',
+                    `
+                      flex h-[46px] items-center gap-3 rounded-2xl border
+                      bg-white px-4 shadow-sm
+                    `,
+                    isActive && `
+                      border-[#e5e7eb]
+                      shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)]
+                    `,
                     step.status !== 'in-progress' && 'border-[#e5e7eb]',
                     isError && 'border-red-500/50 bg-red-500/5'
                   )}
                 >
                   <span
                     className={cn(
-                      'text-[16px] font-medium font-[\'TT_Interphases_Pro\'] flex-1',
+                      `
+                        flex-1 font-[\'TT_Interphases_Pro\'] text-[16px]
+                        font-medium
+                      `,
                       isActive && 'text-[#4f4e4a]',
                       step.status !== 'in-progress' && 'text-[#9e9c98]',
                       isError && 'text-red-600'
@@ -149,13 +164,13 @@ export function TodoList({
                   
                   {/* Loading indicator for active step */}
                   {isActive && (
-                    <Loader2 className="h-4 w-4 text-[#23d57c] animate-spin" />
+                    <Loader2 className="size-4 animate-spin text-[#23d57c]" />
                   )}
                 </div>
 
                 {/* Thinking Process - Shows under active Building step */}
                 {isActive && step.id === 'building' && thinkingSteps.length > 0 && (
-                  <div className="flex gap-6 items-start">
+                  <div className="flex items-start gap-6">
                     <div className="flex-1">
                       <ThinkingProcess
                         steps={thinkingSteps}
@@ -172,7 +187,10 @@ export function TodoList({
                   {/* Agent Todos */}
                   {agentTodos.length > 0 && (
                     <div className="space-y-2">
-                      <div className="text-xs font-semibold text-[#cbc9c4] uppercase tracking-wider">
+                      <div className="
+                        text-xs font-semibold tracking-wider text-[#cbc9c4]
+                        uppercase
+                      ">
                         Tasks
                       </div>
                       <div className="space-y-1.5">
@@ -180,18 +198,32 @@ export function TodoList({
                           <div
                             key={todo.id}
                             className={cn(
-                              'flex items-start gap-2 text-xs rounded-md px-2 py-1.5 transition-colors',
-                              todo.status === 'in-progress' && 'bg-[#23d57c]/5 border border-[#23d57c]/20',
+                              `
+                                flex items-start gap-2 rounded-md px-2 py-1.5
+                                text-xs transition-colors
+                              `,
+                              todo.status === 'in-progress' && `
+                                border border-[#23d57c]/20 bg-[#23d57c]/5
+                              `,
                               todo.status === 'completed' && 'text-[#9e9c98]',
                               todo.status === 'pending' && 'text-[#9e9c98]/60'
                             )}
                           >
                             {todo.status === 'in-progress' ? (
-                              <Loader2 className="h-3 w-3 shrink-0 mt-0.5 animate-spin text-[#23d57c]" />
+                              <Loader2 className="
+                                mt-0.5 size-3 shrink-0 animate-spin
+                                text-[#23d57c]
+                              " />
                             ) : todo.status === 'completed' ? (
-                              <div className="h-3 w-3 shrink-0 mt-0.5 rounded-full bg-[#23d57c]/50" />
+                              <div className="
+                                mt-0.5 size-3 shrink-0 rounded-full
+                                bg-[#23d57c]/50
+                              " />
                             ) : (
-                              <div className="h-3 w-3 shrink-0 mt-0.5 rounded-full border border-[#9e9c98]/30" />
+                              <div className="
+                                mt-0.5 size-3 shrink-0 rounded-full border
+                                border-[#9e9c98]/30
+                              " />
                             )}
                             <span className="flex-1">{todo.activeForm}</span>
                           </div>
@@ -203,24 +235,50 @@ export function TodoList({
                   {/* Agent Logs */}
                   {agentLogs.length > 0 && (
                     <div className="space-y-2">
-                      <div className="text-xs font-semibold text-[#cbc9c4] uppercase tracking-wider">
+                      <div className="
+                        text-xs font-semibold tracking-wider text-[#cbc9c4]
+                        uppercase
+                      ">
                         Activity
                       </div>
-                      <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1 scrollbar-thin scrollbar-thumb-[#9e9c98]/20 scrollbar-track-transparent">
+                      <div className="
+                        scrollbar-thin scrollbar-thumb-[#9e9c98]/20
+                        scrollbar-track-transparent max-h-48 space-y-1.5
+                        overflow-y-auto pr-1
+                      ">
                         {agentLogs.map((log) => {
                           return (
                             <div
                               key={log.id}
                               className={cn(
-                                'flex items-start gap-2 text-xs font-mono rounded px-2 py-1.5 transition-colors',
-                                log.type === 'info' && 'bg-gray-500/5 text-gray-600',
-                                log.type === 'thinking' && 'bg-purple-500/5 text-purple-600',
-                                log.type === 'output' && 'bg-blue-500/5 text-blue-600',
-                                log.type === 'tool_use' && 'bg-orange-500/5 text-orange-600',
-                                log.type === 'tool_executing' && 'bg-yellow-500/5 text-yellow-600',
-                                log.type === 'tool_completed' && 'bg-green-500/5 text-green-600',
-                                log.type === 'success' && 'bg-emerald-500/5 text-emerald-600',
-                                log.type === 'error' && 'bg-red-500/10 text-red-600'
+                                `
+                                  flex items-start gap-2 rounded-sm px-2 py-1.5
+                                  font-mono text-xs transition-colors
+                                `,
+                                log.type === 'info' && `
+                                  bg-gray-500/5 text-gray-600
+                                `,
+                                log.type === 'thinking' && `
+                                  bg-purple-500/5 text-purple-600
+                                `,
+                                log.type === 'output' && `
+                                  bg-blue-500/5 text-blue-600
+                                `,
+                                log.type === 'tool_use' && `
+                                  bg-orange-500/5 text-orange-600
+                                `,
+                                log.type === 'tool_executing' && `
+                                  bg-yellow-500/5 text-yellow-600
+                                `,
+                                log.type === 'tool_completed' && `
+                                  bg-green-500/5 text-green-600
+                                `,
+                                log.type === 'success' && `
+                                  bg-emerald-500/5 text-emerald-600
+                                `,
+                                log.type === 'error' && `
+                                  bg-red-500/10 text-red-600
+                                `
                               )}
                             >
                               <span className="shrink-0">

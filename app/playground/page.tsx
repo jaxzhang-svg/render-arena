@@ -434,18 +434,26 @@ export default function PlaygroundPage() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">
-      <header className="flex h-16 items-center justify-between border-b border-[#f3f4f6] bg-white px-4 shrink-0 z-30">
+      <header className="
+        z-30 flex h-16 shrink-0 items-center justify-between border-b
+        border-[#f3f4f6] bg-white px-4
+      ">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
-              className="size-9 rounded-full hover:bg-muted/80 cursor-pointer p-2"
+              className="
+                hover:bg-muted/80
+                size-9 cursor-pointer rounded-full p-2
+              "
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="size-5" />
             </Button>
           </Link>
-          <h1 className="text-[20px] font-semibold text-black tracking-tight font-sans">
+          <h1 className="
+            font-sans text-[20px] font-semibold tracking-tight text-black
+          ">
             Arena Playground
           </h1>
         </div>
@@ -454,32 +462,45 @@ export default function PlaygroundPage() {
           <Button
             variant="outline"
             size="icon"
-            className="size-9 rounded-lg border-[#e4e4e7] hover:bg-foreground hover:text-background transition-colors cursor-pointer"
+            className="
+              hover:bg-foreground hover:text-background
+              size-9 cursor-pointer rounded-lg border-[#e4e4e7]
+              transition-colors
+            "
             onClick={handleRecordToggle}
             title={isRecording ? 'Stop recording' : 'Start recording'}
           >
             {isRecording ? (
-              <Square className="h-4 w-4 fill-red-500 text-red-500" />
+              <Square className="size-4 fill-red-500 text-red-500" />
             ) : (
-              <Video className="h-4 w-4" />
+              <Video className="size-4" />
             )}
           </Button>
           <Button
             variant="outline"
             size="icon"
-            className="size-9 rounded-lg border-[#e4e4e7] hover:bg-foreground hover:text-background transition-colors cursor-pointer"
+            className="
+              hover:bg-foreground hover:text-background
+              size-9 cursor-pointer rounded-lg border-[#e4e4e7]
+              transition-colors
+            "
             title="Share"
             onClick={() => {
               setShareMode('poster')
               setShowShareModal(true)
             }}
           >
-            <Share className="h-4 w-4" />
+            <Share className="size-4" />
           </Button>
 
-          <div className="flex items-center gap-2 px-3 py-2 bg-[#f5f5f5] rounded-lg border border-[#e7e6e2]">
-            <Wallet className="h-4 w-4 text-[#3f3f46]" />
-            <span className="text-sm font-semibold text-[#3f3f46] tracking-tight">
+          <div className="
+            flex items-center gap-2 rounded-lg border border-[#e7e6e2]
+            bg-[#f5f5f5] px-3 py-2
+          ">
+            <Wallet className="size-4 text-[#3f3f46]" />
+            <span className="
+              text-sm font-semibold tracking-tight text-[#3f3f46]
+            ">
               $1,250.00
             </span>
           </div>
@@ -488,20 +509,38 @@ export default function PlaygroundPage() {
         </div>
       </header>
 
-      <main ref={previewContainerRef} className="w-screen flex flex-1 relative overflow-hidden">
-        <div className="w-full flex flex-1">
+      <main ref={previewContainerRef} className="
+        relative flex w-screen flex-1 overflow-hidden
+      ">
+        <div className="flex w-full flex-1">
           {viewMode !== 'b' && (
-            <div className={`${viewMode === 'split' ? 'w-1/2' : 'flex-1'} flex flex-col border-r border-[#f4f4f5] bg-white relative overflow-hidden`}>
-              <div className="h-16 border-b border-[#e7e6e2] flex items-center justify-between px-4 bg-white shrink-0">
+            <div className={`
+              ${viewMode === 'split' ? 'w-1/2' : 'flex-1'}
+              relative flex flex-col overflow-hidden border-r border-[#f4f4f5]
+              bg-white
+            `}>
+              <div className="
+                flex h-16 shrink-0 items-center justify-between border-b
+                border-[#e7e6e2] bg-white px-4
+              ">
                 <div className="flex items-center gap-3">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className="gap-2 h-8 px-3 py-1.5 bg-[#f5f5f5] rounded-lg hover:bg-[#e7e6e2] transition-colors cursor-pointer"
+                        className="
+                          h-8 cursor-pointer gap-2 rounded-lg bg-[#f5f5f5] px-3
+                          py-1.5 transition-colors
+                          hover:bg-[#e7e6e2]
+                        "
                       >
-                        <span className={`size-5 rounded-sm ${selectedModelA.color}`} />
-                        <span className="text-[16px] font-medium text-[#4f4e4a] font-sans">
+                        <span className={`
+                          size-5 rounded-sm
+                          ${selectedModelA.color}
+                        `} />
+                        <span className="
+                          font-sans text-[16px] font-medium text-[#4f4e4a]
+                        ">
                           {selectedModelA.name}
                         </span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -514,9 +553,12 @@ export default function PlaygroundPage() {
                       <DropdownMenuItem
                         key={model.id}
                         onClick={() => setSelectedModelA(model)}
-                        className="gap-2 cursor-pointer"
+                        className="cursor-pointer gap-2"
                       >
-                        <span className={`size-5 rounded-sm ${model.color}`} />
+                        <span className={`
+                          size-5 rounded-sm
+                          ${model.color}
+                        `} />
                         {model.name}
                       </DropdownMenuItem>
                     ))}
@@ -524,13 +566,20 @@ export default function PlaygroundPage() {
                 </DropdownMenu>
                 
                 {modelAResponse.loading && (
-                  <div className="flex items-center gap-2 text-sm text-[#9e9c98]">
-                    <div className="animate-spin size-4 border-2 border-[#23d57c] border-t-transparent rounded-full" />
+                  <div className="
+                    flex items-center gap-2 text-sm text-[#9e9c98]
+                  ">
+                    <div className="
+                      size-4 animate-spin rounded-full border-2 border-[#23d57c]
+                      border-t-transparent
+                    " />
                     <span className="text-xs font-medium">Generating...</span>
                   </div>
                 )}
                 {!modelAResponse.loading && modelAResponse.completed && modelAResponse.tokens && (
-                  <div className="flex items-center gap-3 text-xs text-[#9e9c98]">
+                  <div className="
+                    flex items-center gap-3 text-xs text-[#9e9c98]
+                  ">
                     <span className="font-medium">{modelAResponse.tokens} tokens</span>
                     <span className="text-[#e7e6e2]">•</span>
                     <span className="font-medium">{modelAResponse.duration?.toFixed(1)}s</span>
@@ -539,24 +588,41 @@ export default function PlaygroundPage() {
                 </div>
 
                 <div className="flex items-center">
-                  <div className="flex bg-[#f5f5f5] p-0.5 rounded-lg border border-[#e7e6e2] mr-2">
+                  <div className="
+                    mr-2 flex rounded-lg border border-[#e7e6e2] bg-[#f5f5f5]
+                    p-0.5
+                  ">
                     <button
                       onClick={() => setModelAView('code')}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                      className={`
+                        cursor-pointer rounded-md px-3 py-1 text-xs font-medium
+                        transition-all
+                        ${
                         modelAView === 'code'
                           ? 'bg-white text-black shadow-sm'
-                          : 'text-[#666] hover:text-black'
-                      }`}
+                          : `
+                            text-[#666]
+                            hover:text-black
+                          `
+                      }
+                      `}
                     >
                       Code
                     </button>
                     <button
                       onClick={() => setModelAView('preview')}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                      className={`
+                        cursor-pointer rounded-md px-3 py-1 text-xs font-medium
+                        transition-all
+                        ${
                         modelAView === 'preview'
                           ? 'bg-white text-black shadow-sm'
-                          : 'text-[#666] hover:text-black'
-                      }`}
+                          : `
+                            text-[#666]
+                            hover:text-black
+                          `
+                      }
+                      `}
                     >
                       Preview
                     </button>
@@ -564,11 +630,14 @@ export default function PlaygroundPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
+                    className="
+                      hover:bg-muted/80
+                      size-8 cursor-pointer rounded-lg
+                    "
                     onClick={handleGenerateModelA}
                     title="Retry generation"
                   >
-                    <RotateCcw className="h-4 w-4 text-[#9e9c98]" />
+                    <RotateCcw className="size-4 text-[#9e9c98]" />
                   </Button>
                   <ModelSettingsPopover
                     modelName={selectedModelA.name}
@@ -578,25 +647,34 @@ export default function PlaygroundPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
+                      className="
+                        hover:bg-muted/80
+                        size-8 cursor-pointer rounded-lg
+                      "
                     >
-                      <SlidersHorizontal className="h-4 w-4 text-[#9e9c98]" />
+                      <SlidersHorizontal className="size-4 text-[#9e9c98]" />
                     </Button>
                   </ModelSettingsPopover>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
+                    className="
+                      hover:bg-muted/80
+                      size-8 cursor-pointer rounded-lg
+                    "
                     onClick={() => setViewMode(viewMode === 'a' ? 'split' : 'a')}
                   >
-                    <Maximize className="h-4 w-4 text-[#9e9c98]" />
+                    <Maximize className="size-4 text-[#9e9c98]" />
                   </Button>
                 </div>
               </div>
 
-              <div className="flex-1 overflow-hidden relative">
+              <div className="relative flex-1 overflow-hidden">
                 {/* Code View - 始终渲染，用 CSS 控制显示 */}
-                <div className={`absolute inset-0 ${modelAView === 'code' ? 'block' : 'hidden'}`}>
+                <div className={`
+                  absolute inset-0
+                  ${modelAView === 'code' ? `block` : `hidden`}
+                `}>
                   <StreamingCodeDisplay
                     content={modelAResponse.content}
                     reasoning={modelAResponse.reasoning}
@@ -608,15 +686,21 @@ export default function PlaygroundPage() {
                 </div>
                 
                 {/* Preview View - 始终渲染，用 CSS 控制显示 */}
-                <div className={`absolute inset-0 ${modelAView === 'preview' ? 'block' : 'hidden'}`}>
+                <div className={`
+                  absolute inset-0
+                  ${modelAView === 'preview' ? `block` : `hidden`}
+                `}>
                   {modelAResponse.html ? (
                     <iframe
                       srcDoc={modelAResponse.html}
-                      className="w-full h-full border-0"
+                      className="size-full border-0"
                       title="Preview"
                     />
                   ) : (
-                    <div className="flex items-center justify-center h-full text-muted-foreground">
+                    <div className="
+                      text-muted-foreground flex h-full items-center
+                      justify-center
+                    ">
                       {modelAResponse.loading
                         ? 'Generating HTML...'
                         : 'No HTML available for preview'}
@@ -628,17 +712,32 @@ export default function PlaygroundPage() {
           )}
 
           {viewMode !== 'a' && (
-            <div className={`${viewMode === 'split' ? 'w-1/2' : 'flex-1'} flex flex-col bg-white relative overflow-hidden`}>
-              <div className="h-16 border-b border-[#e7e6e2] flex items-center justify-between px-4 bg-white shrink-0">
+            <div className={`
+              ${viewMode === 'split' ? 'w-1/2' : 'flex-1'}
+              relative flex flex-col overflow-hidden bg-white
+            `}>
+              <div className="
+                flex h-16 shrink-0 items-center justify-between border-b
+                border-[#e7e6e2] bg-white px-4
+              ">
                 <div className="flex items-center gap-3">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className="gap-2 h-8 px-3 py-1.5 rounded-lg hover:bg-[#f5f5f5] transition-colors cursor-pointer"
+                        className="
+                          h-8 cursor-pointer gap-2 rounded-lg px-3 py-1.5
+                          transition-colors
+                          hover:bg-[#f5f5f5]
+                        "
                       >
-                        <span className={`size-5 rounded-sm ${selectedModelB.color}`} />
-                        <span className="text-[16px] font-medium text-[#4f4e4a] font-sans">
+                        <span className={`
+                          size-5 rounded-sm
+                          ${selectedModelB.color}
+                        `} />
+                        <span className="
+                          font-sans text-[16px] font-medium text-[#4f4e4a]
+                        ">
                           {selectedModelB.name}
                         </span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -651,9 +750,12 @@ export default function PlaygroundPage() {
                       <DropdownMenuItem
                         key={model.id}
                         onClick={() => setSelectedModelB(model)}
-                        className="gap-2 cursor-pointer"
+                        className="cursor-pointer gap-2"
                       >
-                        <span className={`size-5 rounded-sm ${model.color}`} />
+                        <span className={`
+                          size-5 rounded-sm
+                          ${model.color}
+                        `} />
                         {model.name}
                       </DropdownMenuItem>
                     ))}
@@ -661,13 +763,20 @@ export default function PlaygroundPage() {
                 </DropdownMenu>
                 
                 {modelBResponse.loading && (
-                  <div className="flex items-center gap-2 text-sm text-[#9e9c98]">
-                    <div className="animate-spin size-4 border-2 border-[#23d57c] border-t-transparent rounded-full" />
+                  <div className="
+                    flex items-center gap-2 text-sm text-[#9e9c98]
+                  ">
+                    <div className="
+                      size-4 animate-spin rounded-full border-2 border-[#23d57c]
+                      border-t-transparent
+                    " />
                     <span className="text-xs font-medium">Generating...</span>
                   </div>
                 )}
                 {!modelBResponse.loading && modelBResponse.completed && modelBResponse.tokens && (
-                  <div className="flex items-center gap-3 text-xs text-[#9e9c98]">
+                  <div className="
+                    flex items-center gap-3 text-xs text-[#9e9c98]
+                  ">
                     <span className="font-medium">{modelBResponse.tokens} tokens</span>
                     <span className="text-[#e7e6e2]">•</span>
                     <span className="font-medium">{modelBResponse.duration?.toFixed(1)}s</span>
@@ -676,24 +785,39 @@ export default function PlaygroundPage() {
                 </div>
 
                 <div className="flex items-center">
-                  <div className="flex bg-[#f5f5f5] p-0.5 rounded-lg border border-[#e7e6e2] mr-2">
+                  <div className="
+                    mr-2 flex rounded-lg border border-[#e7e6e2] bg-[#f5f5f5]
+                    p-0.5
+                  ">
                     <button
                       onClick={() => setModelBView('code')}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+                      className={`
+                        rounded-md px-3 py-1 text-xs font-medium transition-all
+                        ${
                         modelBView === 'code'
                           ? 'bg-white text-black shadow-sm'
-                          : 'text-[#666] hover:text-black'
-                      }`}
+                          : `
+                            text-[#666]
+                            hover:text-black
+                          `
+                      }
+                      `}
                     >
                       Code
                     </button>
                     <button
                       onClick={() => setModelBView('preview')}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+                      className={`
+                        rounded-md px-3 py-1 text-xs font-medium transition-all
+                        ${
                         modelBView === 'preview'
                           ? 'bg-white text-black shadow-sm'
-                          : 'text-[#666] hover:text-black'
-                      }`}
+                          : `
+                            text-[#666]
+                            hover:text-black
+                          `
+                      }
+                      `}
                     >
                       Preview
                     </button>
@@ -701,11 +825,14 @@ export default function PlaygroundPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
+                    className="
+                      hover:bg-muted/80
+                      size-8 cursor-pointer rounded-lg
+                    "
                     onClick={handleGenerateModelB}
                     title="Retry generation"
                   >
-                    <RotateCcw className="h-4 w-4 text-[#9e9c98]" />
+                    <RotateCcw className="size-4 text-[#9e9c98]" />
                   </Button>
                   <ModelSettingsPopover
                     modelName={selectedModelB.name}
@@ -715,25 +842,34 @@ export default function PlaygroundPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
+                      className="
+                        hover:bg-muted/80
+                        size-8 cursor-pointer rounded-lg
+                      "
                     >
-                      <SlidersHorizontal className="h-4 w-4 text-[#9e9c98]" />
+                      <SlidersHorizontal className="size-4 text-[#9e9c98]" />
                     </Button>
                   </ModelSettingsPopover>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="size-8 rounded-lg hover:bg-muted/80 cursor-pointer"
+                    className="
+                      hover:bg-muted/80
+                      size-8 cursor-pointer rounded-lg
+                    "
                     onClick={() => setViewMode(viewMode === 'b' ? 'split' : 'b')}
                   >
-                    <Maximize className="h-4 w-4 text-[#9e9c98]" />
+                    <Maximize className="size-4 text-[#9e9c98]" />
                   </Button>
                 </div>
               </div>
 
-              <div className="flex-1 overflow-hidden relative">
+              <div className="relative flex-1 overflow-hidden">
                 {/* Code View - 始终渲染，用 CSS 控制显示 */}
-                <div className={`absolute inset-0 ${modelBView === 'code' ? 'block' : 'hidden'}`}>
+                <div className={`
+                  absolute inset-0
+                  ${modelBView === 'code' ? `block` : `hidden`}
+                `}>
                   <StreamingCodeDisplay
                     content={modelBResponse.content}
                     reasoning={modelBResponse.reasoning}
@@ -745,15 +881,21 @@ export default function PlaygroundPage() {
                 </div>
                 
                 {/* Preview View - 始终渲染，用 CSS 控制显示 */}
-                <div className={`absolute inset-0 ${modelBView === 'preview' ? 'block' : 'hidden'}`}>
+                <div className={`
+                  absolute inset-0
+                  ${modelBView === 'preview' ? `block` : `hidden`}
+                `}>
                   {modelBResponse.html ? (
                     <iframe
                       srcDoc={modelBResponse.html}
-                      className="w-full h-full border-0"
+                      className="size-full border-0"
                       title="Preview"
                     />
                   ) : (
-                    <div className="flex items-center justify-center h-full text-muted-foreground">
+                    <div className="
+                      text-muted-foreground flex h-full items-center
+                      justify-center
+                    ">
                       {modelBResponse.loading
                         ? 'Generating HTML...'
                         : 'No HTML available for preview'}
@@ -766,14 +908,30 @@ export default function PlaygroundPage() {
         </div>
 
         {showInputBar && (
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-[720px] z-50">
-            <div className="relative rounded-2xl shadow-[0px_20px_40px_-12px_rgba(0,0,0,0.15)] bg-white/80 backdrop-blur-xl border border-white/50 overflow-hidden">
+          <div className="
+            absolute bottom-8 left-1/2 z-50 w-[90%] max-w-[720px]
+            -translate-x-1/2
+          ">
+            <div className="
+              relative overflow-hidden rounded-2xl border border-white/50
+              bg-white/80 shadow-[0px_20px_40px_-12px_rgba(0,0,0,0.15)]
+              backdrop-blur-xl
+            ">
               <div className="flex flex-col gap-2 p-4">
-                <div className="h-[56.75px] relative w-full">
-                  <div className="absolute flex items-start left-0 overflow-hidden top-[8px] w-[566px] h-[48.75px]">
+                <div className="relative h-[56.75px] w-full">
+                  <div className="
+                    absolute top-[8px] left-0 flex h-[48.75px] w-[566px]
+                    items-start overflow-hidden
+                  ">
                     <Textarea
                       placeholder="Describe your app... (Press Enter to send)"
-                      className="w-full h-full bg-transparent border-0 resize-none focus-visible:ring-0 p-0 text-[16px] text-[#4f4e4a] leading-[24px] placeholder:text-[#9e9c98] font-sans font-normal scrollbar-none"
+                      className="
+                        scrollbar-none size-full resize-none border-0
+                        bg-transparent p-0 font-sans text-[16px] leading-[24px]
+                        font-normal text-[#4f4e4a]
+                        placeholder:text-[#9e9c98]
+                        focus-visible:ring-0
+                      "
                       style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
@@ -796,35 +954,68 @@ export default function PlaygroundPage() {
                       }
                     }}
                     size="icon"
-                    className={`absolute right-0 top-[12.25px] size-9 rounded-xl transition-all active:scale-95 group shrink-0 ${
+                    className={`
+                      group absolute top-[12.25px] right-0 size-9 shrink-0
+                      rounded-xl transition-all
+                      active:scale-95
+                      ${
                       modelAResponse.loading || modelBResponse.loading
-                        ? 'bg-red-500 hover:bg-red-600 text-white shadow-[0px_4px_6px_-4px_rgba(239,68,68,0.5)]'
+                        ? `
+                          bg-red-500 text-white
+                          shadow-[0px_4px_6px_-4px_rgba(239,68,68,0.5)]
+                          hover:bg-red-600
+                        `
                         : modelAResponse.completed && modelBResponse.completed
-                        ? 'bg-orange-500 hover:bg-orange-600 text-white shadow-[0px_4px_6px_-4px_rgba(249,115,22,0.5)]'
-                        : 'bg-[#23d57c] hover:bg-[#23d57c]/90 text-white shadow-[0px_4px_6px_-4px_rgba(35,213,124,0.5)]'
-                    }`}
+                        ? `
+                          bg-orange-500 text-white
+                          shadow-[0px_4px_6px_-4px_rgba(249,115,22,0.5)]
+                          hover:bg-orange-600
+                        `
+                        : `
+                          bg-[#23d57c] text-white
+                          shadow-[0px_4px_6px_-4px_rgba(35,213,124,0.5)]
+                          hover:bg-[#23d57c]/90
+                        `
+                    }
+                    `}
                     disabled={!prompt.trim() && !(modelAResponse.loading || modelBResponse.loading)}
                   >
                     {modelAResponse.loading || modelBResponse.loading ? (
-                      <Square className="h-4 w-4 fill-current" />
+                      <Square className="size-4 fill-current" />
                     ) : modelAResponse.completed && modelBResponse.completed ? (
-                      <RotateCcw className="h-4 w-4 group-hover:-rotate-12 transition-transform" />
+                      <RotateCcw className="
+                        size-4 transition-transform
+                        group-hover:-rotate-12
+                      " />
                     ) : (
-                      <ArrowUp className="h-4 w-4 group-hover:-translate-y-0.5 transition-transform" />
+                      <ArrowUp className="
+                        size-4 transition-transform
+                        group-hover:-translate-y-0.5
+                      " />
                     )}
                   </Button>
                 </div>
 
-                <div className="flex flex-col items-start overflow-hidden pb-0 pt-2 px-0 relative w-full">
-                  <div className="border-[#f4f4f5] border-solid border-t flex items-center justify-end pb-0 pt-2 px-0 relative w-full">
+                <div className="
+                  relative flex w-full flex-col items-start overflow-hidden px-0
+                  pt-2 pb-0
+                ">
+                  <div className="
+                    relative flex w-full items-center justify-end border-t
+                    border-solid border-[#f4f4f5] px-0 pt-2 pb-0
+                  ">
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="gap-1.5 h-7 px-2.5 text-[12px] font-normal text-[#4f4e4a] hover:bg-muted/50 rounded-lg transition-colors cursor-pointer"
+                      className="
+                        hover:bg-muted/50
+                        h-7 cursor-pointer gap-1.5 rounded-lg px-2.5 text-[12px]
+                        font-normal text-[#4f4e4a] transition-colors
+                      "
                       onClick={() => setShowInputBar(false)}
                       title="Hide controls"
                     >
-                      <EyeOff className="h-4 w-4" />
+                      <EyeOff className="size-4" />
                       Hide controls
                     </Button>
                   </div>
@@ -838,10 +1029,13 @@ export default function PlaygroundPage() {
           <Button
             onClick={() => setShowInputBar(true)}
             size="sm"
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 gap-2 px-4 py-2 rounded-full shadow-lg cursor-pointer"
+            className="
+              absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer gap-2
+              rounded-full px-4 py-2 shadow-lg
+            "
             title="Show prompt"
           >
-            <Eye className="h-4 w-4" />
+            <Eye className="size-4" />
             Show Prompt
           </Button>
         )}

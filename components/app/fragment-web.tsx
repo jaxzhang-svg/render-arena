@@ -28,32 +28,32 @@ export function FragmentWeb({ result }: { result: ExecutionResultWeb }) {
   }
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex size-full flex-col">
       <iframe
         key={iframeKey}
-        className="h-full w-full"
+        className="size-full"
         sandbox="allow-forms allow-scripts allow-same-origin"
         loading="lazy"
         src={result.url}
       />
-      <div className="p-2 border-t">
-        <div className="flex items-center bg-muted/50 rounded-2xl">
+      <div className="border-t p-2">
+        <div className="bg-muted/50 flex items-center rounded-2xl">
           <TooltipProvider>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-muted-foreground h-8 w-8"
+                  className="text-muted-foreground size-8"
                   onClick={refreshIframe}
                 >
-                  <RotateCw className="h-4 w-4" />
+                  <RotateCw className="size-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Refresh</TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <span className="text-muted-foreground text-xs flex-1 text-ellipsis overflow-hidden whitespace-nowrap px-2">
+          <span className="text-muted-foreground flex-1 truncate px-2 text-xs">
             {result.url}
           </span>
           <TooltipProvider>
@@ -62,10 +62,12 @@ export function FragmentWeb({ result }: { result: ExecutionResultWeb }) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-muted-foreground h-8 w-8"
+                  className="text-muted-foreground size-8"
                   onClick={copyUrl}
                 >
-                  {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  {copied ? <Check className="size-4" /> : <Copy className="
+                    size-4
+                  " />}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>{copied ? 'Copied!' : 'Copy URL'}</TooltipContent>

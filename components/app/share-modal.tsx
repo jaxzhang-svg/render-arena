@@ -109,18 +109,33 @@ export function ShareModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="!w-[1100px] !max-w-[1100px] h-auto p-0 overflow-hidden gap-0">
-        <div className="flex flex-col lg:flex-row">
+      <DialogContent className="
+        h-auto w-[1100px]! max-w-[1100px]! gap-0 overflow-hidden p-0
+      ">
+        <div className="
+          flex flex-col
+          lg:flex-row
+        ">
           {/* Left Side - Preview */}
-          <div className="w-full lg:w-[60%] bg-muted/30 p-8 flex flex-col justify-center items-center relative">
+          <div className="
+            bg-muted/30 relative flex w-full flex-col items-center
+            justify-center p-8
+            lg:w-[60%]
+          ">
             {mode === 'video' && (
-              <div className="absolute top-6 left-6 bg-black text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wider">
+              <div className="
+                absolute top-6 left-6 rounded-sm bg-black px-3 py-1.5 text-xs
+                font-bold tracking-wider text-white uppercase
+              ">
                 Preview
               </div>
             )}
 
             <div
-              className="w-full rounded-lg shadow-lg overflow-hidden relative bg-background border"
+              className="
+                bg-background relative w-full overflow-hidden rounded-lg border
+                shadow-lg
+              "
               style={{ aspectRatio: mode === 'video' ? '8/3' : '4/3', maxHeight: mode === 'video' ? '420px' : '560px' }}
             >
               {mode === 'video' && videoUrl ? (
@@ -128,7 +143,7 @@ export function ShareModal({
                   src={videoUrl}
                   controls
                   autoPlay
-                  className="w-full h-full object-contain bg-black"
+                  className="size-full bg-black object-contain"
                 />
               ) : (
                 <>
@@ -137,13 +152,21 @@ export function ShareModal({
                     style={{ backgroundImage: `url(${previewImage})` }}
                   />
                   {mode === 'video' && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/20 transition-all cursor-pointer group">
+                    <div className="
+                      group absolute inset-0 flex cursor-pointer items-center
+                      justify-center bg-black/10 transition-all
+                      hover:bg-black/20
+                    ">
                       <Button
                         size="icon"
-                        className="rounded-full w-16 h-16 bg-[#23D57C] text-black hover:bg-[#16B063] transition-all shadow-xl"
+                        className="
+                          size-16 rounded-full bg-[#23D57C] text-black shadow-xl
+                          transition-all
+                          hover:bg-[#16B063]
+                        "
                       >
                         <svg
-                          className="w-8 h-8 ml-1"
+                          className="ml-1 size-8"
                           fill="currentColor"
                           viewBox="0 0 24 24"
                         >
@@ -159,20 +182,32 @@ export function ShareModal({
               {mode === 'video' && (
                 <>
                   {videoStatus === 'generating' && (
-                    <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/80 text-white px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm">
-                      <CircleDashed className="h-3 w-3 animate-spin" />
+                    <div className="
+                      absolute bottom-4 left-4 flex items-center gap-2
+                      rounded-full bg-black/80 px-3 py-1.5 text-xs font-medium
+                      text-white backdrop-blur-sm
+                    ">
+                      <CircleDashed className="size-3 animate-spin" />
                       Generating video...
                     </div>
                   )}
                   {videoStatus === 'uploading' && (
-                    <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2 bg-black/80 text-white px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm">
-                      <CircleDashed className="h-3 w-3 animate-spin" />
+                    <div className="
+                      absolute right-4 bottom-4 left-4 flex items-center gap-2
+                      rounded-full bg-black/80 px-3 py-1.5 text-xs font-medium
+                      text-white backdrop-blur-sm
+                    ">
+                      <CircleDashed className="size-3 animate-spin" />
                       Uploading... {uploadProgress}%
                     </div>
                   )}
                   {videoStatus === 'ready' && (
-                    <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/80 text-white px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm">
-                      <div className="h-2 w-2 rounded-full bg-green-500" />
+                    <div className="
+                      absolute bottom-4 left-4 flex items-center gap-2
+                      rounded-full bg-black/80 px-3 py-1.5 text-xs font-medium
+                      text-white backdrop-blur-sm
+                    ">
+                      <div className="size-2 rounded-full bg-green-500" />
                       Ready to share
                     </div>
                   )}
@@ -186,17 +221,25 @@ export function ShareModal({
                 <div className="flex gap-2">
                   <Button
                     size="default"
-                    className="flex-1 gap-2 font-mono h-12 bg-[#23D57C] text-black hover:bg-[#16B063] text-sm"
+                    className="
+                      h-12 flex-1 gap-2 bg-[#23D57C] font-mono text-sm
+                      text-black
+                      hover:bg-[#16B063]
+                    "
                   >
-                    <Download className="h-5 w-5" />
+                    <Download className="size-5" />
                     Download Poster
                   </Button>
                   <Button
                     onClick={handleCopy}
                     variant="outline"
-                    className="flex-1 gap-2 bg-black text-white hover:bg-black/90 border-black font-mono h-12 text-sm"
+                    className="
+                      h-12 flex-1 gap-2 border-black bg-black font-mono text-sm
+                      text-white
+                      hover:bg-black/90
+                    "
                   >
-                    <Copy className="h-4 w-4" />
+                    <Copy className="size-4" />
                     {copied ? 'Copied!' : 'Copy Link'}
                   </Button>
                 </div>
@@ -206,8 +249,11 @@ export function ShareModal({
                     <div className="space-y-2">
                       {/* Show format info */}
                       {videoFormat && (
-                        <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground px-3 py-1.5 bg-muted/50 rounded-full">
-                          <FileVideo className="h-3 w-3" />
+                        <div className="
+                          text-muted-foreground bg-muted/50 flex items-center
+                          justify-center gap-2 rounded-full px-3 py-1.5 text-xs
+                        ">
+                          <FileVideo className="size-3" />
                           Format: <span className="font-semibold uppercase">{videoFormat}</span>
                         </div>
                       )}
@@ -218,9 +264,13 @@ export function ShareModal({
                           onClick={handleDownload}
                           disabled={isConverting}
                           size="default"
-                          className="flex-1 gap-2 font-mono h-12 bg-[#23D57C] text-black hover:bg-[#16B063] text-sm"
+                          className="
+                            h-12 flex-1 gap-2 bg-[#23D57C] font-mono text-sm
+                            text-black
+                            hover:bg-[#16B063]
+                          "
                         >
-                          <Download className="h-5 w-5" />
+                          <Download className="size-5" />
                           Download {videoFormat?.toUpperCase() || 'Video'}
                         </Button>
 
@@ -230,9 +280,13 @@ export function ShareModal({
                             onClick={handleDownloadAsMp4}
                             disabled={isConverting}
                             variant="outline"
-                            className="flex-1 gap-2 font-mono h-12 border-primary text-primary hover:bg-primary/10 text-sm"
+                            className="
+                              border-primary text-primary
+                              hover:bg-primary/10
+                              h-12 flex-1 gap-2 font-mono text-sm
+                            "
                           >
-                            <Download className="h-5 w-5" />
+                            <Download className="size-5" />
                             {isConverting ? 'Converting...' : 'Convert to MP4'}
                           </Button>
                         )}
@@ -240,19 +294,27 @@ export function ShareModal({
                         <Button
                           onClick={handleCopy}
                           variant="outline"
-                          className="flex-1 gap-2 bg-black text-white hover:bg-black/90 border-black font-mono h-12 text-sm"
+                          className="
+                            h-12 flex-1 gap-2 border-black bg-black font-mono
+                            text-sm text-white
+                            hover:bg-black/90
+                          "
                         >
-                          <Copy className="h-4 w-4" />
+                          <Copy className="size-4" />
                           {copied ? 'Copied!' : 'Copy Link'}
                         </Button>
                       </div>
                     </div>
                   ) : videoStatus === 'uploading' ? (
                     <div className="space-y-2">
-                      <div className="h-2 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-[#23D57C] transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
+                      <div className="bg-muted h-2 overflow-hidden rounded-full">
+                        <div className="
+                          h-full bg-[#23D57C] transition-all duration-300
+                        " style={{ width: `${uploadProgress}%` }} />
                       </div>
-                      <p className="text-center text-xs text-muted-foreground font-medium">
+                      <p className="
+                        text-muted-foreground text-center text-xs font-medium
+                      ">
                         Uploading video... {uploadProgress}%
                       </p>
                     </div>
@@ -260,9 +322,13 @@ export function ShareModal({
                     <Button
                       onClick={handleUpload}
                       size="default"
-                      className="w-full gap-2 font-mono h-12 bg-[#23D57C] text-black hover:bg-[#16B063] text-sm"
+                      className="
+                        h-12 w-full gap-2 bg-[#23D57C] font-mono text-sm
+                        text-black
+                        hover:bg-[#16B063]
+                      "
                     >
-                      <Upload className="h-5 w-5" />
+                      <Upload className="size-5" />
                       Upload Video
                     </Button>
                   )}
@@ -272,9 +338,12 @@ export function ShareModal({
           </div>
 
           {/* Right Side - Controls */}
-          <div className="w-full lg:w-[40%] bg-background p-8 flex flex-col">
+          <div className="
+            bg-background flex w-full flex-col p-8
+            lg:w-[40%]
+          ">
             <DialogHeader className="mb-6 space-y-2">
-              <DialogTitle className="text-3xl font-bold leading-tight">
+              <DialogTitle className="text-3xl/tight font-bold">
                 Share Your Creation
               </DialogTitle>
               <p className="text-muted-foreground text-base font-normal">
@@ -284,45 +353,66 @@ export function ShareModal({
 
             <Separator className="mb-6" />
 
-            <div className="flex flex-col flex-1 gap-6">
+            <div className="flex flex-1 flex-col gap-6">
               {/* App Name Input */}
               <div className="space-y-2">
-                <Label htmlFor="app-name" className="text-sm font-bold uppercase tracking-wide">
+                <Label htmlFor="app-name" className="
+                  text-sm font-bold tracking-wide uppercase
+                ">
                   App Name
                 </Label>
                 <div className="relative">
                   <Input
                     id="app-name"
                     defaultValue={appName}
-                    className="bg-muted/50 border border-border text-base px-4 py-3 pr-10 font-mono focus:border-[#23D57C]"
+                    className="
+                      bg-muted/50 border-border border px-4 py-3 pr-10 font-mono
+                      text-base
+                      focus:border-[#23D57C]
+                    "
                   />
-                  <Edit className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Edit className="
+                    text-muted-foreground absolute top-1/2 right-4 size-4
+                    -translate-y-1/2
+                  " />
                 </div>
               </div>
 
               {/* Social Sharing */}
               <div className="space-y-3">
-                <h3 className="text-sm font-bold uppercase tracking-wide">
+                <h3 className="text-sm font-bold tracking-wide uppercase">
                   Share to Social
                 </h3>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    className="flex-1 h-12 border-border hover:bg-muted"
+                    className="
+                      border-border
+                      hover:bg-muted
+                      h-12 flex-1
+                    "
                   >
-                    <Twitter className="w-5 h-5" />
+                    <Twitter className="size-5" />
                   </Button>
                   <Button
                     variant="outline"
-                    className="flex-1 h-12 border-border hover:bg-muted"
+                    className="
+                      border-border
+                      hover:bg-muted
+                      h-12 flex-1
+                    "
                   >
-                    <Linkedin className="w-5 h-5" />
+                    <Linkedin className="size-5" />
                   </Button>
                   <Button
                     variant="outline"
-                    className="flex-1 h-12 border-border hover:bg-muted"
+                    className="
+                      border-border
+                      hover:bg-muted
+                      h-12 flex-1
+                    "
                   >
-                    <Copy className="w-5 h-5" />
+                    <Copy className="size-5" />
                   </Button>
                 </div>
               </div>
@@ -333,9 +423,14 @@ export function ShareModal({
         {/* Close Button */}
         <button
           onClick={() => onOpenChange?.(false)}
-          className="absolute top-4 right-4 z-20 size-8 flex items-center justify-center rounded-full bg-background border border-border hover:bg-muted transition-colors"
+          className="
+            bg-background border-border
+            hover:bg-muted
+            absolute top-4 right-4 z-20 flex size-8 items-center justify-center
+            rounded-full border transition-colors
+          "
         >
-          <X className="h-4 w-4" />
+          <X className="size-4" />
         </button>
       </DialogContent>
     </Dialog>

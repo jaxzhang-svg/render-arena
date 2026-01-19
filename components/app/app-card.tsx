@@ -27,13 +27,24 @@ export function AppCard({ app }: AppCardProps) {
   return (
     <Card 
       onClick={() => router.push('/playground')}
-      className="group relative flex flex-col overflow-hidden py-0 border-0 bg-card gap-4 rounded-2xl shadow-lg shadow-black/5 transition-all duration-300 hover:shadow-xl hover:shadow-black/10 cursor-pointer ring-1 ring-border/50"
+      className="
+        group bg-card ring-border/50 relative flex cursor-pointer flex-col gap-4
+        overflow-hidden rounded-2xl border-0 py-0 shadow-lg ring-1
+        shadow-black/5 transition-all duration-300
+        hover:shadow-xl hover:shadow-black/10
+      "
     >
-      <div className="relative aspect-[8/3] w-full overflow-hidden bg-muted flex">
+      <div className="bg-muted relative flex aspect-8/3 w-full overflow-hidden">
         {/* Left Side - Model A */}
-        <div className="relative w-1/2 h-full border-r-[1px] border-white/20 overflow-hidden">
+        <div className="
+          relative h-full w-1/2 overflow-hidden border-r border-white/20
+        ">
           <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+            className="
+              absolute inset-0 bg-cover bg-center transition-transform
+              duration-700
+              group-hover:scale-105
+            "
             style={{ backgroundImage: `url(${app.thumbnailA})` }}
           />
           <div className="absolute top-3 left-3 z-10">
@@ -42,9 +53,13 @@ export function AppCard({ app }: AppCardProps) {
         </div>
 
         {/* Right Side - Model B */}
-        <div className="relative w-1/2 h-full overflow-hidden">
+        <div className="relative h-full w-1/2 overflow-hidden">
           <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+            className="
+              absolute inset-0 bg-cover bg-center transition-transform
+              duration-700
+              group-hover:scale-105
+            "
             style={{ backgroundImage: `url(${app.thumbnailB})` }}
           />
            <div className="absolute top-3 right-3 z-10">
@@ -53,62 +68,103 @@ export function AppCard({ app }: AppCardProps) {
         </div>
 
         {/* VS Badge / Run Button Interaction */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+        <div className="absolute top-1/2 left-1/2 z-20 -translate-1/2">
           <div className="relative flex items-center justify-center">
             {/* VS Circle */}
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-background/90 backdrop-blur-md shadow-xl border border-border transition-all duration-300 group-hover:scale-0 group-hover:opacity-0">
-              <span className="text-xs font-black italic text-muted-foreground">VS</span>
+            <div className="
+              bg-background/90 border-border flex size-10 items-center
+              justify-center rounded-full border shadow-xl backdrop-blur-md
+              transition-all duration-300
+              group-hover:scale-0 group-hover:opacity-0
+            ">
+              <span className="text-muted-foreground text-xs font-black italic">VS</span>
             </div>
             
             {/* Run Button (appears on hover) */}
-            <div className="absolute flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-primary-foreground shadow-2xl transition-all duration-300 scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 whitespace-nowrap font-bold">
+            <div className="
+              bg-primary text-primary-foreground absolute flex scale-0
+              items-center justify-center gap-2 rounded-full px-5 py-2.5
+              font-bold whitespace-nowrap opacity-0 shadow-2xl transition-all
+              duration-300
+              group-hover:scale-100 group-hover:opacity-100
+            ">
                Run Battle
             </div>
           </div>
         </div>
 
         {/* Hover Overlay - Subtle Darkening for Contrast */}
-        <div className="absolute inset-0 bg-black/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none" />
+        <div className="
+          pointer-events-none absolute inset-0 bg-black/5 opacity-0
+          transition-opacity duration-300
+          group-hover:opacity-100
+        " />
       </div>
 
       <div className="flex flex-1 flex-col justify-between p-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">
+          <div className="
+            text-muted-foreground/80 flex items-center gap-1.5 text-xs
+            font-semibold tracking-wider uppercase
+          ">
             {(() => {
               const Icon = categoryIcons[app.category];
-              return Icon ? <Icon className="h-3.5 w-3.5" /> : null;
+              return Icon ? <Icon className="size-3.5" /> : null;
             })()}
             {app.category}
           </div>
-          <h3 className="line-clamp-1 text-lg font-black leading-tight tracking-tight text-foreground/90 group-hover:text-primary transition-colors">
+          <h3 className="
+            text-foreground/90
+            group-hover:text-primary
+            line-clamp-1 text-lg/tight font-black tracking-tight
+            transition-colors
+          ">
             {app.title}
           </h3>
-          <p className="text-xs font-medium text-muted-foreground/60 flex items-center gap-1">
-            by <span className="cursor-pointer hover:underline hover:text-foreground transition-colors" onClick={(e) => e.stopPropagation()}>@{app.author}</span>
+          <p className="
+            text-muted-foreground/60 flex items-center gap-1 text-xs font-medium
+          ">
+            by <span className="
+              hover:text-foreground
+              cursor-pointer transition-colors
+              hover:underline
+            " onClick={(e) => e.stopPropagation()}>@{app.author}</span>
           </p>
         </div>
         
-        <div className="flex items-center justify-between mt-3 pt-1">
+        <div className="mt-3 flex items-center justify-between pt-1">
           <button 
-            className="group/copy flex items-center gap-1.5 text-muted-foreground/70 transition-colors hover:text-foreground cursor-pointer px-2 py-1 rounded-lg hover:bg-foreground/5 -ml-2"
+            className="
+              group/copy text-muted-foreground/70
+              hover:text-foreground hover:bg-foreground/5
+              -ml-2 flex cursor-pointer items-center gap-1.5 rounded-lg px-2
+              py-1 transition-colors
+            "
             title="Copy Prompt"
             onClick={(e) => {
               e.stopPropagation();
               // Add copy logic here if needed
             }}
           >
-            <Copy className="h-3.5 w-3.5" />
+            <Copy className="size-3.5" />
             <span className="text-xs font-semibold">Copy</span>
           </button>
 
           <button 
-            className="group/like flex items-center gap-1.5 text-muted-foreground/70 transition-colors hover:text-rose-500 cursor-pointer px-2 py-1 rounded-lg hover:bg-rose-500/5 -mr-2"
+            className="
+              group/like text-muted-foreground/70 -mr-2 flex cursor-pointer
+              items-center gap-1.5 rounded-lg px-2 py-1 transition-colors
+              hover:bg-rose-500/5 hover:text-rose-500
+            "
             onClick={(e) => {
               e.stopPropagation();
               // Add like logic here if needed
             }}
           >
-            <Heart className="h-3.5 w-3.5 group-hover/like:fill-current transition-colors" />
+            <Heart className="
+              size-3.5 transition-colors
+              group-hover/like:fill-current
+            " />
             <span className="text-xs font-semibold tabular-nums">
               {app.likes >= 1000 ? `${(app.likes / 1000).toFixed(1)}k` : app.likes}
             </span>

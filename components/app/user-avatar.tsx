@@ -12,31 +12,53 @@ export function UserAvatar({ avatarUrl = 'https://i.pravatar.cc/150?u=novita', c
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className={`h-10 w-10 overflow-hidden rounded-full border border-border bg-muted ring-2 ring-transparent transition-all hover:ring-primary cursor-pointer ${className || ''}`}>
+        <div className={`
+          border-border bg-muted
+          hover:ring-primary
+          size-10 cursor-pointer overflow-hidden rounded-full border ring-2
+          ring-transparent transition-all
+          ${className || ''}
+        `}>
           <img
             src={avatarUrl}
             alt="User"
-            className="h-full w-full object-cover"
+            className="size-full object-cover"
           />
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-56 p-0" align="end">
         <div className="p-2">
-          <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors cursor-pointer text-left">
-            <User className="h-4 w-4" />
+          <button className="
+            hover:bg-muted
+            flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+            text-left transition-colors
+          ">
+            <User className="size-4" />
             <span className="text-sm font-medium">账户中心</span>
           </button>
-          <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors cursor-pointer text-left">
-            <FileText className="h-4 w-4" />
+          <button className="
+            hover:bg-muted
+            flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+            text-left transition-colors
+          ">
+            <FileText className="size-4" />
             <span className="text-sm font-medium">活动说明</span>
           </button>
-          <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors cursor-pointer text-left">
-            <Shield className="h-4 w-4" />
+          <button className="
+            hover:bg-muted
+            flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+            text-left transition-colors
+          ">
+            <Shield className="size-4" />
             <span className="text-sm font-medium">隐私政策</span>
           </button>
-          <div className="h-px bg-border my-1 mx-2" />
-          <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors cursor-pointer text-left text-destructive">
-            <LogOut className="h-4 w-4" />
+          <div className="bg-border mx-2 my-1 h-px" />
+          <button className="
+            hover:bg-muted
+            text-destructive flex w-full cursor-pointer items-center gap-3
+            rounded-lg px-3 py-2 text-left transition-colors
+          ">
+            <LogOut className="size-4" />
             <span className="text-sm font-medium">退出</span>
           </button>
         </div>

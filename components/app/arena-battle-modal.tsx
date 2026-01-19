@@ -12,25 +12,39 @@ interface ArenaBattleModalProps {
 export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[544px] max-h-[90vh] overflow-y-auto bg-black border-[rgba(13,84,43,0.5)] p-0 rounded-[10px]">
+      <DialogContent className="
+        max-h-[90vh] max-w-[544px] overflow-y-auto rounded-[10px]
+        border-[rgba(13,84,43,0.5)] bg-black p-0
+      ">
         {/* Header */}
-        <DialogHeader className="px-6 pt-6 pb-4 space-y-4">
+        <DialogHeader className="space-y-4 px-6 pt-6 pb-4">
           <div className="flex items-center gap-3">
-            <Trophy className="h-6 w-6 text-[#fdc700]" />
-            <h2 className="text-white text-[32px] font-semibold leading-[40px] tracking-[-0.64px] font-['TT_Interphases_Pro',sans-serif]">
+            <Trophy className="size-6 text-[#fdc700]" />
+            <h2 className="
+              font-['TT_Interphases_Pro',sans-serif] text-[32px] leading-[40px]
+              font-semibold tracking-[-0.64px] text-white
+            ">
               Novita Arena Battle
             </h2>
           </div>
-          <h3 className="text-[#05df72] text-[18px] font-semibold leading-6 font-['TT_Interphases_Pro',sans-serif]">
+          <h3 className="
+            font-['TT_Interphases_Pro',sans-serif] text-[18px]/6 font-semibold
+            text-[#05df72]
+          ">
             Build it. Compare it. Make it glow.
           </h3>
         </DialogHeader>
 
         {/* Scrollable Content */}
-        <div className="px-6 pb-6 space-y-8">
+        <div className="space-y-8 px-6 pb-6">
           {/* Promo Banner */}
-          <div className="bg-[rgba(13,84,43,0.1)] border-l-4 border-[rgba(0,201,80,0.5)] rounded-br-[10px] rounded-tr-[10px] p-4">
-            <p className="text-[#e7e6e2] text-base leading-6 font-['TT_Interphases_Pro',sans-serif]">
+          <div className="
+            rounded-r-[10px] border-l-4 border-[rgba(0,201,80,0.5)]
+            bg-[rgba(13,84,43,0.1)] p-4
+          ">
+            <p className="
+              font-['TT_Interphases_Pro',sans-serif] text-base/6 text-[#e7e6e2]
+            ">
               A 14-day, fully remote Model Arena battle focused on visual comparison, vibes, and shareability — not traditional hackathon code volume.
             </p>
           </div>
@@ -40,31 +54,50 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
             {/* What You'll Build */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-[#fdc700]" />
-                <h3 className="text-white text-2xl font-semibold leading-[38px] font-['TT_Interphases_Pro',sans-serif]">
+                <Zap className="size-5 text-[#fdc700]" />
+                <h3 className="
+                  font-['TT_Interphases_Pro',sans-serif] text-2xl leading-[38px]
+                  font-semibold text-white
+                ">
                   What You'll Build
                 </h3>
               </div>
               
-              <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-[14px] p-5 space-y-3">
-                <p className="text-[#d1d5dc] text-sm leading-5 font-['TT_Interphases_Pro',sans-serif]">
-                  Create visual, comparable demos using <span className="font-semibold text-[#f5f5f5]">Novita Model Arena</span>, focusing on Particle Effects.
+              <div className="
+                space-y-3 rounded-[14px] border border-[rgba(255,255,255,0.1)]
+                bg-[rgba(255,255,255,0.05)] p-5
+              ">
+                <p className="
+                  font-['TT_Interphases_Pro',sans-serif] text-sm/5
+                  text-[#d1d5dc]
+                ">
+                  Create visual, comparable demos using <span className="
+                    font-semibold text-[#f5f5f5]
+                  ">Novita Model Arena</span>, focusing on Particle Effects.
                 </p>
                 
                 <div className="space-y-2">
-                  <p className="text-sm leading-5 font-['TT_Interphases_Pro',sans-serif]">
+                  <p className="
+                    font-['TT_Interphases_Pro',sans-serif] text-sm/5
+                  ">
                     <span className="font-bold text-[#7bf1a8]">Core idea:</span>
                     <span className="text-[#cbc9c4]"> Use the same prompt across different models and showcase output differences in style, motion, and vibe.</span>
                   </p>
                   
-                  <ul className="space-y-1 text-[#cbc9c4] text-sm leading-5 font-['TT_Interphases_Pro',sans-serif]">
+                  <ul className="
+                    space-y-1 font-['TT_Interphases_Pro',sans-serif] text-sm/5
+                    text-[#cbc9c4]
+                  ">
                     <li>Different models, same prompt</li>
                     <li>Visual contrast worth sharing</li>
                     <li>Energy, Motion, Abstract Vibe, Sci-Fi</li>
                   </ul>
                 </div>
                 
-                <p className="text-[#6a7282] text-xs leading-5 font-['TT_Interphases_Pro_Mono',sans-serif] tracking-[0.24px]">
+                <p className="
+                  font-['TT_Interphases_Pro_Mono',sans-serif] text-xs/5
+                  tracking-[0.24px] text-[#6a7282]
+                ">
                   No requirement for a full product, repo, or complex system.
                 </p>
               </div>
@@ -73,49 +106,74 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
             {/* Prize Pool */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Gift className="h-5 w-5 text-[#fdc700]" />
-                <h3 className="text-white text-2xl font-semibold leading-[38px] font-['TT_Interphases_Pro',sans-serif]">
+                <Gift className="size-5 text-[#fdc700]" />
+                <h3 className="
+                  font-['TT_Interphases_Pro',sans-serif] text-2xl leading-[38px]
+                  font-semibold text-white
+                ">
                   Prize Pool
                 </h3>
               </div>
               
               <div className="space-y-3">
                 {/* 1st Place */}
-                <div className="bg-gradient-to-r from-[rgba(115,62,10,0.2)] to-[rgba(0,0,0,0)] border border-[rgba(240,177,0,0.2)] rounded-[14px] p-4 flex items-center justify-between">
+                <div className="
+                  flex items-center justify-between rounded-[14px] border
+                  border-[rgba(240,177,0,0.2)] bg-linear-to-r
+                  from-[rgba(115,62,10,0.2)] to-[rgba(0,0,0,0)] p-4
+                ">
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">🥇</span>
-                    <span className="text-[#fff085] text-base font-bold">1st Place</span>
+                    <span className="text-base font-bold text-[#fff085]">1st Place</span>
                   </div>
-                  <span className="text-white text-base font-medium">$500 Credits</span>
+                  <span className="text-base font-medium text-white">$500 Credits</span>
                 </div>
 
                 {/* 2nd Place */}
-                <div className="bg-gradient-to-r from-[rgba(30,41,57,0.4)] to-[rgba(0,0,0,0)] border border-[rgba(106,114,130,0.2)] rounded-[14px] p-3.5 flex items-center justify-between">
+                <div className="
+                  flex items-center justify-between rounded-[14px] border
+                  border-[rgba(106,114,130,0.2)] bg-linear-to-r
+                  from-[rgba(30,41,57,0.4)] to-[rgba(0,0,0,0)] p-3.5
+                ">
                   <div className="flex items-center gap-3">
                     <span className="text-xl">🥈</span>
-                    <span className="text-[#d1d5dc] text-base font-medium">2nd Place</span>
+                    <span className="text-base font-medium text-[#d1d5dc]">2nd Place</span>
                   </div>
-                  <span className="text-white text-base font-medium">$200 Credits</span>
+                  <span className="text-base font-medium text-white">$200 Credits</span>
                 </div>
 
                 {/* 3rd Place */}
-                <div className="bg-gradient-to-r from-[rgba(126,42,12,0.2)] to-[rgba(0,0,0,0)] border border-[rgba(255,105,0,0.2)] rounded-[14px] p-3 flex items-center justify-between">
+                <div className="
+                  flex items-center justify-between rounded-[14px] border
+                  border-[rgba(255,105,0,0.2)] bg-linear-to-r
+                  from-[rgba(126,42,12,0.2)] to-[rgba(0,0,0,0)] p-3
+                ">
                   <div className="flex items-center gap-3">
                     <span className="text-xl">🥉</span>
-                    <span className="text-[#ffd6a7] text-base font-medium">3rd Place</span>
+                    <span className="text-base font-medium text-[#ffd6a7]">3rd Place</span>
                   </div>
-                  <span className="text-white text-base font-medium">$100 Credits</span>
+                  <span className="text-base font-medium text-white">$100 Credits</span>
                 </div>
 
                 {/* 4th-10th Place */}
-                <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.05)] rounded-[14px] p-3 flex items-center justify-between">
-                  <span className="text-[#cbc9c4] text-sm font-medium">4th - 10th Place</span>
-                  <span className="text-[#e7e6e2] text-base font-medium">$50 Credits</span>
+                <div className="
+                  flex items-center justify-between rounded-[14px] border
+                  border-[rgba(255,255,255,0.05)] bg-[rgba(255,255,255,0.05)]
+                  p-3
+                ">
+                  <span className="text-sm font-medium text-[#cbc9c4]">4th - 10th Place</span>
+                  <span className="text-base font-medium text-[#e7e6e2]">$50 Credits</span>
                 </div>
 
                 {/* Community Bonus */}
-                <div className="bg-[rgba(13,84,43,0.2)] border border-[rgba(0,201,80,0.2)] rounded-[10px] p-2.5">
-                  <p className="text-[#23d57c] text-sm leading-5 font-['TT_Interphases_Pro',sans-serif]">
+                <div className="
+                  rounded-[10px] border border-[rgba(0,201,80,0.2)]
+                  bg-[rgba(13,84,43,0.2)] p-2.5
+                ">
+                  <p className="
+                    font-['TT_Interphases_Pro',sans-serif] text-sm/5
+                    text-[#23d57c]
+                  ">
                     Community Bonus: $30 Credits for high-quality feedback
                   </p>
                 </div>
@@ -126,26 +184,44 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
           {/* Timeline */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-[#fdc700]" />
-              <h3 className="text-white text-xl font-bold leading-7 tracking-[-0.45px] font-['Inter',sans-serif]">
+              <Calendar className="size-5 text-[#fdc700]" />
+              <h3 className="
+                font-['Inter',sans-serif] text-xl/7 font-bold tracking-[-0.45px]
+                text-white
+              ">
                 Timeline (Fully Remote)
               </h3>
             </div>
             
             <div className="grid grid-cols-3 gap-4">
-              <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-[14px] p-4 text-center space-y-1">
-                <p className="text-[#05df72] text-base font-bold tracking-[-0.31px]">Build & Submit</p>
-                <p className="text-[#99a1af] text-sm tracking-[-0.15px]">Day 0 – Day 14</p>
+              <div className="
+                space-y-1 rounded-[14px] border border-[rgba(255,255,255,0.1)]
+                bg-[rgba(255,255,255,0.05)] p-4 text-center
+              ">
+                <p className="
+                  text-base font-bold tracking-[-0.31px] text-[#05df72]
+                ">Build & Submit</p>
+                <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Day 0 – Day 14</p>
               </div>
               
-              <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-[14px] p-4 text-center space-y-1">
-                <p className="text-[#51a2ff] text-base font-bold tracking-[-0.31px]">Review Period</p>
-                <p className="text-[#99a1af] text-sm tracking-[-0.15px]">Day 15 – Day 18</p>
+              <div className="
+                space-y-1 rounded-[14px] border border-[rgba(255,255,255,0.1)]
+                bg-[rgba(255,255,255,0.05)] p-4 text-center
+              ">
+                <p className="
+                  text-base font-bold tracking-[-0.31px] text-[#51a2ff]
+                ">Review Period</p>
+                <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Day 15 – Day 18</p>
               </div>
               
-              <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-[14px] p-4 text-center space-y-1">
-                <p className="text-[#c27aff] text-base font-bold tracking-[-0.31px]">Winners Announced</p>
-                <p className="text-[#99a1af] text-sm tracking-[-0.15px]">Day 18 – Day 21</p>
+              <div className="
+                space-y-1 rounded-[14px] border border-[rgba(255,255,255,0.1)]
+                bg-[rgba(255,255,255,0.05)] p-4 text-center
+              ">
+                <p className="
+                  text-base font-bold tracking-[-0.31px] text-[#c27aff]
+                ">Winners Announced</p>
+                <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Day 18 – Day 21</p>
               </div>
             </div>
           </div>
@@ -153,60 +229,95 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
           {/* How to Participate */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-[#fdc700]" />
-              <h3 className="text-white text-xl font-bold leading-7 tracking-[-0.45px] font-['Inter',sans-serif]">
+              <Users className="size-5 text-[#fdc700]" />
+              <h3 className="
+                font-['Inter',sans-serif] text-xl/7 font-bold tracking-[-0.45px]
+                text-white
+              ">
                 How to Participate
               </h3>
             </div>
             
             <div className="grid grid-cols-4 gap-4">
               {/* Step 1 */}
-              <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-[14px] p-4 relative overflow-hidden">
-                <div className="absolute top-[-8px] right-2 text-[60px] font-bold text-[rgba(255,255,255,0.05)] leading-[60px] tracking-[0.26px]">
+              <div className="
+                relative overflow-hidden rounded-[14px] border
+                border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4
+              ">
+                <div className="
+                  absolute top-[-8px] right-2 text-[60px] leading-[60px]
+                  font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]
+                ">
                   1
                 </div>
                 <div className="relative z-10 space-y-2">
-                  <h4 className="text-white text-[18px] font-bold leading-7 tracking-[-0.44px]">Use Arena</h4>
-                  <p className="text-[#99a1af] text-xs leading-4">
+                  <h4 className="
+                    text-[18px]/7 font-bold tracking-[-0.44px] text-white
+                  ">Use Arena</h4>
+                  <p className="text-xs/4 text-[#99a1af]">
                     Compare at least 2 models (e.g. GLM 5.0 vs Minimax 2.5)
                   </p>
                 </div>
               </div>
 
               {/* Step 2 */}
-              <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-[14px] p-4 relative overflow-hidden">
-                <div className="absolute top-[-8px] right-2 text-[60px] font-bold text-[rgba(255,255,255,0.05)] leading-[60px] tracking-[0.26px]">
+              <div className="
+                relative overflow-hidden rounded-[14px] border
+                border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4
+              ">
+                <div className="
+                  absolute top-[-8px] right-2 text-[60px] leading-[60px]
+                  font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]
+                ">
                   2
                 </div>
                 <div className="relative z-10 space-y-2">
-                  <h4 className="text-white text-[18px] font-bold leading-7 tracking-[-0.44px]">Showcase</h4>
-                  <p className="text-[#99a1af] text-xs leading-4">
+                  <h4 className="
+                    text-[18px]/7 font-bold tracking-[-0.44px] text-white
+                  ">Showcase</h4>
+                  <p className="text-xs/4 text-[#99a1af]">
                     Create a short video (≤ 60s). Demo link optional.
                   </p>
                 </div>
               </div>
 
               {/* Step 3 */}
-              <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-[14px] p-4 relative overflow-hidden">
-                <div className="absolute top-[-8px] right-2 text-[60px] font-bold text-[rgba(255,255,255,0.05)] leading-[60px] tracking-[0.26px]">
+              <div className="
+                relative overflow-hidden rounded-[14px] border
+                border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4
+              ">
+                <div className="
+                  absolute top-[-8px] right-2 text-[60px] leading-[60px]
+                  font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]
+                ">
                   3
                 </div>
                 <div className="relative z-10 space-y-2">
-                  <h4 className="text-white text-[18px] font-bold leading-7 tracking-[-0.44px]">Post on X</h4>
-                  <p className="text-[#99a1af] text-xs leading-4">
+                  <h4 className="
+                    text-[18px]/7 font-bold tracking-[-0.44px] text-white
+                  ">Post on X</h4>
+                  <p className="text-xs/4 text-[#99a1af]">
                     Tag @Novita #NovitaArena #VibeCoding
                   </p>
                 </div>
               </div>
 
               {/* Step 4 */}
-              <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-[14px] p-4 relative overflow-hidden">
-                <div className="absolute top-[-8px] right-2 text-[60px] font-bold text-[rgba(255,255,255,0.05)] leading-[60px] tracking-[0.26px]">
+              <div className="
+                relative overflow-hidden rounded-[14px] border
+                border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4
+              ">
+                <div className="
+                  absolute top-[-8px] right-2 text-[60px] leading-[60px]
+                  font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]
+                ">
                   4
                 </div>
                 <div className="relative z-10 space-y-2">
-                  <h4 className="text-white text-[18px] font-bold leading-7 tracking-[-0.44px]">Submit</h4>
-                  <p className="text-[#99a1af] text-xs leading-4">
+                  <h4 className="
+                    text-[18px]/7 font-bold tracking-[-0.44px] text-white
+                  ">Submit</h4>
+                  <p className="text-xs/4 text-[#99a1af]">
                     Share Twitter link in Discord #arena-showcase
                   </p>
                 </div>
@@ -217,56 +328,71 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
           {/* Bottom Grid: How You're Judged & Why Join */}
           <div className="grid grid-cols-2 gap-8">
             {/* How You're Judged */}
-            <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-[14px] p-5 space-y-3">
-              <h4 className="text-white text-base font-bold tracking-[-0.31px]">How You're Judged</h4>
+            <div className="
+              space-y-3 rounded-[14px] border border-[rgba(255,255,255,0.1)]
+              bg-[rgba(255,255,255,0.05)] p-5
+            ">
+              <h4 className="text-base font-bold tracking-[-0.31px] text-white">How You're Judged</h4>
               
               <div className="space-y-3">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[#d1d5dc] text-sm tracking-[-0.15px]">Public Twitter Engagement</span>
-                    <span className="text-[#05df72] text-sm font-bold tracking-[-0.15px]">50%</span>
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-sm tracking-[-0.15px] text-[#d1d5dc]">Public Twitter Engagement</span>
+                    <span className="
+                      text-sm font-bold tracking-[-0.15px] text-[#05df72]
+                    ">50%</span>
                   </div>
-                  <div className="w-full h-1.5 bg-[rgba(255,255,255,0.1)] rounded-full overflow-hidden">
+                  <div className="
+                    h-1.5 w-full overflow-hidden rounded-full
+                    bg-[rgba(255,255,255,0.1)]
+                  ">
                     <div className="h-full w-1/2 bg-[#00c950]" />
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[#d1d5dc] text-sm tracking-[-0.15px]">Novita Team Review</span>
-                    <span className="text-[#51a2ff] text-sm font-bold tracking-[-0.15px]">50%</span>
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-sm tracking-[-0.15px] text-[#d1d5dc]">Novita Team Review</span>
+                    <span className="
+                      text-sm font-bold tracking-[-0.15px] text-[#51a2ff]
+                    ">50%</span>
                   </div>
-                  <div className="w-full h-1.5 bg-[rgba(255,255,255,0.1)] rounded-full overflow-hidden">
+                  <div className="
+                    h-1.5 w-full overflow-hidden rounded-full
+                    bg-[rgba(255,255,255,0.1)]
+                  ">
                     <div className="h-full w-1/2 bg-[#2b7fff]" />
                   </div>
                 </div>
 
-                <p className="text-[#6a7282] text-xs leading-4">
+                <p className="text-xs/4 text-[#6a7282]">
                   Criteria: Visual impact, vibe, comparison clarity.
                 </p>
               </div>
             </div>
 
             {/* Why Join */}
-            <div className="rounded-[14px] border border-[rgba(0,201,80,0.2)] p-5 space-y-3" style={{ backgroundImage: 'linear-gradient(135.11deg, rgba(13, 84, 43, 0.2) 0%, rgb(0, 0, 0) 100%)' }}>
-              <h4 className="text-white text-base font-bold tracking-[-0.31px]">Why Join?</h4>
+            <div className="
+              space-y-3 rounded-[14px] border border-[rgba(0,201,80,0.2)] p-5
+            " style={{ backgroundImage: 'linear-gradient(135.11deg, rgba(13, 84, 43, 0.2) 0%, rgb(0, 0, 0) 100%)' }}>
+              <h4 className="text-base font-bold tracking-[-0.31px] text-white">Why Join?</h4>
               
               <ul className="space-y-2">
                 <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-[#23d57c] mt-0.5 flex-shrink-0" />
-                  <span className="text-[#d1d5dc] text-sm leading-5 tracking-[-0.15px]">
+                  <Check className="mt-0.5 size-4 shrink-0 text-[#23d57c]" />
+                  <span className="text-sm/5 tracking-[-0.15px] text-[#d1d5dc]">
                     Try cutting-edge models side by side
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-[#23d57c] mt-0.5 flex-shrink-0" />
-                  <span className="text-[#d1d5dc] text-sm leading-5 tracking-[-0.15px]">
+                  <Check className="mt-0.5 size-4 shrink-0 text-[#23d57c]" />
+                  <span className="text-sm/5 tracking-[-0.15px] text-[#d1d5dc]">
                     Create viral, visual AI demos
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-[#23d57c] mt-0.5 flex-shrink-0" />
-                  <span className="text-[#d1d5dc] text-sm leading-5 tracking-[-0.15px]">
+                  <Check className="mt-0.5 size-4 shrink-0 text-[#23d57c]" />
+                  <span className="text-sm/5 tracking-[-0.15px] text-[#d1d5dc]">
                     Get rewarded for insight, not code volume
                   </span>
                 </li>
@@ -276,14 +402,24 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
         </div>
 
         {/* Footer */}
-        <DialogFooter className="bg-black border-t border-[rgba(255,255,255,0.1)] px-6 py-6 flex flex-col items-center gap-4">
+        <DialogFooter className="
+          flex flex-col items-center gap-4 border-t
+          border-[rgba(255,255,255,0.1)] bg-black p-6
+        ">
           <Button 
-            className="w-full max-w-[420px] h-12 bg-[#23d57c] hover:bg-[#1fc76f] text-black text-base font-normal font-['TT_Interphases_Pro_Mono',monospace] rounded-[14px] shadow-[0px_0px_20px_0px_rgba(34,197,94,0.3)]"
+            className="
+              h-12 w-full max-w-[420px] rounded-[14px] bg-[#23d57c]
+              font-['TT_Interphases_Pro_Mono',monospace] text-base font-normal
+              text-black shadow-[0px_0px_20px_0px_rgba(34,197,94,0.3)]
+              hover:bg-[#1fc76f]
+            "
             onClick={() => window.open('https://discord.gg/novita', '_blank')}
           >
             👉 Join via Discord
           </Button>
-          <p className="text-[#6a7282] text-sm tracking-[-0.15px] italic text-center">
+          <p className="
+            text-center text-sm tracking-[-0.15px] text-[#6a7282] italic
+          ">
             Build fast. Compare clearly. Make it share-worthy.
           </p>
         </DialogFooter>

@@ -16,7 +16,7 @@ export function StreamingCodeDisplay({ content, reasoning, onPreview }: Streamin
     <div 
       ref={containerRef} 
       onScroll={handleScroll}
-      className="w-full h-full overflow-y-auto p-4"
+      className="size-full overflow-y-auto p-4"
     >
       <div className="max-w-none">
         <MarkdownRenderer content={content} reasoning={reasoning} onPreview={onPreview} enableTypewriter={false} />

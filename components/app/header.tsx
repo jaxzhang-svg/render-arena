@@ -3,8 +3,10 @@ import Link from "next/link"
 
 export function Header() {
   return (
-    <header className="bg-white border-b border-[#e7e6e2] sticky top-0 z-50">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+    <header className="sticky top-0 z-50 border-b border-[#e7e6e2] bg-white">
+      <div className="
+        mx-auto flex h-16 max-w-7xl items-center justify-between px-6
+      ">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-[6px]">
           <div className="flex items-center">
@@ -12,7 +14,10 @@ export function Header() {
               <path d="M11.9999 0L0 14.8333H23.9998L11.9999 0Z" fill="#23D57C"/>
             </svg>
           </div>
-          <span className="text-[#292827] font-sans font-semibold text-[16px] leading-[14.286px]">
+          <span className="
+            font-sans text-[16px] leading-[14.286px] font-semibold
+            text-[#292827]
+          ">
             Novita
           </span>
         </Link>
@@ -21,25 +26,41 @@ export function Header() {
         <nav className="flex items-center gap-8">
           <Link 
             href="/" 
-            className="text-[#292827] font-mono text-[14px] leading-[16px] hover:text-[#23d57c] transition-colors"
+            className="
+              font-mono text-[14px] leading-[16px] text-[#292827]
+              transition-colors
+              hover:text-[#23d57c]
+            "
           >
             Home
           </Link>
           <Link 
             href="/hackathon" 
-            className="text-[#292827] font-mono text-[14px] leading-[16px] hover:text-[#23d57c] transition-colors"
+            className="
+              font-mono text-[14px] leading-[16px] text-[#292827]
+              transition-colors
+              hover:text-[#23d57c]
+            "
           >
             Hackathon
           </Link>
           <Link 
             href="/gallery" 
-            className="text-[#292827] font-mono text-[14px] leading-[16px] hover:text-[#23d57c] transition-colors"
+            className="
+              font-mono text-[14px] leading-[16px] text-[#292827]
+              transition-colors
+              hover:text-[#23d57c]
+            "
           >
             Gallery
           </Link>
           <Link 
             href="/terms" 
-            className="text-[#292827] font-mono text-[14px] leading-[16px] hover:text-[#23d57c] transition-colors"
+            className="
+              font-mono text-[14px] leading-[16px] text-[#292827]
+              transition-colors
+              hover:text-[#23d57c]
+            "
           >
             Terms
           </Link>
@@ -48,7 +69,10 @@ export function Header() {
         {/* Log In Button */}
         <Button 
           variant="outline" 
-          className="border-[#e7e6e2] text-[#292827] font-mono text-[14px] leading-[16px] hover:border-[#23d57c] hover:text-[#23d57c]"
+          className="
+            border-[#e7e6e2] font-mono text-[14px] leading-[16px] text-[#292827]
+            hover:border-[#23d57c] hover:text-[#23d57c]
+          "
         >
           Log In
         </Button>
