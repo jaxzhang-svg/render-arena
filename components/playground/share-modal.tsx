@@ -3,7 +3,11 @@
 import { Dialog } from '@base-ui/react/dialog';
 import { Download, Copy, X, Link as LinkIcon, Play, Globe, Check } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
-import { Facebook, Twitter, Linkedin } from 'lucide-react';
+
+// Local Assets
+const imgLinkedin = "/images/linkedin-logo.svg";
+const imgTwitter = "/images/twitter-logo.png";
+const imgFacebook = "/images/facebook-logo.png";
 
 type VideoStatus = 'generating' | 'uploading' | 'ready';
 
@@ -30,8 +34,9 @@ export function ShareModal({
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
   const [publishToGallery, setPublishToGallery] = useState(true);
-  const [isPublishing, setIsPublishing] = useState(false);
+  // Default unpublished for fresh share
   const [isPublished, setIsPublished] = useState(false);
+  const [agreedToPolicy, setAgreedToPolicy] = useState(true);
 
   // Create video URL from blob for preview
   const videoUrl = videoBlob ? URL.createObjectURL(videoBlob) : null;
@@ -53,31 +58,32 @@ export function ShareModal({
     }
   }, [open]);
 
-  const handlePublishToGallery = useCallback(async () => {
-    if (!appId || isPublished) return;
-    
-    setIsPublishing(true);
-    try {
-      const response = await fetch(`/api/apps/${appId}/publish`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
-      });
-      
+  const handlePublishToGallery = useCallback(() => {
+    if (!appId || isPublished || !publishToGallery) return;
+
+    // Silent execution - no loading state
+    fetch(`/api/apps/${appId}/publish`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    }).then(response => {
       if (response.ok) {
         setIsPublished(true);
-      } else if (response.status === 401 || response.status === 403) {
-        // 用户未登录或无权限，静默处理
-        console.log('User not authorized to publish');
       }
-    } catch (error) {
+    }).catch(error => {
       console.error('Error publishing to gallery:', error);
-    } finally {
-      setIsPublishing(false);
-    }
+    });
   }, [appId, isPublished]);
 
   const handleCopy = () => {
+    // If not agreed, do nothing (though button should be disabled)
+    if (!agreedToPolicy) return;
+
+    // Trigger publish in background if needed
+    if (appId && !isPublished) {
+      handlePublishToGallery();
+    }
+
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -95,16 +101,18 @@ export function ShareModal({
     }
   };
 
-  const handleSocialShare = async (platform: 'twitter' | 'linkedin' | 'facebook') => {
-    // 如果勾选了发布到画廊，先发布
-    if (publishToGallery && appId && !isPublished) {
-      await handlePublishToGallery();
+  const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
+    if (!agreedToPolicy) return;
+
+    // Trigger publish in background if needed
+    if (appId && !isPublished) {
+      handlePublishToGallery();
     }
-    
+
     const encodedUrl = encodeURIComponent(shareUrl);
     const text = encodeURIComponent('Check out this AI-generated app battle! 🚀');
     let url = '';
-    
+
     switch (platform) {
       case 'twitter':
         url = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${text}`;
@@ -116,7 +124,7 @@ export function ShareModal({
         url = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
         break;
     }
-    
+
     window.open(url, '_blank', 'width=600,height=400');
   };
 
@@ -135,159 +143,193 @@ export function ShareModal({
             </Dialog.Close>
           </div>
 
-        {/* Content */}
-        <div className="flex flex-col gap-6 px-5 pt-5 pb-0">
-          {/* Preview Container - Only show when triggered by recording */}
-          {showVideoSection && (
-          <div className="relative w-full h-[228.375px] bg-[#101828] rounded-[14px] overflow-hidden shadow-[inset_0px_2px_4px_0px_rgba(0,0,0,0.05)]">
-            {videoUrl ? (
-              <video
-                src={videoUrl}
-                className="w-full h-full object-cover opacity-90"
-                poster={previewImage}
-              />
-            ) : previewImage ? (
-              <img
-                src={previewImage}
-                alt="Preview"
-                className="w-full h-full object-cover opacity-90"
-              />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 opacity-90" />
+          {/* Content */}
+          <div className="flex flex-col gap-6 px-5 pt-5 pb-0">
+            {/* Preview Container - Only show when triggered by recording */}
+            {showVideoSection && (
+              <div className="relative w-full h-[228.375px] bg-[#101828] rounded-[14px] overflow-hidden shadow-[inset_0px_2px_4px_0px_rgba(0,0,0,0.05)]">
+                {videoUrl ? (
+                  <video
+                    src={videoUrl}
+                    className="w-full h-full object-cover opacity-90"
+                    poster={previewImage}
+                  />
+                ) : previewImage ? (
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="w-full h-full object-cover opacity-90"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 opacity-90" />
+                )}
+
+                {/* Play Button Overlay */}
+                <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                  <div className="size-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center pl-1">
+                    <div
+                      className="w-0 h-0 border-l-[10px] border-t-[6px] border-b-[6px] border-transparent border-l-white"
+                      style={{ borderTopColor: 'transparent', borderBottomColor: 'transparent' }}
+                    />
+                  </div>
+                </div>
+              </div>
             )}
-            
-            {/* Play Button Overlay */}
-            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-              <div className="size-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center pl-1">
-                <div 
-                  className="w-0 h-0 border-l-[10px] border-t-[6px] border-b-[6px] border-transparent border-l-white"
-                  style={{ borderTopColor: 'transparent', borderBottomColor: 'transparent' }}
-                />
+
+            {/* Public Link Section */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
+                Public Link
+              </label>
+              <div className="flex gap-2">
+                <div className="flex-1 h-[42px] bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] flex items-center gap-2 px-[13px] min-w-0">
+                  <LinkIcon className="size-4 text-gray-500 shrink-0" />
+                  <span className="text-[14px] text-[#4a5565] leading-5 truncate flex-1">
+                    {shareUrl}
+                  </span>
+                </div>
+                <button
+                  onClick={handleCopy}
+                  disabled={!agreedToPolicy}
+                  className={`h-[42px] w-[90px] rounded-[10px] border text-[14px] font-medium tracking-[-0.1504px] transition-colors flex cursor-pointer items-center justify-center
+                  ${!agreedToPolicy
+                      ? 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
+                      : 'border-[#e5e7eb] bg-white text-[#364153] hover:bg-gray-50'
+                    }`}
+                >
+                  {copied ? 'Copied' : 'Copy'}
+                </button>
               </div>
             </div>
-          </div>
-          )}
 
-          {/* Public Link Section */}
-          <div className="space-y-2">
-            <label className="text-[12px] font-medium text-[#6a7282] uppercase tracking-[0.6px] leading-4">
-              Public Link
-            </label>
-            <div className="flex gap-2">
-              <div className="flex-1 h-[42px] bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] flex items-center gap-2 px-[13px]">
-                <LinkIcon className="size-4 text-gray-500" />
-                <span className="text-[14px] text-[#4a5565] leading-5 truncate">
-                  {shareUrl}
-                </span>
+            {/* Share to Social Section */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
+                Share to Social
+              </label>
+              <div className="flex gap-3">
+                {/* Twitter */}
+                <button
+                  disabled={!agreedToPolicy}
+                  className={`flex-1 cursor-pointer border rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors
+                  ${!agreedToPolicy
+                      ? 'border-gray-100 opacity-50 cursor-not-allowed bg-gray-50'
+                      : 'border-[#f3f4f6] hover:bg-gray-50'
+                    }`}
+                >
+                  <div className="size-8 rounded-full flex items-center justify-center overflow-hidden">
+                    <img src={imgTwitter} alt="Twitter" className="size-full object-cover" />
+                  </div>
+                  <span className="text-[12px] font-medium text-[#4a5565] leading-4">
+                    Twitter
+                  </span>
+                </button>
+
+                {/* LinkedIn */}
+                <button
+                  disabled={!agreedToPolicy}
+                  className={`flex-1 cursor-pointer border rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors
+                  ${!agreedToPolicy
+                      ? 'border-gray-100 opacity-50 cursor-not-allowed bg-gray-50'
+                      : 'border-[#f3f4f6] hover:bg-gray-50'
+                    }`}
+                >
+                  <div className="size-8 relative">
+                    <img alt="LinkedIn" className="block max-w-none size-full" src={imgLinkedin} />
+                  </div>
+                  <span className="text-[12px] font-medium text-[#4a5565] leading-4">
+                    LinkedIn
+                  </span>
+                </button>
+
+                {/* Facebook */}
+                <button
+                  disabled={!agreedToPolicy}
+                  className={`flex-1 cursor-pointer border rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors
+                  ${!agreedToPolicy
+                      ? 'border-gray-100 opacity-50 cursor-not-allowed bg-gray-50'
+                      : 'border-[#f3f4f6] hover:bg-gray-50'
+                    }`}
+                >
+                  <div className="size-8 rounded-full flex items-center justify-center overflow-hidden">
+                    <img src={imgFacebook} alt="Facebook" className="size-full object-cover" />
+                  </div>
+                  <span className="text-[12px] font-medium text-[#4a5565] leading-4">
+                    Facebook
+                  </span>
+                </button>
               </div>
-              <button
-                onClick={handleCopy}
-                className="h-[42px] w-[90px] rounded-[10px] border border-[#e5e7eb] bg-white text-[14px] font-medium text-[#364153] tracking-[-0.1504px] hover:bg-gray-50 transition-colors flex cursor-pointer items-center justify-center"
-              >
-                {copied ? 'Copied' : 'Copy'}
-              </button>
             </div>
-          </div>
 
-          {/* Share to Social Section */}
-          <div className="space-y-2">
-            <label className="text-[12px] font-medium text-[#6a7282] uppercase tracking-[0.6px] leading-4">
-              Share to Social
-            </label>
-            <div className="flex gap-3">
-              {/* Twitter */}
-              <button
-                onClick={() => handleSocialShare('twitter')}
-                className="flex-1 cursor-pointer border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
-              >
-                <div className="size-8 rounded-full bg-[rgba(29,161,242,0.1)] flex items-center justify-center">
-                  <Twitter className="size-4 text-[#1da1f2]" />
-                </div>
-                <span className="text-[12px] font-medium text-[#4a5565] leading-4">
-                  Twitter
-                </span>
-              </button>
-
-              {/* LinkedIn */}
-              <button
-                onClick={() => handleSocialShare('linkedin')}
-                className="flex-1 cursor-pointer border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
-              >
-                <div className="size-8 rounded-full bg-[rgba(10,102,194,0.1)] flex items-center justify-center">
-                  <Linkedin className="size-4 text-[#0a66c2]" />
-                </div>
-                <span className="text-[12px] font-medium text-[#4a5565] leading-4">
-                  LinkedIn
-                </span>
-              </button>
-
-              {/* Facebook */}
-              <button
-                onClick={() => handleSocialShare('facebook')}
-                className="flex-1 cursor-pointer border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
-              >
-                <div className="size-8 rounded-full bg-[rgba(24,119,242,0.1)] flex items-center justify-center">
-                  <Facebook className="size-4 text-[#1877f2]" />
-                </div>
-                <span className="text-[12px] font-medium text-[#4a5565] leading-4">
-                  Facebook
-                </span>
-              </button>
-            </div>
-          </div>
-
-          {/* Publish to Gallery Checkbox */}
-          {appId && (
             <div className="flex items-center gap-3 py-2">
+              {appId && (
+                <>
+                  <button
+                    type="button"
+                    role="checkbox"
+                    aria-checked={publishToGallery}
+                    onClick={() => setPublishToGallery(!publishToGallery)}
+                    className={`
+                      size-5 cursor-pointer rounded border-2 flex items-center justify-center transition-colors flex-shrink-0
+                      ${publishToGallery
+                        ? 'bg-[#23d57c] border-[#23d57c]'
+                        : 'bg-white border-gray-300 hover:border-gray-400'
+                      }
+                    `}
+                  >
+                    {publishToGallery && <Check className="size-3 text-white" />}
+                  </button>
+                  <span className="text-[14px] text-[#364153]">
+                    Publish to Gallery
+                  </span>
+                  
+                  {/* Separator */}
+                  <div className="w-[1px] h-4 bg-gray-200 mx-1" />
+                </>
+              )}
+
               <button
                 type="button"
                 role="checkbox"
-                aria-checked={publishToGallery}
-                onClick={() => setPublishToGallery(!publishToGallery)}
+                aria-checked={agreedToPolicy}
+                onClick={() => setAgreedToPolicy(!agreedToPolicy)}
                 className={`
-                  size-5 cursor-pointer rounded border-2 flex items-center justify-center transition-colors
-                  ${publishToGallery
+                  size-5 cursor-pointer rounded border-2 flex items-center justify-center transition-colors flex-shrink-0
+                  ${agreedToPolicy
                     ? 'bg-[#23d57c] border-[#23d57c]'
                     : 'bg-white border-gray-300 hover:border-gray-400'
                   }
                 `}
               >
-                {publishToGallery && <Check className="size-3 text-white" />}
+                {agreedToPolicy && <Check className="size-3 text-white" />}
               </button>
               <div className="flex items-center gap-2">
-                <Globe className="size-4 text-[#6a7282]" />
                 <span className="text-[14px] text-[#364153]">
-                  Publish to Gallery when sharing
+                  <a href="#" className="underline hover:text-black">Privacy Policy</a>
                 </span>
-                {isPublished && (
-                  <span className="text-[12px] text-[#23d57c] font-medium">
-                    ✓ Published
-                  </span>
-                )}
               </div>
             </div>
-          )}
-        </div>
-
-        {/* Footer - Only show download section when triggered by recording */}
-        {showVideoSection ? (
-        <div className="bg-[#f9fafb] border-t border-[#f3f4f6] h-[69px] flex items-center justify-between px-5 mt-6">
-          <div className="text-[12px] leading-4">
-            <span className="font-medium text-[#101828]">{fileSize}MB</span>
-            <span className="font-normal text-[#6a7282]"> • MP4</span>
           </div>
-          <button
-            onClick={handleDownload}
-            className="h-9 bg-[#101828] text-white rounded-[10px] px-4 flex cursor-pointer items-center gap-2 text-[14px] font-medium tracking-[-0.1504px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] hover:bg-[#101828]/90 transition-colors"
-          >
-            <Download className="size-4" />
-            Download Video
-          </button>
-        </div>
-        ) : (
-        <div className="h-6" />
-        )}
-      </Dialog.Popup>
+
+          {/* Footer - Only show download section when triggered by recording */}
+          {showVideoSection ? (
+            <div className="bg-[#f9fafb] border-t border-[#f3f4f6] h-[69px] flex items-center justify-between px-5 mt-6">
+              <div className="text-[12px] leading-4">
+                <span className="font-medium text-[#101828]">{fileSize}MB</span>
+                <span className="font-normal text-[#6a7282]"> • MP4</span>
+              </div>
+              <button
+                onClick={handleDownload}
+                className="h-9 bg-[#101828] text-white rounded-[10px] px-4 flex cursor-pointer items-center gap-2 text-[14px] font-medium tracking-[-0.1504px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] hover:bg-[#101828]/90 transition-colors"
+              >
+                <Download className="size-4" />
+                Download Video
+              </button>
+            </div>
+          ) : (
+            <div className="h-6" />
+          )}
+        </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>
   );

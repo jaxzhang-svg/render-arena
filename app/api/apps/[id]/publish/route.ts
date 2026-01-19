@@ -13,7 +13,7 @@ export async function POST(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, description } = body;
+    const { name } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -31,7 +31,7 @@ export async function POST(
     // 获取 App 并验证权限
     const { data: app, error: fetchError } = await adminClient
       .from('apps')
-      .select('user_id, is_public')
+      .select('user_id, is_public, prompt, name')
       .eq('id', id)
       .single();
 
@@ -50,13 +50,53 @@ export async function POST(
       );
     }
 
+    let shortName = name || app.name;
+
+    // Generate title if name is missing or default
+    if (!shortName || shortName === 'Untitled App') {
+      try {
+        const apiKey = process.env.NEXT_NOVITA_API_KEY || process.env.NOVITA_API_KEY;
+        
+        if (apiKey) {
+          const prompt = app.prompt || 'An awesome AI app';
+          const response = await fetch('https://api.novita.ai/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+              model: 'deepseek/deepseek-v3.2',
+              messages: [
+                { role: 'user', content: `Generate a very short, catchy title (max 4-5 words) for an app that does this: "${prompt}". Return ONLY the title, no quotes.` },
+              ],
+              max_tokens: 50,
+            }),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const text = data.choices?.[0]?.message?.content;
+            if (text) {
+              shortName = text.trim().replace(/^"|"$/g, '');
+            }
+          } else {
+            console.error('Failed to generate title from Novita API:', await response.text());
+          }
+        }
+      } catch (e) {
+        console.error('Failed to generate title:', e);
+        // Fallback
+        if (!shortName) shortName = 'Untitled App';
+      }
+    }
+
     // 更新 app
     const { error: updateError } = await adminClient
       .from('apps')
       .update({
         is_public: true,
-        name: name || null,
-        description: description || null,
+        name: shortName,
       })
       .eq('id', id);
 
@@ -70,7 +110,8 @@ export async function POST(
 
     return NextResponse.json({ 
       success: true, 
-      message: '已发布到画廊' 
+      message: '已发布到画廊',
+      name: shortName
     });
   } catch (error) {
     console.error('Error in POST /api/apps/[id]/publish:', error);

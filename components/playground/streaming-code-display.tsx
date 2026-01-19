@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useRef, useId } from 'react'
+import { useEffect, useRef, useId, useState } from 'react'
 import { Streamdown } from 'streamdown'
 import { code } from '@streamdown/code'
 import { mermaid } from '@streamdown/mermaid'
 import { math } from '@streamdown/math'
 import { cjk } from '@streamdown/cjk'
 import { Accordion } from '@base-ui/react/accordion'
-import { ChevronUp } from 'lucide-react'
+import { ChevronUp, ArrowDown } from 'lucide-react'
 import 'katex/dist/katex.min.css'
 
 interface StreamingCodeDisplayProps {
@@ -28,11 +28,42 @@ export function StreamingCodeDisplay({
 }: StreamingCodeDisplayProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const accordionTriggerId = useId()
+  const [showScrollButton, setShowScrollButton] = useState(false)
+  const isAutoScrolling = useRef(true)
+
+  const scrollToBottom = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight
+      isAutoScrolling.current = true
+      setShowScrollButton(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isAutoScrolling.current) {
+      scrollToBottom()
+    }
+  }, [content, reasoning])
+
+  const handleScroll = () => {
+    if (!containerRef.current) return
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current
+    const isAtBottom = scrollHeight - scrollTop - clientHeight < 50
+
+    if (isAtBottom) {
+      isAutoScrolling.current = true
+      setShowScrollButton(false)
+    } else {
+      isAutoScrolling.current = false
+      setShowScrollButton(true)
+    }
+  }
 
   return (
-    <div className="size-full overflow-hidden p-4">
+    <div className="relative size-full overflow-hidden p-4">
       <div
         ref={containerRef}
+        onScroll={handleScroll}
         className="size-full max-w-none overflow-y-auto"
       >
         {/* Reasoning 区域 */}
@@ -66,6 +97,15 @@ export function StreamingCodeDisplay({
           {content}
         </Streamdown>
       </div>
+
+      {showScrollButton && (
+        <button
+          onClick={scrollToBottom}
+          className="absolute bottom-8 right-8 z-10 flex size-8 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 transition-all hover:bg-gray-50 dark:bg-zinc-800 dark:ring-white/10"
+        >
+          <ArrowDown className="size-4 text-gray-600 dark:text-gray-400" />
+        </button>
+      )}
     </div>
   )
 }
