@@ -1,14 +1,32 @@
 # Typography System
 
+## ⚠️ Font Usage Rules
+
+**IMPORTANT: Only use Tailwind font utilities in code**
+- **Use `font-sans`** for all regular text (maps to TT Interphases Pro)
+- **Use `font-mono`** for code and technical text (maps to TT Interphases Pro Mono)
+- **DO NOT use** `font-['TT_Interphases_Pro']` or any explicit font family names
+- **DO NOT use** `font-['Inter']` or other font family strings
+
+The font families are configured in `tailwind.config.ts`:
+```typescript
+fontFamily: {
+  sans: ['var(--font-interphases)', 'system-ui', 'sans-serif'],
+  mono: ['var(--font-interphases-mono)', 'monospace'],
+}
+```
+
 ## Font Families
 
-### Primary Font: TT Interphases Pro
+### Primary Font: TT Interphases Pro (font-sans)
 - **Weights Available**: Regular (400), Medium (500), DemiBold (600)
 - **Usage**: Headings, body text, UI elements
+- **Tailwind Class**: `font-sans`
 
-### Secondary Font: TT Interphases Pro Mono
+### Secondary Font: TT Interphases Pro Mono (font-mono)
 - **Weight Available**: Regular (400)
 - **Usage**: Code, captions, labels, technical text
+- **Tailwind Class**: `font-mono`
 
 ### Tertiary Font: TT Interfaces
 - **Weight Available**: Regular (400)
@@ -43,8 +61,40 @@
 
 ## Typography Implementation
 
+### Correct Usage (✅)
+```tsx
+// Heading with sans font
+<h1 className="font-sans text-[80px] font-semibold leading-[74px] tracking-[-1.6px]">
+  Generate anything
+</h1>
+
+// Body text with sans font
+<p className="font-sans text-base font-normal leading-6">
+  Standard body text
+</p>
+
+// Technical text with mono font
+<span className="font-mono text-sm font-normal">
+  Code or technical content
+</span>
+
+// Button with mono font
+<button className="font-mono text-base">
+  Generate
+</button>
+```
+
+### Incorrect Usage (❌)
+```tsx
+// DON'T use explicit font family names
+<h1 className="font-['TT_Interphases_Pro',sans-serif] text-[80px]">Wrong</h1>
+<p className="font-['Inter',sans-serif] text-base">Wrong</p>
+<button className="font-['TT_Interphases_Pro_Mono',monospace]">Wrong</button>
+```
+
 ### H1 Example
 ```css
+/* Use font-sans in Tailwind instead */
 font-family: 'TT Interphases Pro', sans-serif;
 font-size: 80px;
 font-weight: 600;
@@ -55,6 +105,7 @@ color: #292827;
 
 ### H2 Example
 ```css
+/* Use font-sans in Tailwind instead */
 font-family: 'TT Interphases Pro', sans-serif;
 font-size: 56px;
 font-weight: 600;
@@ -65,6 +116,7 @@ color: #292827;
 
 ### Body Text Example
 ```css
+/* Use font-sans in Tailwind instead */
 font-family: 'TT Interphases Pro', sans-serif;
 font-size: 16px;
 font-weight: 500;
@@ -74,6 +126,7 @@ color: #292827;
 
 ### Mono/Caption Example
 ```css
+/* Use font-mono in Tailwind instead */
 font-family: 'TT Interphases Pro Mono', monospace;
 font-size: 12px;
 font-weight: 400;

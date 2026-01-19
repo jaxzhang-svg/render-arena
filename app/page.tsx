@@ -12,6 +12,7 @@ import { Accordion } from '@base-ui/react/accordion';
 import { cn } from '@/lib/utils';
 
 import { useState, useEffect } from 'react';
+import { Button } from '@/components/base/button';
 
 const mockApps: AppCardType[] = [
   {
@@ -267,14 +268,15 @@ export default function HomePage() {
 
                   {/* Actions Row */}
                   <div className="flex items-center justify-between border-t border-[#f3f4f6] pt-4">
-                    <button 
-                      className="size-4 p-0 inline-flex items-center justify-center"
+                    <Button 
+                      variant="ghost"
+                      className="size-8 p-1 inline-flex items-center justify-center"
                     >
                       <Sparkles className="text-gray-400 size-4" />
-                    </button>
+                    </Button>
                     
                     <Link href="/playground">
-                      <button className="
+                      <Button className="
                         flex items-center justify-center gap-2 rounded-xl
                         bg-[#292827] px-4 py-2.5
                         font-mono text-base
@@ -283,7 +285,7 @@ export default function HomePage() {
                       ">
                         <span>Generate</span>
                         <ArrowRight className="size-5" />
-                      </button>
+                      </Button>
                     </Link>
                   </div>
                 </div>

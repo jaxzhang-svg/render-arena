@@ -15,8 +15,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     
     const variantStyles = {
       default: 'bg-[#292827] text-white hover:bg-[#3a3938] font-mono rounded-xl',
-      primary: 'bg-white text-black hover:bg-white/90 font-sans font-bold rounded-full shadow-[0px_0px_20px_0px_rgba(255,255,255,0.3)]',
-      outline: 'border border-[#e7e6e2] bg-white text-gray-900 hover:bg-gray-50 font-sans rounded-full',
+      primary: 'bg-white text-black hover:bg-white/90 font-sans font-bold rounded shadow-[0px_0px_20px_0px_rgba(255,255,255,0.3)]',
+      outline: 'border border-[#e7e6e2] bg-white text-gray-900 hover:bg-gray-50 font-sans rounded-small',
       ghost: 'hover:bg-gray-100 text-gray-900 font-sans',
       destructive: 'bg-red-500 text-white hover:bg-red-600 font-sans',
       secondary: 'bg-[#23D57C] text-black hover:bg-[#16B063] font-sans',
