@@ -282,28 +282,24 @@ export default function HomePage() {
               relative h-[380px] overflow-hidden rounded-3xl border
               border-white/10 bg-black shadow-2xl
             ">
-              {/* Background gradient lines */}
-              <div className="absolute inset-0 opacity-40">
-                <div className="absolute inset-0 opacity-70" style={{background: 'linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0))'}} />
+              {/* Background container image (grid/line pattern) */}
+              <div className="absolute left-0 top-0 h-[368px] w-[1253px] opacity-40">
+                <img 
+                  alt="" 
+                  className="absolute inset-0 max-w-none object-cover opacity-70 pointer-events-none size-full" 
+                  src="/images/hackathon-bg-container.png" 
+                />
               </div>
 
-              {/* Horizontal gradient lines */}
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-[75px] h-[2px] w-full opacity-31" style={{background: 'linear-gradient(90deg, transparent, #00b8db 50%, transparent)', filter: 'blur(8px)'}} />
-                <div className="absolute top-[133px] h-[2.5px] w-full opacity-33" style={{background: 'linear-gradient(90deg, transparent, #00b8db 50%, transparent)', filter: 'blur(8px)'}} />
-                <div className="absolute top-[200px] h-[3.7px] w-full opacity-46" style={{background: 'linear-gradient(90deg, transparent, #00b8db 50%, transparent)', filter: 'blur(8px)'}} />
-                <div className="absolute top-[258px] h-[4px] w-full opacity-60" style={{background: 'linear-gradient(90deg, transparent, #00b8db 50%, transparent)', filter: 'blur(8px)'}} />
-                <div className="absolute top-[311px] h-[3.8px] w-full opacity-49" style={{background: 'linear-gradient(90deg, transparent, #00b8db 50%, transparent)', filter: 'blur(8px)'}} />
+              {/* Main artistic background image */}
+              <div className="absolute left-1/2 top-1/2 h-[380px] w-[1248px] -translate-x-1/2 -translate-y-1/2 rounded-md">
+                <div className="absolute inset-0 bg-black rounded-md" />
+                <img 
+                  alt="" 
+                  className="absolute max-w-none object-cover opacity-60 rounded-md size-full" 
+                  src="/images/hackathon-bg-main.png" 
+                />
               </div>
-
-              {/* Vertical gradient line */}
-              <div className="absolute left-[695px] h-full w-px opacity-14" style={{background: 'linear-gradient(180deg, transparent, #2b7fff 50%, transparent)'}} />
-
-              {/* Glow effect */}
-              <div className="
-                absolute top-[-80px] left-[740px] size-[384px] rounded-full
-                blur-[100px]
-              " style={{background: 'radial-gradient(circle, rgba(43,127,255,0.3), transparent)'}} />
 
               {/* Content */}
               <div className="
