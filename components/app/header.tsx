@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { UserAvatar } from "./user-avatar"
 
 export function Header() {
   return (
@@ -66,16 +66,8 @@ export function Header() {
           </Link>
         </nav>
 
-        {/* Log In Button */}
-        <Button 
-          variant="outline" 
-          className="
-            border-[#e7e6e2] font-mono text-[14px] leading-[16px] text-[#292827]
-            hover:border-[#23d57c] hover:text-[#23d57c]
-          "
-        >
-          Log In
-        </Button>
+        {/* User Avatar / Login Button */}
+        <UserAvatar />
       </div>
     </header>
   )
