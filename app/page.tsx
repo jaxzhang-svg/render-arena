@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { AppCard } from '@/components/app/app-card';
 import { UserAvatar } from '@/components/app/user-avatar';
 import { Header } from '@/components/app/header';
@@ -9,7 +8,8 @@ import { Footer } from '@/components/app/footer';
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal';
 import { Plus, TrendingUp, Clock, Box, ArrowRight, Code, Image as ImageIcon, Video, PenTool, Gamepad2, Settings, Sparkles, FileText, ChevronDown } from 'lucide-react';
 import { AppCard as AppCardType } from '@/types';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Accordion } from '@base-ui/react/accordion';
+import { cn } from '@/lib/utils';
 
 import { useState, useEffect } from 'react';
 
@@ -258,13 +258,11 @@ export default function HomePage() {
 
                   {/* Actions Row */}
                   <div className="flex items-center justify-between pt-4">
-                    <Button 
-                      variant="ghost"
-                      size="icon"
-                      className="size-4 p-0"
+                    <button 
+                      className="size-4 p-0 inline-flex items-center justify-center"
                     >
-                      <Sparkles className="text-muted-foreground size-4" />
-                    </Button>
+                      <Sparkles className="text-gray-400 size-4" />
+                    </button>
                     
                     <Link href="/playground">
                       <button className="
@@ -485,10 +483,10 @@ export default function HomePage() {
             </div>
 
             <div className="mt-16 flex justify-center">
-              <Button variant="outline" size="lg" className="gap-2">
+              <button className="inline-flex items-center gap-2 h-11 px-8 rounded-lg border border-gray-200 bg-white text-gray-900 hover:bg-gray-100 font-medium transition-colors">
                 Load more apps
                 <Plus className="size-4" />
-              </Button>
+              </button>
             </div>
           </div>
         </section>
@@ -504,123 +502,119 @@ export default function HomePage() {
               Frequently Asked Questions
             </h2>
 
-            <Accordion defaultValue={["item-0"]} className="
-              w-full space-y-2
-            ">
-              <AccordionItem value="item-0" className="
-                rounded-[10px] border-none bg-[#f9fafb] px-6
-              ">
-                <AccordionTrigger className="
+            <Accordion.Root defaultValue={["item-0"]} className="w-full space-y-2">
+              <Accordion.Item value="item-0" className="rounded-[10px] border-none bg-[#f9fafb] px-6">
+                <Accordion.Trigger className="
                   py-6 font-['TT_Interphases_Pro',sans-serif] text-xl/6
                   font-semibold tracking-[-0.4px] text-[#23d57c]
                   hover:no-underline
                 ">
                   How does the Novita affiliate program work?
-                </AccordionTrigger>
-                <AccordionContent className="
+                </Accordion.Trigger>
+                <Accordion.Panel className="
                   border-t border-[#f3f4f6] pt-0 pb-6
                   font-['TT_Interphases_Pro',sans-serif] text-base/6
                   text-[#4f4e4a]
                 ">
                   The Novita affiliate program allows you to earn commissions by referring new customers to our platform. Once you sign up, you'll receive a unique tracking link. Share this link on your website, blog, or social media channels. When someone clicks your link and makes a purchase, you earn a percentage of the sale.
-                </AccordionContent>
-              </AccordionItem>
+                </Accordion.Panel>
+              </Accordion.Item>
 
-              <AccordionItem value="item-1" className="
+              <Accordion.Item value="item-1" className="
                 rounded-[10px] border-none bg-[#f9fafb] px-6
               ">
-                <AccordionTrigger className="
+                <Accordion.Trigger className="
                   py-6 font-['TT_Interphases_Pro',sans-serif] text-xl/6
                   font-semibold tracking-[-0.4px] text-[#1e2939]
                   hover:no-underline
                 ">
                   Do I need a website or blog to be part of the Novita affiliate program?
-                </AccordionTrigger>
-                <AccordionContent className="
+                </Accordion.Trigger>
+                <Accordion.Panel className="
                   border-t border-[#f3f4f6] pt-0 pb-6
                   font-['TT_Interphases_Pro',sans-serif] text-base/6
                   text-[#4f4e4a]
                 ">
                   No, you don't need a website or blog to participate. You can share your affiliate link through social media, email newsletters, or any other platform where you have an audience.
-                </AccordionContent>
-              </AccordionItem>
+                </Accordion.Panel>
+              </Accordion.Item>
 
-              <AccordionItem value="item-2" className="
+              <Accordion.Item value="item-2" className="
                 rounded-[10px] border-none bg-[#f9fafb] px-6
               ">
-                <AccordionTrigger className="
+                <Accordion.Trigger className="
                   py-6 font-['TT_Interphases_Pro',sans-serif] text-xl/6
                   font-semibold tracking-[-0.4px] text-[#1e2939]
                   hover:no-underline
                 ">
                   If a customer clicks my link but buys later without the link, do I still get commission?
-                </AccordionTrigger>
-                <AccordionContent className="
+                </Accordion.Trigger>
+                <Accordion.Panel className="
                   border-t border-[#f3f4f6] pt-0 pb-6
                   font-['TT_Interphases_Pro',sans-serif] text-base/6
                   text-[#4f4e4a]
                 ">
                   Yes, our tracking system uses cookies that typically last 30 days. If a customer clicks your link and makes a purchase within that timeframe, you'll receive credit for the referral.
-                </AccordionContent>
-              </AccordionItem>
+                </Accordion.Panel>
+              </Accordion.Item>
 
-              <AccordionItem value="item-3" className="
+              <Accordion.Item value="item-3" className="
                 rounded-[10px] border-none bg-[#f9fafb] px-6
               ">
-                <AccordionTrigger className="
+                <Accordion.Trigger className="
                   py-6 font-['TT_Interphases_Pro',sans-serif] text-xl/6
                   font-semibold tracking-[-0.4px] text-[#1e2939]
                   hover:no-underline
                 ">
                   When do I receive my rewards?
-                </AccordionTrigger>
-                <AccordionContent className="
+                </Accordion.Trigger>
+                <Accordion.Panel className="
                   border-t border-[#f3f4f6] pt-0 pb-6
                   font-['TT_Interphases_Pro',sans-serif] text-base/6
                   text-[#4f4e4a]
                 ">
                   Rewards are typically processed monthly. Once you reach the minimum payout threshold, your earnings will be transferred to your designated payment method.
-                </AccordionContent>
-              </AccordionItem>
+                </Accordion.Panel>
+              </Accordion.Item>
 
-              <AccordionItem value="item-4" className="
+              <Accordion.Item value="item-4" className="
                 rounded-[10px] border-none bg-[#f9fafb] px-6
               ">
-                <AccordionTrigger className="
+                <Accordion.Trigger className="
                   py-6 font-['TT_Interphases_Pro',sans-serif] text-xl/6
                   font-semibold tracking-[-0.4px] text-[#1e2939]
                   hover:no-underline
                 ">
                   Where can I find Affiliate Terms of Service?
-                </AccordionTrigger>
-                <AccordionContent className="
+                </Accordion.Trigger>
+                <Accordion.Panel className="
                   border-t border-[#f3f4f6] pt-0 pb-6
                   font-['TT_Interphases_Pro',sans-serif] text-base/6
                   text-[#4f4e4a]
                 ">
                   You can find our Affiliate Terms of Service in your affiliate dashboard or on our website's legal section. Make sure to review them carefully before participating in the program.
-                </AccordionContent>
-              </AccordionItem>
+                </Accordion.Panel>
+              </Accordion.Item>
 
-              <AccordionItem value="item-5" className="
+              <Accordion.Item value="item-5" className="
                 rounded-[10px] border-none bg-[#f9fafb] px-6
               ">
-                <AccordionTrigger className="
+                <Accordion.Trigger className="
                   py-6 font-['TT_Interphases_Pro',sans-serif] text-xl/6
                   font-semibold tracking-[-0.4px] text-[#1e2939]
                   hover:no-underline
                 ">
                   Are there any restrictions on the affiliate program?
-                </AccordionTrigger>
-                <AccordionContent className="
+                </Accordion.Trigger>
+                <Accordion.Panel className="
                   border-t border-[#f3f4f6] pt-0 pb-6
                   font-['TT_Interphases_Pro',sans-serif] text-base/6
                   text-[#4f4e4a]
                 ">
                   Yes, there are some restrictions including prohibited promotional methods and content guidelines. Please refer to our Affiliate Terms of Service for complete details.
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion.Root>
           </div>
         </section>
       </main>

@@ -6,7 +6,7 @@ import React, { useState, memo } from 'react'
 import { ChevronDown, ChevronRight, Code2, Eye } from 'lucide-react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { Button } from '../ui/button'
+import { Button } from '../base/button'
 import { useTypewriter } from '@/hooks/use-typewriter'
 
 interface MarkdownRendererProps {

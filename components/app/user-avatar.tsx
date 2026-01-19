@@ -1,9 +1,10 @@
 'use client';
 
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
+import { Popover } from '@base-ui/react/popover';
+import { Button } from '@/components/base/button';
 import { User, LogOut, FileText, Shield } from 'lucide-react';
 import { useAuth, loginWithNovita } from '@/hooks/use-auth';
+import { cn } from '@/lib/utils';
 
 interface UserAvatarProps {
   className?: string;
@@ -61,8 +62,8 @@ export function UserAvatar({ className }: UserAvatarProps) {
 
   // 已登录状态：显示头像
   return (
-    <Popover>
-      <PopoverTrigger>
+    <Popover.Root>
+      <Popover.Trigger>
         <div className={`
           flex size-10 cursor-pointer items-center justify-center
           overflow-hidden rounded-full border border-[#e7e6e2]
@@ -74,52 +75,58 @@ export function UserAvatar({ className }: UserAvatarProps) {
             {getInitial()}
           </span>
         </div>
-      </PopoverTrigger>
-      <PopoverContent className="w-56 p-0" align="end">
-        {/* 用户信息 */}
-        <div className="border-b border-[#e7e6e2] px-4 py-3">
-          <p className="truncate font-mono text-sm font-medium text-[#292827]">
-            {user.email || user.user_metadata?.username || 'User'}
-          </p>
-        </div>
-        
-        <div className="p-2">
-          <button className="
-            flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-            text-left transition-colors hover:bg-[#f5f5f3]
-          ">
-            <User className="size-4 text-[#666]" />
-            <span className="font-mono text-sm text-[#292827]">Account</span>
-          </button>
-          <button className="
-            flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-            text-left transition-colors hover:bg-[#f5f5f3]
-          ">
-            <FileText className="size-4 text-[#666]" />
-            <span className="font-mono text-sm text-[#292827]">Activity</span>
-          </button>
-          <button className="
-            flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-            text-left transition-colors hover:bg-[#f5f5f3]
-          ">
-            <Shield className="size-4 text-[#666]" />
-            <span className="font-mono text-sm text-[#292827]">Privacy</span>
-          </button>
-          
-          <div className="mx-2 my-1 h-px bg-[#e7e6e2]" />
-          
-          <button 
-            onClick={handleLogout}
-            className="
-              flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-              text-left text-red-600 transition-colors hover:bg-red-50
-            "
-          >
-            <LogOut className="size-4" />
-            <span className="font-mono text-sm font-medium">Logout</span>
-          </button>
-        </div>
-      </PopoverContent>
-    </Popover>
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Positioner>
+          <Popover.Popup className={cn(
+            "z-50 w-56 overflow-hidden rounded-lg border border-gray-200 bg-white p-0 text-gray-900 shadow-lg"
+          )}>
+            {/* 用户信息 */}
+            <div className="border-b border-[#e7e6e2] px-4 py-3">
+              <p className="truncate font-mono text-sm font-medium text-[#292827]">
+                {user.email || user.user_metadata?.username || 'User'}
+              </p>
+            </div>
+
+            <div className="p-2">
+              <button className="
+                flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+                text-left transition-colors hover:bg-[#f5f5f3]
+              ">
+                <User className="size-4 text-[#666]" />
+                <span className="font-mono text-sm text-[#292827]">Account</span>
+              </button>
+              <button className="
+                flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+                text-left transition-colors hover:bg-[#f5f5f3]
+              ">
+                <FileText className="size-4 text-[#666]" />
+                <span className="font-mono text-sm text-[#292827]">Activity</span>
+              </button>
+              <button className="
+                flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+                text-left transition-colors hover:bg-[#f5f5f3]
+              ">
+                <Shield className="size-4 text-[#666]" />
+                <span className="font-mono text-sm text-[#292827]">Privacy</span>
+              </button>
+
+              <div className="mx-2 my-1 h-px bg-[#e7e6e2]" />
+
+              <button
+                onClick={handleLogout}
+                className="
+                  flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
+                  text-left text-red-600 transition-colors hover:bg-red-50
+                "
+              >
+                <LogOut className="size-4" />
+                <span className="font-mono text-sm font-medium">Logout</span>
+              </button>
+            </div>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }

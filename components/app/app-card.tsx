@@ -1,6 +1,5 @@
 'use client';
 
-import { Card } from '@/components/ui/card';
 import { Heart, Copy, Code, Gamepad2, Box, Sparkles, Image as ImageIcon, Video, PenTool, Zap } from 'lucide-react';
 import { AppCard as AppCardType } from '@/types';
 import { ModelBadge } from './model-badge';
@@ -25,7 +24,7 @@ export function AppCard({ app }: AppCardProps) {
   const router = useRouter();
 
   return (
-    <Card 
+    <div
       onClick={() => router.push('/playground')}
       className="
         group bg-card ring-border/50 relative flex cursor-pointer flex-col gap-4
@@ -171,6 +170,6 @@ export function AppCard({ app }: AppCardProps) {
           </button>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

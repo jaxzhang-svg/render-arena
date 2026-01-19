@@ -1,8 +1,9 @@
 'use client';
 
-import { Dialog, DialogContent, DialogHeader, DialogFooter } from '@/components/ui/dialog';
+import { Dialog } from '@base-ui/react/dialog';
 import { X, Trophy, Gift, Calendar, Users, Zap, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/base/button';
+import { cn } from '@/lib/utils';
 
 interface ArenaBattleModalProps {
   open: boolean;
@@ -11,29 +12,32 @@ interface ArenaBattleModalProps {
 
 export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="
-        max-h-[90vh] max-w-[544px] overflow-y-auto rounded-[10px]
-        border-[rgba(13,84,43,0.5)] bg-black p-0
-      ">
-        {/* Header */}
-        <DialogHeader className="space-y-4 px-6 pt-6 pb-4">
-          <div className="flex items-center gap-3">
-            <Trophy className="size-6 text-[#fdc700]" />
-            <h2 className="
-              font-['TT_Interphases_Pro',sans-serif] text-[32px] leading-[40px]
-              font-semibold tracking-[-0.64px] text-white
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Backdrop className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
+        <Dialog.Popup className={cn(
+          "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50",
+          "max-h-[90vh] max-w-[544px] overflow-y-auto rounded-[10px]",
+          "border-[rgba(13,84,43,0.5)] bg-black p-0"
+        )}>
+          {/* Header */}
+          <div className="space-y-4 px-6 pt-6 pb-4">
+            <div className="flex items-center gap-3">
+              <Trophy className="size-6 text-[#fdc700]" />
+              <h2 className="
+                font-['TT_Interphases_Pro',sans-serif] text-[32px] leading-[40px]
+                font-semibold tracking-[-0.64px] text-white
+              ">
+                Novita Arena Battle
+              </h2>
+            </div>
+            <h3 className="
+              font-['TT_Interphases_Pro',sans-serif] text-[18px]/6 font-semibold
+              text-[#05df72]
             ">
-              Novita Arena Battle
-            </h2>
+              Build it. Compare it. Make it glow.
+            </h3>
           </div>
-          <h3 className="
-            font-['TT_Interphases_Pro',sans-serif] text-[18px]/6 font-semibold
-            text-[#05df72]
-          ">
-            Build it. Compare it. Make it glow.
-          </h3>
-        </DialogHeader>
 
         {/* Scrollable Content */}
         <div className="space-y-8 px-6 pb-6">
@@ -402,11 +406,11 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
         </div>
 
         {/* Footer */}
-        <DialogFooter className="
+        <div className="
           flex flex-col items-center gap-4 border-t
           border-[rgba(255,255,255,0.1)] bg-black p-6
         ">
-          <Button 
+          <Button
             className="
               h-12 w-full max-w-[420px] rounded-[14px] bg-[#23d57c]
               font-['TT_Interphases_Pro_Mono',monospace] text-base font-normal
@@ -422,8 +426,9 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
           ">
             Build fast. Compare clearly. Make it share-worthy.
           </p>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </Dialog.Popup>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

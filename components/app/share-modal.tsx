@@ -1,26 +1,17 @@
 'use client';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Download, Copy, X, Edit, Twitter, Linkedin, Upload, CircleDashed, FileVideo } from 'lucide-react';
+import { Dialog } from '@base-ui/react/dialog';
+import { Download, Copy, X, Link as LinkIcon, Play } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { Facebook, Twitter, Linkedin } from 'lucide-react';
+
 type VideoStatus = 'generating' | 'uploading' | 'ready';
 
 interface ShareModalProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  appName?: string;
   shareUrl?: string;
   previewImage?: string;
-  mode?: 'video' | 'poster';
   videoBlob?: Blob | null;
   videoFormat?: 'webm' | 'mp4' | null;
 }
@@ -28,20 +19,16 @@ interface ShareModalProps {
 export function ShareModal({
   open = false,
   onOpenChange,
-  appName = 'Project Alpha v1',
-  shareUrl = 'app.ai/share/u/83js-29ks',
-  previewImage = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBuEUyhZ3KbhHzwPx4RHXay5LWvoNIQsyjsNB6BH0lL_uQI9U9uI35qhlr-KxVKV-RScG5g4dTON7wx0rZTx88VrOzBkHMbOSg9Z1NPQlN92Ooga-SLJVc1u7aoLp_FzfkAzLdCMkQY-qoVeXSmGyB5ABY5ze5YGZguir7BeHmzYpi9eCUnEcgE_yZlMtkrUVJaHK7uYPfALmreCeBPFJQFc0gvj6x7vlxHsMPKAk3tUPW7xcyXJTdWwiuWpdwmboahOjJSDA-df1E',
-  mode = 'poster',
+  shareUrl = 'https://make.figma.com/s/9f8a7d6',
+  previewImage,
   videoBlob,
   videoFormat,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
-  const [videoStatus, setVideoStatus] = useState<VideoStatus>(videoBlob ? 'ready' : 'generating');
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isConverting, setIsConverting] = useState(false);
 
   // Create video URL from blob for preview
   const videoUrl = videoBlob ? URL.createObjectURL(videoBlob) : null;
+  const fileSize = videoBlob ? (videoBlob.size / (1024 * 1024)).toFixed(1) : '4.2';
 
   // Cleanup object URL when component unmounts or blob changes
   useEffect(() => {
@@ -58,26 +45,11 @@ export function ShareModal({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleUpload = () => {
-    setVideoStatus('uploading');
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setVideoStatus('ready');
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 300);
-  };
-
   const handleDownload = () => {
     if (videoBlob && videoUrl) {
       const a = document.createElement('a');
       a.href = videoUrl;
-      const extension = videoFormat || 'webm';
+      const extension = videoFormat || 'mp4';
       a.download = `recording-${Date.now()}.${extension}`;
       document.body.appendChild(a);
       a.click();
@@ -85,354 +57,156 @@ export function ShareModal({
     }
   };
 
-  const handleDownloadAsMp4 = async () => {
-    if (!videoBlob || isConverting) return;
-
-    setIsConverting(true);
-    try {
-      // Download converted MP4
-      const url = URL.createObjectURL(videoBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `recording-${Date.now()}.mp4`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Failed to convert video:', error);
-      alert('Failed to convert video to MP4. Please try again.');
-    } finally {
-      setIsConverting(false);
+  const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
+    const encodedUrl = encodeURIComponent(shareUrl);
+    let url = '';
+    
+    switch (platform) {
+      case 'twitter':
+        url = `https://twitter.com/intent/tweet?url=${encodedUrl}`;
+        break;
+      case 'linkedin':
+        url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+        break;
+      case 'facebook':
+        url = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+        break;
     }
+    
+    window.open(url, '_blank', 'width=600,height=400');
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="
-        h-auto w-[1100px]! max-w-[1100px]! gap-0 overflow-hidden p-0
-      ">
-        <div className="
-          flex flex-col
-          lg:flex-row
-        ">
-          {/* Left Side - Preview */}
-          <div className="
-            bg-muted/30 relative flex w-full flex-col items-center
-            justify-center p-8
-            lg:w-[60%]
-          ">
-            {mode === 'video' && (
-              <div className="
-                absolute top-6 left-6 rounded-sm bg-black px-3 py-1.5 text-xs
-                font-bold tracking-wider text-white uppercase
-              ">
-                Preview
-              </div>
+    <Dialog.Root open={open} onOpenChange={(open) => onOpenChange?.(open)}>
+      <Dialog.Portal>
+        <Dialog.Backdrop className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
+        <Dialog.Popup className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[446px] bg-white rounded-2xl border border-[#f3f4f6] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] overflow-hidden outline-none">
+          {/* Header */}
+          <div className="flex items-center justify-between h-[69px] px-5 pr-3 border-b border-[#f3f4f6]">
+            <h2 className="text-[18px] font-semibold text-[#101828] tracking-[-0.4395px] leading-7">
+              Share Generation
+            </h2>
+            <Dialog.Close className="flex items-center justify-center size-9 rounded-full hover:bg-gray-100 transition-colors">
+              <X className="size-5 text-gray-600" />
+            </Dialog.Close>
+          </div>
+
+        {/* Content */}
+        <div className="flex flex-col gap-6 px-5 pt-5 pb-0">
+          {/* Preview Container */}
+          <div className="relative w-full h-[228.375px] bg-[#101828] rounded-[14px] overflow-hidden shadow-[inset_0px_2px_4px_0px_rgba(0,0,0,0.05)]">
+            {videoUrl ? (
+              <video
+                src={videoUrl}
+                className="w-full h-full object-cover opacity-90"
+                poster={previewImage}
+              />
+            ) : previewImage ? (
+              <img
+                src={previewImage}
+                alt="Preview"
+                className="w-full h-full object-cover opacity-90"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 opacity-90" />
             )}
-
-            <div
-              className="
-                bg-background relative w-full overflow-hidden rounded-lg border
-                shadow-lg
-              "
-              style={{ aspectRatio: mode === 'video' ? '8/3' : '4/3', maxHeight: mode === 'video' ? '420px' : '560px' }}
-            >
-              {mode === 'video' && videoUrl ? (
-                <video
-                  src={videoUrl}
-                  controls
-                  autoPlay
-                  className="size-full bg-black object-contain"
+            
+            {/* Play Button Overlay */}
+            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+              <div className="size-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center pl-1">
+                <div 
+                  className="w-0 h-0 border-l-[10px] border-t-[6px] border-b-[6px] border-transparent border-l-white"
+                  style={{ borderTopColor: 'transparent', borderBottomColor: 'transparent' }}
                 />
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${previewImage})` }}
-                  />
-                  {mode === 'video' && (
-                    <div className="
-                      group absolute inset-0 flex cursor-pointer items-center
-                      justify-center bg-black/10 transition-all
-                      hover:bg-black/20
-                    ">
-                      <Button
-                        size="icon"
-                        className="
-                          size-16 rounded-full bg-[#23D57C] text-black shadow-xl
-                          transition-all
-                          hover:bg-[#16B063]
-                        "
-                      >
-                        <svg
-                          className="ml-1 size-8"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </Button>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Status Badges - Only show for video */}
-              {mode === 'video' && (
-                <>
-                  {videoStatus === 'generating' && (
-                    <div className="
-                      absolute bottom-4 left-4 flex items-center gap-2
-                      rounded-full bg-black/80 px-3 py-1.5 text-xs font-medium
-                      text-white backdrop-blur-sm
-                    ">
-                      <CircleDashed className="size-3 animate-spin" />
-                      Generating video...
-                    </div>
-                  )}
-                  {videoStatus === 'uploading' && (
-                    <div className="
-                      absolute right-4 bottom-4 left-4 flex items-center gap-2
-                      rounded-full bg-black/80 px-3 py-1.5 text-xs font-medium
-                      text-white backdrop-blur-sm
-                    ">
-                      <CircleDashed className="size-3 animate-spin" />
-                      Uploading... {uploadProgress}%
-                    </div>
-                  )}
-                  {videoStatus === 'ready' && (
-                    <div className="
-                      absolute bottom-4 left-4 flex items-center gap-2
-                      rounded-full bg-black/80 px-3 py-1.5 text-xs font-medium
-                      text-white backdrop-blur-sm
-                    ">
-                      <div className="size-2 rounded-full bg-green-500" />
-                      Ready to share
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="mt-6 w-full space-y-2">
-              {mode === 'poster' ? (
-                <div className="flex gap-2">
-                  <Button
-                    size="default"
-                    className="
-                      h-12 flex-1 gap-2 bg-[#23D57C] font-mono text-sm
-                      text-black
-                      hover:bg-[#16B063]
-                    "
-                  >
-                    <Download className="size-5" />
-                    Download Poster
-                  </Button>
-                  <Button
-                    onClick={handleCopy}
-                    variant="outline"
-                    className="
-                      h-12 flex-1 gap-2 border-black bg-black font-mono text-sm
-                      text-white
-                      hover:bg-black/90
-                    "
-                  >
-                    <Copy className="size-4" />
-                    {copied ? 'Copied!' : 'Copy Link'}
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  {videoStatus === 'ready' ? (
-                    <div className="space-y-2">
-                      {/* Show format info */}
-                      {videoFormat && (
-                        <div className="
-                          text-muted-foreground bg-muted/50 flex items-center
-                          justify-center gap-2 rounded-full px-3 py-1.5 text-xs
-                        ">
-                          <FileVideo className="size-3" />
-                          Format: <span className="font-semibold uppercase">{videoFormat}</span>
-                        </div>
-                      )}
-
-                      {/* Download buttons */}
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={handleDownload}
-                          disabled={isConverting}
-                          size="default"
-                          className="
-                            h-12 flex-1 gap-2 bg-[#23D57C] font-mono text-sm
-                            text-black
-                            hover:bg-[#16B063]
-                          "
-                        >
-                          <Download className="size-5" />
-                          Download {videoFormat?.toUpperCase() || 'Video'}
-                        </Button>
-
-                        {/* Show MP4 conversion button for WebM videos */}
-                        {videoFormat === 'webm' && (
-                          <Button
-                            onClick={handleDownloadAsMp4}
-                            disabled={isConverting}
-                            variant="outline"
-                            className="
-                              border-primary text-primary
-                              hover:bg-primary/10
-                              h-12 flex-1 gap-2 font-mono text-sm
-                            "
-                          >
-                            <Download className="size-5" />
-                            {isConverting ? 'Converting...' : 'Convert to MP4'}
-                          </Button>
-                        )}
-
-                        <Button
-                          onClick={handleCopy}
-                          variant="outline"
-                          className="
-                            h-12 flex-1 gap-2 border-black bg-black font-mono
-                            text-sm text-white
-                            hover:bg-black/90
-                          "
-                        >
-                          <Copy className="size-4" />
-                          {copied ? 'Copied!' : 'Copy Link'}
-                        </Button>
-                      </div>
-                    </div>
-                  ) : videoStatus === 'uploading' ? (
-                    <div className="space-y-2">
-                      <div className="bg-muted h-2 overflow-hidden rounded-full">
-                        <div className="
-                          h-full bg-[#23D57C] transition-all duration-300
-                        " style={{ width: `${uploadProgress}%` }} />
-                      </div>
-                      <p className="
-                        text-muted-foreground text-center text-xs font-medium
-                      ">
-                        Uploading video... {uploadProgress}%
-                      </p>
-                    </div>
-                  ) : (
-                    <Button
-                      onClick={handleUpload}
-                      size="default"
-                      className="
-                        h-12 w-full gap-2 bg-[#23D57C] font-mono text-sm
-                        text-black
-                        hover:bg-[#16B063]
-                      "
-                    >
-                      <Upload className="size-5" />
-                      Upload Video
-                    </Button>
-                  )}
-                </>
-              )}
+              </div>
             </div>
           </div>
 
-          {/* Right Side - Controls */}
-          <div className="
-            bg-background flex w-full flex-col p-8
-            lg:w-[40%]
-          ">
-            <DialogHeader className="mb-6 space-y-2">
-              <DialogTitle className="text-3xl/tight font-bold">
-                Share Your Creation
-              </DialogTitle>
-              <p className="text-muted-foreground text-base font-normal">
-                Give your app a name and share it with the world.
-              </p>
-            </DialogHeader>
-
-            <Separator className="mb-6" />
-
-            <div className="flex flex-1 flex-col gap-6">
-              {/* App Name Input */}
-              <div className="space-y-2">
-                <Label htmlFor="app-name" className="
-                  text-sm font-bold tracking-wide uppercase
-                ">
-                  App Name
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="app-name"
-                    defaultValue={appName}
-                    className="
-                      bg-muted/50 border-border border px-4 py-3 pr-10 font-mono
-                      text-base
-                      focus:border-[#23D57C]
-                    "
-                  />
-                  <Edit className="
-                    text-muted-foreground absolute top-1/2 right-4 size-4
-                    -translate-y-1/2
-                  " />
-                </div>
+          {/* Public Link Section */}
+          <div className="space-y-2">
+            <label className="text-[12px] font-medium text-[#6a7282] uppercase tracking-[0.6px] leading-4">
+              Public Link
+            </label>
+            <div className="flex gap-2">
+              <div className="flex-1 h-[42px] bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] flex items-center gap-2 px-[13px]">
+                <LinkIcon className="size-4 text-gray-500" />
+                <span className="text-[14px] text-[#4a5565] leading-5 truncate">
+                  {shareUrl}
+                </span>
               </div>
+              <button
+                onClick={handleCopy}
+                className="h-[42px] w-[90px] rounded-[10px] border border-[#e5e7eb] bg-white text-[14px] font-medium text-[#364153] tracking-[-0.1504px] hover:bg-gray-50 transition-colors flex items-center justify-center"
+              >
+                {copied ? 'Copied' : 'Copy'}
+              </button>
+            </div>
+          </div>
 
-              {/* Social Sharing */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-bold tracking-wide uppercase">
-                  Share to Social
-                </h3>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    className="
-                      border-border
-                      hover:bg-muted
-                      h-12 flex-1
-                    "
-                  >
-                    <Twitter className="size-5" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="
-                      border-border
-                      hover:bg-muted
-                      h-12 flex-1
-                    "
-                  >
-                    <Linkedin className="size-5" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="
-                      border-border
-                      hover:bg-muted
-                      h-12 flex-1
-                    "
-                  >
-                    <Copy className="size-5" />
-                  </Button>
+          {/* Share to Social Section */}
+          <div className="space-y-2">
+            <label className="text-[12px] font-medium text-[#6a7282] uppercase tracking-[0.6px] leading-4">
+              Share to Social
+            </label>
+            <div className="flex gap-3">
+              {/* Twitter */}
+              <button
+                onClick={() => handleSocialShare('twitter')}
+                className="flex-1 border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
+              >
+                <div className="size-8 rounded-full bg-[rgba(29,161,242,0.1)] flex items-center justify-center">
+                  <Twitter className="size-4 text-[#1da1f2]" />
                 </div>
-              </div>
+                <span className="text-[12px] font-medium text-[#4a5565] leading-4">
+                  Twitter
+                </span>
+              </button>
+
+              {/* LinkedIn */}
+              <button
+                onClick={() => handleSocialShare('linkedin')}
+                className="flex-1 border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
+              >
+                <div className="size-8 rounded-full bg-[rgba(10,102,194,0.1)] flex items-center justify-center">
+                  <Linkedin className="size-4 text-[#0a66c2]" />
+                </div>
+                <span className="text-[12px] font-medium text-[#4a5565] leading-4">
+                  LinkedIn
+                </span>
+              </button>
+
+              {/* Facebook */}
+              <button
+                onClick={() => handleSocialShare('facebook')}
+                className="flex-1 border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
+              >
+                <div className="size-8 rounded-full bg-[rgba(24,119,242,0.1)] flex items-center justify-center">
+                  <Facebook className="size-4 text-[#1877f2]" />
+                </div>
+                <span className="text-[12px] font-medium text-[#4a5565] leading-4">
+                  Facebook
+                </span>
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Close Button */}
-        <button
-          onClick={() => onOpenChange?.(false)}
-          className="
-            bg-background border-border
-            hover:bg-muted
-            absolute top-4 right-4 z-20 flex size-8 items-center justify-center
-            rounded-full border transition-colors
-          "
-        >
-          <X className="size-4" />
-        </button>
-      </DialogContent>
-    </Dialog>
+        {/* Footer */}
+        <div className="bg-[#f9fafb] border-t border-[#f3f4f6] h-[69px] flex items-center justify-between px-5 mt-6">
+          <div className="text-[12px] leading-4">
+            <span className="font-medium text-[#101828]">{fileSize}MB</span>
+            <span className="font-normal text-[#6a7282]"> • MP4</span>
+          </div>
+          <button
+            onClick={handleDownload}
+            className="h-9 bg-[#101828] text-white rounded-[10px] px-4 flex items-center gap-2 text-[14px] font-medium tracking-[-0.1504px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] hover:bg-[#101828]/90 transition-colors"
+          >
+            <Download className="size-4" />
+            Download Video
+          </button>
+        </div>
+      </Dialog.Popup>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

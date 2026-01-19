@@ -2,8 +2,6 @@
 
 import React, { useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/base/button'
-import { Textarea } from '@/components/base/textarea'
 import {
   Video,
   Share,
@@ -21,8 +19,7 @@ import { ShareModal } from '@/components/app/share-modal'
 import { ModelSettingsPopover } from '@/components/app/model-settings-modal'
 import { UserAvatar } from '@/components/app/user-avatar'
 import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
-import { Menu } from '@base-ui/react/menu'
-import { cn } from '@/lib/utils'
+import { DropdownMenu } from '@base-ui/react/dropdown'
 import { models, LLMModel } from '@/lib/models'
 import { useScreenRecorder } from '@/hooks/use-screen-recorder'
 import { streamChatCompletion } from '@/lib/novita-api'
@@ -520,8 +517,8 @@ export default function PlaygroundPage() {
                 border-[#e7e6e2] bg-white px-4
               ">
                 <div className="flex items-center gap-3">
-                  <Menu.Root>
-                    <Menu.Trigger>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
                       <Button
                         variant="ghost"
                         className="
@@ -543,33 +540,23 @@ export default function PlaygroundPage() {
                           <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </Button>
-                    </Menu.Trigger>
-                    <Menu.Portal>
-                      <Menu.Positioner>
-                        <Menu.Popup className={cn(
-                          "z-50 min-w-[8rem] overflow-hidden rounded-lg border border-gray-200 bg-white p-1 text-gray-900 shadow-lg"
-                        )}>
-                          {models.map((model) => (
-                            <Menu.Item
-                              key={model.id}
-                              onClick={() => setSelectedModelA(model)}
-                              className={cn(
-                                "relative flex cursor-pointer select-none items-center rounded-md px-2 py-1.5 text-sm outline-none transition-colors",
-                                "hover:bg-gray-100 focus:bg-gray-100",
-                                "gap-2"
-                              )}
-                            >
-                              <span className={`
-                                size-5 rounded-sm
-                                ${model.color}
-                              `} />
-                              {model.name}
-                            </Menu.Item>
-                          ))}
-                        </Menu.Popup>
-                      </Menu.Positioner>
-                    </Menu.Portal>
-                  </Menu.Root>
+                    </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56">
+                    {models.map((model) => (
+                      <DropdownMenuItem
+                        key={model.id}
+                        onClick={() => setSelectedModelA(model)}
+                        className="cursor-pointer gap-2"
+                      >
+                        <span className={`
+                          size-5 rounded-sm
+                          ${model.color}
+                        `} />
+                        {model.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 
                 {modelAResponse.loading && (
                   <div className="
@@ -727,8 +714,8 @@ export default function PlaygroundPage() {
                 border-[#e7e6e2] bg-white px-4
               ">
                 <div className="flex items-center gap-3">
-                  <Menu.Root>
-                    <Menu.Trigger>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
                       <Button
                         variant="ghost"
                         className="
@@ -750,33 +737,23 @@ export default function PlaygroundPage() {
                           <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </Button>
-                    </Menu.Trigger>
-                    <Menu.Portal>
-                      <Menu.Positioner>
-                        <Menu.Popup className={cn(
-                          "z-50 min-w-[8rem] overflow-hidden rounded-lg border border-gray-200 bg-white p-1 text-gray-900 shadow-lg"
-                        )}>
-                          {models.map((model) => (
-                            <Menu.Item
-                              key={model.id}
-                              onClick={() => setSelectedModelB(model)}
-                              className={cn(
-                                "relative flex cursor-pointer select-none items-center rounded-md px-2 py-1.5 text-sm outline-none transition-colors",
-                                "hover:bg-gray-100 focus:bg-gray-100",
-                                "gap-2"
-                              )}
-                            >
-                              <span className={`
-                                size-5 rounded-sm
-                                ${model.color}
-                              `} />
-                              {model.name}
-                            </Menu.Item>
-                          ))}
-                        </Menu.Popup>
-                      </Menu.Positioner>
-                    </Menu.Portal>
-                  </Menu.Root>
+                    </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56">
+                    {models.map((model) => (
+                      <DropdownMenuItem
+                        key={model.id}
+                        onClick={() => setSelectedModelB(model)}
+                        className="cursor-pointer gap-2"
+                      >
+                        <span className={`
+                          size-5 rounded-sm
+                          ${model.color}
+                        `} />
+                        {model.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 
                 {modelBResponse.loading && (
                   <div className="

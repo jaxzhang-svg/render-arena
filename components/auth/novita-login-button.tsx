@@ -1,7 +1,7 @@
 'use client';
 
 import { loginWithNovita } from '@/hooks/use-auth';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/base/button';
 
 interface NovitaLoginButtonProps {
   next?: string;
