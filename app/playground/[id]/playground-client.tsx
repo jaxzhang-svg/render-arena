@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/base/button'
 import { Textarea } from '@/components/base/textarea'
 import {
@@ -50,6 +51,31 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareMode, setShareMode] = useState<'video' | 'poster'>('poster')
   const [recordedFormat, setRecordedFormat] = useState<'webm' | 'mp4' | null>(null)
+
+  // 自动开始生成逻辑
+  const searchParams = useSearchParams()
+  const autoStart = searchParams.get('autoStart') === 'true'
+  const hasAutoStartedRef = useRef(false)
+  const handleGenerateRef = useRef(handleGenerate)
+  const modelsReady = modelA.selectedModel.id && modelB.selectedModel.id
+  
+  // 更新 handleGenerateRef
+  useEffect(() => {
+    handleGenerateRef.current = handleGenerate
+  }, [handleGenerate])
+
+  // 执行自动生成
+  useEffect(() => {
+    // 只有在从未自动开始过、需要自动开始、且没有初始 App（是新会话）、且模型都准备好时才执行
+    if (autoStart && !hasAutoStartedRef.current && !initialApp && !currentAppId && modelsReady) {
+      hasAutoStartedRef.current = true
+      // 使用 setTimeout 确保在渲染完成后执行，并且错开即时更新
+      const timer = setTimeout(() => {
+        handleGenerateRef.current()
+      }, 100)
+      return () => clearTimeout(timer)
+    }
+  }, [autoStart, initialApp, currentAppId, modelsReady])
 
   // 屏幕录制
   const {

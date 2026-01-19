@@ -64,13 +64,9 @@ export function useArenaPlayground({
   const searchParams = useSearchParams()
   const urlPrompt = searchParams.get('prompt')
   const urlCategory = searchParams.get('category') || ''
-  const autoStart = searchParams.get('autoStart') === 'true'
-
-  // App 状态
   const [currentAppId, setCurrentAppId] = useState<string | undefined>(appId)
   const [prompt, setPrompt] = useState(initialApp?.prompt || urlPrompt || '')
   const [category] = useState(initialApp?.category || urlCategory || '')
-  const [hasAutoStarted, setHasAutoStarted] = useState(false)
 
   // 视图状态
   const [arenaViewMode, setArenaViewMode] = useState<ArenaViewMode>('split')
@@ -175,19 +171,7 @@ export function useArenaPlayground({
     await modelB.generate(currentAppId)
   }, [currentAppId, handleGenerate, modelB])
 
-  // 自动开始生成（从首页跳转时）
-  useEffect(() => {
-    const shouldAutoStart = autoStart && urlPrompt && !initialApp && !currentAppId && modelA.selectedModel.id && modelB.selectedModel.id
-    console.log('autoStart check:', { autoStart, urlPrompt, hasAutoStarted, initialApp, currentAppId, hasModelA: !!modelA.selectedModel.id, hasModelB: !!modelB.selectedModel.id, shouldAutoStart })
-
-    if (shouldAutoStart && !hasAutoStarted) {
-      setHasAutoStarted(true)
-      const timer = setTimeout(() => {
-        handleGenerate()
-      }, 100)
-      return () => clearTimeout(timer)
-    }
-  }, [autoStart, urlPrompt, hasAutoStarted, initialApp, currentAppId, handleGenerate, modelA.selectedModel.id, modelB.selectedModel.id])
+// 自动开始生成逻辑已移动到 PlaygroundClient 组件中
 
   return {
     // App 状态
