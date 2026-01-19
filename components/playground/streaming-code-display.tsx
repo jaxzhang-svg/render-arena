@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useId } from 'react'
 import { Streamdown } from 'streamdown'
 import { code } from '@streamdown/code'
 import { mermaid } from '@streamdown/mermaid'
@@ -27,6 +27,7 @@ export function StreamingCodeDisplay({
   isStreaming = false,
 }: StreamingCodeDisplayProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const accordionTriggerId = useId()
 
   return (
     <div className="size-full overflow-hidden p-4">
@@ -38,7 +39,7 @@ export function StreamingCodeDisplay({
         {reasoning && (
           <Accordion.Root defaultValue={['thinking']} className="mb-4">
             <Accordion.Item value="thinking" className="rounded-lg border-none bg-gray-100 overflow-hidden">
-              <Accordion.Trigger className="
+              <Accordion.Trigger id={accordionTriggerId} className="
                 flex items-center justify-between w-full px-4 py-3
                 text-sm font-medium text-gray-700
                 hover:text-gray-900 aria-expanded:text-blue-600

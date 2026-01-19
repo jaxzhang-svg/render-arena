@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useId } from 'react';
 import Link from 'next/link';
 import { Popover } from '@base-ui/react/popover';
 import { Button } from '@/components/base/button';
@@ -22,6 +22,7 @@ interface UserAvatarProps {
 export function UserAvatar({ className }: UserAvatarProps) {
   const { user, loading, logout } = useAuth();
   const [isHackathonModalOpen, setIsHackathonModalOpen] = useState(false);
+  const popoverTriggerId = useId();
 
   // 加载中状态
   if (loading) {
@@ -67,7 +68,7 @@ export function UserAvatar({ className }: UserAvatarProps) {
   // 已登录状态：显示头像
   return (
     <Popover.Root>
-      <Popover.Trigger>
+      <Popover.Trigger id={popoverTriggerId}>
         <div className={`
           flex size-10 cursor-pointer items-center justify-center
           overflow-hidden rounded-full border border-[#e7e6e2]

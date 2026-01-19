@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useId } from 'react'
 import { Popover } from '@base-ui/react/popover'
 import { Tooltip } from '@base-ui/react/tooltip'
 import { Slider } from '@base-ui/react/slider'
@@ -21,10 +21,13 @@ export function ModelSettingsPopover({
   onSettingsChange,
 }: ModelSettingsPopoverProps) {
   const [open, setOpen] = useState(false)
+  const popoverTriggerId = useId()
+  const tooltipTriggerId = useId()
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger
+        id={popoverTriggerId}
         className={cn(
           'hover:bg-muted/80 size-8 cursor-pointer rounded-lg',
           'inline-flex items-center justify-center',
@@ -50,7 +53,7 @@ export function ModelSettingsPopover({
                         Temperature
                       </span>
                       <Tooltip.Root>
-                        <Tooltip.Trigger>
+                        <Tooltip.Trigger id={tooltipTriggerId}>
                           <Info className="size-3 text-[#9e9c98]" />
                         </Tooltip.Trigger>
                         <Tooltip.Portal>

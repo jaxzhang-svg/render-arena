@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useId } from 'react'
 import { Button } from '@/components/base/button'
 import { Menu } from '@base-ui/react/menu'
 import { Maximize, RotateCcw } from 'lucide-react'
@@ -58,6 +58,8 @@ export function ModelPanel({
   showRightBorder = false,
   className,
 }: ModelPanelProps) {
+  const menuTriggerId = useId()
+  
   return (
     <div
       className={cn(
@@ -73,6 +75,7 @@ export function ModelPanel({
           <div suppressHydrationWarning>
             <Menu.Root>
               <Menu.Trigger
+              id={menuTriggerId}
               openOnHover
               className={cn(
                 'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors',

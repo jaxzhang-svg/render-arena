@@ -8,7 +8,7 @@ import { GalleryGrid } from '@/components/app/gallery-grid';
 import { Clock, Box, ArrowRight, ChevronUp, Sparkles } from 'lucide-react';
 import { Accordion } from '@base-ui/react/accordion';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useId } from 'react';
 import { Button } from '@/components/base/button';
 
 import { playgroundModes, getCategoryFromModeLabel } from '@/lib/config';
@@ -22,6 +22,14 @@ export default function HomePage() {
   const [loopNum, setLoopNum] = useState(0);
   const [typingSpeed, setTypingSpeed] = useState(50);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Generate stable IDs for accordion triggers
+  const accordionId0 = useId();
+  const accordionId1 = useId();
+  const accordionId2 = useId();
+  const accordionId3 = useId();
+  const accordionId4 = useId();
+  const accordionId5 = useId();
 
   const handleGenerate = () => {
     const promptToUse = userPrompt.trim() || placeholderText.trim();
@@ -423,7 +431,7 @@ export default function HomePage() {
 
             <Accordion.Root defaultValue={[]} className="w-full space-y-2">
               <Accordion.Item value="item-0" className="rounded-[10px] border-none bg-[#f9fafb] overflow-hidden">
-                <Accordion.Trigger className="
+                <Accordion.Trigger id={accordionId0} className="
                   flex items-center justify-between w-full h-[72.75px] px-6 py-0
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
@@ -446,7 +454,7 @@ export default function HomePage() {
               <Accordion.Item value="item-1" className="
                 rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
-                <Accordion.Trigger className="
+                <Accordion.Trigger id={accordionId1} className="
                   flex items-center justify-between w-full h-[72.75px] px-6 py-0
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
@@ -469,7 +477,7 @@ export default function HomePage() {
               <Accordion.Item value="item-2" className="
                 rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
-                <Accordion.Trigger className="
+                <Accordion.Trigger id={accordionId2} className="
                   flex items-center justify-between w-full h-[72.75px] px-6 py-0
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
@@ -492,7 +500,7 @@ export default function HomePage() {
               <Accordion.Item value="item-3" className="
                 rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
-                <Accordion.Trigger className="
+                <Accordion.Trigger id={accordionId3} className="
                   flex items-center justify-between w-full h-[72.75px] px-6 py-0
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
@@ -515,7 +523,7 @@ export default function HomePage() {
               <Accordion.Item value="item-4" className="
                 rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
-                <Accordion.Trigger className="
+                <Accordion.Trigger id={accordionId4} className="
                   flex items-center justify-between w-full h-[72.75px] px-6 py-0
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
@@ -538,7 +546,7 @@ export default function HomePage() {
               <Accordion.Item value="item-5" className="
                 rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
-                <Accordion.Trigger className="
+                <Accordion.Trigger id={accordionId5} className="
                   flex items-center justify-between w-full h-[72.75px] px-6 py-0
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
