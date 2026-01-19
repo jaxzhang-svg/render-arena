@@ -521,28 +521,24 @@ export default function PlaygroundPage() {
               ">
                 <div className="flex items-center gap-3">
                   <Menu.Root>
-                    <Menu.Trigger>
-                      <Button
-                        variant="ghost"
-                        className="
-                          h-8 cursor-pointer gap-2 rounded-lg bg-[#f5f5f5] px-3
-                          py-1.5 transition-colors
-                          hover:bg-[#e7e6e2]
-                        "
-                      >
-                        <span className={`
-                          size-5 rounded-sm
-                          ${selectedModelA.color}
-                        `} />
-                        <span className="
-                          font-sans text-[16px] font-medium text-[#4f4e4a]
-                        ">
-                          {selectedModelA.name}
-                        </span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                          <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </Button>
+                    <Menu.Trigger className={cn(
+                      "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors",
+                      "h-8 cursor-pointer gap-2 bg-[#f5f5f5] px-3 py-1.5",
+                      "hover:bg-[#e7e6e2]",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                    )}>
+                      <span className={`
+                        size-5 rounded-sm
+                        ${selectedModelA.color}
+                      `} />
+                      <span className="
+                        font-sans text-[16px] font-medium text-[#4f4e4a]
+                      ">
+                        {selectedModelA.name}
+                      </span>
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                     </Menu.Trigger>
                     <Menu.Portal>
                       <Menu.Positioner>
@@ -651,6 +647,7 @@ export default function PlaygroundPage() {
                     onSettingsChange={setModelASettings}
                   >
                     <Button
+                      asChild
                       variant="ghost"
                       size="icon"
                       className="
@@ -728,28 +725,24 @@ export default function PlaygroundPage() {
               ">
                 <div className="flex items-center gap-3">
                   <Menu.Root>
-                    <Menu.Trigger>
-                      <Button
-                        variant="ghost"
-                        className="
-                          h-8 cursor-pointer gap-2 rounded-lg px-3 py-1.5
-                          transition-colors
-                          hover:bg-[#f5f5f5]
-                        "
-                      >
-                        <span className={`
-                          size-5 rounded-sm
-                          ${selectedModelB.color}
-                        `} />
-                        <span className="
-                          font-sans text-[16px] font-medium text-[#4f4e4a]
-                        ">
-                          {selectedModelB.name}
-                        </span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                          <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </Button>
+                    <Menu.Trigger className={cn(
+                      "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors",
+                      "h-8 cursor-pointer gap-2 bg-[#f5f5f5] px-3 py-1.5",
+                      "hover:bg-[#e7e6e2]",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                    )}>
+                      <span className={`
+                        size-5 rounded-sm
+                        ${selectedModelB.color}
+                      `} />
+                      <span className="
+                        font-sans text-[16px] font-medium text-[#4f4e4a]
+                      ">
+                        {selectedModelB.name}
+                      </span>
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="#9e9c98" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                     </Menu.Trigger>
                     <Menu.Portal>
                       <Menu.Positioner>
@@ -856,6 +849,7 @@ export default function PlaygroundPage() {
                     onSettingsChange={setModelBSettings}
                   >
                     <Button
+                      asChild
                       variant="ghost"
                       size="icon"
                       className="
