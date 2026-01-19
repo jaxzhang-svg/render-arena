@@ -140,7 +140,7 @@ export function MenuItem({ title, description, icon, href }: MenuItemProps) {
         <p className="font-sans text-base leading-6 text-black">
           {title}
         </p>
-        <p className="font-['TT_Interphases_Pro_Mono'] text-sm leading-4 text-[#4F4E4A]">
+        <p className="font-mono text-sm leading-4 text-[#4F4E4A]">
           {description}
         </p>
       </div>

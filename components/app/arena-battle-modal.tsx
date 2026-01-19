@@ -25,14 +25,14 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
             <div className="flex items-center gap-3">
               <Trophy className="size-6 text-[#fdc700]" />
               <h2 className="
-                font-['TT_Interphases_Pro',sans-serif] text-[32px] leading-[40px]
+                font-sans text-[32px] leading-[40px]
                 font-semibold tracking-[-0.64px] text-white
               ">
                 Novita Arena Battle
               </h2>
             </div>
             <h3 className="
-              font-['TT_Interphases_Pro',sans-serif] text-[18px]/6 font-semibold
+              font-sans text-[18px]/6 font-semibold
               text-[#05df72]
             ">
               Build it. Compare it. Make it glow.
@@ -47,7 +47,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
             bg-[rgba(13,84,43,0.1)] p-4
           ">
             <p className="
-              font-['TT_Interphases_Pro',sans-serif] text-base/6 text-[#e7e6e2]
+              font-sans text-base/6 text-[#e7e6e2]
             ">
               A 14-day, fully remote Model Arena battle focused on visual comparison, vibes, and shareability — not traditional hackathon code volume.
             </p>
@@ -60,7 +60,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
               <div className="flex items-center gap-2">
                 <Zap className="size-5 text-[#fdc700]" />
                 <h3 className="
-                  font-['TT_Interphases_Pro',sans-serif] text-2xl leading-[38px]
+                  font-sans text-2xl leading-[38px]
                   font-semibold text-white
                 ">
                   What You'll Build
@@ -72,7 +72,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                 bg-[rgba(255,255,255,0.05)] p-5
               ">
                 <p className="
-                  font-['TT_Interphases_Pro',sans-serif] text-sm/5
+                  font-sans text-sm/5
                   text-[#d1d5dc]
                 ">
                   Create visual, comparable demos using <span className="
@@ -82,14 +82,14 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                 
                 <div className="space-y-2">
                   <p className="
-                    font-['TT_Interphases_Pro',sans-serif] text-sm/5
+                    font-sans text-sm/5
                   ">
                     <span className="font-bold text-[#7bf1a8]">Core idea:</span>
                     <span className="text-[#cbc9c4]"> Use the same prompt across different models and showcase output differences in style, motion, and vibe.</span>
                   </p>
                   
                   <ul className="
-                    space-y-1 font-['TT_Interphases_Pro',sans-serif] text-sm/5
+                    space-y-1 font-sans text-sm/5
                     text-[#cbc9c4]
                   ">
                     <li>Different models, same prompt</li>
@@ -99,7 +99,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                 </div>
                 
                 <p className="
-                  font-['TT_Interphases_Pro_Mono',sans-serif] text-xs/5
+                  font-mono text-xs/5
                   tracking-[0.24px] text-[#6a7282]
                 ">
                   No requirement for a full product, repo, or complex system.
@@ -112,7 +112,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
               <div className="flex items-center gap-2">
                 <Gift className="size-5 text-[#fdc700]" />
                 <h3 className="
-                  font-['TT_Interphases_Pro',sans-serif] text-2xl leading-[38px]
+                  font-sans text-2xl leading-[38px]
                   font-semibold text-white
                 ">
                   Prize Pool
@@ -175,7 +175,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                   bg-[rgba(13,84,43,0.2)] p-2.5
                 ">
                   <p className="
-                    font-['TT_Interphases_Pro',sans-serif] text-sm/5
+                    font-sans text-sm/5
                     text-[#23d57c]
                   ">
                     Community Bonus: $30 Credits for high-quality feedback
@@ -413,7 +413,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
           <Button
             className="
               h-12 w-full max-w-[420px] rounded-[14px] bg-[#23d57c]
-              font-['TT_Interphases_Pro_Mono',monospace] text-base font-normal
+              font-mono text-base font-normal
               text-black shadow-[0px_0px_20px_0px_rgba(34,197,94,0.3)]
               hover:bg-[#1fc76f]
             "
