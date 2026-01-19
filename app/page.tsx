@@ -6,7 +6,7 @@ import { Header } from '@/components/app/header';
 import { Footer } from '@/components/app/footer';
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal';
 import { GalleryGrid } from '@/components/app/gallery-grid';
-import { Plus, TrendingUp, Clock, Box, ArrowRight, Code, Image as ImageIcon, Video, PenTool, Gamepad2, Settings, Sparkles, FileText, ChevronDown } from 'lucide-react';
+import { Plus, TrendingUp, Clock, Box, ArrowRight, Code, Image as ImageIcon, Video, PenTool, Gamepad2, Settings, Sparkles, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import { Accordion } from '@base-ui/react/accordion';
 import { cn } from '@/lib/utils';
 
@@ -19,56 +19,32 @@ const categories = [
 ];
 
 const modes = [
-  { label: 'Website', icon: Code, color: 'bg-teal-400/80' },
-  { label: 'Image', icon: ImageIcon, color: 'bg-indigo-400/80' },
-  { label: '3D Video', icon: Video, color: 'bg-rose-400/80' },
-  { label: 'Logo', icon: PenTool, color: 'bg-amber-400/80' },
-  { label: 'Image Editing', icon: Settings, color: 'bg-cyan-400/80' },
-  { label: 'Game Dev', icon: Gamepad2, color: 'bg-purple-400/80' },
-  { label: '3D Design', icon: Box, color: 'bg-blue-400/80' },
+  { label: 'Physics Playground', icon: Box, color: 'bg-violet-400/80', description: 'Create interactive physics simulations and dynamic experiences' },
+  { label: 'Visual Magic', icon: Sparkles, color: 'bg-pink-400/80', description: 'Generate stunning visual effects and artistic creations' },
+  { label: 'Micro Game Jam', icon: Gamepad2, color: 'bg-cyan-400/80', description: 'Build mini games and interactive entertainment' },
 ];
 
 const modePrompts: Record<string, string[]> = {
-  'Website': [
-    "Build me a minimalistic dashboard for tracking my personal expenses...",
-    "Create a landing page for a new coffee brand with scroll animations...",
-    "Design a portfolio site with dark mode and a contact form..."
+  'Physics Playground': [
+    "A pendulum with realistic swing physics and friction...",
+    "Bouncing balls with gravity and elastic collision physics...",
+    "A rope bridge swaying and deforming under dynamic forces..."
   ],
-  'Image': [
-    "A cyberpunk city street at night with neon lights and rain...",
-    "A portrait of a futuristic astronaut in a garden of alien plants...",
-    "A wide angle shot of a serene mountain lake at sunrise..."
+  'Visual Magic': [
+    "Neon particles dancing in mesmerizing spiral patterns...",
+    "Liquid wave distortion effect with metallic reflections...",
+    "Kaleidoscopic mandala pattern with smooth color transitions..."
   ],
-  '3D Video': [
-    "A time-lapse video of a flower blooming in a forest...",
-    "A drone shot flying over a busy futuristic metropolis...",
-    "Slow motion waves crashing on a black sand beach..."
-  ],
-  'Logo': [
-    "A minimalist geometric logo for a tech startup called 'Nexus'...",
-    "A vintage style badge logo for a coffee shop...",
-    "An abstract icon representing connection and speed..."
-  ],
-  'Image Editing': [
-    "Remove the background from this portrait and add a studio backdrop...",
-    "Color correct this landscape to look like golden hour...",
-    "Add a lens flare effect to the top right corner..."
-  ],
-  'Game Dev': [
-    "Create a basic Flappy Bird element with physics...",
-    "Build a 2D platformer character controller with double jump...",
-    "A simple memory card game grid with flip animations..."
-  ],
-  '3D Design': [
-    "A 3D rotating globe with data visualization points...",
-    "A low poly forest scene with volumetric lighting...",
-    "A physics simulation of falling cloth over a sphere..."
+  'Micro Game Jam': [
+    "A fast-paced tap-the-tiles rhythm game with increasing difficulty...",
+    "A simple puzzle game where you match falling colored blocks...",
+    "A dodge-the-obstacles endless runner with power-ups..."
   ]
 };
 
 export default function HomePage() {
   const router = useRouter();
-  const [activeMode, setActiveMode] = useState('Website');
+  const [activeMode, setActiveMode] = useState('Physics Playground');
   const [userPrompt, setUserPrompt] = useState('');
   const [placeholderText, setPlaceholderText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -85,8 +61,21 @@ export default function HomePage() {
     }
   };
 
+  const handleSurpriseMe = () => {
+    const activePrompts = modePrompts[activeMode] || [];
+    if (activePrompts.length > 0) {
+      const randomIndex = Math.floor(Math.random() * activePrompts.length);
+      const randomPrompt = activePrompts[randomIndex];
+      setUserPrompt(randomPrompt);
+      // Automatically generate with the surprise prompt
+      setTimeout(() => {
+        router.push(`/playground/new?prompt=${encodeURIComponent(randomPrompt)}&autoStart=true`);
+      }, 100);
+    }
+  };
+
   useEffect(() => {
-    const activePrompts = modePrompts[activeMode] || modePrompts['Website'];
+    const activePrompts = modePrompts[activeMode] || [];
     const i = loopNum % activePrompts.length;
     const fullText = activePrompts[i];
 
@@ -188,8 +177,8 @@ export default function HomePage() {
                   {/* Textarea with scrollbar */}
                   <div className="relative">
                     <textarea
-                      value={userPrompt || placeholderText}
-                      placeholder="Describe what you want to create..."
+                      value={userPrompt}
+                      placeholder={placeholderText || "Describe what you want to create..."}
                       onChange={(e) => setUserPrompt(e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
@@ -216,21 +205,28 @@ export default function HomePage() {
                   {/* Actions Row */}
                   <div className="flex items-center justify-between border-t border-[#f3f4f6] pt-4">
                     <Button 
+                      onClick={handleSurpriseMe}
                       variant="ghost"
-                      className="size-8 p-1 inline-flex items-center justify-center"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-gray-800"
+                      title="Generate a random prompt from this category"
                     >
-                      <Sparkles className="text-gray-400 size-4" />
+                      <Sparkles className="size-4" />
+                      <span className="text-sm font-medium">Surprise me</span>
                     </Button>
                     
                     <Button 
                       onClick={handleGenerate}
-                      className="
+                      disabled={!userPrompt.trim()}
+                      className={`
                         flex items-center justify-center gap-2 rounded-xl
-                        bg-[#292827] px-4 py-2.5
+                        px-4 py-2.5
                         font-mono text-base
-                        font-normal text-white transition-colors
-                        hover:bg-[#3a3938]
-                      "
+                        font-normal transition-colors
+                        ${userPrompt.trim()
+                          ? "bg-[#292827] text-white hover:bg-[#3a3938]"
+                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }
+                      `}
                     >
                       <span>Generate</span>
                       <ArrowRight className="size-5" />
@@ -241,38 +237,40 @@ export default function HomePage() {
 
               {/* Category Buttons */}
               <div className="
-                flex w-full flex-wrap items-center justify-center gap-3
+                flex w-full flex-col items-center justify-center gap-6
               ">
-                {modes.map((mode) => {
-                  const Icon = mode.icon;
-                  const isActive = activeMode === mode.label;
-                  return (
-                    <button
-                      key={mode.label}
-                      onClick={() => setActiveMode(mode.label)}
-                      className={`
-                        flex items-center gap-1.5 rounded-full border px-4
-                        py-2.5 transition-colors
-                        ${
-                        isActive 
-                          ? "border-black bg-black text-white" 
-                          : `
-                            border-[#e7e6e2] bg-white text-[#4f4e4a]
-                            hover:bg-gray-50
-                          `
-                      }
-                      `}
-                    >
-                      <Icon className="size-3.5" />
-                      <span className="
-                        font-sans text-sm
-                        font-medium
-                      ">
-                        {mode.label}
-                      </span>
-                    </button>
-                  );
-                })}
+                <div className="flex w-full flex-wrap items-center justify-center gap-3">
+                  {modes.map((mode) => {
+                    const Icon = mode.icon;
+                    const isActive = activeMode === mode.label;
+                    return (
+                      <button
+                        key={mode.label}
+                        onClick={() => setActiveMode(mode.label)}
+                        className={`
+                          flex cursor-pointer items-center gap-2 rounded-full border px-5
+                          py-3 transition-all
+                          ${
+                          isActive
+                            ? "border-black bg-black text-white shadow-lg"
+                            : `
+                              border-[#e7e6e2] bg-white text-[#4f4e4a]
+                              hover:bg-gray-50 hover:border-gray-300
+                            `
+                        }
+                        `}
+                      >
+                        <Icon className="size-4" />
+                        <span className="
+                          font-sans text-sm
+                          font-semibold
+                        ">
+                          {mode.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
@@ -399,10 +397,10 @@ export default function HomePage() {
                   </div>
 
                   {/* Join Button */}
-                  <button 
+                  <button
                     onClick={() => setIsModalOpen(true)}
                     className="
-                      flex items-center justify-center gap-2 rounded-full
+                      flex cursor-pointer items-center justify-center gap-2 rounded-full
                       bg-white px-8 py-4 font-['Inter',sans-serif] text-lg
                       leading-7 font-bold text-black
                       shadow-[0px_0px_20px_0px_rgba(255,255,255,0.3)]
@@ -448,16 +446,19 @@ export default function HomePage() {
             </h2>
 
             <Accordion.Root defaultValue={["item-0"]} className="w-full space-y-2">
-              <Accordion.Item value="item-0" className="rounded-[10px] border-none bg-[#f9fafb] px-6">
+              <Accordion.Item value="item-0" className="rounded-[10px] border-none bg-[#f9fafb] overflow-hidden">
                 <Accordion.Trigger className="
-                  py-6 font-sans text-xl
-                  leading-6 font-semibold tracking-[-0.4px] text-[#23d57c]
-                  hover:no-underline
+                  flex items-center justify-between w-full h-[72.75px] px-6 py-0
+                  font-sans text-xl
+                  leading-6 font-semibold tracking-[-0.4px]
+                  hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
+                  group transition-colors
                 ">
-                  How does the Novita affiliate program work?
+                  <span>How does the Novita affiliate program work?</span>
+                  <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
-                  border-t border-[#f3f4f6] pt-4 pb-6
+                  border-t border-[#f3f4f6] px-6 py-4
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
@@ -466,17 +467,20 @@ export default function HomePage() {
               </Accordion.Item>
 
               <Accordion.Item value="item-1" className="
-                rounded-[10px] border-none bg-[#f9fafb] px-6
+                rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
                 <Accordion.Trigger className="
-                  py-6 font-sans text-xl
-                  leading-6 font-semibold tracking-[-0.4px] text-[#1e2939]
-                  hover:no-underline
+                  flex items-center justify-between w-full h-[72.75px] px-6 py-0
+                  font-sans text-xl
+                  leading-6 font-semibold tracking-[-0.4px]
+                  hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
+                  group transition-colors
                 ">
-                  Do I need a website or blog to be part of the Novita affiliate program?
+                  <span>Do I need a website or blog to be part of the Novita affiliate program?</span>
+                  <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
-                  border-t border-[#f3f4f6] pt-4 pb-6
+                  border-t border-[#f3f4f6] px-6 py-4
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
@@ -485,17 +489,20 @@ export default function HomePage() {
               </Accordion.Item>
 
               <Accordion.Item value="item-2" className="
-                rounded-[10px] border-none bg-[#f9fafb] px-6
+                rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
                 <Accordion.Trigger className="
-                  py-6 font-sans text-xl
-                  leading-6 font-semibold tracking-[-0.4px] text-[#1e2939]
-                  hover:no-underline
+                  flex items-center justify-between w-full h-[72.75px] px-6 py-0
+                  font-sans text-xl
+                  leading-6 font-semibold tracking-[-0.4px]
+                  hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
+                  group transition-colors
                 ">
-                  If a customer clicks my link but buys later without the link, do I still get commission?
+                  <span>If a customer clicks my link but buys later without the link, do I still get commission?</span>
+                  <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
-                  border-t border-[#f3f4f6] pt-4 pb-6
+                  border-t border-[#f3f4f6] px-6 py-4
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
@@ -504,17 +511,20 @@ export default function HomePage() {
               </Accordion.Item>
 
               <Accordion.Item value="item-3" className="
-                rounded-[10px] border-none bg-[#f9fafb] px-6
+                rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
                 <Accordion.Trigger className="
-                  py-6 font-sans text-xl
-                  leading-6 font-semibold tracking-[-0.4px] text-[#1e2939]
-                  hover:no-underline
+                  flex items-center justify-between w-full h-[72.75px] px-6 py-0
+                  font-sans text-xl
+                  leading-6 font-semibold tracking-[-0.4px]
+                  hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
+                  group transition-colors
                 ">
-                  When do I receive my rewards?
+                  <span>When do I receive my rewards?</span>
+                  <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
-                  border-t border-[#f3f4f6] pt-4 pb-6
+                  border-t border-[#f3f4f6] px-6 py-4
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
@@ -523,17 +533,20 @@ export default function HomePage() {
               </Accordion.Item>
 
               <Accordion.Item value="item-4" className="
-                rounded-[10px] border-none bg-[#f9fafb] px-6
+                rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
                 <Accordion.Trigger className="
-                  py-6 font-sans text-xl
-                  leading-6 font-semibold tracking-[-0.4px] text-[#1e2939]
-                  hover:no-underline
+                  flex items-center justify-between w-full h-[72.75px] px-6 py-0
+                  font-sans text-xl
+                  leading-6 font-semibold tracking-[-0.4px]
+                  hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
+                  group transition-colors
                 ">
-                  Where can I find Affiliate Terms of Service?
+                  <span>Where can I find Affiliate Terms of Service?</span>
+                  <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
-                  border-t border-[#f3f4f6] pt-4 pb-6
+                  border-t border-[#f3f4f6] px-6 py-4
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
@@ -542,17 +555,20 @@ export default function HomePage() {
               </Accordion.Item>
 
               <Accordion.Item value="item-5" className="
-                rounded-[10px] border-none bg-[#f9fafb] px-6
+                rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
               ">
                 <Accordion.Trigger className="
-                  py-6 font-sans text-xl
-                  leading-6 font-semibold tracking-[-0.4px] text-[#1e2939]
-                  hover:no-underline
+                  flex items-center justify-between w-full h-[72.75px] px-6 py-0
+                  font-sans text-xl
+                  leading-6 font-semibold tracking-[-0.4px]
+                  hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
+                  group transition-colors
                 ">
-                  Are there any restrictions on the affiliate program?
+                  <span>Are there any restrictions on the affiliate program?</span>
+                  <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
-                  border-t border-[#f3f4f6] pt-4 pb-6
+                  border-t border-[#f3f4f6] px-6 py-4
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">

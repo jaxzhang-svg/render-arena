@@ -766,7 +766,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                     <button
                       onClick={() => setModelBView('code')}
                       className={`
-                        rounded-md px-3 py-1 text-xs font-medium transition-all
+                        cursor-pointer rounded-md px-3 py-1 text-xs font-medium transition-all
                         ${
                         modelBView === 'code'
                           ? 'bg-white text-black shadow-sm'
@@ -782,7 +782,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                     <button
                       onClick={() => setModelBView('preview')}
                       className={`
-                        rounded-md px-3 py-1 text-xs font-medium transition-all
+                        cursor-pointer rounded-md px-3 py-1 text-xs font-medium transition-all
                         ${
                         modelBView === 'preview'
                           ? 'bg-white text-black shadow-sm'

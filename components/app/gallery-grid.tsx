@@ -287,9 +287,9 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
         <button
           onClick={() => handleCategoryChange('latest')}
           className={`
-            flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors
-            ${category === 'latest' 
-              ? 'bg-black text-white' 
+            flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors
+            ${category === 'latest'
+              ? 'bg-black text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }
           `}
@@ -300,9 +300,9 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
         <button
           onClick={() => handleCategoryChange('hot')}
           className={`
-            flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors
-            ${category === 'hot' 
-              ? 'bg-black text-white' 
+            flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors
+            ${category === 'hot'
+              ? 'bg-black text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }
           `}
@@ -325,10 +325,10 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
       {/* Load More */}
       {hasMore && (
         <div className="mt-16 flex justify-center">
-          <button 
+          <button
             onClick={handleLoadMore}
             disabled={loading}
-            className="inline-flex items-center gap-2 h-10 px-8 rounded-lg border border-gray-200 bg-white text-gray-900 hover:bg-gray-100 font-medium transition-colors disabled:opacity-50"
+            className="inline-flex cursor-pointer items-center gap-2 h-10 px-8 rounded-lg border border-gray-200 bg-white text-gray-900 hover:bg-gray-100 font-medium transition-colors disabled:opacity-50"
           >
             {loading ? (
               <>

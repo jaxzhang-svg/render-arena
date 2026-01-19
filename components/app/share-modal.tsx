@@ -130,7 +130,7 @@ export function ShareModal({
             <h2 className="text-[18px] font-semibold text-[#101828] tracking-[-0.4395px] leading-7">
               Share Generation
             </h2>
-            <Dialog.Close className="flex items-center justify-center size-9 rounded-full hover:bg-gray-100 transition-colors">
+            <Dialog.Close className="flex cursor-pointer items-center justify-center size-9 rounded-full hover:bg-gray-100 transition-colors">
               <X className="size-5 text-gray-600" />
             </Dialog.Close>
           </div>
@@ -182,7 +182,7 @@ export function ShareModal({
               </div>
               <button
                 onClick={handleCopy}
-                className="h-[42px] w-[90px] rounded-[10px] border border-[#e5e7eb] bg-white text-[14px] font-medium text-[#364153] tracking-[-0.1504px] hover:bg-gray-50 transition-colors flex items-center justify-center"
+                className="h-[42px] w-[90px] rounded-[10px] border border-[#e5e7eb] bg-white text-[14px] font-medium text-[#364153] tracking-[-0.1504px] hover:bg-gray-50 transition-colors flex cursor-pointer items-center justify-center"
               >
                 {copied ? 'Copied' : 'Copy'}
               </button>
@@ -198,7 +198,7 @@ export function ShareModal({
               {/* Twitter */}
               <button
                 onClick={() => handleSocialShare('twitter')}
-                className="flex-1 border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
+                className="flex-1 cursor-pointer border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
               >
                 <div className="size-8 rounded-full bg-[rgba(29,161,242,0.1)] flex items-center justify-center">
                   <Twitter className="size-4 text-[#1da1f2]" />
@@ -211,7 +211,7 @@ export function ShareModal({
               {/* LinkedIn */}
               <button
                 onClick={() => handleSocialShare('linkedin')}
-                className="flex-1 border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
+                className="flex-1 cursor-pointer border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
               >
                 <div className="size-8 rounded-full bg-[rgba(10,102,194,0.1)] flex items-center justify-center">
                   <Linkedin className="size-4 text-[#0a66c2]" />
@@ -224,7 +224,7 @@ export function ShareModal({
               {/* Facebook */}
               <button
                 onClick={() => handleSocialShare('facebook')}
-                className="flex-1 border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
+                className="flex-1 cursor-pointer border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] hover:bg-gray-50 transition-colors"
               >
                 <div className="size-8 rounded-full bg-[rgba(24,119,242,0.1)] flex items-center justify-center">
                   <Facebook className="size-4 text-[#1877f2]" />
@@ -245,9 +245,9 @@ export function ShareModal({
                 aria-checked={publishToGallery}
                 onClick={() => setPublishToGallery(!publishToGallery)}
                 className={`
-                  size-5 rounded border-2 flex items-center justify-center transition-colors
-                  ${publishToGallery 
-                    ? 'bg-[#23d57c] border-[#23d57c]' 
+                  size-5 cursor-pointer rounded border-2 flex items-center justify-center transition-colors
+                  ${publishToGallery
+                    ? 'bg-[#23d57c] border-[#23d57c]'
                     : 'bg-white border-gray-300 hover:border-gray-400'
                   }
                 `}
@@ -278,7 +278,7 @@ export function ShareModal({
           </div>
           <button
             onClick={handleDownload}
-            className="h-9 bg-[#101828] text-white rounded-[10px] px-4 flex items-center gap-2 text-[14px] font-medium tracking-[-0.1504px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] hover:bg-[#101828]/90 transition-colors"
+            className="h-9 bg-[#101828] text-white rounded-[10px] px-4 flex cursor-pointer items-center gap-2 text-[14px] font-medium tracking-[-0.1504px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] hover:bg-[#101828]/90 transition-colors"
           >
             <Download className="size-4" />
             Download Video
