@@ -63,11 +63,13 @@ export function useArenaPlayground({
 }: UseArenaPlaygroundOptions): UseArenaPlaygroundReturn {
   const searchParams = useSearchParams()
   const urlPrompt = searchParams.get('prompt')
+  const urlCategory = searchParams.get('category') || ''
   const autoStart = searchParams.get('autoStart') === 'true'
 
   // App 状态
   const [currentAppId, setCurrentAppId] = useState<string | undefined>(appId)
   const [prompt, setPrompt] = useState(initialApp?.prompt || urlPrompt || '')
+  const [category, setCategory] = useState(initialApp?.category || urlCategory || '')
   const [hasAutoStarted, setHasAutoStarted] = useState(false)
 
   // 视图状态
@@ -106,6 +108,7 @@ export function useArenaPlayground({
           prompt: prompt.trim(),
           modelA: modelA.selectedModel.id,
           modelB: modelB.selectedModel.id,
+          category: category,
         }),
       })
 
@@ -125,7 +128,7 @@ export function useArenaPlayground({
       alert('创建失败，请稍后重试')
       return null
     }
-  }, [prompt, modelA.selectedModel.id, modelB.selectedModel.id])
+  }, [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id])
 
   // 同时生成两个模型
   const handleGenerate = useCallback(async () => {

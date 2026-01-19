@@ -3,8 +3,8 @@ import { Box, Sparkles, Gamepad2 } from 'lucide-react';
 export const galleryCategories = [
   { id: 'all', label: 'All' },
   { id: 'physics', label: 'Physics' },
-  { id: 'visual-magic', label: 'Visual Magic' },
-  { id: 'bio-runner', label: 'Bio-Runner' },
+  { id: 'visual', label: 'Visual Magic' },
+  { id: 'game', label: 'Micro Game Jam' },
 ] as const;
 
 export type GalleryCategoryId = typeof galleryCategories[number]['id'];
@@ -47,3 +47,16 @@ export const playgroundModes = [
     ]
   },
 ] as const;
+
+export type PlaygroundModeId = typeof playgroundModes[number]['id'];
+
+/** Get the category ID from playground mode label */
+export function getCategoryFromModeLabel(modeLabel: string): PlaygroundModeId | '' {
+  const mode = playgroundModes.find(m => m.label === modeLabel);
+  return mode?.id || '';
+}
+
+/** Get playground mode by category ID */
+export function getModeByCategory(categoryId: string) {
+  return playgroundModes.find(m => m.id === categoryId);
+}

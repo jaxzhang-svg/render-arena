@@ -3,7 +3,7 @@
 import React from 'react'
 import { Button } from '@/components/base/button'
 import { Menu } from '@base-ui/react/menu'
-import { Maximize, RotateCcw, SlidersHorizontal } from 'lucide-react'
+import { Maximize, RotateCcw } from 'lucide-react'
 import { ModelSettingsPopover } from '@/components/playground/model-settings-modal'
 import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
 import { cn } from '@/lib/utils'
@@ -70,8 +70,9 @@ export function ModelPanel({
       <div className="flex h-16 shrink-0 items-center justify-between border-b border-[#e7e6e2] bg-white px-4">
         <div className="flex items-center gap-3">
           {/* Model Selector */}
-          <Menu.Root>
-            <Menu.Trigger
+          <div suppressHydrationWarning>
+            <Menu.Root>
+              <Menu.Trigger
               className={cn(
                 'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors',
                 'h-8 cursor-pointer gap-2 bg-[#f5f5f5] px-3 py-1.5',
@@ -118,6 +119,7 @@ export function ModelPanel({
               </Menu.Positioner>
             </Menu.Portal>
           </Menu.Root>
+          </div>
 
           {/* Status Indicator */}
           {response.loading && (
@@ -174,21 +176,10 @@ export function ModelPanel({
             <RotateCcw className="size-4 text-[#9e9c98]" />
           </Button>
 
-          {/* Settings Button */}
           <ModelSettingsPopover
-            modelName={selectedModel.name}
             settings={settings}
             onSettingsChange={onSettingsChange}
-          >
-            <Button
-              asChild
-              variant="ghost"
-              size="icon"
-              className="hover:bg-muted/80 size-8 cursor-pointer rounded-lg"
-            >
-              <SlidersHorizontal className="size-4 text-[#9e9c98]" />
-            </Button>
-          </ModelSettingsPopover>
+          />
 
           {/* Maximize Button */}
           <Button

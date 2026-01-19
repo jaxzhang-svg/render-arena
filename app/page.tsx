@@ -11,7 +11,7 @@ import { Accordion } from '@base-ui/react/accordion';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/base/button';
 
-import { playgroundModes } from '@/lib/config';
+import { playgroundModes, getCategoryFromModeLabel } from '@/lib/config';
 
 export default function HomePage() {
   const router = useRouter();
@@ -25,15 +25,17 @@ export default function HomePage() {
 
   const handleGenerate = () => {
     const promptToUse = userPrompt.trim() || placeholderText.trim();
+    const category = getCategoryFromModeLabel(activeMode);
     if (promptToUse) {
-      router.push(`/playground/new?prompt=${encodeURIComponent(promptToUse)}&autoStart=true`);
+      router.push(`/playground/new?prompt=${encodeURIComponent(promptToUse)}&category=${encodeURIComponent(category)}&autoStart=true`);
     } else {
-      router.push('/playground/new');
+      router.push(`/playground/new?category=${encodeURIComponent(category)}`);
     }
   };
 
   const handleSurpriseMe = () => {
     const currentMode = playgroundModes.find(m => m.label === activeMode);
+    const category = getCategoryFromModeLabel(activeMode);
     const activePrompts = currentMode?.prompts || [];
     if (activePrompts.length > 0) {
       const randomIndex = Math.floor(Math.random() * activePrompts.length);
@@ -41,7 +43,7 @@ export default function HomePage() {
       setUserPrompt(randomPrompt);
       // Automatically generate with the surprise prompt
       setTimeout(() => {
-        router.push(`/playground/new?prompt=${encodeURIComponent(randomPrompt)}&autoStart=true`);
+        router.push(`/playground/new?prompt=${encodeURIComponent(randomPrompt)}&category=${encodeURIComponent(category)}&autoStart=true`);
       }, 100);
     }
   };
@@ -414,7 +416,7 @@ export default function HomePage() {
               Frequently Asked Questions
             </h2>
 
-            <Accordion.Root defaultValue={["item-0"]} className="w-full space-y-2">
+            <Accordion.Root defaultValue={[]} className="w-full space-y-2">
               <Accordion.Item value="item-0" className="rounded-[10px] border-none bg-[#f9fafb] overflow-hidden">
                 <Accordion.Trigger className="
                   flex items-center justify-between w-full h-[72.75px] px-6 py-0

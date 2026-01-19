@@ -34,7 +34,7 @@ function getClientIP(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     const body: CreateAppRequest = await request.json();
-    const { prompt, modelA, modelB } = body;
+    const { prompt, modelA, modelB, category = '' } = body;
 
     if (!prompt?.trim()) {
       return NextResponse.json(
@@ -57,10 +57,20 @@ export async function POST(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
     
     let userId: string | null = null;
+    let userEmail: string | null = null;
 
     if (user) {
-      // 登录用户 - 暂时不限制次数
+      // 登录用户 - 获取用户信息
       userId = user.id;
+      
+      // 从 users 表获取 email
+      const { data: userData } = await adminClient
+        .from('users')
+        .select('email')
+        .eq('id', user.id)
+        .single();
+      
+      userEmail = userData?.email || null;
     } else {
       // 匿名用户 - 检查 IP 额度
       const clientIP = getClientIP(request);
@@ -112,9 +122,11 @@ export async function POST(request: NextRequest) {
       .from('apps')
       .insert({
         user_id: userId,
+        user_email: userEmail,
         prompt: prompt.trim(),
         model_a: modelA,
         model_b: modelB,
+        category: category,
       })
       .select('id')
       .single();

@@ -11,9 +11,12 @@ interface GalleryGridProps {
   initialApps?: GalleryApp[];
 }
 
+interface GalleryAppCardProps {
+  app: GalleryApp;
+  currentCategory: GalleryCategoryId;
+}
 
-
-function GalleryAppCard({ app }: { app: GalleryApp }) {
+function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   const router = useRouter();
   const [likeCount, setLikeCount] = useState(app.like_count);
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
@@ -154,7 +157,7 @@ function GalleryAppCard({ app }: { app: GalleryApp }) {
           <p className="
             text-[#9e9c98] line-clamp-1 text-base font-normal leading-6 font-sans
           ">
-            by @{app.user_name || 'anonymous'}
+            by @{app.user_email?.split('@')[0] || 'anonymous'}
           </p>
         </div>
 
@@ -238,7 +241,7 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
         setApps(data.apps);
       }
       setTotal(data.total);
-      setHasMore(data?.apps.length === 20 && pageNum * 20 < data.total);
+      setHasMore(data?.apps?.length === 20 && pageNum * 20 < data.total);
     } catch (error) {
       console.error('Error fetching apps:', error);
     } finally {
@@ -308,7 +311,7 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
       {/* Apps Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {apps.map((app) => (
-          <GalleryAppCard key={app.id} app={app} />
+          <GalleryAppCard key={app.id} app={app} currentCategory={category} />
         ))}
       </div>
 

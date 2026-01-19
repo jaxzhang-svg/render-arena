@@ -16,9 +16,11 @@ export interface AppCard {
 export interface App {
   id: string;
   user_id: string | null;
+  user_email: string | null;
   name: string | null;
   description: string | null;
   prompt: string;
+  category: string;
   model_a: string;
   model_b: string;
   html_content_a: string | null;
@@ -50,6 +52,7 @@ export interface CreateAppRequest {
   prompt: string;
   modelA: string;
   modelB: string;
+  category?: string;
 }
 
 export interface CreateAppResponse {

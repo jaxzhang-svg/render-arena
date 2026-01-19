@@ -42,29 +42,3 @@ export async function getNovitaUserInfo(): Promise<NovitaUserInfo | null> {
     return null;
   }
 }
-
-/**
- * 校验 Novita API Key 是否有效
- * 使用正确的验证 URL: https://api.novita.ai/openai/v1/chat/completions
- */
-export async function validateNovitaApiKey(apiKey: string): Promise<boolean> {
-  try {
-    const response = await fetch('https://api.novita.ai/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'deepseek/deepseek-v3',
-        messages: [{ role: 'user', content: 'hi' }],
-        max_tokens: 1,
-      }),
-    });
-
-    return response.ok;
-  } catch (error) {
-    console.error('Failed to validate Novita API key:', error);
-    return false;
-  }
-}
