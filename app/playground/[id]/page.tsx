@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
 import PlaygroundClient from './playground-client'
@@ -12,7 +13,11 @@ export default async function PlaygroundPage({ params }: PlaygroundPageProps) {
   
   // 如果 id 是 'new'，则创建新的 playground
   if (id === 'new') {
-    return <PlaygroundClient />
+    return (
+      <Suspense fallback={null}>
+        <PlaygroundClient />
+      </Suspense>
+    )
   }
 
   // 否则尝试加载已有的 app
@@ -28,5 +33,9 @@ export default async function PlaygroundPage({ params }: PlaygroundPageProps) {
     notFound()
   }
 
-  return <PlaygroundClient initialApp={app as App} appId={id} />
+  return (
+    <Suspense fallback={null}>
+      <PlaygroundClient initialApp={app as App} appId={id} />
+    </Suspense>
+  )
 }

@@ -68,10 +68,12 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   useEffect(() => {
     // 只有在从未自动开始过、需要自动开始、且没有初始 App（是新会话）、且模型都准备好时才执行
     if (autoStart && !hasAutoStartedRef.current && !initialApp && !currentAppId && modelsReady) {
-      hasAutoStartedRef.current = true
       // 使用 setTimeout 确保在渲染完成后执行，并且错开即时更新
       const timer = setTimeout(() => {
-        handleGenerateRef.current()
+        if (!hasAutoStartedRef.current) {
+          hasAutoStartedRef.current = true
+          handleGenerateRef.current()
+        }
       }, 100)
       return () => clearTimeout(timer)
     }
