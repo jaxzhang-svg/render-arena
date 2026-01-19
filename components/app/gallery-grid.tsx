@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { Heart, Copy, Code, Gamepad2, Box, Sparkles, Image as ImageIcon, Video, PenTool, Zap, ChevronDown, TrendingUp, Clock } from 'lucide-react';
+import { Heart, Copy, Box, ChevronDown, Download } from 'lucide-react';
+import { galleryCategories, type GalleryCategoryId } from '@/lib/config';
 import { useRouter } from 'next/navigation';
 import type { GalleryApp } from '@/types';
 import { getModelById, models } from '@/lib/models';
@@ -10,44 +11,36 @@ interface GalleryGridProps {
   initialApps?: GalleryApp[];
 }
 
-const categoryIcons: Record<string, React.ElementType> = {
-  'Website': Code,
-  'Game': Gamepad2,
-  '3D Scene': Box,
-  'Physics': Zap,
-  'Visual Effect': Sparkles,
-  'Image': ImageIcon,
-  'Video': Video,
-  'Logo': PenTool,
-};
+
 
 function GalleryAppCard({ app }: { app: GalleryApp }) {
   const router = useRouter();
   const [likeCount, setLikeCount] = useState(app.like_count);
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
   const [isLiking, setIsLiking] = useState(false);
-  
+  const [copied, setCopied] = useState(false);
+
   const modelA = getModelById(app.model_a) || models[0];
   const modelB = getModelById(app.model_b) || models[1];
 
   const handleLike = async () => {
     if (isLiking) return;
-    
+
     setIsLiking(true);
     try {
       const response = await fetch(`/api/apps/${app.id}/like`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
-      
+
       const data = await response.json();
-      
+
       if (response.status === 401) {
         // 用户未登录，可以提示登录
         alert('请先登录后再点赞');
         return;
       }
-      
+
       if (data.success) {
         setLikeCount(data.likeCount);
         setIsLiked(data.liked);
@@ -59,33 +52,25 @@ function GalleryAppCard({ app }: { app: GalleryApp }) {
     }
   };
 
-  // 从 prompt 中推断类别
-  const inferCategory = (prompt: string): string => {
-    const lowerPrompt = prompt.toLowerCase();
-    if (lowerPrompt.includes('game') || lowerPrompt.includes('play')) return 'Game';
-    if (lowerPrompt.includes('3d') || lowerPrompt.includes('three')) return '3D Scene';
-    if (lowerPrompt.includes('physics') || lowerPrompt.includes('simulation')) return 'Physics';
-    if (lowerPrompt.includes('effect') || lowerPrompt.includes('animation')) return 'Visual Effect';
-    if (lowerPrompt.includes('image') || lowerPrompt.includes('photo')) return 'Image';
-    if (lowerPrompt.includes('video')) return 'Video';
-    if (lowerPrompt.includes('logo') || lowerPrompt.includes('icon')) return 'Logo';
-    return 'Website';
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(app.prompt);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
   };
-
-  const category = inferCategory(app.prompt);
-  const CategoryIcon = categoryIcons[category] || Code;
 
   return (
     <div
       onClick={() => router.push(`/gallery/${app.id}`)}
       className="
-        group bg-card ring-border/50 relative flex cursor-pointer flex-col gap-4
-        overflow-hidden rounded-2xl border-0 py-0 shadow-lg ring-1
-        shadow-black/5 transition-all duration-300
-        hover:shadow-xl hover:shadow-black/10
+        group relative flex flex-col gap-4
+        overflow-hidden
       "
     >
-      <div className="bg-muted relative flex aspect-8/3 w-full overflow-hidden">
+      <div className="bg-[#ececf0] relative flex h-[344px] w-full overflow-hidden rounded-2xl cursor-pointer">
         {/* Left Side - Model A */}
         <div className="
           relative h-full w-1/2 overflow-hidden border-r border-white/20
@@ -97,12 +82,13 @@ function GalleryAppCard({ app }: { app: GalleryApp }) {
               <span className="text-white text-lg font-bold">A</span>
             </div>
           </div>
-          <div className="absolute top-3 left-3 z-10">
-            <div className={`
-              inline-flex items-center gap-1.5 rounded-full px-2 py-1
-              text-xs font-medium text-white backdrop-blur-md
-              ${modelA.color}
-            `}>
+          <div className="absolute top-[18px] left-3 z-10">
+            <div className="
+              inline-flex items-center gap-1.5 rounded-full px-[11px] py-0.5
+              text-sm font-medium font-sans text-white backdrop-blur-md h-[29px]
+              bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
+            ">
+              <div className={`size-5 rounded-full ${modelA.color} flex items-center justify-center`} />
               {modelA.name}
             </div>
           </div>
@@ -118,12 +104,13 @@ function GalleryAppCard({ app }: { app: GalleryApp }) {
               <span className="text-white text-lg font-bold">B</span>
             </div>
           </div>
-          <div className="absolute top-3 right-3 z-10">
-            <div className={`
-              inline-flex items-center gap-1.5 rounded-full px-2 py-1
-              text-xs font-medium text-white backdrop-blur-md
-              ${modelB.color}
-            `}>
+          <div className="absolute top-[18px] right-3 z-10">
+            <div className="
+              inline-flex items-center gap-1.5 rounded-full px-[11px] py-0.5
+              text-sm font-medium text-white backdrop-blur-md h-[29px]
+              bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
+            ">
+              <div className={`size-5 rounded-full ${modelB.color} flex items-center justify-center`} />
               {modelB.name}
             </div>
           </div>
@@ -134,74 +121,86 @@ function GalleryAppCard({ app }: { app: GalleryApp }) {
           <div className="relative flex items-center justify-center">
             {/* VS Circle */}
             <div className="
-              bg-background/90 border-border flex size-10 items-center
-              justify-center rounded-full border shadow-xl backdrop-blur-md
+              bg-white border-white/50 flex size-10 items-center
+              justify-center rounded-full border shadow-[0px_0px_15px_0px_rgba(255,255,255,0.3)]
               transition-all duration-300
               group-hover:scale-0 group-hover:opacity-0
             ">
-              <span className="text-muted-foreground text-xs font-black italic">VS</span>
+              <span className="text-black text-xs font-black tracking-tight">VS</span>
             </div>
-            
+
             {/* View Button (appears on hover) */}
             <div className="
               bg-primary text-primary-foreground absolute flex scale-0
               items-center justify-center gap-2 rounded-full px-5 py-2.5
-              font-bold whitespace-nowrap opacity-0 shadow-2xl transition-all
+              font-bold font-sans whitespace-nowrap opacity-0 shadow-2xl transition-all
               duration-300
               group-hover:scale-100 group-hover:opacity-100
             ">
-               View Battle
+              View Battle
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col justify-between p-4">
+      <div className="flex flex-1 flex-col justify-between px-0 pt-3 pb-0">
         <div className="space-y-1">
-          <div className="
-            text-muted-foreground/80 flex items-center gap-1.5 text-xs
-            font-semibold tracking-wider uppercase
-          ">
-            <CategoryIcon className="size-3.5" />
-            {category}
-          </div>
           <h3 className="
-            text-foreground/90
-            line-clamp-1 text-lg/tight font-black tracking-tight
-            transition-colors
+            text-[#0a0a0a]
+            line-clamp-1 text-2xl font-semibold leading-[38px] font-sans
           ">
-            {app.name || app.prompt.slice(0, 50)}
+            {app.name || 'Untitled App'}
           </h3>
           <p className="
-            text-muted-foreground/60 line-clamp-2 text-xs font-medium
+            text-[#9e9c98] line-clamp-1 text-base font-normal leading-6 font-sans
           ">
-            {app.prompt}
+            by @{app.user_name || 'anonymous'}
           </p>
         </div>
-        
-        <div className="mt-3 flex items-center justify-between pt-1">
-          <button 
-            className="
-              group/copy text-muted-foreground/70
-              hover:text-foreground hover:bg-foreground/5
-              -ml-2 flex cursor-pointer items-center gap-1.5 rounded-lg px-2
-              py-1 transition-colors
-            "
-            title="Copy Prompt"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/playground/new?prompt=${encodeURIComponent(app.prompt)}`);
-            }}
-          >
-            <Copy className="size-3.5" />
-            <span className="text-xs font-semibold">Copy</span>
-          </button>
-          
+
+        <div className="mt-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              className="
+                text-[#4f4e4a]
+                hover:text-foreground
+                flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors
+              "
+              title="Copy Prompt"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCopy();
+              }}
+            >
+              <Copy className="size-5" />
+              <span className="font-sans">{copied ? 'Copied!' : 'Copy'}</span>
+            </button>
+
+            <button
+              className="
+                text-[#4f4e4a]
+                hover:text-foreground
+                flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors
+              "
+              title="Download"
+              onClick={(e) => {
+                e.stopPropagation();
+                // TODO: 实现下载功能
+              }}
+            >
+              <Download className="size-5" />
+              <span className="font-sans lowercase">download</span>
+            </button>
+          </div>
+
           <button
             className={`
-              flex items-center gap-1.5 text-xs
-              font-semibold transition-colors cursor-pointer
-              ${isLiked ? 'text-red-500' : 'text-muted-foreground/60 hover:text-red-500'}
+              flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm
+              font-medium transition-all cursor-pointer shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)]
+              ${isLiked
+                ? 'text-[#f23030] border-red-200 bg-red-50'
+                : 'text-[#4f4e4a] border-black/10 bg-[#f5f5f5] hover:border-gray-300'
+              }
               ${isLiking ? 'opacity-50' : ''}
             `}
             onClick={(e) => {
@@ -210,8 +209,8 @@ function GalleryAppCard({ app }: { app: GalleryApp }) {
             }}
             disabled={isLiking}
           >
-            <Heart className={`size-3.5 ${isLiked ? 'fill-current' : ''}`} />
-            <span>{likeCount}</span>
+            <Heart className={`size-5 ${isLiked ? 'fill-current' : ''}`} />
+            <span className="font-sans">{likeCount}</span>
           </button>
         </div>
       </div>
@@ -222,17 +221,17 @@ function GalleryAppCard({ app }: { app: GalleryApp }) {
 export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
   const [apps, setApps] = useState<GalleryApp[]>(initialApps);
   const [loading, setLoading] = useState(initialApps.length === 0);
-  const [category, setCategory] = useState<'latest' | 'hot'>('latest');
+  const [category, setCategory] = useState<GalleryCategoryId>('all');
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [total, setTotal] = useState(0);
 
-  const fetchApps = useCallback(async (pageNum: number, cat: 'latest' | 'hot', append = false) => {
+  const fetchApps = useCallback(async (pageNum: number, cat: GalleryCategoryId, append = false) => {
     try {
       setLoading(true);
       const response = await fetch(`/api/apps?category=${cat}&page=${pageNum}&limit=20`);
       const data = await response.json();
-      
+
       if (append) {
         setApps(prev => [...prev, ...data.apps]);
       } else {
@@ -257,7 +256,7 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
     fetchApps(nextPage, category, true);
   };
 
-  const handleCategoryChange = (cat: 'latest' | 'hot') => {
+  const handleCategoryChange = (cat: GalleryCategoryId) => {
     setCategory(cat);
     setPage(1);
   };
@@ -284,35 +283,26 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
     <div>
       {/* Category Filter */}
       <div className="mb-8 flex items-center gap-4">
-        <button
-          onClick={() => handleCategoryChange('latest')}
-          className={`
-            flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors
-            ${category === 'latest'
-              ? 'bg-black text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }
-          `}
-        >
-          <Clock className="size-4" />
-          Latest
-        </button>
-        <button
-          onClick={() => handleCategoryChange('hot')}
-          className={`
-            flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors
-            ${category === 'hot'
-              ? 'bg-black text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }
-          `}
-        >
-          <TrendingUp className="size-4" />
-          Trending
-        </button>
-        <span className="text-sm text-muted-foreground">
+        <div className="flex gap-2">
+          {galleryCategories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => handleCategoryChange(cat.id)}
+              className={`
+                flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-medium font-sans transition-all
+                ${category === cat.id
+                  ? 'bg-white text-foreground shadow-sm ring-1 ring-black/5'
+                  : 'text-muted-foreground hover:bg-gray-100/50 hover:text-foreground'
+                }
+              `}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+        <div className="ml-auto text-sm text-muted-foreground">
           {total} apps
-        </span>
+        </div>
       </div>
 
       {/* Apps Grid */}

@@ -1,45 +1,17 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { UserAvatar } from '@/components/app/user-avatar';
 import { Header } from '@/components/app/header';
 import { Footer } from '@/components/app/footer';
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal';
 import { GalleryGrid } from '@/components/app/gallery-grid';
-import { Plus, TrendingUp, Clock, Box, ArrowRight, Code, Image as ImageIcon, Video, PenTool, Gamepad2, Settings, Sparkles, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Clock, Box, ArrowRight, ChevronUp, Sparkles } from 'lucide-react';
 import { Accordion } from '@base-ui/react/accordion';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/base/button';
 
-const categories = [
-  { name: 'Trending', icon: TrendingUp },
-  { name: 'Newest', icon: Clock },
-];
-
-const modes = [
-  { label: 'Physics Playground', icon: Box, color: 'bg-violet-400/80', description: 'Create interactive physics simulations and dynamic experiences' },
-  { label: 'Visual Magic', icon: Sparkles, color: 'bg-pink-400/80', description: 'Generate stunning visual effects and artistic creations' },
-  { label: 'Micro Game Jam', icon: Gamepad2, color: 'bg-cyan-400/80', description: 'Build mini games and interactive entertainment' },
-];
-
-const modePrompts: Record<string, string[]> = {
-  'Physics Playground': [
-    "A pendulum with realistic swing physics and friction...",
-    "Bouncing balls with gravity and elastic collision physics...",
-    "A rope bridge swaying and deforming under dynamic forces..."
-  ],
-  'Visual Magic': [
-    "Neon particles dancing in mesmerizing spiral patterns...",
-    "Liquid wave distortion effect with metallic reflections...",
-    "Kaleidoscopic mandala pattern with smooth color transitions..."
-  ],
-  'Micro Game Jam': [
-    "A fast-paced tap-the-tiles rhythm game with increasing difficulty...",
-    "A simple puzzle game where you match falling colored blocks...",
-    "A dodge-the-obstacles endless runner with power-ups..."
-  ]
-};
+import { playgroundModes } from '@/lib/config';
 
 export default function HomePage() {
   const router = useRouter();
@@ -61,7 +33,8 @@ export default function HomePage() {
   };
 
   const handleSurpriseMe = () => {
-    const activePrompts = modePrompts[activeMode] || [];
+    const currentMode = playgroundModes.find(m => m.label === activeMode);
+    const activePrompts = currentMode?.prompts || [];
     if (activePrompts.length > 0) {
       const randomIndex = Math.floor(Math.random() * activePrompts.length);
       const randomPrompt = activePrompts[randomIndex];
@@ -74,7 +47,8 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    const activePrompts = modePrompts[activeMode] || [];
+    const currentMode = playgroundModes.find(m => m.label === activeMode);
+    const activePrompts = currentMode?.prompts || [];
     const i = loopNum % activePrompts.length;
     const fullText = activePrompts[i];
 
@@ -239,7 +213,7 @@ export default function HomePage() {
                 flex w-full flex-col items-center justify-center gap-6
               ">
                 <div className="flex w-full flex-wrap items-center justify-center gap-3">
-                  {modes.map((mode) => {
+                  {playgroundModes.map((mode) => {
                     const Icon = mode.icon;
                     const isActive = activeMode === mode.label;
                     return (
@@ -413,7 +387,7 @@ export default function HomePage() {
         </section>
 
         {/* Gallery Grid */}
-        <section id="gallery" className="bg-muted/30 pt-16 pb-20">
+        <section id="gallery" className="pt-16 pb-20">
           <div className="mx-auto max-w-7xl px-6">
             {/* Gallery Header */}
             <div className="mb-12">
