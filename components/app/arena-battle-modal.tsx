@@ -17,7 +17,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
         <Dialog.Backdrop className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
         <Dialog.Popup className={cn(
           "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50",
-          "max-h-[90vh] max-w-[544px] overflow-y-auto rounded-[10px]",
+          "max-h-[90vh] max-w-[600px] overflow-y-auto rounded-[10px]",
           "border-[rgba(13,84,43,0.5)] bg-black p-0"
         )}>
           {/* Header */}

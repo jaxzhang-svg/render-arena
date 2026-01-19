@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { useModelGeneration, ViewMode } from './use-model-generation'
+import { useModelGeneration } from './use-model-generation'
 import type { App } from '@/types'
 
 export type ArenaViewMode = 'a' | 'b' | 'split'
@@ -69,7 +69,7 @@ export function useArenaPlayground({
   // App 状态
   const [currentAppId, setCurrentAppId] = useState<string | undefined>(appId)
   const [prompt, setPrompt] = useState(initialApp?.prompt || urlPrompt || '')
-  const [category, setCategory] = useState(initialApp?.category || urlCategory || '')
+  const [category] = useState(initialApp?.category || urlCategory || '')
   const [hasAutoStarted, setHasAutoStarted] = useState(false)
 
   // 视图状态
@@ -152,41 +152,42 @@ export function useArenaPlayground({
 
     // 并行生成两个模型
     await Promise.allSettled([
-      modelA.generate(newAppId, modelB.responseRef, modelB.setViewMode),
-      modelB.generate(newAppId, modelA.responseRef, modelA.setViewMode),
+      modelA.generate(newAppId),
+      modelB.generate(newAppId),
     ])
   }, [prompt, createApp, stopAllGeneration, modelA, modelB])
 
   // 单独重新生成 Model A
   const handleGenerateModelA = useCallback(async () => {
     if (!currentAppId) {
-      await handleGenerate()
       return
     }
 
-    await modelA.generate(currentAppId, modelB.responseRef, modelB.setViewMode)
-  }, [currentAppId, handleGenerate, modelA, modelB.responseRef, modelB.setViewMode])
+    await modelA.generate(currentAppId)
+  }, [currentAppId, handleGenerate, modelA])
 
   // 单独重新生成 Model B
   const handleGenerateModelB = useCallback(async () => {
     if (!currentAppId) {
-      await handleGenerate()
       return
     }
 
-    await modelB.generate(currentAppId, modelA.responseRef, modelA.setViewMode)
-  }, [currentAppId, handleGenerate, modelB, modelA.responseRef, modelA.setViewMode])
+    await modelB.generate(currentAppId)
+  }, [currentAppId, handleGenerate, modelB])
 
   // 自动开始生成（从首页跳转时）
   useEffect(() => {
-    if (autoStart && urlPrompt && !hasAutoStarted && !initialApp) {
+    const shouldAutoStart = autoStart && urlPrompt && !initialApp && !currentAppId && modelA.selectedModel.id && modelB.selectedModel.id
+    console.log('autoStart check:', { autoStart, urlPrompt, hasAutoStarted, initialApp, currentAppId, hasModelA: !!modelA.selectedModel.id, hasModelB: !!modelB.selectedModel.id, shouldAutoStart })
+
+    if (shouldAutoStart && !hasAutoStarted) {
       setHasAutoStarted(true)
       const timer = setTimeout(() => {
         handleGenerate()
       }, 100)
       return () => clearTimeout(timer)
     }
-  }, [autoStart, urlPrompt, hasAutoStarted, initialApp, handleGenerate])
+  }, [autoStart, urlPrompt, hasAutoStarted, initialApp, currentAppId, handleGenerate, modelA.selectedModel.id, modelB.selectedModel.id])
 
   return {
     // App 状态

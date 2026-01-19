@@ -40,11 +40,8 @@ export default function HomePage() {
     if (activePrompts.length > 0) {
       const randomIndex = Math.floor(Math.random() * activePrompts.length);
       const randomPrompt = activePrompts[randomIndex];
-      setUserPrompt(randomPrompt);
       // Automatically generate with the surprise prompt
-      setTimeout(() => {
-        router.push(`/playground/new?prompt=${encodeURIComponent(randomPrompt)}&category=${encodeURIComponent(category)}&autoStart=true`);
-      }, 100);
+      router.push(`/playground/new?prompt=${encodeURIComponent(randomPrompt)}&category=${encodeURIComponent(category)}&autoStart=true`);
     }
   };
 
@@ -127,125 +124,133 @@ export default function HomePage() {
 
             {/* Textarea Input Section */}
             <div className="
-              flex w-full max-w-[787px] flex-col items-center gap-5
+              flex w-full max-w-[787px] flex-col items-center gap-8
             ">
-              {/* Textarea Box */}
-              <div className="
-                w-full rounded-2xl border border-[#e7e6e2] bg-white p-6
-                shadow-sm
-              ">
-                <div className="flex flex-col gap-4">
-                  {/* Mode Badge */}
-                  <div className="
-                    inline-flex items-center gap-2 self-start rounded-full
-                    bg-[#f1f5f9] px-2 py-1.5
-                  ">
-                    <div className="size-2 rounded-full bg-[#2b7fff]" />
-                    <span className="
-                      font-sans text-sm font-normal
-                      text-[#45556c]
-                    ">
-                      {activeMode}
-                    </span>
-                  </div>
+              <div 
+                className={`
+                  relative w-full transition-all duration-300 ease-in-out
+                  border border-[#e7e6e2] bg-white shadow-sm
+                  ${(userPrompt.length > 38 || userPrompt.includes('\n')) 
+                    ? 'rounded-[32px] p-6 flex flex-col items-start' // Multi-line state
+                    : 'rounded-full px-2 pl-4 py-2 flex items-center gap-3' // One-line state
+                  }
+                `}
 
-                  {/* Textarea with scrollbar */}
-                  <div className="relative">
-                    <textarea
-                      value={userPrompt}
-                      placeholder={placeholderText || "Describe what you want to create..."}
-                      onChange={(e) => setUserPrompt(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handleGenerate();
-                        }
-                      }}
-                      className="
-                        h-[118px] w-full resize-none bg-transparent
-                        font-sans text-base/6
-                        font-normal text-[#4f4e4a] outline-none
-                        placeholder:text-[#9e9c98] pr-2
-                        overflow-y-auto
-                      "
-                      style={{
-                        scrollbarWidth: 'thin',
-                        scrollbarColor: '#d9d9d9 transparent'
-                      }}
-                    />
-                    {/* Custom scrollbar indicator */}
-                    <div className="absolute right-1.5 top-2 bottom-2 w-1 rounded-full bg-[#d9d9d9]" />
-                  </div>
+              >
+                {/* Mode Badge - Position depends on state */}
+                <div className={`
+                  inline-flex items-center gap-2 rounded-full px-3 py-1.5 shrink-0 transition-colors
+                  ${(userPrompt.length > 38 || userPrompt.includes('\n')) ? 'mb-4' : ''}
+                  ${(() => {
+                    const mode = playgroundModes.find(m => m.label === activeMode);
+                    return mode?.theme?.badge || 'bg-gray-100 text-gray-700';
+                  })()}
+                `}>
+                  <div className={`size-2 rounded-full ${(() => {
+                    const mode = playgroundModes.find(m => m.label === activeMode);
+                    return mode?.theme?.dot || 'bg-gray-500';
+                  })()}`} />
+                  <span className="font-sans text-sm font-medium">
+                    {playgroundModes.find(m => m.label === activeMode)?.label || activeMode}
+                  </span>
+                </div>
 
-                  {/* Actions Row */}
-                  <div className="flex items-center justify-between border-t border-[#f3f4f6] pt-4">
-                    <Button 
-                      onClick={handleSurpriseMe}
-                      variant="ghost"
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-gray-800"
-                      title="Generate a random prompt from this category"
-                    >
-                      <Sparkles className="size-4" />
+                {/* Input Area */}
+                <div className={`relative flex-1 ${(userPrompt.length > 38 || userPrompt.includes('\n')) ? 'w-full min-h-[120px]' : 'h-full flex items-center'}`}>
+                  <textarea
+                    value={userPrompt}
+                    placeholder={placeholderText || "Describe what you want to create..."}
+                    onChange={(e) => {
+                      setUserPrompt(e.target.value);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleGenerate();
+                      }
+                    }}
+                    className={`
+                      w-full bg-transparent font-sans text-lg
+                      font-normal text-[#4f4e4a] outline-none
+                      placeholder:text-[#9e9c98] resize-none
+                      ${(userPrompt.length > 38 || userPrompt.includes('\n')) 
+                        ? 'h-full' 
+                        : 'h-[28px] overflow-hidden leading-[28px]'
+                      }
+                    `}
+                    spellCheck={false}
+                  />
+                </div>
+
+                {/* Actions - Position depends on state */}
+                <div className={`
+                  flex items-center gap-3
+                  ${(userPrompt.length > 38 || userPrompt.includes('\n')) 
+                    ? 'absolute bottom-6 right-6' 
+                    : 'shrink-0'
+                  }
+                `}>
+                  <button 
+                    onClick={handleSurpriseMe}
+                    className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[#9e9c98] transition-colors hover:bg-[#f5f5f5] hover:text-[#4f4e4a] cursor-pointer"
+                    title="Surprise me"
+                  >
+                    <Sparkles className="size-5" />
+                    {(userPrompt.length > 38 || userPrompt.includes('\n')) && (
                       <span className="text-sm font-medium">Surprise me</span>
-                    </Button>
-                    
-                    <Button 
-                      onClick={handleGenerate}
-                      disabled={!userPrompt.trim()}
-                      className={`
-                        flex items-center justify-center gap-2 rounded-xl
-                        px-4 py-2.5
-                        font-mono text-base
-                        font-normal transition-colors
-                        ${userPrompt.trim()
-                          ? "bg-[#292827] text-white hover:bg-[#3a3938]"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }
-                      `}
-                    >
-                      <span>Generate</span>
-                      <ArrowRight className="size-5" />
-                    </Button>
-                  </div>
+                    )}
+                  </button>
+                  
+                  <Button 
+                    onClick={handleGenerate}
+                    className={`
+                      flex items-center justify-center gap-2 rounded-full
+                      pl-5 pr-4 py-2.5
+                      font-mono text-base font-normal transition-all
+                      bg-[#1a1a1a] text-white hover:bg-black
+                      hover:shadow-lg hover:scale-[1.02]
+                      active:scale-[0.98]
+                    `}
+                  >
+                    <span>Generate</span>
+                    <ArrowRight className="size-4" />
+                  </Button>
                 </div>
               </div>
 
               {/* Category Buttons */}
               <div className="
-                flex w-full flex-col items-center justify-center gap-6
+                flex w-full flex-wrap items-center justify-center gap-3
               ">
-                <div className="flex w-full flex-wrap items-center justify-center gap-3">
-                  {playgroundModes.map((mode) => {
-                    const Icon = mode.icon;
-                    const isActive = activeMode === mode.label;
-                    return (
-                      <button
-                        key={mode.label}
-                        onClick={() => setActiveMode(mode.label)}
-                        className={`
-                          flex cursor-pointer items-center gap-2 rounded-full border px-5
-                          py-3 transition-all
-                          ${
-                          isActive
-                            ? "border-black bg-black text-white shadow-lg"
-                            : `
-                              border-[#e7e6e2] bg-white text-[#4f4e4a]
-                              hover:bg-gray-50 hover:border-gray-300
-                            `
-                        }
-                        `}
-                      >
-                        <Icon className="size-4" />
-                        <span className="
-                          font-sans text-sm
-                          font-semibold
-                        ">
-                          {mode.label}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+                {playgroundModes.map((mode) => {
+                  const Icon = mode.icon;
+                  const isActive = activeMode === mode.label;
+                  return (
+                    <button
+                      key={mode.label}
+                      onClick={() => setActiveMode(mode.label)}
+                      className={`
+                        flex cursor-pointer items-center gap-2 rounded-full border px-4
+                        py-2 transition-all duration-200
+                        ${
+                        isActive
+                          ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-md scale-[1.05]"
+                          : `
+                            border-transparent bg-white text-[#4f4e4a]
+                            hover:bg-gray-50 hover:border-[#e7e6e2] hover:shadow-sm
+                          `
+                      }
+                      `}
+                    >
+                      <Icon className="size-4" />
+                      <span className="
+                        font-sans text-sm font-medium
+                      ">
+                        {mode.label}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -255,7 +260,7 @@ export default function HomePage() {
         <section id="hackathon" className="px-6 py-4">
           <div className="mx-auto max-w-[1254px]">
             <div className="
-              relative h-[380px] overflow-hidden rounded-3xl border
+              relative h-[380px] overflow-hidden rounded-[32px] border
               border-white/10 bg-black shadow-2xl
             ">
               {/* Background container image (grid/line pattern) */}

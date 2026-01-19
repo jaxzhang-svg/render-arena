@@ -20,7 +20,11 @@ export const playgroundModes = [
       "A pendulum with realistic swing physics and friction...",
       "Bouncing balls with gravity and elastic collision physics...",
       "A rope bridge swaying and deforming under dynamic forces..."
-    ]
+    ],
+    theme: {
+      badge: 'bg-violet-100 text-violet-700',
+      dot: 'bg-violet-500'
+    }
   },
   { 
     id: 'visual',
@@ -32,7 +36,11 @@ export const playgroundModes = [
       "Neon particles dancing in mesmerizing spiral patterns...",
       "Liquid wave distortion effect with metallic reflections...",
       "Kaleidoscopic mandala pattern with smooth color transitions..."
-    ]
+    ],
+    theme: {
+      badge: 'bg-pink-100 text-pink-700',
+      dot: 'bg-pink-500'
+    }
   },
   { 
     id: 'game',
@@ -44,7 +52,11 @@ export const playgroundModes = [
       "A fast-paced tap-the-tiles rhythm game with increasing difficulty...",
       "A simple puzzle game where you match falling colored blocks...",
       "A dodge-the-obstacles endless runner with power-ups..."
-    ]
+    ],
+    theme: {
+      badge: 'bg-cyan-100 text-cyan-700',
+      dot: 'bg-cyan-500'
+    }
   },
 ] as const;
 

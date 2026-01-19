@@ -77,7 +77,7 @@ interface UseModelGenerationReturn {
   /** 设置模型设置 */
   setSettings: React.Dispatch<React.SetStateAction<ModelSettings>>
   /** 生成内容 */
-  generate: (appId: string, otherResponseRef: React.RefObject<ModelResponse>, setOtherViewMode: React.Dispatch<React.SetStateAction<ViewMode>>) => Promise<void>
+  generate: (appId: string) => Promise<void>
   /** 停止生成 */
   stop: () => void
   /** 是否正在加载 */
@@ -166,11 +166,7 @@ export function useModelGeneration({
   }, [flushBuffer])
 
   // 生成内容
-  const generate = useCallback(async (
-    appId: string,
-    otherResponseRef: React.RefObject<ModelResponse>,
-    setOtherViewMode: React.Dispatch<React.SetStateAction<ViewMode>>
-  ) => {
+  const generate = useCallback(async (appId: string) => {
     const startTime = Date.now()
 
     // 停止之前的生成
@@ -246,10 +242,9 @@ export function useModelGeneration({
             const duration = (Date.now() - startTime) / 1000
             const tokens = Math.floor(mergedContent.length / 4)
 
-            // 如果另一个模型也已完成且有 HTML，则两边都切换到预览模式
-            if (otherResponseRef.current?.completed && otherResponseRef.current?.html && html) {
+            // 如果当前模型生成了 HTML，则切换到预览模式
+            if (html) {
               setViewMode('preview')
-              setOtherViewMode('preview')
             }
 
             // 保存 HTML 到数据库
