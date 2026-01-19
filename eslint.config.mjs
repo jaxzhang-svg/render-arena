@@ -1,7 +1,6 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
-import eslintPluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
 
 const eslintConfig = defineConfig([
   ...nextVitals,

@@ -11,17 +11,3 @@ export interface AppCard {
   category: string;
   likes: number;
 }
-
-export interface ModelConfig {
-  name: ModelName;
-  tokens?: number;
-  time?: string;
-  color: string;
-}
-
-export interface StepConfig {
-  title: string;
-  status: 'completed' | 'in-progress' | 'pending';
-  icon: string;
-  codePreview?: string;
-}
