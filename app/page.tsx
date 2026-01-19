@@ -186,7 +186,7 @@ export default function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative w-full px-6 py-16">
-          <div className="mx-auto flex max-w-[896px] flex-col items-center gap-8 text-center">
+          <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 text-center">
             {/* Live Badge */}
             <div className="inline-flex items-center gap-3 px-3 py-1 bg-[#f0fdf4] border border-[#b9f8cf] rounded-full">
               <div className="w-2 h-2 rounded-full bg-[#00c950]" />
