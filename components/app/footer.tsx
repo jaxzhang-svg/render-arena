@@ -88,21 +88,21 @@ export function Footer() {
                   CONTACT
                 </div>
                 <div className="flex flex-col gap-[16px]">
-                  <Link href="/contact" className="
+                  <Link href="mailto:support@novita.ai" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
-                    Contact support
+                    Contact Support
                   </Link>
-                  <Link href="/demo" className="
+                  <Link href="https://meetings-na2.hubspot.com/junyu" target="_blank" rel="noopener noreferrer" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
-                    Book a demo
+                    Book a Demo
                   </Link>
-                  <Link href="/supply" className="
+                  <Link href="mailto:gpu@novita.ai" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
@@ -124,33 +124,33 @@ export function Footer() {
                   RESOURCES
                 </div>
                 <div className="flex flex-col gap-[16px]">
-                  <Link href="/docs" className="
+                  <Link href="https://novita.ai/docs/guides/introduction" target="_blank" rel="noopener noreferrer" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     Docs
                   </Link>
-                  <Link href="/pricing" className="
+                  <Link href="https://novita.ai/docs/guides/faq" target="_blank" rel="noopener noreferrer" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
-                    Pricing
+                    FAQ
                   </Link>
-                  <Link href="/blog" className="
+                  <Link href="https://blogs.novita.ai/" target="_blank" rel="noopener noreferrer" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
                     Blog
                   </Link>
-                  <Link href="/affiliate" className="
+                  <Link href="https://novita.ai/gpus-console/templates-library" target="_blank" rel="noopener noreferrer" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
-                    Affiliate
+                    Templates Library
                   </Link>
                 </div>
               </div>
@@ -167,26 +167,33 @@ export function Footer() {
                   COMPANY
                 </div>
                 <div className="flex flex-col gap-[16px]">
-                  <Link href="/about" className="
+                  <Link href="https://novita.ai/legal/terms-of-service" target="_blank" rel="noopener noreferrer" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
-                    About
+                    Terms of Service
                   </Link>
-                  <Link href="/privacy" className="
+                  <Link href="https://novita.ai/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
-                    Privacy
+                    Privacy Policy
                   </Link>
-                  <Link href="/terms" className="
+                  <Link href="https://jobs.ashbyhq.com/novita-ai" target="_blank" rel="noopener noreferrer" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
-                    Terms
+                    Careers
+                  </Link>
+                  <Link href="https://trust.novita.ai/" target="_blank" rel="noopener noreferrer" className="
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
+                    transition-colors
+                    hover:text-[#23d57c]
+                  ">
+                    Trust Center
                   </Link>
                 </div>
               </div>
@@ -203,19 +210,12 @@ export function Footer() {
                   PARTNERS
                 </div>
                 <div className="flex flex-col gap-[16px]">
-                  <Link href="/startup" className="
+                  <Link href="https://novita.ai/affiliate-new" target="_blank" rel="noopener noreferrer" className="
                     flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
                     transition-colors
                     hover:text-[#23d57c]
                   ">
-                    Startup Program
-                  </Link>
-                  <Link href="/become-affiliate" className="
-                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
-                    transition-colors
-                    hover:text-[#23d57c]
-                  ">
-                    Become an affiliate
+                    Affiliate Program
                   </Link>
                 </div>
               </div>
@@ -229,7 +229,7 @@ export function Footer() {
             font-mono text-[12px] leading-[20px] tracking-[0.24px]
             text-[#000000]
           ">
-            © 2024 NOVITA AI. ALL RIGHTS RESERVED. 14 ROBINSON ROAD, #02-01, SINGAPORE 048545
+            © 2026 NOVITA AI. ALL RIGHTS RESERVED. 156 2ND STREET, SAN FRANCISCO, CA 94105
           </p>
         </div>
       </div>
