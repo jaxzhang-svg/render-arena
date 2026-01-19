@@ -1,87 +1,17 @@
 'use client';
 
-import Link from 'next/link';
-import { AppCard } from '@/components/app/app-card';
+import { useRouter } from 'next/navigation';
 import { UserAvatar } from '@/components/app/user-avatar';
 import { Header } from '@/components/app/header';
 import { Footer } from '@/components/app/footer';
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal';
+import { GalleryGrid } from '@/components/app/gallery-grid';
 import { Plus, TrendingUp, Clock, Box, ArrowRight, Code, Image as ImageIcon, Video, PenTool, Gamepad2, Settings, Sparkles, FileText, ChevronDown } from 'lucide-react';
-import { AppCard as AppCardType } from '@/types';
 import { Accordion } from '@base-ui/react/accordion';
 import { cn } from '@/lib/utils';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/base/button';
-
-const mockApps: AppCardType[] = [
-  {
-    id: '1',
-    title: 'Gravity Data Sim',
-    author: 'phys_wiz',
-    modelA: 'Claude 3.5',
-    modelB: 'GPT-4o',
-    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7alA6GSnzYKzv_iaaBMefKcuGt-BkmdeBPvOY92u9GY-TmgSU5wEb_P42t8BvLMnNxVJx-okzDsQsMjXxc09WcJ8ejLlUQOk2yNkF8h4v6fnhSpIssjEf4WtTUFM2MpEhSgXUfpiwH9Fjjqg-jb6K0ssOJ7vwYjJne-U--Sz3Vbd6rKGoz5gEpbsr1-AbjiQ-TsguOACGmJ1s4ZWzTyj4ADWizlpFjLRqpsX6jPszN2reOc53QZUGnC9MzuCQrr3ptjpMn8epE_Q',
-    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7alA6GSnzYKzv_iaaBMefKcuGt-BkmdeBPvOY92u9GY-TmgSU5wEb_P42t8BvLMnNxVJx-okzDsQsMjXxc09WcJ8ejLlUQOk2yNkF8h4v6fnhSpIssjEf4WtTUFM2MpEhSgXUfpiwH9Fjjqg-jb6K0ssOJ7vwYjJne-U--Sz3Vbd6rKGoz5gEpbsr1-AbjiQ-TsguOACGmJ1s4ZWzTyj4ADWizlpFjLRqpsX6jPszN2reOc53QZUGnC9MzuCQrr3ptjpMn8epE_Q',
-    category: 'Website',
-    likes: 1200,
-  },
-  {
-    id: '2',
-    title: 'Snake 3D Remake',
-    author: 'retro_dev',
-    modelA: 'GPT-4o',
-    modelB: 'Claude 3.5',
-    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFRFUClCq6ybiXEKjq22HMXbWLz4q_L7gbZYs4SxYwIfzFWWZzJMvUD2YSPIWrNwmdCPqareipI9KHu79oNhUyKy3C5v6fVVToev9lceJHNFMTfwtkxmF3Jc-HIgBWfkwvdqJe9hz9D43JIAXX7XNdedPoseJ7andHLaf8IqFIJF1f0plJpbg5qwWJgcfToO-hRadiE7RzszYTN3O1-mHoUKPLyPesFlUWWYjT-RQdX9NvJ4FYQIcIdk1IXBd9Bp9Pf4S7Wk0hu_U',
-    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFRFUClCq6ybiXEKjq22HMXbWLz4q_L7gbZYs4SxYwIfzFWWZzJMvUD2YSPIWrNwmdCPqareipI9KHu79oNhUyKy3C5v6fVVToev9lceJHNFMTfwtkxmF3Jc-HIgBWfkwvdqJe9hz9D43JIAXX7XNdedPoseJ7andHLaf8IqFIJF1f0plJpbg5qwWJgcfToO-hRadiE7RzszYTN3O1-mHoUKPLyPesFlUWWYjT-RQdX9NvJ4FYQIcIdk1IXBd9Bp9Pf4S7Wk0hu_U',
-    category: 'Game',
-    likes: 850,
-  },
-  {
-    id: '3',
-    title: 'Particle Controller',
-    author: 'threejs_god',
-    modelA: 'Claude 3.5',
-    modelB: 'Llama 3',
-    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnVMAVAfPY-z3xydBc4GuaP646hDi3d0JTEOxFh4-ZISxgrX6llG36-AbgsYvMAcVmhbmGPu9Ib2YmWNrnhIjyHaE47I6trYyJ1xk44D_rNQbSMISFwY7PQIixZpaQm3yCOVoTSrMpGz9fNxWFgG4CRvdywfL0CHUqGjSlYhgI4Z5Ptir0riDNgj7NA6ATgdvUqn-PeOsK6K17fbusw3Duq7cNHdEnVM6Ygca472YCz2ilhlw66GskDBlY-KGIDmBZTeZea-tQwdE',
-    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnVMAVAfPY-z3xydBc4GuaP646hDi3d0JTEOxFh4-ZISxgrX6llG36-AbgsYvMAcVmhbmGPu9Ib2YmWNrnhIjyHaE47I6trYyJ1xk44D_rNQbSMISFwY7PQIixZpaQm3yCOVoTSrMpGz9fNxWFgG4CRvdywfL0CHUqGjSlYhgI4Z5Ptir0riDNgj7NA6ATgdvUqn-PeOsK6K17fbusw3Duq7cNHdEnVM6Ygca472YCz2ilhlw66GskDBlY-KGIDmBZTeZea-tQwdE',
-    category: '3D Scene',
-    likes: 2100,
-  },
-  {
-    id: '4',
-    title: 'Cloth Physics Demo',
-    author: 'sim_master',
-    modelA: 'Llama 3',
-    modelB: 'GPT-4o',
-    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAg6VNqDZan7bxkNmvSno_pJ8p0TnF1grXxABXL15oRk9NOwgMdo8XfzjhW0r_m8DnbE35YCB-BD9NJz6fCInZO_OxnHjuzQOOSy9OlPA_ntO-sybaPiBoN4--WOGOsHdFxLkgqENco3GUHeJ9UzDbZqbggbEXfPGlWCjGgoK8C7ScTWMrLg6s3hv6DWlQm_trv-P87NW5EufWTgfxUq42ZETz2C9OSR_edIX9uS3f6zoF8fTI_w-_X5q7yIQBDYQOAEiTdQBGRV-Y',
-    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAg6VNqDZan7bxkNmvSno_pJ8p0TnF1grXxABXL15oRk9NOwgMdo8XfzjhW0r_m8DnbE35YCB-BD9NJz6fCInZO_OxnHjuzQOOSy9OlPA_ntO-sybaPiBoN4--WOGOsHdFxLkgqENco3GUHeJ9UzDbZqbggbEXfPGlWCjGgoK8C7ScTWMrLg6s3hv6DWlQm_trv-P87NW5EufWTgfxUq42ZETz2C9OSR_edIX9uS3f6zoF8fTI_w-_X5q7yIQBDYQOAEiTdQBGRV-Y',
-    category: 'Physics',
-    likes: 932,
-  },
-  {
-    id: '5',
-    title: 'Fluid Rain Sim',
-    author: 'weather_ai',
-    modelA: 'GPT-4o',
-    modelB: 'Claude 3.5',
-    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDilnTv7FHR-fvz6wlAd_WKWQAS5SD4MRnAQc9LdcYWGZa58a1laOPLNAN1vk2hS5NUhh0I-gaps1OyZa8PtqePVPsrC77fZH6v6IDwy0u5sz3OCOT92TmQEjz02MSJEQkWqshsPKJwaDnB5_f1hkpgz_P4Gi0bEj80qXVKzunBQNVsdbiVq32DZFIuujk9oz7xKjfcPz_YLWbe4TCAKRREy-8XxRaZk9jfNXFpgNycSfbZ6eiArosR6jonNsFkhmyEsZy9us9uPcc',
-    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDilnTv7FHR-fvz6wlAd_WKWQAS5SD4MRnAQc9LdcYWGZa58a1laOPLNAN1vk2hS5NUhh0I-gaps1OyZa8PtqePVPsrC77fZH6v6IDwy0u5sz3OCOT92TmQEjz02MSJEQkWqshsPKJwaDnB5_f1hkpgz_P4Gi0bEj80qXVKzunBQNVsdbiVq32DZFIuujk9oz7xKjfcPz_YLWbe4TCAKRREy-8XxRaZk9jfNXFpgNycSfbZ6eiArosR6jonNsFkhmyEsZy9us9uPcc',
-    category: 'Visual Effect',
-    likes: 4500,
-  },
-  {
-    id: '6',
-    title: 'Pong: Neon Edition',
-    author: 'arcade_lover',
-    modelA: 'Claude 3.5',
-    modelB: 'GPT-4o',
-    thumbnailA: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAqGBqc3-YVTMgfmeXXMm0pYx7umPRuT7qhMosgCoIcST2TVDPSMj9utb4wMAKBjGe6VLGpb4Zf_obyAMMBZnz1GMiCxYQa2lF0ROOrde9p249X2LZKU_oxxfK0MVYD8DVGwcH9krPGaCppv4XIfN5lpUVm5Sc33xvUJRO8Ntn8oe0bKwNOG9RJd5OxGhlA5ExhFsJqxNH4gWkEoUkvygtsLr8_WYim4Ffe9FP_d3_ynSDocCxXazq85J43B5as87Z8fULoji_P6aI',
-    thumbnailB: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAqGBqc3-YVTMgfmeXXMm0pYx7umPRuT7qhMosgCoIcST2TVDPSMj9utb4wMAKBjGe6VLGpb4Zf_obyAMMBZnz1GMiCxYQa2lF0ROOrde9p249X2LZKU_oxxfK0MVYD8DVGwcH9krPGaCppv4XIfN5lpUVm5Sc33xvUJRO8Ntn8oe0bKwNOG9RJd5OxGhlA5ExhFsJqxNH4gWkEoUkvygtsLr8_WYim4Ffe9FP_d3_ynSDocCxXazq85J43B5as87Z8fULoji_P6aI',
-    category: 'Game',
-    likes: 156,
-  },
-];
 
 const categories = [
   { name: 'Trending', icon: TrendingUp },
@@ -137,12 +67,23 @@ const modePrompts: Record<string, string[]> = {
 };
 
 export default function HomePage() {
+  const router = useRouter();
   const [activeMode, setActiveMode] = useState('Website');
+  const [userPrompt, setUserPrompt] = useState('');
   const [placeholderText, setPlaceholderText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
   const [typingSpeed, setTypingSpeed] = useState(50);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleGenerate = () => {
+    const promptToUse = userPrompt.trim() || placeholderText.trim();
+    if (promptToUse) {
+      router.push(`/playground/new?prompt=${encodeURIComponent(promptToUse)}&autoStart=true`);
+    } else {
+      router.push('/playground/new');
+    }
+  };
 
   useEffect(() => {
     const activePrompts = modePrompts[activeMode] || modePrompts['Website'];
@@ -247,9 +188,15 @@ export default function HomePage() {
                   {/* Textarea with scrollbar */}
                   <div className="relative">
                     <textarea
-                      value={placeholderText}
+                      value={userPrompt || placeholderText}
                       placeholder="Describe what you want to create..."
-                      readOnly
+                      onChange={(e) => setUserPrompt(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleGenerate();
+                        }
+                      }}
                       className="
                         h-[118px] w-full resize-none bg-transparent
                         font-sans text-base/6
@@ -275,18 +222,19 @@ export default function HomePage() {
                       <Sparkles className="text-gray-400 size-4" />
                     </Button>
                     
-                    <Link href="/playground">
-                      <Button className="
+                    <Button 
+                      onClick={handleGenerate}
+                      className="
                         flex items-center justify-center gap-2 rounded-xl
                         bg-[#292827] px-4 py-2.5
                         font-mono text-base
                         font-normal text-white transition-colors
                         hover:bg-[#3a3938]
-                      ">
-                        <span>Generate</span>
-                        <ArrowRight className="size-5" />
-                      </Button>
-                    </Link>
+                      "
+                    >
+                      <span>Generate</span>
+                      <ArrowRight className="size-5" />
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -484,21 +432,7 @@ export default function HomePage() {
               </h2>
             </div>
 
-            <div className="
-              grid grid-cols-1 gap-6
-              md:grid-cols-2
-            ">
-              {mockApps.map((app) => (
-                <AppCard key={app.id} app={app} />
-              ))}
-            </div>
-
-            <div className="mt-16 flex justify-center">
-              <button className="inline-flex items-center gap-2 h-10 px-8 rounded-lg border border-gray-200 bg-white text-gray-900 hover:bg-gray-100 font-medium transition-colors">
-                Load more apps
-                <ChevronDown className="size-5" />
-              </button>
-            </div>
+            <GalleryGrid />
           </div>
         </section>
 

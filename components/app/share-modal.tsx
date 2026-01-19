@@ -1,8 +1,8 @@
 'use client';
 
 import { Dialog } from '@base-ui/react/dialog';
-import { Download, Copy, X, Link as LinkIcon, Play } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Download, Copy, X, Link as LinkIcon, Play, Globe, Check } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 import { Facebook, Twitter, Linkedin } from 'lucide-react';
 
 type VideoStatus = 'generating' | 'uploading' | 'ready';
@@ -10,21 +10,28 @@ type VideoStatus = 'generating' | 'uploading' | 'ready';
 interface ShareModalProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  appId?: string;
   shareUrl?: string;
   previewImage?: string;
   videoBlob?: Blob | null;
   videoFormat?: 'webm' | 'mp4' | null;
+  showVideoSection?: boolean;
 }
 
 export function ShareModal({
   open = false,
   onOpenChange,
+  appId,
   shareUrl = 'https://make.figma.com/s/9f8a7d6',
   previewImage,
   videoBlob,
   videoFormat,
+  showVideoSection = false,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
+  const [publishToGallery, setPublishToGallery] = useState(true);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
 
   // Create video URL from blob for preview
   const videoUrl = videoBlob ? URL.createObjectURL(videoBlob) : null;
@@ -38,6 +45,37 @@ export function ShareModal({
       }
     };
   }, [videoUrl]);
+
+  // Reset published state when modal opens
+  useEffect(() => {
+    if (open) {
+      setIsPublished(false);
+    }
+  }, [open]);
+
+  const handlePublishToGallery = useCallback(async () => {
+    if (!appId || isPublished) return;
+    
+    setIsPublishing(true);
+    try {
+      const response = await fetch(`/api/apps/${appId}/publish`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+      
+      if (response.ok) {
+        setIsPublished(true);
+      } else if (response.status === 401 || response.status === 403) {
+        // 用户未登录或无权限，静默处理
+        console.log('User not authorized to publish');
+      }
+    } catch (error) {
+      console.error('Error publishing to gallery:', error);
+    } finally {
+      setIsPublishing(false);
+    }
+  }, [appId, isPublished]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shareUrl);
@@ -57,13 +95,19 @@ export function ShareModal({
     }
   };
 
-  const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
+  const handleSocialShare = async (platform: 'twitter' | 'linkedin' | 'facebook') => {
+    // 如果勾选了发布到画廊，先发布
+    if (publishToGallery && appId && !isPublished) {
+      await handlePublishToGallery();
+    }
+    
     const encodedUrl = encodeURIComponent(shareUrl);
+    const text = encodeURIComponent('Check out this AI-generated app battle! 🚀');
     let url = '';
     
     switch (platform) {
       case 'twitter':
-        url = `https://twitter.com/intent/tweet?url=${encodedUrl}`;
+        url = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${text}`;
         break;
       case 'linkedin':
         url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
@@ -93,7 +137,8 @@ export function ShareModal({
 
         {/* Content */}
         <div className="flex flex-col gap-6 px-5 pt-5 pb-0">
-          {/* Preview Container */}
+          {/* Preview Container - Only show when triggered by recording */}
+          {showVideoSection && (
           <div className="relative w-full h-[228.375px] bg-[#101828] rounded-[14px] overflow-hidden shadow-[inset_0px_2px_4px_0px_rgba(0,0,0,0.05)]">
             {videoUrl ? (
               <video
@@ -121,6 +166,7 @@ export function ShareModal({
               </div>
             </div>
           </div>
+          )}
 
           {/* Public Link Section */}
           <div className="space-y-2">
@@ -189,9 +235,42 @@ export function ShareModal({
               </button>
             </div>
           </div>
+
+          {/* Publish to Gallery Checkbox */}
+          {appId && (
+            <div className="flex items-center gap-3 py-2">
+              <button
+                type="button"
+                role="checkbox"
+                aria-checked={publishToGallery}
+                onClick={() => setPublishToGallery(!publishToGallery)}
+                className={`
+                  size-5 rounded border-2 flex items-center justify-center transition-colors
+                  ${publishToGallery 
+                    ? 'bg-[#23d57c] border-[#23d57c]' 
+                    : 'bg-white border-gray-300 hover:border-gray-400'
+                  }
+                `}
+              >
+                {publishToGallery && <Check className="size-3 text-white" />}
+              </button>
+              <div className="flex items-center gap-2">
+                <Globe className="size-4 text-[#6a7282]" />
+                <span className="text-[14px] text-[#364153]">
+                  Publish to Gallery when sharing
+                </span>
+                {isPublished && (
+                  <span className="text-[12px] text-[#23d57c] font-medium">
+                    ✓ Published
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Footer */}
+        {/* Footer - Only show download section when triggered by recording */}
+        {showVideoSection ? (
         <div className="bg-[#f9fafb] border-t border-[#f3f4f6] h-[69px] flex items-center justify-between px-5 mt-6">
           <div className="text-[12px] leading-4">
             <span className="font-medium text-[#101828]">{fileSize}MB</span>
@@ -205,6 +284,9 @@ export function ShareModal({
             Download Video
           </button>
         </div>
+        ) : (
+        <div className="h-6" />
+        )}
       </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>

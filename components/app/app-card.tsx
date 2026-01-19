@@ -114,7 +114,6 @@ export function AppCard({ app }: AppCardProps) {
           </div>
           <h3 className="
             text-foreground/90
-            group-hover:text-primary
             line-clamp-1 text-lg/tight font-black tracking-tight
             transition-colors
           ">
