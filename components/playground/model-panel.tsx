@@ -209,6 +209,7 @@ export function ModelPanel({
           <StreamingCodeDisplay
             content={response.content}
             reasoning={response.reasoning}
+            isStreaming={response.loading}
             onPreview={(html) => {
               onResponseChange((prev) => ({ ...prev, html }))
               onViewModeChange('preview')

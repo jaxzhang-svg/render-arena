@@ -239,7 +239,7 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
         setApps(data.apps);
       }
       setTotal(data.total);
-      setHasMore(data.apps.length === 20 && pageNum * 20 < data.total);
+      setHasMore(data?.apps.length === 20 && pageNum * 20 < data.total);
     } catch (error) {
       console.error('Error fetching apps:', error);
     } finally {

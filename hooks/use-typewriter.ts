@@ -13,6 +13,21 @@ interface UseTypewriterOptions {
  */
 export function useTypewriter(options: UseTypewriterOptions) {
   const { text, enabled = true } = options
+  
+  // 如果禁用打字机效果，直接返回原文本，不使用任何状态
+  // 这样可以完全避免额外的渲染开销
+  if (!enabled) {
+    return { displayedText: text, isComplete: true }
+  }
+  
+  // 以下是启用打字机效果时的逻辑
+  return useTypewriterInternal(text)
+}
+
+/**
+ * 内部实现：仅在启用打字机效果时使用
+ */
+function useTypewriterInternal(text: string) {
   const [displayedText, setDisplayedText] = useState('')
   const [isComplete, setIsComplete] = useState(false)
   const indexRef = useRef(0)
@@ -20,13 +35,6 @@ export function useTypewriter(options: UseTypewriterOptions) {
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    // 如果禁用打字机效果，直接显示全部文本
-    if (!enabled) {
-      setDisplayedText(text)
-      setIsComplete(true)
-      return
-    }
-
     // 如果文本变短了或者文本为空（重置），重置索引
     if (text.length < previousTextRef.current.length || text === '') {
       indexRef.current = 0
@@ -83,7 +91,7 @@ export function useTypewriter(options: UseTypewriterOptions) {
         timerRef.current = null
       }
     }
-  }, [text, enabled])
+  }, [text])
 
   return { displayedText, isComplete }
 }

@@ -125,16 +125,45 @@ export function useModelGeneration({
   const responseRef = useRef(response)
   responseRef.current = response
 
+  // Token 缓冲（用于批量更新，避免每个 token 都触发渲染）
+  const contentBufferRef = useRef('')
+  const reasoningBufferRef = useRef('')
+  const flushIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
   // AbortController 用于中断请求
   const abortControllerRef = useRef<AbortController | null>(null)
 
+  // 刷新缓冲区到状态（批量更新）
+  const flushBuffer = useCallback(() => {
+    const contentDelta = contentBufferRef.current
+    const reasoningDelta = reasoningBufferRef.current
+    
+    if (contentDelta || reasoningDelta) {
+      setResponse((prev) => ({
+        ...prev,
+        content: prev.content + contentDelta,
+        reasoning: (prev.reasoning || '') + reasoningDelta,
+      }))
+      contentBufferRef.current = ''
+      reasoningBufferRef.current = ''
+    }
+  }, [])
+
   // 停止生成
   const stop = useCallback(() => {
+    // 停止批量更新定时器
+    if (flushIntervalRef.current) {
+      clearInterval(flushIntervalRef.current)
+      flushIntervalRef.current = null
+    }
+    // 最后一次刷新确保所有内容都被渲染
+    flushBuffer()
+    
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
       abortControllerRef.current = null
     }
-  }, [])
+  }, [flushBuffer])
 
   // 生成内容
   const generate = useCallback(async (
@@ -154,6 +183,16 @@ export function useModelGeneration({
     // 切换到代码视图并重置状态
     setViewMode('code')
     setResponse({ content: '', reasoning: '', loading: true, completed: false, startTime })
+    
+    // 重置缓冲区
+    contentBufferRef.current = ''
+    reasoningBufferRef.current = ''
+    
+    // 启动批量更新定时器（每 50ms 刷新一次，即每秒最多 20 次渲染）
+    if (flushIntervalRef.current) {
+      clearInterval(flushIntervalRef.current)
+    }
+    flushIntervalRef.current = setInterval(flushBuffer, 50)
 
     try {
       await fetchEventSource(`/api/apps/${appId}/generate?model=${slot}`, {
@@ -176,11 +215,9 @@ export function useModelGeneration({
             const delta = data.choices?.[0]?.delta
 
             if (delta) {
-              setResponse((prev) => ({
-                ...prev,
-                content: prev.content + (delta.content || ''),
-                reasoning: (prev.reasoning || '') + (delta.reasoning_content || ''),
-              }))
+              // 只更新缓冲区，不触发渲染（由定时器批量刷新）
+              contentBufferRef.current += delta.content || ''
+              reasoningBufferRef.current += delta.reasoning_content || ''
             }
           } catch {
             // Ignore parsing errors
@@ -190,10 +227,24 @@ export function useModelGeneration({
           throw error
         },
         onclose: () => {
+          // 停止定时器并最后一次刷新
+          if (flushIntervalRef.current) {
+            clearInterval(flushIntervalRef.current)
+            flushIntervalRef.current = null
+          }
+          // 确保所有缓冲内容都被刷新
+          const finalContent = contentBufferRef.current
+          const finalReasoning = reasoningBufferRef.current
+          contentBufferRef.current = ''
+          reasoningBufferRef.current = ''
+          
           setResponse((prev) => {
-            const html = extractHTMLFromMarkdown(prev.content)
+            // 合并最后的缓冲内容
+            const mergedContent = prev.content + finalContent
+            const mergedReasoning = (prev.reasoning || '') + finalReasoning
+            const html = extractHTMLFromMarkdown(mergedContent)
             const duration = (Date.now() - startTime) / 1000
-            const tokens = Math.floor(prev.content.length / 4)
+            const tokens = Math.floor(mergedContent.length / 4)
 
             // 如果另一个模型也已完成且有 HTML，则两边都切换到预览模式
             if (otherResponseRef.current?.completed && otherResponseRef.current?.html && html) {
@@ -218,6 +269,8 @@ export function useModelGeneration({
 
             return {
               ...prev,
+              content: mergedContent,
+              reasoning: mergedReasoning,
               loading: false,
               completed: true,
               html: html || undefined,

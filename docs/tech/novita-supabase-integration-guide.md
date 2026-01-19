@@ -91,14 +91,9 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 # Supabase 配置
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key # 用于同步用户，切勿暴露给前端
-
-# Novita 配置
-NEXT_PUBLIC_NOVITA_LOGIN_URL=https://api.novita.ai/login
-NOVITA_API_SERVER=https://api-server.novita.ai
-
+NEXT_SUPABASE_SERVICE_ROLE_KEY=your-service-role-key # 用于同步用户，切勿暴露给前端
 # 安全配置
-ENCRYPTION_MASTER_KEY=your-random-super-secret-key
+NEXT_ENCRYPTION_MASTER_KEY=your-random-super-secret-key
 ```
 
 ### 3.1 客户端配置 (`lib/supabase/client.ts`)
@@ -154,10 +149,8 @@ export async function createClient() {
 |--------|------|------|------|
 | `NEXT_PUBLIC_SUPABASE_URL` | 是 | Supabase 项目 URL | `https://xyz.supabase.co` |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | 是 | Supabase Anon Key | `eyJhbGci...` |
-| `SUPABASE_SERVICE_ROLE_KEY` | 是 | Supabase 管理 Key (仅后端) | `eyJhbGci...` |
-| `NEXT_PUBLIC_NOVITA_LOGIN_URL` | 是 | Novita 登录跳转地址 | `https://api.novita.ai/login` |
-| `NOVITA_API_SERVER` | 是 | Novita API 服务器地址 | `https://api-server.novita.ai` |
-| `ENCRYPTION_MASTER_KEY` | 是 | 用于加密 API Key 的主秘钥 | `32位随机字符串` |
+| `NEXT_SUPABASE_SERVICE_ROLE_KEY` | 是 | Supabase 管理 Key (仅后端) | `eyJhbGci...` |
+| `NEXT_ENCRYPTION_MASTER_KEY` | 是 | 用于加密 API Key 的主秘钥 | `32位随机字符串` |
 
 ### Cookie 设置
 
@@ -189,7 +182,7 @@ export async function getNovitaUserInfo(): Promise<NovitaUserInfo | null> {
   const allCookies = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join('; ');
 
   try {
-    const response = await fetch(`${process.env.NOVITA_API_SERVER}/v1/user/info`, {
+    const response = await fetch(`https://api-server.novita.ai/v1/user/info`, {
       headers: {
         'Cookie': allCookies, // 透传 Novita 登录后的 Cookie
       },
@@ -311,7 +304,7 @@ async function createAdminClient() {
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY!,
     { cookies: { getAll: () => cookieStore.getAll(), setAll: (c) => c.forEach(v => cookieStore.set(v.name, v.value, v.options)) } }
   );
 }
@@ -390,7 +383,7 @@ export async function POST(request: NextRequest) {
   const { error } = await supabase.rpc('update_user_api_key', {
     p_user_id: user.id,
     p_api_key: apiKey,
-    p_master_key: process.env.ENCRYPTION_MASTER_KEY
+    p_master_key: process.env.NEXT_ENCRYPTION_MASTER_KEY
   });
   
   // 注意：需要先在 SQL 创建 update_user_api_key 函数，详见第8节安全实践
@@ -457,7 +450,7 @@ export const config = {
 export function NovitaLoginButton() {
   const handleLogin = () => {
     const callbackUrl = `${window.location.origin}/api/auth/callback`;
-    const loginUrl = `${process.env.NEXT_PUBLIC_NOVITA_LOGIN_URL}?redirect_url=${encodeURIComponent(callbackUrl)}`;
+    const loginUrl = `https://novita.ai/user/login?redirect_url=${encodeURIComponent(callbackUrl)}`;
     window.location.href = loginUrl;
   };
 
@@ -585,7 +578,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 export async function getDecryptedApiKey(supabase: any, userId: string) {
   const { data, error } = await supabase.rpc('get_user_api_key', {
     p_user_id: userId,
-    p_master_key: process.env.ENCRYPTION_MASTER_KEY
+    p_master_key: process.env.NEXT_ENCRYPTION_MASTER_KEY
   });
 
   if (error || !data) return null;
@@ -635,5 +628,5 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 ## 10. 常见问题排查
 
 - **Callback 无限循环**: 检查 Middleware 是否正确排除了静态资源和 API 回调路径。
-- **User Sync 失败**: 确保 `SUPABASE_SERVICE_ROLE_KEY` 具有操作 `auth.users` 的权限。
+- **User Sync 失败**: 确保 `NEXT_SUPABASE_SERVICE_ROLE_KEY` 具有操作 `auth.users` 的权限。
 - **Novita User Info 返回 401**: 确认 Novita 域名的 Cookie 已被正确透传给 API 服务器。由于 Next.js 运行在您的域名下，而 Novita Cookie 可能属于 `novita.ai`，如果是非同源环境，请确保使用 Oauth2 流程或在同一主域下。
