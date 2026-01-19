@@ -2,13 +2,14 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { Heart, Copy, Box, ChevronDown, Download } from 'lucide-react';
+import Image from 'next/image';
 import { galleryCategories, type GalleryCategoryId } from '@/lib/config';
 import { useRouter } from 'next/navigation';
 import type { GalleryApp } from '@/types';
-import { getModelById, models } from '@/lib/models';
 
 interface GalleryGridProps {
   initialApps?: GalleryApp[];
+  selectedCategory: GalleryCategoryId;
 }
 
 interface GalleryAppCardProps {
@@ -22,9 +23,6 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
   const [isLiking, setIsLiking] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  const modelA = getModelById(app.model_a) || models[0];
-  const modelB = getModelById(app.model_b) || models[1];
 
   const handleLike = async () => {
     if (isLiking) return;
@@ -74,50 +72,12 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
       "
     >
       <div className="bg-[#ececf0] relative flex h-[344px] w-full overflow-hidden rounded-2xl cursor-pointer">
-        {/* Left Side - Model A */}
-        <div className="
-          relative h-full w-1/2 overflow-hidden border-r border-white/20
-          bg-gradient-to-br from-gray-100 to-gray-200
-        ">
-          {/* 使用 prompt 的首字母作为占位符 */}
-          <div className="flex h-full items-center justify-center">
-            <div className={`size-12 rounded-lg ${modelA.color} flex items-center justify-center`}>
-              <span className="text-white text-lg font-bold">A</span>
-            </div>
-          </div>
-          <div className="absolute top-[18px] left-3 z-10">
-            <div className="
-              inline-flex items-center gap-1.5 rounded-full px-[11px] py-0.5
-              text-sm font-medium font-sans text-white backdrop-blur-md h-[29px]
-              bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
-            ">
-              <div className={`size-5 rounded-full ${modelA.color} flex items-center justify-center`} />
-              {modelA.name}
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side - Model B */}
-        <div className="
-          relative h-full w-1/2 overflow-hidden
-          bg-gradient-to-br from-gray-200 to-gray-300
-        ">
-          <div className="flex h-full items-center justify-center">
-            <div className={`size-12 rounded-lg ${modelB.color} flex items-center justify-center`}>
-              <span className="text-white text-lg font-bold">B</span>
-            </div>
-          </div>
-          <div className="absolute top-[18px] right-3 z-10">
-            <div className="
-              inline-flex items-center gap-1.5 rounded-full px-[11px] py-0.5
-              text-sm font-medium text-white backdrop-blur-md h-[29px]
-              bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
-            ">
-              <div className={`size-5 rounded-full ${modelB.color} flex items-center justify-center`} />
-              {modelB.name}
-            </div>
-          </div>
-        </div>
+        <Image
+          src="/images/default-poster.png"
+          alt={app.name || 'App Preview'}
+          fill
+          className="object-cover"
+        />
 
         {/* VS Badge / Run Button Interaction */}
         <div className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
@@ -178,22 +138,6 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               <Copy className="size-5" />
               <span className="font-sans">{copied ? 'Copied!' : 'Copy'}</span>
             </button>
-
-            <button
-              className="
-                text-[#4f4e4a]
-                hover:text-foreground
-                flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors
-              "
-              title="Download"
-              onClick={(e) => {
-                e.stopPropagation();
-                // TODO: 实现下载功能
-              }}
-            >
-              <Download className="size-5" />
-              <span className="font-sans lowercase">download</span>
-            </button>
           </div>
 
           <button
@@ -221,13 +165,12 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   );
 }
 
-export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
+export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridProps) {
   const [apps, setApps] = useState<GalleryApp[]>(initialApps);
   const [loading, setLoading] = useState(initialApps.length === 0);
-  const [category, setCategory] = useState<GalleryCategoryId>('all');
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [total, setTotal] = useState(0);
+  const [, setTotal] = useState(0);
 
   const fetchApps = useCallback(async (pageNum: number, cat: GalleryCategoryId, append = false) => {
     try {
@@ -250,18 +193,14 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
   }, []);
 
   useEffect(() => {
-    fetchApps(1, category);
-  }, [category, fetchApps]);
+    setPage(1); // Reset page when category changes
+    fetchApps(1, selectedCategory);
+  }, [selectedCategory, fetchApps]);
 
   const handleLoadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    fetchApps(nextPage, category, true);
-  };
-
-  const handleCategoryChange = (cat: GalleryCategoryId) => {
-    setCategory(cat);
-    setPage(1);
+    fetchApps(nextPage, selectedCategory, true);
   };
 
   if (loading && apps.length === 0) {
@@ -284,34 +223,10 @@ export function GalleryGrid({ initialApps = [] }: GalleryGridProps) {
 
   return (
     <div>
-      {/* Category Filter */}
-      <div className="mb-8 flex items-center gap-4">
-        <div className="flex gap-2">
-          {galleryCategories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => handleCategoryChange(cat.id)}
-              className={`
-                flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-medium font-sans transition-all
-                ${category === cat.id
-                  ? 'bg-white text-foreground shadow-sm ring-1 ring-black/5'
-                  : 'text-muted-foreground hover:bg-gray-100/50 hover:text-foreground'
-                }
-              `}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-        <div className="ml-auto text-sm text-muted-foreground">
-          {total} apps
-        </div>
-      </div>
-
       {/* Apps Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {apps.map((app) => (
-          <GalleryAppCard key={app.id} app={app} currentCategory={category} />
+          <GalleryAppCard key={app.id} app={app} currentCategory={selectedCategory} />
         ))}
       </div>
 

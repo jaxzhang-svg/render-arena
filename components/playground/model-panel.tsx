@@ -4,6 +4,7 @@ import React, { useId } from 'react'
 import { Button } from '@/components/base/button'
 import { Menu } from '@base-ui/react/menu'
 import { Maximize, RotateCcw } from 'lucide-react'
+import Image from 'next/image'
 import { ModelSettingsPopover } from '@/components/playground/model-settings-modal'
 import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
 import { cn } from '@/lib/utils'
@@ -84,7 +85,13 @@ export function ModelPanel({
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
               )}
             >
-              <span className={cn('size-5 rounded-sm', selectedModel.color)} />
+              <Image 
+                src={selectedModel.icon} 
+                alt={selectedModel.name} 
+                width={20} 
+                height={20} 
+                className="size-5 rounded-sm"
+              />
               <span className="font-sans text-[16px] font-medium text-[#4f4e4a]">
                 {selectedModel.name}
               </span>
@@ -124,7 +131,13 @@ export function ModelPanel({
                           'gap-[8px]'
                         )}
                       >
-                        <span className={cn('size-[20px] rounded-sm shrink-0', model.color)} />
+                        <Image 
+                          src={model.icon} 
+                          alt={model.name} 
+                          width={20} 
+                          height={20} 
+                          className="size-[20px] rounded-sm shrink-0"
+                        />
                         <span className="text-[#292827] text-[16px] font-normal leading-[24px]">
                           {model.name}
                         </span>

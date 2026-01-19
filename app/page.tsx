@@ -11,7 +11,7 @@ import { Accordion } from '@base-ui/react/accordion';
 import { useState, useEffect, useId } from 'react';
 import { Button } from '@/components/base/button';
 
-import { playgroundModes, getCategoryFromModeLabel } from '@/lib/config';
+import { playgroundModes, getCategoryFromModeLabel, galleryCategories, type GalleryCategoryId } from '@/lib/config';
 
 export default function HomePage() {
   const router = useRouter();
@@ -22,6 +22,7 @@ export default function HomePage() {
   const [loopNum, setLoopNum] = useState(0);
   const [typingSpeed, setTypingSpeed] = useState(50);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [galleryCategory, setGalleryCategory] = useState<GalleryCategoryId>('all');
   
   // Generate stable IDs for accordion triggers
   const accordionId0 = useId();
@@ -405,16 +406,34 @@ export default function HomePage() {
         <section id="gallery" className="pt-16 pb-20">
           <div className="mx-auto max-w-7xl px-6">
             {/* Gallery Header */}
-            <div className="mb-12">
+            <div className="mb-12 flex items-center justify-between">
               <h2 className="
                 font-sans text-[48px]
                 leading-[48px] font-semibold tracking-[-0.96px] text-[#292827]
               ">
                 Arena Gallery
               </h2>
+
+              <div className="flex gap-2 bg-gray-100/50 p-1 rounded-full">
+                {galleryCategories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setGalleryCategory(cat.id)}
+                    className={`
+                      flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-medium font-sans transition-all
+                      ${galleryCategory === cat.id
+                        ? 'bg-white text-foreground shadow-sm ring-1 ring-black/5'
+                        : 'text-muted-foreground hover:bg-gray-200/50 hover:text-foreground'
+                      }
+                    `}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <GalleryGrid />
+            <GalleryGrid selectedCategory={galleryCategory} />
           </div>
         </section>
 

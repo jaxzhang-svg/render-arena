@@ -9,10 +9,12 @@ import {
   Heart,
   Copy,
   ExternalLink,
-  Eye,
   Maximize,
   Check,
+  Loader2,
 } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { UserAvatar } from '@/components/app/user-avatar'
 import { cn } from '@/lib/utils'
 import { getModelById, models } from '@/lib/models'
@@ -23,15 +25,19 @@ interface GalleryClientProps {
 }
 
 export default function GalleryClient({ app }: GalleryClientProps) {
+  const router = useRouter()
   const [viewMode, setViewMode] = useState<'a' | 'b' | 'split'>('split')
   const [liked, setLiked] = useState(app.isLiked)
   const [likeCount, setLikeCount] = useState(app.like_count)
+  const [isLiking, setIsLiking] = useState(false)
   const [copied, setCopied] = useState(false)
 
   const modelA = getModelById(app.model_a) || models[0]
   const modelB = getModelById(app.model_b) || models[1]
 
   const handleLike = useCallback(async () => {
+    if (isLiking) return
+    setIsLiking(true)
     try {
       const response = await fetch(`/api/apps/${app.id}/like`, {
         method: 'POST',
@@ -47,8 +53,10 @@ export default function GalleryClient({ app }: GalleryClientProps) {
       }
     } catch (error) {
       console.error('Like error:', error)
+    } finally {
+      setIsLiking(false)
     }
-  }, [app.id])
+  }, [app.id, isLiking])
 
   const handleCopyPrompt = useCallback(async () => {
     try {
@@ -59,6 +67,16 @@ export default function GalleryClient({ app }: GalleryClientProps) {
       console.error('Copy error:', error)
     }
   }, [app.prompt])
+
+  const handleOpenPlayground = useCallback(() => {
+    const params = new URLSearchParams()
+    params.set('prompt', app.prompt)
+    if (app.category) {
+      params.set('category', app.category)
+    }
+    params.set('autoStart', 'true')
+    router.push(`/playground/new?${params.toString()}`)
+  }, [app.prompt, app.category, router])
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">
@@ -97,8 +115,13 @@ export default function GalleryClient({ app }: GalleryClientProps) {
               liked && "border-red-200 bg-red-50 text-red-500 hover:bg-red-100"
             )}
             onClick={handleLike}
+            disabled={isLiking}
           >
-            <Heart className={cn("size-4", liked && "fill-current")} />
+            {isLiking ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Heart className={cn("size-4", liked && "fill-current")} />
+            )}
             <span>{likeCount}</span>
           </Button>
 
@@ -123,28 +146,19 @@ export default function GalleryClient({ app }: GalleryClientProps) {
           </Button>
 
           {/* 在 Playground 中打开 */}
-          <Link href={`/playground/${app.id}`}>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-2 rounded-lg border-[#e4e4e7]"
-            >
-              <ExternalLink className="size-4" />
-              <span>Open in Playground</span>
-            </Button>
-          </Link>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2 rounded-lg border-[#e4e4e7]"
+            onClick={handleOpenPlayground}
+          >
+            <ExternalLink className="size-4" />
+            <span>Open in Playground</span>
+          </Button>
 
           <UserAvatar />
         </div>
       </header>
-
-      {/* Prompt 显示 */}
-      <div className="border-b border-[#f3f4f6] bg-[#fafafa] px-6 py-3">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-[#666]">Prompt:</span>
-          <span className="text-sm text-[#333]">{app.prompt}</span>
-        </div>
-      </div>
 
       {/* Main Content - 左右分屏预览 */}
       <main className="relative flex w-screen flex-1 overflow-hidden">
@@ -161,7 +175,13 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                 border-[#e7e6e2] bg-white px-4
               ">
                 <div className="flex items-center gap-2">
-                  <span className={`size-4 rounded-sm ${modelA.color}`} />
+                  <Image 
+                    src={modelA.icon} 
+                    alt={modelA.name} 
+                    width={16} 
+                    height={16} 
+                    className="size-4 rounded-sm"
+                  />
                   <span className="text-sm font-medium text-[#4f4e4a]">
                     {modelA.name}
                   </span>
@@ -204,7 +224,13 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                 border-[#e7e6e2] bg-white px-4
               ">
                 <div className="flex items-center gap-2">
-                  <span className={`size-4 rounded-sm ${modelB.color}`} />
+                  <Image 
+                    src={modelB.icon} 
+                    alt={modelB.name} 
+                    width={16} 
+                    height={16} 
+                    className="size-4 rounded-sm"
+                  />
                   <span className="text-sm font-medium text-[#4f4e4a]">
                     {modelB.name}
                   </span>
@@ -237,26 +263,6 @@ export default function GalleryClient({ app }: GalleryClientProps) {
           )}
         </div>
       </main>
-
-      {/* Footer with stats */}
-      <footer className="
-        flex h-10 shrink-0 items-center justify-between border-t
-        border-[#f3f4f6] bg-white px-4 text-xs text-[#9e9c98]
-      ">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1">
-            <Eye className="size-3" />
-            {app.view_count} views
-          </span>
-          <span className="flex items-center gap-1">
-            <Heart className="size-3" />
-            {likeCount} likes
-          </span>
-        </div>
-        <div>
-          Created {new Date(app.created_at).toLocaleDateString()}
-        </div>
-      </footer>
     </div>
   )
 }

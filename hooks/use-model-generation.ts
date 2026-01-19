@@ -111,6 +111,7 @@ export function useModelGeneration({
   // 响应状态
   const [response, setResponse] = useState<ModelResponse>({
     ...initialModelResponse,
+    content: initialHtml ? `\`\`\`html\n${initialHtml}\n\`\`\`` : '',
     html: initialHtml || undefined,
     completed: !!initialHtml,
   })

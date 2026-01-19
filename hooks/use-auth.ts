@@ -137,5 +137,19 @@ export function getNovitaLoginUrl(next?: string): string {
  * @param next - 登录后重定向的路径
  */
 export function loginWithNovita(next?: string): void {
-  window.location.href = getNovitaLoginUrl(next);
+  const loginUrl = getNovitaLoginUrl(next);
+  
+  // Set redirect cookie for novita.ai main site
+  // Parse the login URL to get the callback URL
+  try {
+    const urlObj = new URL(loginUrl);
+    const redirectUrl = urlObj.searchParams.get('redirect_url');
+    if (redirectUrl) {
+      document.cookie = `redirect=${redirectUrl}; domain=.novita.ai; path=/`;
+    }
+  } catch (e) {
+    console.error('Error setting redirect cookie:', e);
+  }
+
+  window.location.href = loginUrl;
 }
