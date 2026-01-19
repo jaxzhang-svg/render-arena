@@ -25,7 +25,7 @@ const interphases = localFont({
       style: "normal",
     },
   ],
-  variable: "--font-interphases",
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -37,7 +37,7 @@ const interphasesMono = localFont({
       style: "normal",
     },
   ],
-  variable: "--font-interphases-mono",
+  variable: "--font-mono",
   display: "swap",
 });
 

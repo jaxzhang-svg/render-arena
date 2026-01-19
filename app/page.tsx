@@ -504,7 +504,7 @@ export default function HomePage() {
               Frequently Asked Questions
             </h2>
 
-            <Accordion type="single" collapsible defaultValue="item-0" className="
+            <Accordion defaultValue={["item-0"]} className="
               w-full space-y-2
             ">
               <AccordionItem value="item-0" className="

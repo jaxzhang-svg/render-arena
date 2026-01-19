@@ -525,7 +525,7 @@ export default function PlaygroundPage() {
               ">
                 <div className="flex items-center gap-3">
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger>
                       <Button
                         variant="ghost"
                         className="
@@ -722,7 +722,7 @@ export default function PlaygroundPage() {
               ">
                 <div className="flex items-center gap-3">
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger>
                       <Button
                         variant="ghost"
                         className="

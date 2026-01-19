@@ -11,7 +11,7 @@ interface UserAvatarProps {
 export function UserAvatar({ avatarUrl = 'https://i.pravatar.cc/150?u=novita', className }: UserAvatarProps) {
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <div className={`
           border-border bg-muted
           hover:ring-primary

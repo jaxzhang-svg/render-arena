@@ -35,7 +35,7 @@ export function ModelSettingsPopover({
   return (
     <TooltipProvider>
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+        <PopoverTrigger>
           {children}
         </PopoverTrigger>
         <PopoverContent className="w-[318px] p-0" align="end">
@@ -61,7 +61,7 @@ export function ModelSettingsPopover({
                         Temperature
                       </span>
                       <Tooltip>
-                        <TooltipTrigger asChild>
+                        <TooltipTrigger>
                           <div className="group relative cursor-help">
                             <svg 
                               width="12" 
@@ -96,7 +96,7 @@ export function ModelSettingsPopover({
                     <Slider
                       value={[settings.temperature]}
                       onValueChange={(value) => 
-                        onSettingsChange({ ...settings, temperature: value[0] })
+                        onSettingsChange({ ...settings, temperature: value })
                       }
                       max={2}
                       min={0}

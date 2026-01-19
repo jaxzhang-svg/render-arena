@@ -39,8 +39,8 @@ export function FragmentWeb({ result }: { result: ExecutionResultWeb }) {
       <div className="border-t p-2">
         <div className="bg-muted/50 flex items-center rounded-2xl">
           <TooltipProvider>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger asChild>
+            <Tooltip>
+              <TooltipTrigger>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -57,8 +57,8 @@ export function FragmentWeb({ result }: { result: ExecutionResultWeb }) {
             {result.url}
           </span>
           <TooltipProvider>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger asChild>
+            <Tooltip>
+              <TooltipTrigger>
                 <Button
                   variant="ghost"
                   size="icon"
