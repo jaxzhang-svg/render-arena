@@ -29,8 +29,8 @@ export function Header() {
 
         {/* Navigation */}
         <nav className="flex items-center gap-8">
-          <Link 
-            href="/" 
+          <Link
+            href="/#home"
             className="
               font-mono text-[14px] leading-[16px] text-[#292827]
               transition-colors
@@ -39,8 +39,8 @@ export function Header() {
           >
             Home
           </Link>
-          <Link 
-            href="/hackathon" 
+          <Link
+            href="/#hackathon"
             className="
               font-mono text-[14px] leading-[16px] text-[#292827]
               transition-colors
@@ -49,8 +49,8 @@ export function Header() {
           >
             Hackathon
           </Link>
-          <Link 
-            href="/gallery" 
+          <Link
+            href="/#gallery"
             className="
               font-mono text-[14px] leading-[16px] text-[#292827]
               transition-colors
@@ -59,15 +59,15 @@ export function Header() {
           >
             Gallery
           </Link>
-          <Link 
-            href="/terms" 
+          <Link
+            href="/#faq"
             className="
               font-mono text-[14px] leading-[16px] text-[#292827]
               transition-colors
               hover:text-[#23d57c]
             "
           >
-            Terms
+            FAQ
           </Link>
         </nav>
 

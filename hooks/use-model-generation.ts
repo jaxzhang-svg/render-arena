@@ -1,0 +1,259 @@
+import { useState, useRef, useCallback } from 'react'
+import { fetchEventSource } from '@microsoft/fetch-event-source'
+import { extractHTMLFromMarkdown } from '@/lib/html-extractor'
+import { LLMModel, getModelById, models } from '@/lib/models'
+
+/**
+ * 模型响应状态
+ */
+export interface ModelResponse {
+  content: string
+  reasoning?: string
+  loading: boolean
+  completed: boolean
+  html?: string
+  tokens?: number
+  duration?: number
+  startTime?: number
+}
+
+/**
+ * 模型设置
+ */
+export interface ModelSettings {
+  temperature: number
+}
+
+/**
+ * 初始响应状态
+ */
+export const initialModelResponse: ModelResponse = {
+  content: '',
+  reasoning: '',
+  loading: false,
+  completed: false,
+}
+
+/**
+ * 初始模型设置
+ */
+export const initialModelSettings: ModelSettings = {
+  temperature: 0.7,
+}
+
+export type ViewMode = 'code' | 'preview'
+export type ModelSlot = 'a' | 'b'
+
+interface UseModelGenerationOptions {
+  /** 模型槽位 (a 或 b) */
+  slot: ModelSlot
+  /** 初始模型 ID */
+  initialModelId?: string
+  /** 默认模型索引（如果初始模型 ID 无效） */
+  fallbackModelIndex: number
+  /** 初始 HTML 内容 */
+  initialHtml?: string
+  /** 当生成完成时的回调，用于协调另一个模型 */
+  onGenerationComplete?: (html: string | undefined) => void
+}
+
+interface UseModelGenerationReturn {
+  /** 当前选中的模型 */
+  selectedModel: LLMModel
+  /** 设置选中的模型 */
+  setSelectedModel: (model: LLMModel) => void
+  /** 模型响应状态 */
+  response: ModelResponse
+  /** 设置响应状态 */
+  setResponse: React.Dispatch<React.SetStateAction<ModelResponse>>
+  /** 响应状态的 ref（用于避免闭包陷阱） */
+  responseRef: React.RefObject<ModelResponse>
+  /** 当前视图模式 */
+  viewMode: ViewMode
+  /** 设置视图模式 */
+  setViewMode: React.Dispatch<React.SetStateAction<ViewMode>>
+  /** 模型设置 */
+  settings: ModelSettings
+  /** 设置模型设置 */
+  setSettings: React.Dispatch<React.SetStateAction<ModelSettings>>
+  /** 生成内容 */
+  generate: (appId: string, otherResponseRef: React.RefObject<ModelResponse>, setOtherViewMode: React.Dispatch<React.SetStateAction<ViewMode>>) => Promise<void>
+  /** 停止生成 */
+  stop: () => void
+  /** 是否正在加载 */
+  isLoading: boolean
+}
+
+/**
+ * 单个模型生成的 Hook
+ * 
+ * 封装了单个模型的所有状态和生成逻辑
+ */
+export function useModelGeneration({
+  slot,
+  initialModelId,
+  fallbackModelIndex,
+  initialHtml,
+  onGenerationComplete,
+}: UseModelGenerationOptions): UseModelGenerationReturn {
+  // 获取初始模型
+  const getInitialModel = (): LLMModel => {
+    if (initialModelId) {
+      const model = getModelById(initialModelId)
+      if (model) return model
+    }
+    return models[fallbackModelIndex]
+  }
+
+  // 模型选择状态
+  const [selectedModel, setSelectedModel] = useState<LLMModel>(getInitialModel)
+
+  // 响应状态
+  const [response, setResponse] = useState<ModelResponse>({
+    ...initialModelResponse,
+    html: initialHtml || undefined,
+    completed: !!initialHtml,
+  })
+
+  // 视图模式
+  const [viewMode, setViewMode] = useState<ViewMode>(initialHtml ? 'preview' : 'code')
+
+  // 模型设置
+  const [settings, setSettings] = useState<ModelSettings>(initialModelSettings)
+
+  // 响应状态的 ref（避免闭包陷阱）
+  const responseRef = useRef(response)
+  responseRef.current = response
+
+  // AbortController 用于中断请求
+  const abortControllerRef = useRef<AbortController | null>(null)
+
+  // 停止生成
+  const stop = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+      abortControllerRef.current = null
+    }
+  }, [])
+
+  // 生成内容
+  const generate = useCallback(async (
+    appId: string,
+    otherResponseRef: React.RefObject<ModelResponse>,
+    setOtherViewMode: React.Dispatch<React.SetStateAction<ViewMode>>
+  ) => {
+    const startTime = Date.now()
+
+    // 停止之前的生成
+    stop()
+
+    // 创建新的 AbortController
+    abortControllerRef.current = new AbortController()
+    const signal = abortControllerRef.current.signal
+
+    // 切换到代码视图并重置状态
+    setViewMode('code')
+    setResponse({ content: '', reasoning: '', loading: true, completed: false, startTime })
+
+    try {
+      await fetchEventSource(`/api/apps/${appId}/generate?model=${slot}`, {
+        method: 'GET',
+        openWhenHidden: true,
+        signal,
+        onopen: async (res) => {
+          if (!res.ok) {
+            const errorText = await res.text()
+            throw new Error(`HTTP error: ${res.status} ${errorText}`)
+          }
+        },
+        onmessage: (msg) => {
+          if (msg.data === '[DONE]') {
+            return
+          }
+
+          try {
+            const data = JSON.parse(msg.data)
+            const delta = data.choices?.[0]?.delta
+
+            if (delta) {
+              setResponse((prev) => ({
+                ...prev,
+                content: prev.content + (delta.content || ''),
+                reasoning: (prev.reasoning || '') + (delta.reasoning_content || ''),
+              }))
+            }
+          } catch {
+            // Ignore parsing errors
+          }
+        },
+        onerror: (error) => {
+          throw error
+        },
+        onclose: () => {
+          setResponse((prev) => {
+            const html = extractHTMLFromMarkdown(prev.content)
+            const duration = (Date.now() - startTime) / 1000
+            const tokens = Math.floor(prev.content.length / 4)
+
+            // 如果另一个模型也已完成且有 HTML，则两边都切换到预览模式
+            if (otherResponseRef.current?.completed && otherResponseRef.current?.html && html) {
+              setViewMode('preview')
+              setOtherViewMode('preview')
+            }
+
+            // 保存 HTML 到数据库
+            if (html) {
+              const fieldName = slot === 'a' ? 'html_content_a' : 'html_content_b'
+              fetch(`/api/apps/${appId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ [fieldName]: html }),
+              }).catch((err) => {
+                console.error(`Failed to save HTML for model ${slot}:`, err)
+              })
+            }
+
+            // 通知生成完成
+            onGenerationComplete?.(html || undefined)
+
+            return {
+              ...prev,
+              loading: false,
+              completed: true,
+              html: html || undefined,
+              duration,
+              tokens,
+            }
+          })
+        },
+      })
+    } catch (error) {
+      if ((error as Error).name === 'AbortError') {
+        setResponse((prev) => ({ ...prev, loading: false }))
+        return
+      }
+      console.error(`Model ${slot} error:`, error)
+      setResponse((prev) => ({
+        ...prev,
+        content: prev.content + '\n\nError: ' + (error as Error).message,
+        loading: false,
+        completed: true,
+      }))
+    }
+  }, [slot, stop, onGenerationComplete])
+
+  return {
+    selectedModel,
+    setSelectedModel,
+    response,
+    setResponse,
+    responseRef,
+    viewMode,
+    setViewMode,
+    settings,
+    setSettings,
+    generate,
+    stop,
+    isLoading: response.loading,
+  }
+}

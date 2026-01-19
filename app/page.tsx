@@ -8,7 +8,6 @@ import { ArenaBattleModal } from '@/components/app/arena-battle-modal';
 import { GalleryGrid } from '@/components/app/gallery-grid';
 import { Plus, TrendingUp, Clock, Box, ArrowRight, Code, Image as ImageIcon, Video, PenTool, Gamepad2, Settings, Sparkles, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import { Accordion } from '@base-ui/react/accordion';
-import { cn } from '@/lib/utils';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/base/button';
@@ -116,7 +115,7 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative w-full px-6 py-16">
+        <section id="home" className="relative w-full px-6 py-16">
           <div className="
             mx-auto flex max-w-4xl flex-col items-center gap-8 text-center
           ">
@@ -277,7 +276,7 @@ export default function HomePage() {
         </section>
 
         {/* Hackathon Banner */}
-        <section className="px-6 py-4">
+        <section id="hackathon" className="px-6 py-4">
           <div className="mx-auto max-w-[1254px]">
             <div className="
               relative h-[380px] overflow-hidden rounded-3xl border
@@ -418,7 +417,7 @@ export default function HomePage() {
         </section>
 
         {/* Gallery Grid */}
-        <section className="bg-muted/30 pt-16 pb-20">
+        <section id="gallery" className="bg-muted/30 pt-16 pb-20">
           <div className="mx-auto max-w-7xl px-6">
             {/* Gallery Header */}
             <div className="mb-12">
@@ -435,7 +434,7 @@ export default function HomePage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="bg-background py-20">
+        <section id="faq" className="bg-background py-20">
           <div className="mx-auto max-w-7xl px-6">
             <h2 className="
               mb-12 text-center font-sans
@@ -452,7 +451,8 @@ export default function HomePage() {
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
                   hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
-                  group transition-colors
+                  group transition-colors cursor-pointer
+                  hover:bg-[#f0f0ed]
                 ">
                   <span>How does the Novita affiliate program work?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
@@ -474,7 +474,8 @@ export default function HomePage() {
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
                   hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
-                  group transition-colors
+                  group transition-colors cursor-pointer
+                  hover:bg-[#f0f0ed]
                 ">
                   <span>Do I need a website or blog to be part of the Novita affiliate program?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
@@ -496,7 +497,8 @@ export default function HomePage() {
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
                   hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
-                  group transition-colors
+                  group transition-colors cursor-pointer
+                  hover:bg-[#f0f0ed]
                 ">
                   <span>If a customer clicks my link but buys later without the link, do I still get commission?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
@@ -518,7 +520,8 @@ export default function HomePage() {
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
                   hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
-                  group transition-colors
+                  group transition-colors cursor-pointer
+                  hover:bg-[#f0f0ed]
                 ">
                   <span>When do I receive my rewards?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
@@ -540,7 +543,8 @@ export default function HomePage() {
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
                   hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
-                  group transition-colors
+                  group transition-colors cursor-pointer
+                  hover:bg-[#f0f0ed]
                 ">
                   <span>Where can I find Affiliate Terms of Service?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
@@ -562,7 +566,8 @@ export default function HomePage() {
                   font-sans text-xl
                   leading-6 font-semibold tracking-[-0.4px]
                   hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
-                  group transition-colors
+                  group transition-colors cursor-pointer
+                  hover:bg-[#f0f0ed]
                 ">
                   <span>Are there any restrictions on the affiliate program?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
