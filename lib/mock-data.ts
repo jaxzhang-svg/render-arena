@@ -84,7 +84,7 @@ export const mockApps: GalleryApp[] = [
 ];
 
 export function isMockMode(): boolean {
-  return process.env.NEXT_PUBLIC_MOCK_DATA === 'true';
+  return process.env.NEXT_PUBLIC_DEV_MODE === 'true';
 }
 
 // Mock user for dev mode - always "logged in"

@@ -16,11 +16,14 @@ npm run aidev         # Vercel AI SDK devtools
 
 ## Environment Variables
 
-Required in `.env.local`:
+Required in `.env` (copy from `.env.example`):
 ```bash
 NOVITA_API_KEY=your-novita-api-key
 E2B_API_KEY=your-e2b-api-key
+NEXT_PUBLIC_DEV_MODE=true
 ```
+
+Mock mode (local dev) uses in-memory data and a mock user (`dev@localhost`). It bypasses Supabase and does not persist data across server restarts.
 
 ---
 

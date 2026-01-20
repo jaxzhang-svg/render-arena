@@ -5,7 +5,7 @@ import { isMockMode } from '@/lib/mock-data';
 import { getMockApp } from '@/lib/mock-store';
 import type { App } from '@/types';
 
-const NOVITA_API_KEY = process.env.NEXT_NOVITA_API_KEY!;
+const NOVITA_API_KEY = process.env.NOVITA_API_KEY!;
 const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions';
 
 // HTML 生成系统提示词

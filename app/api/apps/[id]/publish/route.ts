@@ -89,7 +89,7 @@ export async function POST(
     // Generate title if name is missing or default
     if (!shortName || shortName === 'Untitled App') {
       try {
-        const apiKey = process.env.NEXT_NOVITA_API_KEY || process.env.NOVITA_API_KEY;
+        const apiKey = process.env.NOVITA_API_KEY;
         
         if (apiKey) {
           const prompt = app.prompt || 'An awesome AI app';

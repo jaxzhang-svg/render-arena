@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 
 // Check mock mode on client side
-const isMockMode = process.env.NEXT_PUBLIC_MOCK_DATA === 'true';
+const isMockMode = process.env.NEXT_PUBLIC_DEV_MODE === 'true';
 
 // Mock user for dev mode
 const mockUserData = {

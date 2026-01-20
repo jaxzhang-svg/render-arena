@@ -16,6 +16,13 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Local Dev Mode (Mock Data)
+
+Set `NEXT_PUBLIC_DEV_MODE=true` in `.env` (copy from `.env.example`) to bypass Supabase and use the in-memory mock store. This logs you in as `dev@localhost` and does not persist data between server restarts.
+
+In mock mode, `/api/auth/me` returns the mock user and the apps APIs operate on the in-memory store, so data resets on server restart.
+
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
