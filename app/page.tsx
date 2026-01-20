@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Header } from '@/components/app/header';
 import { Footer } from '@/components/app/footer';
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal';
@@ -274,21 +275,31 @@ export default function HomePage() {
             ">
               {/* Background container image (grid/line pattern) */}
               <div className="absolute left-0 top-0 h-[368px] w-[1253px] opacity-40">
-                <img 
-                  alt="" 
-                  className="absolute inset-0 max-w-none object-cover opacity-70 pointer-events-none size-full" 
-                  src="/images/hackathon-bg-container.png" 
-                />
+                <div className="relative size-full">
+                  <Image
+                    alt=""
+                    className="absolute inset-0 max-w-none object-cover opacity-70 pointer-events-none"
+                    src="/images/hackathon-bg-container.png"
+                    fill
+                    sizes="1253px"
+                    priority
+                  />
+                </div>
               </div>
 
               {/* Main artistic background image */}
               <div className="absolute left-1/2 top-1/2 h-[380px] w-[1248px] -translate-x-1/2 -translate-y-1/2 rounded-md">
                 <div className="absolute inset-0 bg-black rounded-md" />
-                <img 
-                  alt="" 
-                  className="absolute max-w-none object-cover opacity-60 rounded-md size-full" 
-                  src="/images/hackathon-bg-main.png" 
-                />
+                <div className="absolute inset-0 rounded-md">
+                  <Image
+                    alt=""
+                    className="absolute max-w-none object-cover opacity-60 rounded-md"
+                    src="/images/hackathon-bg-main.png"
+                    fill
+                    sizes="1248px"
+                    priority
+                  />
+                </div>
               </div>
 
               {/* Content */}
@@ -466,7 +477,7 @@ export default function HomePage() {
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
-                  The Novita affiliate program allows you to earn commissions by referring new customers to our platform. Once you sign up, you'll receive a unique tracking link. Share this link on your website, blog, or social media channels. When someone clicks your link and makes a purchase, you earn a percentage of the sale.
+                  The Novita affiliate program allows you to earn commissions by referring new customers to our platform. Once you sign up, you&apos;ll receive a unique tracking link. Share this link on your website, blog, or social media channels. When someone clicks your link and makes a purchase, you earn a percentage of the sale.
                 </Accordion.Panel>
               </Accordion.Item>
 
@@ -489,7 +500,7 @@ export default function HomePage() {
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
-                  No, you don't need a website or blog to participate. You can share your affiliate link through social media, email newsletters, or any other platform where you have an audience.
+                  No, you don&apos;t need a website or blog to participate. You can share your affiliate link through social media, email newsletters, or any other platform where you have an audience.
                 </Accordion.Panel>
               </Accordion.Item>
 
@@ -512,7 +523,7 @@ export default function HomePage() {
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
-                  Yes, our tracking system uses cookies that typically last 30 days. If a customer clicks your link and makes a purchase within that timeframe, you'll receive credit for the referral.
+                  Yes, our tracking system uses cookies that typically last 30 days. If a customer clicks your link and makes a purchase within that timeframe, you&apos;ll receive credit for the referral.
                 </Accordion.Panel>
               </Accordion.Item>
 
@@ -558,7 +569,7 @@ export default function HomePage() {
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
-                  You can find our Affiliate Terms of Service in your affiliate dashboard or on our website's legal section. Make sure to review them carefully before participating in the program.
+                  You can find our Affiliate Terms of Service in your affiliate dashboard or on our website&apos;s legal section. Make sure to review them carefully before participating in the program.
                 </Accordion.Panel>
               </Accordion.Item>
 

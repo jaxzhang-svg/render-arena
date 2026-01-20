@@ -13,7 +13,6 @@ import 'katex/dist/katex.min.css'
 interface StreamingCodeDisplayProps {
   content: string
   reasoning?: string
-  onPreview?: (html: string) => void
   isStreaming?: boolean
 }
 
@@ -23,7 +22,6 @@ interface StreamingCodeDisplayProps {
 export function StreamingCodeDisplay({
   content,
   reasoning,
-  onPreview,
   isStreaming = false,
 }: StreamingCodeDisplayProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -35,7 +33,6 @@ export function StreamingCodeDisplay({
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight
       isAutoScrolling.current = true
-      setShowScrollButton(false)
     }
   }
 
@@ -100,7 +97,10 @@ export function StreamingCodeDisplay({
 
       {showScrollButton && (
         <button
-          onClick={scrollToBottom}
+          onClick={() => {
+            scrollToBottom()
+            setShowScrollButton(false)
+          }}
           className="absolute bottom-8 right-8 z-10 flex size-8 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 transition-all hover:bg-gray-50 dark:bg-zinc-800 dark:ring-white/10"
         >
           <ArrowDown className="size-4 text-gray-600 dark:text-gray-400" />

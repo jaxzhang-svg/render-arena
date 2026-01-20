@@ -25,8 +25,6 @@ interface ModelPanelProps {
   onModelChange: (model: LLMModel) => void
   /** 模型响应状态 */
   response: ModelResponse
-  /** 更新响应状态 */
-  onResponseChange: (updater: (prev: ModelResponse) => ModelResponse) => void
   /** 当前视图模式 (code/preview) */
   viewMode: ViewMode
   /** 视图模式变更回调 */
@@ -49,7 +47,6 @@ export function ModelPanel({
   selectedModel,
   onModelChange,
   response,
-  onResponseChange,
   viewMode,
   onViewModeChange,
   settings,
@@ -236,10 +233,6 @@ export function ModelPanel({
             content={response.content}
             reasoning={response.reasoning}
             isStreaming={response.loading}
-            onPreview={(html) => {
-              onResponseChange((prev) => ({ ...prev, html }))
-              onViewModeChange('preview')
-            }}
           />
         </div>
 

@@ -66,12 +66,20 @@ export async function GET(
     const { data: { user } } = await supabase.auth.getUser();
 
     // 只有作者或匿名创建者可以生成
-    if (app.user_id && app.user_id !== user?.id) {
+    if (appData.user_id && appData.user_id !== user?.id) {
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
         { status: 403, headers: { 'Content-Type': 'application/json' } }
       );
     }
+  }
+
+  // TypeScript guard - app is guaranteed non-null at this point
+  if (!app) {
+    return new Response(
+      JSON.stringify({ error: 'App not found' }),
+      { status: 404, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 
   const modelId = model === 'a' ? app.model_a : app.model_b;

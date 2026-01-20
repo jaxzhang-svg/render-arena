@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog } from '@base-ui/react/dialog';
-import { X, Trophy, Gift, Calendar, Users, Zap, Check } from 'lucide-react';
+import { Trophy, Gift, Calendar, Users, Zap, Check } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { cn } from '@/lib/utils';
 
@@ -55,7 +55,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
 
           {/* Main Content Grid */}
           <div className="grid grid-cols-2 gap-8">
-            {/* What You'll Build */}
+            {/* What You&apos;ll Build */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Zap className="size-5 text-[#fdc700]" />
@@ -63,7 +63,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                   font-sans text-2xl leading-[38px]
                   font-semibold text-white
                 ">
-                  What You'll Build
+                  What You&apos;ll Build
                 </h3>
               </div>
               
@@ -336,7 +336,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
               space-y-3 rounded-[14px] border border-[rgba(255,255,255,0.1)]
               bg-[rgba(255,255,255,0.05)] p-5
             ">
-              <h4 className="text-base font-bold tracking-[-0.31px] text-white">How You're Judged</h4>
+              <h4 className="text-base font-bold tracking-[-0.31px] text-white">How You&apos;re Judged</h4>
               
               <div className="space-y-3">
                 <div>

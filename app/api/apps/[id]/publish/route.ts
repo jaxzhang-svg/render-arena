@@ -42,7 +42,7 @@ export async function POST(
         );
       }
 
-      let shortName = name || app.name || `Dev App ${id.slice(-6)}`;
+      const shortName = name || app.name || `Dev App ${id.slice(-6)}`;
 
       updateMockApp(id, {
         is_public: true,

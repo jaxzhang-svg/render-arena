@@ -48,7 +48,11 @@ export interface UseScreenRecorderReturn {
  * ```
  */
 export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseScreenRecorderReturn {
-  const { onRecordingComplete, onError, preferredFormat = 'mp4', convertToMp4 = false } = options
+  const { onRecordingComplete, onError, preferredFormat = 'mp4' } = options
+
+  type CropTargetConstructor = { fromElement: (element: Element) => Promise<unknown> }
+  type CroppableMediaTrack = MediaStreamTrack & { cropTo?: (target: unknown) => Promise<void> }
+  type RecordRTCLike = { destroy?: () => void }
 
   const [isRecording, setIsRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
@@ -64,17 +68,23 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
 
   // Detect supported video format
   const getSupportedFormat = useCallback((): { mimeType: string; format: VideoFormat } => {
-    const formats = [
+    const mp4Formats = [
       // MP4 formats - use avc3 to avoid codec description changes
       { mimeType: 'video/mp4; codecs=avc3,mp4a', format: 'mp4' as VideoFormat },
       { mimeType: 'video/mp4; codecs=avc1.42E01E,mp4a.40.2', format: 'mp4' as VideoFormat },
       { mimeType: 'video/mp4; codecs=h264,aac', format: 'mp4' as VideoFormat },
       { mimeType: 'video/mp4', format: 'mp4' as VideoFormat },
+    ]
+    const webmFormats = [
       // WebM formats as fallback
       { mimeType: 'video/webm; codecs=h264', format: 'webm' as VideoFormat },
       { mimeType: 'video/webm; codecs=vp9', format: 'webm' as VideoFormat },
       { mimeType: 'video/webm', format: 'webm' as VideoFormat },
     ]
+
+    const formats = preferredFormat === 'webm'
+      ? [...webmFormats, ...mp4Formats]
+      : [...mp4Formats, ...webmFormats]
 
     for (const { mimeType, format } of formats) {
       if (MediaRecorder.isTypeSupported(mimeType)) {
@@ -85,7 +95,7 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
 
     console.warn('[useScreenRecorder] No supported format found, falling back to webm')
     return { mimeType: 'video/webm', format: 'webm' }
-  }, [])
+  }, [preferredFormat])
 
   // Cleanup on unmount
   useEffect(() => {
@@ -94,10 +104,13 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
         clearInterval(timerRef.current)
       }
       if (recorderRef.current) {
-        const recorder = recorderRef.current as any
+        const recorder = recorderRef.current
         // RecordRTC has destroy(), MediaRecorder doesn't need cleanup
-        if (recorder.destroy && typeof recorder.destroy === 'function') {
-          recorder.destroy()
+        if (recorder && 'destroy' in recorder) {
+          const recordRtcRecorder = recorder as RecordRTCLike
+          if (typeof recordRtcRecorder.destroy === 'function') {
+            recordRtcRecorder.destroy()
+          }
         }
       }
       if (streamRef.current) {
@@ -125,78 +138,6 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
       }
     }
   }, [isRecording])
-
-  const startRecording = useCallback(async () => {
-    try {
-      // Clear previous blob and format
-      setRecordedBlob(null)
-      setRecordedFormat(null)
-      setRecordingTime(0)
-      chunksRef.current = []
-
-      // Use preferCurrentTab to automatically select current tab
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: true,
-        audio: false,
-        preferCurrentTab: true,
-      } as any)
-
-      streamRef.current = stream
-
-      const videoTrack = stream.getVideoTracks()[0]
-
-      // Try to crop to the preview container using Region Capture API
-      if (previewContainerRef.current && 'CropTarget' in window) {
-        try {
-          const cropTarget = await (window as any).CropTarget.fromElement(
-            previewContainerRef.current
-          )
-          // Use cropTo() method as per MDN documentation
-          await (videoTrack as any).cropTo(cropTarget)
-          console.log('[useScreenRecorder] Successfully cropped to preview area')
-        } catch (cropError) {
-          console.warn('[useScreenRecorder] Failed to crop to element:', cropError)
-          // Continue without cropping (full tab)
-        }
-      }
-
-      // Get supported format (prefer MP4)
-      const { mimeType, format } = getSupportedFormat()
-      console.log('[useScreenRecorder] Requested format:', format, 'with mimeType:', mimeType)
-
-      // Use MediaRecorder directly for better format support
-      const mediaRecorder = new MediaRecorder(stream, { mimeType })
-
-      // Log the actual mimeType that the recorder is using
-      console.log('[useScreenRecorder] Recorder created with actual mimeType:', mediaRecorder.mimeType)
-
-      // If the actual mimeType differs from what we requested, log it
-      if (mediaRecorder.mimeType !== mimeType) {
-        console.warn('[useScreenRecorder] Browser changed mimeType to:', mediaRecorder.mimeType)
-      }
-
-      // Collect data chunks
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data && event.data.size > 0) {
-          chunksRef.current.push(event.data)
-        }
-      }
-
-      mediaRecorder.start(100) // Collect data every 100ms
-      recorderRef.current = mediaRecorder
-      setRecordedFormat(format)
-      setIsRecording(true)
-
-      // Handle user stopping the share via browser UI
-      videoTrack.onended = () => {
-        stopRecording()
-      }
-    } catch (error) {
-      const err = error instanceof Error ? error : new Error('Failed to start recording')
-      console.error('[useScreenRecorder] Error starting recording:', err)
-      onError?.(err)
-    }
-  }, [onError, getSupportedFormat])
 
   const stopRecording = useCallback(() => {
     if (recorderRef.current && isRecording) {
@@ -241,6 +182,80 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
       recorder.stop()
     }
   }, [isRecording, onRecordingComplete, recordedFormat])
+
+  const startRecording = useCallback(async () => {
+    try {
+      // Clear previous blob and format
+      setRecordedBlob(null)
+      setRecordedFormat(null)
+      setRecordingTime(0)
+      chunksRef.current = []
+
+      // Use preferCurrentTab to automatically select current tab
+      const displayMediaOptions: MediaStreamConstraints & { preferCurrentTab?: boolean } = {
+        video: true,
+        audio: false,
+        preferCurrentTab: true,
+      }
+      const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+
+      streamRef.current = stream
+
+      const videoTrack = stream.getVideoTracks()[0]
+
+      // Try to crop to the preview container using Region Capture API
+      const cropTargetCtor = (window as Window & typeof globalThis & { CropTarget?: CropTargetConstructor }).CropTarget
+      if (previewContainerRef.current && cropTargetCtor) {
+        try {
+          const cropTarget = await cropTargetCtor.fromElement(previewContainerRef.current)
+          const croppableTrack = videoTrack as CroppableMediaTrack
+          if (croppableTrack.cropTo) {
+            await croppableTrack.cropTo(cropTarget)
+            console.log('[useScreenRecorder] Successfully cropped to preview area')
+          }
+        } catch (cropError) {
+          console.warn('[useScreenRecorder] Failed to crop to element:', cropError)
+          // Continue without cropping (full tab)
+        }
+      }
+
+      // Get supported format (prefer MP4)
+      const { mimeType, format } = getSupportedFormat()
+      console.log('[useScreenRecorder] Requested format:', format, 'with mimeType:', mimeType)
+
+      // Use MediaRecorder directly for better format support
+      const mediaRecorder = new MediaRecorder(stream, { mimeType })
+
+      // Log the actual mimeType that the recorder is using
+      console.log('[useScreenRecorder] Recorder created with actual mimeType:', mediaRecorder.mimeType)
+
+      // If the actual mimeType differs from what we requested, log it
+      if (mediaRecorder.mimeType !== mimeType) {
+        console.warn('[useScreenRecorder] Browser changed mimeType to:', mediaRecorder.mimeType)
+      }
+
+      // Collect data chunks
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          chunksRef.current.push(event.data)
+        }
+      }
+
+      mediaRecorder.start(100) // Collect data every 100ms
+      recorderRef.current = mediaRecorder
+      setRecordedFormat(format)
+      setIsRecording(true)
+
+      // Handle user stopping the share via browser UI
+      videoTrack.onended = () => {
+        stopRecording()
+      }
+    } catch (error) {
+      const err = error instanceof Error ? error : new Error('Failed to start recording')
+      console.error('[useScreenRecorder] Error starting recording:', err)
+      onError?.(err)
+    }
+  }, [onError, getSupportedFormat, stopRecording])
 
   const resetRecording = useCallback(() => {
     setRecordedBlob(null)

@@ -1,15 +1,14 @@
 'use client';
 
 import { Dialog } from '@base-ui/react/dialog';
-import { Download, Copy, X, Link as LinkIcon, Play, Globe, Check } from 'lucide-react';
-import { useState, useEffect, useCallback } from 'react';
+import { Download, X, Link as LinkIcon, Check } from 'lucide-react';
+import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
 
 // Local Assets
 const imgLinkedin = "/images/linkedin-logo.svg";
 const imgTwitter = "/images/twitter-logo.png";
 const imgFacebook = "/images/facebook-logo.png";
-
-type VideoStatus = 'generating' | 'uploading' | 'ready';
 
 interface ShareModalProps {
   open?: boolean;
@@ -34,9 +33,8 @@ export function ShareModal({
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
   const [publishToGallery, setPublishToGallery] = useState(true);
-  // Default unpublished for fresh share
-  const [isPublished, setIsPublished] = useState(false);
   const [agreedToPolicy, setAgreedToPolicy] = useState(true);
+  const isPublishedRef = useRef(false);
 
   // Create video URL from blob for preview
   const videoUrl = videoBlob ? URL.createObjectURL(videoBlob) : null;
@@ -54,12 +52,12 @@ export function ShareModal({
   // Reset published state when modal opens
   useEffect(() => {
     if (open) {
-      setIsPublished(false);
+      isPublishedRef.current = false;
     }
   }, [open]);
 
-  const handlePublishToGallery = useCallback(() => {
-    if (!appId || isPublished || !publishToGallery) return;
+  const handlePublishToGallery = () => {
+    if (!appId || isPublishedRef.current || !publishToGallery) return;
 
     // Silent execution - no loading state
     fetch(`/api/apps/${appId}/publish`, {
@@ -68,19 +66,19 @@ export function ShareModal({
       body: JSON.stringify({}),
     }).then(response => {
       if (response.ok) {
-        setIsPublished(true);
+        isPublishedRef.current = true;
       }
     }).catch(error => {
       console.error('Error publishing to gallery:', error);
     });
-  }, [appId, isPublished]);
+  };
 
   const handleCopy = () => {
     // If not agreed, do nothing (though button should be disabled)
     if (!agreedToPolicy) return;
 
     // Trigger publish in background if needed
-    if (appId && !isPublished) {
+    if (appId && !isPublishedRef.current) {
       handlePublishToGallery();
     }
 
@@ -105,7 +103,7 @@ export function ShareModal({
     if (!agreedToPolicy) return;
 
     // Trigger publish in background if needed
-    if (appId && !isPublished) {
+    if (appId && !isPublishedRef.current) {
       handlePublishToGallery();
     }
 
@@ -155,10 +153,13 @@ export function ShareModal({
                     poster={previewImage}
                   />
                 ) : previewImage ? (
-                  <img
+                  <Image
                     src={previewImage}
                     alt="Preview"
-                    className="w-full h-full object-cover opacity-90"
+                    fill
+                    sizes="(max-width: 446px) 100vw, 446px"
+                    className="object-cover opacity-90"
+                    unoptimized
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 opacity-90" />
@@ -211,6 +212,7 @@ export function ShareModal({
                 {/* Twitter */}
                 <button
                   disabled={!agreedToPolicy}
+                  onClick={() => handleSocialShare('twitter')}
                   className={`flex-1 cursor-pointer border rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors
                   ${!agreedToPolicy
                       ? 'border-gray-100 opacity-50 cursor-not-allowed bg-gray-50'
@@ -218,7 +220,7 @@ export function ShareModal({
                     }`}
                 >
                   <div className="size-8 rounded-full flex items-center justify-center overflow-hidden">
-                    <img src={imgTwitter} alt="Twitter" className="size-full object-cover" />
+                    <Image src={imgTwitter} alt="Twitter" width={32} height={32} className="size-full object-cover" />
                   </div>
                   <span className="text-[12px] font-medium text-[#4a5565] leading-4">
                     Twitter
@@ -228,6 +230,7 @@ export function ShareModal({
                 {/* LinkedIn */}
                 <button
                   disabled={!agreedToPolicy}
+                  onClick={() => handleSocialShare('linkedin')}
                   className={`flex-1 cursor-pointer border rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors
                   ${!agreedToPolicy
                       ? 'border-gray-100 opacity-50 cursor-not-allowed bg-gray-50'
@@ -235,7 +238,7 @@ export function ShareModal({
                     }`}
                 >
                   <div className="size-8 relative">
-                    <img alt="LinkedIn" className="block max-w-none size-full" src={imgLinkedin} />
+                    <Image alt="LinkedIn" className="block max-w-none size-full" src={imgLinkedin} width={32} height={32} />
                   </div>
                   <span className="text-[12px] font-medium text-[#4a5565] leading-4">
                     LinkedIn
@@ -245,6 +248,7 @@ export function ShareModal({
                 {/* Facebook */}
                 <button
                   disabled={!agreedToPolicy}
+                  onClick={() => handleSocialShare('facebook')}
                   className={`flex-1 cursor-pointer border rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors
                   ${!agreedToPolicy
                       ? 'border-gray-100 opacity-50 cursor-not-allowed bg-gray-50'
@@ -252,7 +256,7 @@ export function ShareModal({
                     }`}
                 >
                   <div className="size-8 rounded-full flex items-center justify-center overflow-hidden">
-                    <img src={imgFacebook} alt="Facebook" className="size-full object-cover" />
+                    <Image src={imgFacebook} alt="Facebook" width={32} height={32} className="size-full object-cover" />
                   </div>
                   <span className="text-[12px] font-medium text-[#4a5565] leading-4">
                     Facebook

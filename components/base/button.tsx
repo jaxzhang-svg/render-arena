@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentPropsWithoutRef, forwardRef, cloneElement, isValidElement } from 'react';
+import { ComponentPropsWithoutRef, forwardRef, cloneElement, isValidElement, type ReactElement } from 'react';
 import { cn } from '@/lib/utils';
 
 interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
@@ -37,11 +37,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
     
     if (asChild && isValidElement(children)) {
-      return cloneElement(children, {
+      const child = children as ReactElement<{ className?: string }>;
+      return cloneElement(child, {
         ...props,
-        ...(children.props as Record<string, any>),
-        className: cn(computedClassName, (children.props as any).className),
-      } as any);
+        ...child.props,
+        className: cn(computedClassName, child.props.className),
+      });
     }
     
     return (

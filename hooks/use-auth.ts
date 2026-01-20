@@ -117,8 +117,29 @@ export function useAuth(): UseAuthReturn {
       return;
     }
 
+    let isMounted = true;
+
     // 初始化时获取用户
-    fetchUser();
+    supabase.auth.getSession()
+      .then(({ data: { session }, error }) => {
+        if (!isMounted) return;
+        if (error) {
+          console.error('Error fetching session:', error);
+          setState({ user: null, session: null, loading: false });
+          return;
+        }
+
+        setState({
+          user: session?.user ?? null,
+          session: session ?? null,
+          loading: false,
+        });
+      })
+      .catch((error) => {
+        if (!isMounted) return;
+        console.error('Error in fetchUser:', error);
+        setState({ user: null, session: null, loading: false });
+      });
 
     // 监听认证状态变化
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -140,9 +161,10 @@ export function useAuth(): UseAuthReturn {
 
     // 清理订阅
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
-  }, [fetchUser, supabase]);
+  }, [supabase]);
 
   return {
     ...state,

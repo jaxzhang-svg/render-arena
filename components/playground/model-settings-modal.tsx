@@ -9,10 +9,12 @@ import { cn } from '@/lib/utils'
 
 interface ModelSettingsPopoverProps {
   className?: string
-  settings: {
-    temperature: number
-  }
-  onSettingsChange: (settings: any) => void
+  settings: ModelSettings
+  onSettingsChange: (settings: ModelSettings) => void
+}
+
+interface ModelSettings {
+  temperature: number
 }
 
 export function ModelSettingsPopover({
@@ -78,9 +80,10 @@ export function ModelSettingsPopover({
                   <div className="relative pt-2 pb-0">
                     <Slider.Root
                       value={[settings.temperature]}
-                      onValueChange={(value) =>
-                        onSettingsChange({ ...settings, temperature: value })
-                      }
+                      onValueChange={(value) => {
+                        const [temperature] = value
+                        onSettingsChange({ ...settings, temperature })
+                      }}
                       min={0}
                       max={2}
                       step={0.1}

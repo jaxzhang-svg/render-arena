@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { isMockMode, mockUser } from '@/lib/mock-data';
 import { getMockApp, updateMockApp, isAppLikedByUser } from '@/lib/mock-store';
-import type { App, AppDetailResponse } from '@/types';
+import type { AppDetailResponse } from '@/types';
 
 /**
  * GET /api/apps/[id]

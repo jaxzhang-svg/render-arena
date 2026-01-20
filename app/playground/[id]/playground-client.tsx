@@ -183,7 +183,6 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
               selectedModel={modelA.selectedModel}
               onModelChange={modelA.setSelectedModel}
               response={modelA.response}
-              onResponseChange={modelA.setResponse}
               viewMode={modelA.viewMode}
               onViewModeChange={modelA.setViewMode}
               settings={modelA.settings}
@@ -200,7 +199,6 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
               selectedModel={modelB.selectedModel}
               onModelChange={modelB.setSelectedModel}
               response={modelB.response}
-              onResponseChange={modelB.setResponse}
               viewMode={modelB.viewMode}
               onViewModeChange={modelB.setViewMode}
               settings={modelB.settings}

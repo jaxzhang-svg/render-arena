@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { Heart, Copy, Box, ChevronDown, Download } from 'lucide-react';
+import { Heart, Copy, Box, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
-import { galleryCategories, type GalleryCategoryId } from '@/lib/config';
+import { type GalleryCategoryId } from '@/lib/config';
 import { useRouter } from 'next/navigation';
 import type { GalleryApp } from '@/types';
 
@@ -14,10 +14,9 @@ interface GalleryGridProps {
 
 interface GalleryAppCardProps {
   app: GalleryApp;
-  currentCategory: GalleryCategoryId;
 }
 
-function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
+function GalleryAppCard({ app }: GalleryAppCardProps) {
   const router = useRouter();
   const [likeCount, setLikeCount] = useState(app.like_count);
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
@@ -226,7 +225,7 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
       {/* Apps Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {apps.map((app) => (
-          <GalleryAppCard key={app.id} app={app} currentCategory={selectedCategory} />
+          <GalleryAppCard key={app.id} app={app} />
         ))}
       </div>
 

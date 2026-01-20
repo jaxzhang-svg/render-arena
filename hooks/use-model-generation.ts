@@ -289,7 +289,7 @@ export function useModelGeneration({
         completed: true,
       }))
     }
-  }, [slot, stop, onGenerationComplete])
+  }, [slot, stop, onGenerationComplete, flushBuffer])
 
   return {
     selectedModel,

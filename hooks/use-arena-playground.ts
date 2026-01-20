@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useModelGeneration } from './use-model-generation'
 import type { App } from '@/types'
@@ -160,7 +160,7 @@ export function useArenaPlayground({
     }
 
     await modelA.generate(currentAppId)
-  }, [currentAppId, handleGenerate, modelA])
+  }, [currentAppId, modelA])
 
   // 单独重新生成 Model B
   const handleGenerateModelB = useCallback(async () => {
@@ -169,7 +169,7 @@ export function useArenaPlayground({
     }
 
     await modelB.generate(currentAppId)
-  }, [currentAppId, handleGenerate, modelB])
+  }, [currentAppId, modelB])
 
 // 自动开始生成逻辑已移动到 PlaygroundClient 组件中
 
