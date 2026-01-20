@@ -61,24 +61,32 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   const previewContainerRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const chunksRef = useRef<Blob[]>([])
+  
+  // Use refs to avoid stale closure issues
+  const isRecordingRef = useRef(false)
+  const onRecordingCompleteRef = useRef(onRecordingComplete)
+  const recordedFormatRef = useRef<VideoFormat | null>(null)
+  
+  // Keep refs in sync with state
+  isRecordingRef.current = isRecording
+  onRecordingCompleteRef.current = onRecordingComplete
+  recordedFormatRef.current = recordedFormat
 
-  // Detect supported video format
+  // Detect supported video format - prefer WebM for simplicity (widely supported, no transcoding needed)
   const getSupportedFormat = useCallback((): { mimeType: string; format: VideoFormat } => {
     const formats = [
-      // MP4 formats - use avc3 to avoid codec description changes
-      { mimeType: 'video/mp4; codecs=avc3,mp4a', format: 'mp4' as VideoFormat },
-      { mimeType: 'video/mp4; codecs=avc1.42E01E,mp4a.40.2', format: 'mp4' as VideoFormat },
-      { mimeType: 'video/mp4; codecs=h264,aac', format: 'mp4' as VideoFormat },
-      { mimeType: 'video/mp4', format: 'mp4' as VideoFormat },
-      // WebM formats as fallback
-      { mimeType: 'video/webm; codecs=h264', format: 'webm' as VideoFormat },
+      // WebM formats - preferred (native browser support, Cloudflare accepts it)
       { mimeType: 'video/webm; codecs=vp9', format: 'webm' as VideoFormat },
+      { mimeType: 'video/webm; codecs=vp8', format: 'webm' as VideoFormat },
       { mimeType: 'video/webm', format: 'webm' as VideoFormat },
+      // MP4 as fallback (some browsers like Safari may need this)
+      { mimeType: 'video/mp4; codecs=avc1.42E01E,mp4a.40.2', format: 'mp4' as VideoFormat },
+      { mimeType: 'video/mp4', format: 'mp4' as VideoFormat },
     ]
 
     for (const { mimeType, format } of formats) {
       if (MediaRecorder.isTypeSupported(mimeType)) {
-        console.log('[useScreenRecorder] Supported format:', mimeType)
+        console.log('[useScreenRecorder] Using format:', mimeType)
         return { mimeType, format }
       }
     }
@@ -199,8 +207,18 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   }, [onError, getSupportedFormat])
 
   const stopRecording = useCallback(() => {
-    if (recorderRef.current && isRecording) {
+    console.log('[useScreenRecorder] stopRecording called, recorderRef:', !!recorderRef.current, 'isRecordingRef:', isRecordingRef.current)
+    
+    // Use ref to check recording state instead of state variable (avoids stale closure)
+    if (recorderRef.current && isRecordingRef.current) {
       const recorder = recorderRef.current as MediaRecorder
+      
+      // Check if recorder is in a valid state
+      if (recorder.state === 'inactive') {
+        console.warn('[useScreenRecorder] Recorder already inactive')
+        setIsRecording(false)
+        return
+      }
 
       recorder.onstop = () => {
         // Get the actual mimeType from the recorder
@@ -213,20 +231,16 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
 
         console.log('[useScreenRecorder] Recording complete:', {
           size: blob.size,
-          requestedFormat: recordedFormat,
-          requestedMimeType: `${recordedFormat}/mp4`,
+          requestedFormat: recordedFormatRef.current,
           actualMimeType: actualMimeType,
           blobType: blob.type,
         })
 
         // Update format based on actual blob type
         const actualFormat = blob.type.includes('mp4') ? 'mp4' : 'webm'
-        if (actualFormat !== recordedFormat) {
-          console.warn('[useScreenRecorder] Format mismatch! Requested:', recordedFormat, 'Got:', actualFormat)
-        }
 
         setRecordedBlob(blob)
-        onRecordingComplete?.(blob, actualFormat)
+        onRecordingCompleteRef.current?.(blob, actualFormat)
 
         // Stop all tracks
         if (streamRef.current) {
@@ -239,8 +253,10 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
       }
 
       recorder.stop()
+    } else {
+      console.warn('[useScreenRecorder] Cannot stop: no recorder or not recording')
     }
-  }, [isRecording, onRecordingComplete, recordedFormat])
+  }, []) // Remove dependencies to avoid stale closures
 
   const resetRecording = useCallback(() => {
     setRecordedBlob(null)

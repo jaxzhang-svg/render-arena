@@ -1,11 +1,14 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import { Heart, Copy, Box, ChevronDown, Download } from 'lucide-react';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { Heart, Copy, Box, ChevronDown, Download, Play } from 'lucide-react';
 import Image from 'next/image';
 import { galleryCategories, getModelById, type GalleryCategoryId } from '@/lib/config';
 import { useRouter } from 'next/navigation';
 import type { GalleryApp } from '@/types';
+
+// Cloudflare Stream customer code
+const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || '';
 
 interface GalleryGridProps {
   initialApps?: GalleryApp[];
@@ -22,9 +25,20 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   const [likeCount, setLikeCount] = useState(app.like_count);
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
   const [isLiking, setIsLiking] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const modelA = getModelById(app.model_a);
   const modelB = getModelById(app.model_b);
+  
+  // Check if this app has a video preview
+  const hasVideo = !!app.preview_video_url && !!CLOUDFLARE_CUSTOMER_CODE;
+  const videoUrl = hasVideo 
+    ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/iframe?muted=true&loop=true&autoplay=true&poster=https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/thumbnails/thumbnail.jpg`
+    : null;
+  const thumbnailUrl = hasVideo
+    ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/thumbnails/thumbnail.jpg?time=1s`
+    : '/images/default-poster.png';
 
   const handleLike = async () => {
     if (isLiking) return;
@@ -39,7 +53,6 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
       const data = await response.json();
 
       if (response.status === 401) {
-        // 用户未登录，可以提示登录
         alert('请先登录后再点赞');
         return;
       }
@@ -67,18 +80,31 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   return (
     <div
       onClick={() => router.push(`/gallery/${app.id}`)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className="
         group relative flex flex-col gap-4
         overflow-hidden
       "
     >
       <div className="bg-[#ececf0] relative flex h-[344px] w-full overflow-hidden rounded-2xl cursor-pointer">
-        <Image
-          src="/images/default-poster.png"
-          alt={app.name || 'App Preview'}
-          fill
-          className="object-cover"
-        />
+        {/* Video or Image Preview */}
+        {hasVideo && isHovered ? (
+          <iframe
+            ref={iframeRef}
+            src={videoUrl!}
+            className="absolute inset-0 w-full h-full border-0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <Image
+            src={thumbnailUrl}
+            alt={app.name || 'App Preview'}
+            fill
+            className="object-cover"
+          />
+        )}
 
         {/* Model Badge */}
         {modelA ? <div className="absolute top-[18px] left-3 z-10">
@@ -119,14 +145,18 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         {/* VS Badge / Run Button Interaction */}
         <div className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
           <div className="relative flex items-center justify-center">
-            {/* VS Circle */}
-            <div className="
+            {/* VS Circle or Play icon for video */}
+            <div className={`
               bg-white border-white/50 flex size-10 items-center
               justify-center rounded-full border shadow-[0px_0px_15px_0px_rgba(255,255,255,0.3)]
               transition-all duration-300
               group-hover:scale-0 group-hover:opacity-0
-            ">
-              <span className="text-black text-xs font-black tracking-tight">VS</span>
+            `}>
+              {hasVideo ? (
+                <Play className="size-4 text-black fill-current ml-0.5" />
+              ) : (
+                <span className="text-black text-xs font-black tracking-tight">VS</span>
+              )}
             </div>
 
             {/* View Button (appears on hover) */}
@@ -137,7 +167,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               duration-300
               group-hover:scale-100 group-hover:opacity-100
             ">
-              View Battle
+              {hasVideo ? 'Watch Battle' : 'View Battle'}
             </div>
           </div>
         </div>
