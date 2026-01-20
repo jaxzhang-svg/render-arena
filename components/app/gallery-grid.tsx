@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Heart, Copy, Box, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
-import { type GalleryCategoryId } from '@/lib/config';
+import { galleryCategories, getModelById, type GalleryCategoryId } from '@/lib/config';
 import { useRouter } from 'next/navigation';
 import type { GalleryApp } from '@/types';
 
@@ -21,7 +21,9 @@ function GalleryAppCard({ app }: GalleryAppCardProps) {
   const [likeCount, setLikeCount] = useState(app.like_count);
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
   const [isLiking, setIsLiking] = useState(false);
-  const [copied, setCopied] = useState(false);
+
+  const modelA = getModelById(app.model_a);
+  const modelB = getModelById(app.model_b);
 
   const handleLike = async () => {
     if (isLiking) return;
@@ -55,8 +57,7 @@ function GalleryAppCard({ app }: GalleryAppCardProps) {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(app.prompt);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      router.push(`/playground/new?prompt=${encodeURIComponent(app.prompt)}&category=${encodeURIComponent(currentCategory)}`);
     } catch (error) {
       console.error('Failed to copy:', error);
     }
@@ -77,6 +78,42 @@ function GalleryAppCard({ app }: GalleryAppCardProps) {
           fill
           className="object-cover"
         />
+
+        {/* Model Badge */}
+        {modelA ? <div className="absolute top-[18px] left-3 z-10">
+          <div className="
+              inline-flex items-center gap-1.5 rounded-full px-[11px] py-0.5
+              text-sm font-medium font-sans text-white backdrop-blur-md h-[29px]
+              bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
+            ">
+            <Image 
+              src={modelA.icon} 
+              alt={modelA.name} 
+              width={20} 
+              height={20} 
+              className="size-5 rounded-sm"
+            />
+            {modelA?.name}
+          </div>
+        </div> : null}
+        {
+          modelB ? <div className="absolute top-[18px] right-3 z-10">
+            <div className="
+              inline-flex items-center gap-1.5 rounded-full px-[11px] py-0.5
+              text-sm font-medium text-white backdrop-blur-md h-[29px]
+              bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
+            ">
+              <Image 
+                src={modelB.icon}
+                alt={modelB.name} 
+                width={20} 
+                height={20} 
+                className="size-5 rounded-sm"
+              />
+              {modelB.name}
+            </div>
+          </div> : null
+        }
 
         {/* VS Badge / Run Button Interaction */}
         <div className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
@@ -135,7 +172,7 @@ function GalleryAppCard({ app }: GalleryAppCardProps) {
               }}
             >
               <Copy className="size-5" />
-              <span className="font-sans">{copied ? 'Copied!' : 'Copy'}</span>
+              <span className="font-sans">Copy</span>
             </button>
           </div>
 
