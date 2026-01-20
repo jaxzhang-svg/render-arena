@@ -127,7 +127,7 @@ export function getNovitaLoginUrl(next?: string): string {
   }
   
   const loginUrl = new URL('https://novita.ai/user/login');
-  loginUrl.searchParams.set('redirect_url', callbackUrl.toString());
+  loginUrl.searchParams.set('redirect', callbackUrl.toString());
   
   return loginUrl.toString();
 }
