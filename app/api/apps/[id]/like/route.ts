@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { isMockMode, mockUser } from '@/lib/mock-data';
+import { toggleMockLike } from '@/lib/mock-store';
 
 /**
  * POST /api/apps/[id]/like
@@ -20,9 +22,27 @@ export async function POST(
       );
     }
 
+    // Mock mode - use in-memory store
+    if (isMockMode()) {
+      const result = toggleMockLike(id, mockUser.id);
+
+      if (!result) {
+        return NextResponse.json(
+          { error: 'App not found' },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        likeCount: result.likeCount,
+        liked: result.liked,
+      });
+    }
+
     const supabase = await createClient();
     const adminClient = await createAdminClient();
-    
+
     // 获取当前用户
     const { data: { user } } = await supabase.auth.getUser();
 

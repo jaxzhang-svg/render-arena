@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { isMockMode, mockUser } from '@/lib/mock-data';
+import { getMockApp, updateMockApp, isAppLikedByUser } from '@/lib/mock-store';
 import type { App, AppDetailResponse } from '@/types';
 
 /**
@@ -21,9 +23,37 @@ export async function GET(
       );
     }
 
+    // Mock mode - use in-memory store
+    if (isMockMode()) {
+      const app = getMockApp(id);
+      if (!app) {
+        return NextResponse.json(
+          { error: 'App not found' },
+          { status: 404 }
+        );
+      }
+
+      // In mock mode, dev user can see all apps they created
+      if (!app.is_public && app.user_id !== mockUser.id) {
+        return NextResponse.json(
+          { error: 'App not found' },
+          { status: 404 }
+        );
+      }
+
+      const response: AppDetailResponse = {
+        app: {
+          ...app,
+          isOwner: app.user_id === mockUser.id,
+          isLiked: isAppLikedByUser(id, mockUser.id),
+        },
+      };
+      return NextResponse.json(response);
+    }
+
     const supabase = await createClient();
     const adminClient = await createAdminClient();
-    
+
     // 获取当前用户
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -98,9 +128,39 @@ export async function PATCH(
       );
     }
 
+    // Mock mode - use in-memory store
+    if (isMockMode()) {
+      const app = getMockApp(id);
+      if (!app) {
+        return NextResponse.json(
+          { error: 'App not found' },
+          { status: 404 }
+        );
+      }
+
+      // In mock mode, dev user owns their apps
+      if (app.user_id !== mockUser.id) {
+        return NextResponse.json(
+          { error: 'Unauthorized' },
+          { status: 403 }
+        );
+      }
+
+      const allowedFields = ['name', 'description', 'html_content_a', 'html_content_b'];
+      const updates: Record<string, unknown> = {};
+      for (const field of allowedFields) {
+        if (body[field] !== undefined) {
+          updates[field] = body[field];
+        }
+      }
+
+      updateMockApp(id, updates);
+      return NextResponse.json({ success: true });
+    }
+
     const supabase = await createClient();
     const adminClient = await createAdminClient();
-    
+
     // 获取当前用户
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -129,7 +189,7 @@ export async function PATCH(
     // 允许更新的字段
     const allowedFields = ['name', 'description', 'html_content_a', 'html_content_b'];
     const updateData: Record<string, unknown> = {};
-    
+
     for (const field of allowedFields) {
       if (body[field] !== undefined) {
         updateData[field] = body[field];

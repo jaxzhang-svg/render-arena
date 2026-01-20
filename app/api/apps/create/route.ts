@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { headers } from 'next/headers';
+import { isMockMode } from '@/lib/mock-data';
+import { createMockApp } from '@/lib/mock-store';
 import type { CreateAppRequest, CreateAppResponse } from '@/types';
 
 const FREE_QUOTA = 5; // 匿名用户免费次数
@@ -11,18 +12,18 @@ const FREE_QUOTA = 5; // 匿名用户免费次数
  */
 function getClientIP(request: NextRequest): string {
   const headersList = request.headers;
-  
+
   // 尝试从各种 header 获取真实 IP
   const forwardedFor = headersList.get('x-forwarded-for');
   if (forwardedFor) {
     return forwardedFor.split(',')[0].trim();
   }
-  
+
   const realIP = headersList.get('x-real-ip');
   if (realIP) {
     return realIP;
   }
-  
+
   // 默认返回一个占位符
   return '127.0.0.1';
 }
@@ -48,6 +49,22 @@ export async function POST(request: NextRequest) {
         { success: false, error: 'INVALID_MODELS', message: 'Both modelA and modelB are required' },
         { status: 400 }
       );
+    }
+
+    // Mock mode - use in-memory store
+    if (isMockMode()) {
+      const app = createMockApp({
+        prompt: prompt.trim(),
+        modelA,
+        modelB,
+        category,
+      });
+
+      const response: CreateAppResponse = {
+        success: true,
+        appId: app.id,
+      };
+      return NextResponse.json(response);
     }
 
     const supabase = await createClient();

@@ -1,6 +1,9 @@
 import { NextRequest } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { isMockMode } from '@/lib/mock-data';
+import { getMockApp } from '@/lib/mock-store';
+import type { App } from '@/types';
 
 const NOVITA_API_KEY = process.env.NEXT_NOVITA_API_KEY!;
 const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions';
@@ -27,32 +30,48 @@ export async function GET(
     );
   }
 
-  const supabase = await createClient();
-  const adminClient = await createAdminClient();
+  let app: App | null = null;
 
-  // 获取 App
-  const { data: app, error } = await adminClient
-    .from('apps')
-    .select('*')
-    .eq('id', id)
-    .single();
+  // Mock mode - use in-memory store
+  if (isMockMode()) {
+    app = getMockApp(id) || null;
+    if (!app) {
+      return new Response(
+        JSON.stringify({ error: 'App not found' }),
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+    // In mock mode, skip auth check - dev user can generate
+  } else {
+    const supabase = await createClient();
+    const adminClient = await createAdminClient();
 
-  if (error || !app) {
-    return new Response(
-      JSON.stringify({ error: 'App not found' }),
-      { status: 404, headers: { 'Content-Type': 'application/json' } }
-    );
-  }
+    // 获取 App
+    const { data: appData, error } = await adminClient
+      .from('apps')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-  // 获取当前用户（用于权限检查）
-  const { data: { user } } = await supabase.auth.getUser();
+    if (error || !appData) {
+      return new Response(
+        JSON.stringify({ error: 'App not found' }),
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
-  // 只有作者或匿名创建者可以生成
-  if (app.user_id && app.user_id !== user?.id) {
-    return new Response(
-      JSON.stringify({ error: 'Unauthorized' }),
-      { status: 403, headers: { 'Content-Type': 'application/json' } }
-    );
+    app = appData;
+
+    // 获取当前用户（用于权限检查）
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // 只有作者或匿名创建者可以生成
+    if (app.user_id && app.user_id !== user?.id) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
   }
 
   const modelId = model === 'a' ? app.model_a : app.model_b;

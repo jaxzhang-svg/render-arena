@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { isMockMode } from '@/lib/mock-data';
+import { getPublicMockApps } from '@/lib/mock-store';
 import type { GalleryResponse, GalleryApp } from '@/types';
 
 /**
@@ -14,6 +16,22 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '20', 10);
     const offset = (page - 1) * limit;
+
+    // Mock mode for development - use dynamic mock store
+    if (isMockMode()) {
+      let filtered = getPublicMockApps();
+      if (categoryFilter && categoryFilter !== 'all') {
+        filtered = filtered.filter(app => app.category === categoryFilter);
+      }
+      const paginated = filtered.slice(offset, offset + limit);
+      const response: GalleryResponse = {
+        apps: paginated.map(app => ({ ...app, isLiked: false })),
+        total: filtered.length,
+        page,
+        limit,
+      };
+      return NextResponse.json(response);
+    }
 
     const supabase = await createClient();
     const adminClient = await createAdminClient();

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { isMockMode, mockUser } from '@/lib/mock-data';
+import { getMockApp, updateMockApp } from '@/lib/mock-store';
 
 /**
  * POST /api/apps/[id]/publish
@@ -22,9 +24,41 @@ export async function POST(
       );
     }
 
+    // Mock mode - use in-memory store
+    if (isMockMode()) {
+      const app = getMockApp(id);
+      if (!app) {
+        return NextResponse.json(
+          { error: 'App not found' },
+          { status: 404 }
+        );
+      }
+
+      // In mock mode, dev user can publish their apps
+      if (app.user_id !== mockUser.id) {
+        return NextResponse.json(
+          { error: 'Unauthorized' },
+          { status: 403 }
+        );
+      }
+
+      let shortName = name || app.name || `Dev App ${id.slice(-6)}`;
+
+      updateMockApp(id, {
+        is_public: true,
+        name: shortName,
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: 'Published to mock gallery',
+        name: shortName,
+      });
+    }
+
     const supabase = await createClient();
     const adminClient = await createAdminClient();
-    
+
     // 获取当前用户
     const { data: { user } } = await supabase.auth.getUser();
 

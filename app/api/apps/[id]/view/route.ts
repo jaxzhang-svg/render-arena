@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { isMockMode } from '@/lib/mock-data';
+import { getMockApp, updateMockApp } from '@/lib/mock-store';
 
 /**
  * POST /api/apps/[id]/view
@@ -17,6 +19,25 @@ export async function POST(
         { error: 'App ID is required' },
         { status: 400 }
       );
+    }
+
+    // Mock mode - use in-memory store
+    if (isMockMode()) {
+      const app = getMockApp(id);
+      if (!app) {
+        return NextResponse.json(
+          { error: 'App not found' },
+          { status: 404 }
+        );
+      }
+
+      const newViewCount = app.view_count + 1;
+      updateMockApp(id, { view_count: newViewCount });
+
+      return NextResponse.json({
+        success: true,
+        viewCount: newViewCount,
+      });
     }
 
     const adminClient = await createAdminClient();

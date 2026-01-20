@@ -1,5 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
+import { isMockMode, mockUser } from '@/lib/mock-data'
+import { getMockApp, updateMockApp, isAppLikedByUser } from '@/lib/mock-store'
 import { notFound } from 'next/navigation'
 import GalleryClient from './gallery-client'
 import type { App } from '@/types'
@@ -10,13 +12,39 @@ interface GalleryPageProps {
 
 export default async function GalleryPage({ params }: GalleryPageProps) {
   const { id } = await params
-  
+
+  // Mock mode - use in-memory store
+  if (isMockMode()) {
+    const app = getMockApp(id)
+
+    if (!app) {
+      notFound()
+    }
+
+    // Check permissions: private apps only visible to owner
+    if (!app.is_public && app.user_id !== mockUser.id) {
+      notFound()
+    }
+
+    // Increment view count
+    updateMockApp(id, { view_count: app.view_count + 1 })
+
+    const appWithMeta = {
+      ...app,
+      view_count: app.view_count + 1,
+      isOwner: app.user_id === mockUser.id,
+      isLiked: isAppLikedByUser(id, mockUser.id),
+    } as App & { isOwner: boolean; isLiked: boolean }
+
+    return <GalleryClient app={appWithMeta} />
+  }
+
   const adminClient = await createAdminClient()
   const supabase = await createClient()
-  
+
   // 获取当前用户
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   // 获取 App
   const { data: app, error } = await adminClient
     .from('apps')

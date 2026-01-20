@@ -4,6 +4,21 @@ import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 
+// Check mock mode on client side
+const isMockMode = process.env.NEXT_PUBLIC_MOCK_DATA === 'true';
+
+// Mock user for dev mode
+const mockUserData = {
+  id: 'dev-user-001',
+  email: 'dev@localhost',
+  user_metadata: {
+    username: 'DevUser',
+  },
+  app_metadata: {},
+  aud: 'authenticated',
+  created_at: new Date().toISOString(),
+} as User;
+
 interface AuthState {
   user: User | null;
   session: Session | null;
@@ -17,7 +32,7 @@ interface UseAuthReturn extends AuthState {
 
 /**
  * 认证状态管理 Hook
- * 
+ *
  * 提供：
  * - user: 当前登录用户对象
  * - session: 当前会话对象
@@ -27,18 +42,24 @@ interface UseAuthReturn extends AuthState {
  */
 export function useAuth(): UseAuthReturn {
   const [state, setState] = useState<AuthState>({
-    user: null,
+    user: isMockMode ? mockUserData : null,
     session: null,
-    loading: true,
+    loading: !isMockMode,
   });
 
-  const supabase = createClient();
+  // Don't create Supabase client in mock mode
+  const supabase = isMockMode ? null : createClient();
 
   // 获取当前用户
   const fetchUser = useCallback(async () => {
+    // In mock mode, user is already set
+    if (isMockMode || !supabase) {
+      return;
+    }
+
     try {
       const { data: { session }, error } = await supabase.auth.getSession();
-      
+
       if (error) {
         console.error('Error fetching session:', error);
         setState({ user: null, session: null, loading: false });
@@ -58,21 +79,30 @@ export function useAuth(): UseAuthReturn {
 
   // 刷新会话
   const refresh = useCallback(async () => {
+    if (isMockMode) return;
     setState(prev => ({ ...prev, loading: true }));
     await fetchUser();
   }, [fetchUser]);
 
   // 登出
   const logout = useCallback(async () => {
+    if (isMockMode) {
+      // In mock mode, just reload the page
+      window.location.href = '/';
+      return;
+    }
+
     setState(prev => ({ ...prev, loading: true }));
-    
+
     try {
       // 调用后端 API 清理服务端会话
       await fetch('/api/auth/logout', { method: 'POST' });
-      
+
       // 清理客户端会话
-      await supabase.auth.signOut();
-      
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
+
       // 重定向到首页
       window.location.href = '/';
     } catch (error) {
@@ -82,6 +112,11 @@ export function useAuth(): UseAuthReturn {
   }, [supabase]);
 
   useEffect(() => {
+    // In mock mode, no need to fetch or subscribe
+    if (isMockMode || !supabase) {
+      return;
+    }
+
     // 初始化时获取用户
     fetchUser();
 
