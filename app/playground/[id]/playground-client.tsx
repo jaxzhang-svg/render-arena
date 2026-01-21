@@ -112,10 +112,16 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   })
 
   const handleRecordToggle = async () => {
+    if (isGuest || authLoading || !isAllCompleted) {
+      return
+    }
     if (isRecording) {
       stopRecording()
       setShowInputBar(true)
     } else {
+      if (recordedBlob && !window.confirm('Starting a new recording will discard your previous recording. Do you want to continue?')) {
+        return
+      }
       setShowInputBar(false)
       await startRecording()
     }
@@ -157,12 +163,11 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                   variant="outline"
                   size="icon"
                   className={cn(
-                    "size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors hover:bg-foreground hover:text-background focus-visible:outline-none",
-                    (isGuest || !isAllCompleted) && "cursor-not-allowed pointer-events-none opacity-50"
+                    "size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors hover:text-primary hover:border-primary",
+                    isGuest || !isAllCompleted ? 'opacity-50' : '',
                   )}
                   onClick={handleRecordToggle}
                   title={isGuest || !isAllCompleted ? undefined : (isRecording ? 'Stop recording' : 'Start recording')}
-                  disabled={isGuest || authLoading || !isAllCompleted}
                 >
                   {isRecording ? (
                     <Square className="size-4 fill-red-500 text-red-500" />
@@ -172,7 +177,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                 </Button>
               }
             />
-            {(isGuest || (!isAllCompleted && !authLoading)) && (
+            {(isGuest || (!isAllCompleted && !authLoading)) ? (
               <Tooltip.Portal>
                 <Tooltip.Positioner sideOffset={4}>
                   <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
@@ -180,7 +185,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                   </Tooltip.Popup>
                 </Tooltip.Positioner>
               </Tooltip.Portal>
-            )}
+            ) : null}
           </Tooltip.Root>
 
           <Tooltip.Root>
@@ -192,21 +197,27 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                   variant="outline"
                   size="icon"
                   className={cn(
-                    "size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors hover:bg-foreground hover:text-background focus-visible:outline-none",
-                    (isGuest || !isAllCompleted) && "cursor-not-allowed pointer-events-none opacity-50"
+                    "size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors hover:text-primary hover:border-primary",
+                    isGuest || !isAllCompleted ? 'opacity-50' : '',
                   )}
                   title={isGuest || !isAllCompleted ? undefined : "Share"}
                   onClick={() => {
-                    setShareMode('poster')
+                    if (isGuest || !isAllCompleted) {
+                      return
+                    }
+                    if (recordedBlob) {
+                      setShareMode('video')
+                    } else {
+                      setShareMode('poster')
+                    }
                     setShowShareModal(true)
                   }}
-                  disabled={isGuest || authLoading || !isAllCompleted}
                 >
                   <Share2 className="size-4" />
                 </Button>
               }
             />
-            {(isGuest || (!isAllCompleted && !authLoading)) && (
+            {(isGuest || (!isAllCompleted && !authLoading)) ? (
               <Tooltip.Portal>
                 <Tooltip.Positioner sideOffset={4}>
                   <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
@@ -214,7 +225,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                   </Tooltip.Popup>
                 </Tooltip.Positioner>
               </Tooltip.Portal>
-            )}
+            ) : null}
           </Tooltip.Root>
 
           <UserAvatar />
