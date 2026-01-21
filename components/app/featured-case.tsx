@@ -50,7 +50,7 @@ function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
                 alt={mode.label}
                 fill
                 className={cn(
-                    "object-cover transition-opacity duration-300",
+                    "object-cover transition-opacity duration-300 cursor-pointer",
                 )}
             />
              {/* Gradient Overlay - Darker at bottom for text readability */}
@@ -61,11 +61,11 @@ function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
                 <iframe
                     src={cfVideoUrl!}
                     className={cn(
-                        "absolute inset-0 size-full border-0 transition-opacity duration-300",
+                        "absolute inset-0 size-full border-0 transition-opacity duration-300 cursor-pointer",
                         isHovering ? "opacity-100" : "opacity-0"
                     )}
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    style={{ pointerEvents: isHovering ? 'auto' : 'none' }}
+                    style={{ pointerEvents: 'none' }}
                 />
             )}
         </div>

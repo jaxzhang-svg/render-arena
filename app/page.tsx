@@ -241,7 +241,7 @@ export default function HomePage() {
                       disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
                     `}
                   >
-                    <span>Generate & Compare</span>
+                    <span>Generate</span>
                     <ArrowRight className="size-4" />
                   </Button>
                 </div>
