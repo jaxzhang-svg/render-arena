@@ -14,6 +14,8 @@ import {
   ModelSettings,
   ViewMode,
 } from '@/hooks/use-model-generation'
+import DOMPurify from 'isomorphic-dompurify'
+import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
 
 // Re-export types for convenience
 export type { ModelResponse, ModelSettings, ViewMode }
@@ -266,7 +268,12 @@ export function ModelPanel({
         {/* Preview View - 始终渲染，用 CSS 控制显示 */}
         <div className={cn('absolute inset-0', viewMode === 'preview' ? 'block' : 'hidden')}>
           {response.html ? (
-            <iframe srcDoc={response.html} className="size-full border-0" title="Preview" />
+            <iframe
+              srcDoc={DOMPurify.sanitize(response.html, DOMPURIFY_CONFIG)}
+              className="size-full border-0"
+              title="Preview"
+              sandbox="allow-scripts"
+            />
           ) : (
             <div className="text-muted-foreground flex h-full items-center justify-center">
               {response.loading ? 'Generating HTML...' : 'No HTML available for preview'}

@@ -7,6 +7,7 @@ import { galleryCategories, getModelById, playgroundModes, type GalleryCategoryI
 import { useRouter } from 'next/navigation';
 import type { GalleryApp } from '@/types';
 import DOMPurify from 'isomorphic-dompurify';
+import { DOMPURIFY_CONFIG } from '@/lib/sanitizer';
 
 // Cloudflare Stream customer code
 const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || '';
@@ -109,10 +110,10 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         ) : (
           <div className='absolute inset-0 w-full h-full flex'>
             <iframe
-            srcDoc={DOMPurify.sanitize(app.html_content_a || '')}
+            srcDoc={DOMPurify.sanitize(app.html_content_a || '', DOMPURIFY_CONFIG)}
             className="absolute inset-0 w-1/2 h-full border-0 bg-white transition-opacity duration-500 opacity-100"
             title={app.name || 'App Preview'}
-            sandbox="allow-scripts allow-forms allow-pointer-lock allow-modals allow-popups"
+            sandbox="allow-scripts"
             style={{ 
               pointerEvents: 'none', 
               transform: 'scale(0.25)', 
@@ -122,10 +123,10 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
             }}
           />
           <iframe
-            srcDoc={DOMPurify.sanitize(app.html_content_b || '')}
+            srcDoc={DOMPurify.sanitize(app.html_content_b || '', DOMPURIFY_CONFIG)}
             className="absolute inset-0 w-1/2 left-1/2 border-0 bg-white transition-opacity duration-500 opacity-100"
             title={app.name || 'App Preview'}
-            sandbox="allow-scripts allow-forms allow-pointer-lock allow-modals allow-popups"
+            sandbox="allow-scripts"
             style={{ 
               pointerEvents: 'none', 
               transform: 'scale(0.25)', 
