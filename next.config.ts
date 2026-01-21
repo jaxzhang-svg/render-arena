@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
             },
         ],
     },
+    serverExternalPackages: ['jsdom', 'isomorphic-dompurify'],
     async headers() {
         return [
             {
