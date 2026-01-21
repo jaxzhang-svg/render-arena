@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useId } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/base/button'
@@ -14,12 +14,16 @@ import {
   EyeOff,
   Square,
   RotateCcw,
+  Share2,
 } from 'lucide-react'
 import { ShareModal } from '@/components/playground/share-modal'
 import { UserAvatar } from '@/components/app/user-avatar'
 import { ModelPanel } from '@/components/playground/model-panel'
 import { useArenaPlayground } from '@/hooks/use-arena-playground'
 import { useScreenRecorder } from '@/hooks/use-screen-recorder'
+import { useAuth } from '@/hooks/use-auth'
+import { Tooltip } from '@base-ui/react/tooltip'
+import { cn } from '@/lib/utils'
 import type { App } from '@/types'
 
 interface PlaygroundClientProps {
@@ -46,6 +50,11 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     isAnyLoading,
     isAllCompleted,
   } = useArenaPlayground({ initialApp, appId })
+
+  const { user, loading: authLoading } = useAuth()
+  const recordTooltipId = useId()
+  const shareTooltipId = useId()
+  const isGuest = !authLoading && !user
 
   // 分享相关状态
   const [showShareModal, setShowShareModal] = useState(false)
@@ -135,39 +144,74 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
         </div>
 
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            size="icon"
-            className="
-              hover:bg-foreground hover:text-background
-              size-9 cursor-pointer rounded-lg border-[#e4e4e7]
-              transition-colors
-            "
-            onClick={handleRecordToggle}
-            title={isRecording ? 'Stop recording' : 'Start recording'}
-          >
-            {isRecording ? (
-              <Square className="size-4 fill-red-500 text-red-500" />
-            ) : (
-              <Video className="size-4" />
+          <Tooltip.Root>
+            <Tooltip.Trigger
+              id={recordTooltipId}
+              delay={100}
+              render={
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors hover:bg-foreground hover:text-background focus-visible:outline-none",
+                    isGuest && "cursor-not-allowed pointer-events-none opacity-50"
+                  )}
+                  onClick={handleRecordToggle}
+                  title={isGuest ? undefined : (isRecording ? 'Stop recording' : 'Start recording')}
+                  disabled={isGuest || authLoading}
+                >
+                  {isRecording ? (
+                    <Square className="size-4 fill-red-500 text-red-500" />
+                  ) : (
+                    <Video className="size-4" />
+                  )}
+                </Button>
+              }
+            />
+            {isGuest && (
+              <Tooltip.Portal>
+                <Tooltip.Positioner sideOffset={4}>
+                  <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
+                    Please login first
+                  </Tooltip.Popup>
+                </Tooltip.Positioner>
+              </Tooltip.Portal>
             )}
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="
-              hover:bg-foreground hover:text-background
-              size-9 cursor-pointer rounded-lg border-[#e4e4e7]
-              transition-colors
-            "
-            title="Share"
-            onClick={() => {
-              setShareMode('poster')
-              setShowShareModal(true)
-            }}
-          >
-            <Share className="size-4" />
-          </Button>
+          </Tooltip.Root>
+
+          <Tooltip.Root>
+            <Tooltip.Trigger
+              id={shareTooltipId}
+              delay={100}
+              render={
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors hover:bg-foreground hover:text-background focus-visible:outline-none",
+                    isGuest && "cursor-not-allowed pointer-events-none opacity-50"
+                  )}
+                  title={isGuest ? undefined : "Share"}
+                  onClick={() => {
+                    setShareMode('poster')
+                    setShowShareModal(true)
+                  }}
+                  disabled={isGuest || authLoading}
+                >
+                  <Share2 className="size-4" />
+                </Button>
+              }
+            />
+            {isGuest && (
+              <Tooltip.Portal>
+                <Tooltip.Positioner sideOffset={4}>
+                  <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
+                    Please login first
+                  </Tooltip.Popup>
+                </Tooltip.Positioner>
+              </Tooltip.Portal>
+            )}
+          </Tooltip.Root>
 
           <UserAvatar />
         </div>

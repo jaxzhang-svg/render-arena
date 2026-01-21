@@ -29,46 +29,45 @@ export function Header() {
 
         {/* Navigation */}
         <nav className="flex items-center gap-8">
-          <Link
-            href="/#home"
-            className="
-              font-mono text-[14px] leading-[16px] text-[#292827]
-              transition-colors
-              hover:text-[#23d57c]
-            "
-          >
-            Home
-          </Link>
-          <Link
-            href="/#hackathon"
-            className="
-              font-mono text-[14px] leading-[16px] text-[#292827]
-              transition-colors
-              hover:text-[#23d57c]
-            "
-          >
-            Hackathon
-          </Link>
-          <Link
-            href="/#gallery"
-            className="
-              font-mono text-[14px] leading-[16px] text-[#292827]
-              transition-colors
-              hover:text-[#23d57c]
-            "
-          >
-            Gallery
-          </Link>
-          <Link
-            href="/#faq"
-            className="
-              font-mono text-[14px] leading-[16px] text-[#292827]
-              transition-colors
-              hover:text-[#23d57c]
-            "
-          >
-            FAQ
-          </Link>
+          {[
+            { name: "Home", href: "/#home", id: "home" },
+            { name: "Hackathon", href: "/#hackathon", id: "hackathon" },
+            { name: "Gallery", href: "/#gallery", id: "gallery" },
+            { name: "FAQ", href: "/#faq", id: "faq" },
+          ].map((item) => (
+            <Link
+              key={item.id}
+              href={item.href}
+              onClick={(e) => {
+                // If we're on the home page, handle scroll manually
+                if (window.location.pathname === "/") {
+                  const element = document.getElementById(item.id);
+                  if (element) {
+                    e.preventDefault();
+                    const headerHeight = 64;
+                    const buffer = 16;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - (headerHeight + buffer);
+
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: "smooth",
+                    });
+                    
+                    // Update URL hash without jumping
+                    window.history.pushState(null, "", item.href);
+                  }
+                }
+              }}
+              className="
+                font-mono text-[14px] leading-[16px] text-[#292827]
+                transition-colors
+                hover:text-[#23d57c]
+              "
+            >
+              {item.name}
+            </Link>
+          ))}
         </nav>
 
         {/* User Avatar / Login Button */}

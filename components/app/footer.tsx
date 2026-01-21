@@ -7,7 +7,7 @@ export function Footer() {
       <div className="mx-auto w-[1280px] px-[120px]">
         <div className="flex items-start justify-between pt-[66px]">
           {/* Left Column - Logo and Social */}
-          <div className="flex h-[366px] w-[144px] flex-col justify-between">
+          <div className="flex h-[366px] flex-col justify-between">
             <div className="flex flex-col gap-3">
               {/* Logo */}
               <Link href="/" className="flex items-center gap-[6px]">
@@ -151,6 +151,13 @@ export function Footer() {
                     hover:text-[#23d57c]
                   ">
                     Templates Library
+                  </Link>
+                  <Link href="/" className="
+                    flex h-[32px] items-center py-[8px] font-mono text-[14px] leading-[16px] text-[#292827]
+                    transition-colors
+                    hover:text-[#23d57c]
+                  ">
+                    Render Arena
                   </Link>
                 </div>
               </div>

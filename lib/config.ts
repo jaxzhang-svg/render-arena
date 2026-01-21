@@ -190,7 +190,7 @@ export const models: LLMModel[] = modelGroups.flatMap((group) =>
   }))
 )
 
-export const defaultModelAId = 'deepseek/deepseek-v3.2'
+export const defaultModelAId = 'pa/grok-code-fast-1'
 export const defaultModelBId = 'pa/gemini-3-flash-preview'
 
 export function getModelById(modelId: string): LLMModel | undefined {

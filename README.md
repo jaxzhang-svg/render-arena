@@ -29,6 +29,13 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Documentation
+
+Detailed documentation and coding standards can be found in the [docs](./docs) directory.
+
+### Important Coding Rules
+- **Base UI Triggers**: Do not nest `<button>` elements inside `Tooltip.Trigger`, `Popover.Trigger`, or any other Base UI trigger components. Use the `render` prop instead. See [Coding Standards](./docs/tech/04-coding-standards.md) for details.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

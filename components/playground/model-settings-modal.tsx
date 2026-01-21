@@ -53,7 +53,7 @@ export function ModelSettingsPopover({
                         Temperature
                       </span>
                       <Tooltip.Root>
-                        <Tooltip.Trigger id={tooltipTriggerId}>
+                        <Tooltip.Trigger id={tooltipTriggerId} delay={100}>
                           <Info className="size-3 text-[#9e9c98]" />
                         </Tooltip.Trigger>
                         <Tooltip.Portal>

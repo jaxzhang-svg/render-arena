@@ -248,3 +248,7 @@ body {
 .root {
   isolation: isolate;
 }
+
+html {
+  scroll-behavior: smooth;
+}

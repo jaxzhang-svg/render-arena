@@ -175,7 +175,7 @@ export default function HomePage() {
                       }
                     }}
                     className={`
-                      w-full bg-transparent font-sans text-lg
+                      w-full bg-transparent font-sans text-base
                       font-normal text-[#4f4e4a] outline-none
                       placeholder:text-[#9e9c98] resize-none
                       ${(userPrompt.length > 38 || userPrompt.includes('\n')) 
@@ -386,7 +386,7 @@ export default function HomePage() {
                       leading-7 font-bold text-black
                       shadow-[0px_0px_20px_0px_rgba(255,255,255,0.3)]
                       transition-all tracking-[-0.44px]
-                      hover:bg-white/90
+                      hover:bg-primary
                     "
                   >
                     <span>Join Now</span>

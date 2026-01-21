@@ -165,6 +165,15 @@ export function useModelGeneration({
       abortControllerRef.current.abort()
       abortControllerRef.current = null
     }
+
+    setResponse((prev) => {
+      if (prev.loading) {
+        const duration = prev.startTime ? (Date.now() - prev.startTime) / 1000 : undefined
+        const tokens = Math.floor(prev.content.length / 4)
+        return { ...prev, loading: false, completed: true, duration, tokens }
+      }
+      return prev
+    })
   }, [flushBuffer])
 
   // 生成内容
@@ -279,7 +288,11 @@ export function useModelGeneration({
       })
     } catch (error) {
       if ((error as Error).name === 'AbortError') {
-        setResponse((prev) => ({ ...prev, loading: false }))
+        setResponse((prev) => {
+          const duration = prev.startTime ? (Date.now() - prev.startTime) / 1000 : undefined
+          const tokens = Math.floor(prev.content.length / 4)
+          return { ...prev, loading: false, completed: true, duration, tokens }
+        })
         return
       }
       console.error(`Model ${slot} error:`, error)
