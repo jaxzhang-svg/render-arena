@@ -24,6 +24,13 @@ export const playgroundModes = [
     theme: {
       badge: 'bg-violet-100 text-violet-700',
       dot: 'bg-violet-500'
+    },
+    featuredCase: {
+      appId: 'mock-physics-id', // Placeholder
+      title: 'Music Video',
+      description: 'Create interactive physics simulations and dynamic experiences',
+      imageUrl: 'https://cdn.openart.ai/assets/music_video_home.webp',
+      prompt: 'A pendulum with realistic swing physics and friction...'
     }
   },
   { 
@@ -40,6 +47,13 @@ export const playgroundModes = [
     theme: {
       badge: 'bg-pink-100 text-pink-700',
       dot: 'bg-pink-500'
+    },
+    featuredCase: {
+      appId: 'mock-visual-id', // Placeholder
+      title: 'Explainer Video',
+      description: 'Generate stunning visual effects and artistic creations',
+      imageUrl: 'https://cdn.openart.ai/assets/explainer_video_home_video.webp',
+      prompt: 'Liquid wave distortion effect with metallic reflections...'
     }
   },
   { 
@@ -56,6 +70,13 @@ export const playgroundModes = [
     theme: {
       badge: 'bg-cyan-100 text-cyan-700',
       dot: 'bg-cyan-500'
+    },
+    featuredCase: {
+      appId: 'mock-game-id', // Placeholder
+      title: 'Micro Game Jam',
+      description: 'Build mini games and interactive entertainment',
+      imageUrl: 'https://cdn.openart.ai/assets/internal/uploads/image_un6XRgGs_1090x810_1757948286886.webp',
+      prompt: 'A dodge-the-obstacles endless runner with power-ups...'
     }
   },
 ] as const;
@@ -200,4 +221,43 @@ export function getModelById(modelId: string): LLMModel | undefined {
 // Hackathon Configuration
 export const HACKATHON_END_TIME = '2026-02-14T23:59:59Z'; // Hardcoded date for now
 export const HACKATHON_PARTICIPANTS = 1234;
+
+export const FEATURED_CASES = [
+  {
+    id: 'music-video',
+    title: 'Physical',
+    appId: 'mock-music-video-id',
+    imageUrl: 'https://cdn.openart.ai/assets/music_video_home.webp',
+    category: 'physics',
+    prompt: 'A pendulum with realistic swing physics and friction...',
+    themeColor: '#8b5cf6' // violet-500
+  },
+  {
+    id: 'explainer-video',
+    title: 'Visual',
+    appId: 'mock-explainer-video-id',
+    imageUrl: 'https://cdn.openart.ai/assets/explainer_video_home_video.webp',
+    category: 'visual',
+    prompt: 'Liquid wave distortion effect with metallic reflections...',
+    themeColor: '#ec4899' // pink-500
+  },
+  {
+    id: 'character-vlog',
+    title: 'Game',
+    appId: 'mock-character-vlog-id',
+    imageUrl: 'https://cdn.openart.ai/assets/internal/uploads/image_un6XRgGs_1090x810_1757948286886.webp',
+    category: 'game',
+    prompt: 'A dodge-the-obstacles endless runner with power-ups...',
+    themeColor: '#06b6d4' // cyan-500
+  },
+  // {
+  //   id: 'asmr-video',
+  //   title: 'ASMR Video',
+  //   appId: 'mock-asmr-id',
+  //   imageUrl: 'https://cdn.openart.ai/assets/internal/uploads/image_un6XRgGs_1090x810_1757948286886.webp',
+  //   category: 'visual',
+  //   prompt: 'ASMR visual triggers with soft lighting and gentle movements...',
+  //   themeColor: '#10b981' // emerald-500
+  // }
+];
 

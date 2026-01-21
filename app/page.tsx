@@ -10,6 +10,7 @@ import { Accordion } from '@base-ui/react/accordion';
 
 import { useState, useEffect, useId } from 'react';
 import { Button } from '@/components/base/button';
+import { FeaturedCasesSection } from '@/components/app/featured-case';
 
 import { playgroundModes, getCategoryFromModeLabel, galleryCategories, type GalleryCategoryId, HACKATHON_END_TIME, HACKATHON_PARTICIPANTS } from '@/lib/config';
 
@@ -138,23 +139,22 @@ export default function HomePage() {
 
             {/* Heading */}
             <h1 className="
-              max-w-[820px] font-sans text-[80px]
+              max-w-[820px] font-sans text-[68px]
               leading-[74px] font-semibold tracking-[-1.6px] text-[#292827]
             ">
-              <span>One prompt, </span>
-              <br />
-              <span>Multiple models.</span>
-              <br />
-              <span>Side by side.</span>
+              <span>One prompt, Side Compare.</span>
             </h1>
 
+            {/* Featured Case */}
+            <FeaturedCasesSection />
+
             {/* Subtitle */}
-            <p className="
+            {/* <p className="
               max-w-[672px] font-sans text-lg/6
               font-normal text-[#4f4e4a]
             ">
               Test how different models render the same idea. Compare, judge, and share the results.
-            </p>
+            </p> */}
 
             {/* Textarea Input Section */}
             <div className="
