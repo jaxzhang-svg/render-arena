@@ -19,6 +19,7 @@ import { UserAvatar } from '@/components/app/user-avatar'
 import { cn } from '@/lib/utils'
 import { getModelById, models } from '@/lib/models'
 import type { App } from '@/types'
+import DOMPurify from 'isomorphic-dompurify'
 
 interface GalleryClientProps {
   app: App & { isOwner: boolean; isLiked: boolean }
@@ -200,9 +201,10 @@ export default function GalleryClient({ app }: GalleryClientProps) {
               <div className="relative flex-1 overflow-hidden">
                 {app.html_content_a ? (
                   <iframe
-                    srcDoc={app.html_content_a}
+                    srcDoc={DOMPurify.sanitize(app.html_content_a)}
                     className="size-full border-0"
                     title="Model A Preview"
+                    sandbox="allow-scripts allow-popups allow-forms"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center text-muted-foreground">
@@ -249,9 +251,10 @@ export default function GalleryClient({ app }: GalleryClientProps) {
               <div className="relative flex-1 overflow-hidden">
                 {app.html_content_b ? (
                   <iframe
-                    srcDoc={app.html_content_b}
+                    srcDoc={DOMPurify.sanitize(app.html_content_b)}
                     className="size-full border-0"
                     title="Model B Preview"
+                    sandbox="allow-scripts allow-popups allow-forms"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center text-muted-foreground">

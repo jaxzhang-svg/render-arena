@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { headers } from 'next/headers';
 import type { CreateAppRequest, CreateAppResponse } from '@/types';
+import DOMPurify from 'isomorphic-dompurify';
 
 const FREE_QUOTA = 5; // 匿名用户免费次数
 
@@ -123,10 +124,10 @@ export async function POST(request: NextRequest) {
       .insert({
         user_id: userId,
         user_email: userEmail,
-        prompt: prompt.trim(),
+        prompt: DOMPurify.sanitize(prompt.trim()),
         model_a: modelA,
         model_b: modelB,
-        category: category,
+        category: DOMPurify.sanitize(category),
       })
       .select('id')
       .single();

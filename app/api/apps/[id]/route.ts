@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { App, AppDetailResponse } from '@/types';
+import DOMPurify from 'isomorphic-dompurify';
 
 /**
  * GET /api/apps/[id]
@@ -132,7 +133,12 @@ export async function PATCH(
     
     for (const field of allowedFields) {
       if (body[field] !== undefined) {
-        updateData[field] = body[field];
+        let value = body[field];
+        // Sanitize string fields
+        if (typeof value === 'string') {
+          value = DOMPurify.sanitize(value);
+        }
+        updateData[field] = value;
       }
     }
 
