@@ -24,6 +24,7 @@ import { useScreenRecorder } from '@/hooks/use-screen-recorder'
 import { useAuth } from '@/hooks/use-auth'
 import { Tooltip } from '@base-ui/react/tooltip'
 import { cn } from '@/lib/utils'
+import { playgroundModes } from '@/lib/config'
 import type { App } from '@/types'
 
 interface PlaygroundClientProps {
@@ -64,6 +65,9 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   // 自动开始生成逻辑
   const searchParams = useSearchParams()
   const autoStart = searchParams.get('autoStart') === 'true'
+  const categoryParam = searchParams.get('category')
+  const currentMode = playgroundModes.find((m) => m.id === categoryParam) || playgroundModes[0]
+  
   const hasAutoStartedRef = useRef(false)
   const handleGenerateRef = useRef(handleGenerate)
   const modelsReady = modelA.selectedModel.id && modelB.selectedModel.id
@@ -235,6 +239,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
               onRegenerate={handleGenerateModelA}
               onToggleMaximize={() => setArenaViewMode(arenaViewMode === 'a' ? 'split' : 'a')}
               showRightBorder={arenaViewMode === 'split'}
+              scrollButtonPosition={arenaViewMode === 'split' ? 'left' : 'right'}
             />
           )}
 
@@ -261,36 +266,58 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
             -translate-x-1/2
           ">
             <div className="
-              relative overflow-hidden rounded-2xl border border-white/50
-              bg-white/80 shadow-[0px_20px_40px_-12px_rgba(0,0,0,0.15)]
-              backdrop-blur-xl
+              relative overflow-hidden rounded-[16px] border border-white/50
+              bg-white/90 shadow-[0px_20px_40px_-12px_rgba(0,0,0,0.15)]
+              backdrop-blur
             ">
-              <div className="flex flex-col gap-2 p-4">
-                <div className="relative h-[56.75px] w-full">
-                  <div className="
-                    absolute top-[8px] left-0 flex h-[48.75px] w-[566px]
-                    items-start overflow-hidden
-                  ">
-                    <Textarea
-                      placeholder="Describe your app... (Press Enter to send)"
+              <div className="flex flex-col gap-2 p-4 pb-0">
+                <div className={cn("flex items-center gap-2 rounded-full px-2 py-1.5 w-fit", currentMode.theme.badge)}>
+                  <div className={cn("size-2 rounded-full", currentMode.theme.dot)} />
+                  <span className="text-sm font-medium">{currentMode.label}</span>
+                </div>
+                <div className="relative w-full">
+                  <Textarea
+                    placeholder="Describe your app... (Press Enter to send)"
+                    className="
+                      scrollbar-none w-full resize-none border-0
+                      bg-transparent p-0 font-sans text-[16px] leading-[24px]
+                      font-normal text-[#292827]
+                      placeholder:text-[#9e9c98]
+                      focus-visible:ring-0
+                      min-h-[48px]
+                    "
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
+                        handleGenerate()
+                      }
+                    }}
+                  />
+                </div>
+
+                <div className="
+                  relative flex w-full items-center justify-between border-t
+                  border-solid border-[#e7e6e2]/80 px-0 py-2
+                ">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       className="
-                        scrollbar-none size-full resize-none border-0
-                        bg-transparent p-0 font-sans text-[16px] leading-[24px]
-                        font-normal text-[#4f4e4a]
-                        placeholder:text-[#9e9c98]
-                        focus-visible:ring-0
+                        hover:bg-muted/50 cursor-pointer gap-1.5 rounded-lg px-2.5 text-[12px]
+                        font-normal text-[#4f4e4a] transition-colors inline-flex items-center
                       "
-                      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                      value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault()
-                          handleGenerate()
-                        }
-                      }}
-                    />
+                      onClick={() => setShowInputBar(false)}
+                      title="Hide controls"
+                    >
+                      <EyeOff className="size-4 relative top-[1px]" />
+                      Hide controls
+                    </Button>
                   </div>
+
                   <Button
                     onClick={() => {
                       if (isAnyLoading) {
@@ -301,8 +328,8 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                     }}
                     size="icon"
                     className={`
-                      group absolute top-[12.25px] right-0 size-9 shrink-0
-                      rounded-xl transition-all
+                      group size-8 shrink-0
+                      rounded-[12px] transition-all
                       active:scale-95
                       ${
                       isAnyLoading
@@ -340,31 +367,6 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                       " />
                     )}
                   </Button>
-                </div>
-
-                <div className="
-                  relative flex w-full flex-col items-start overflow-hidden px-0
-                  pt-2 pb-0
-                ">
-                  <div className="
-                    relative flex w-full items-center justify-end border-t
-                    border-solid border-[#f4f4f5] px-0 pt-2 pb-0
-                  ">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="
-                        hover:bg-muted/50
-                        h-7 cursor-pointer gap-1.5 rounded-lg px-2.5 text-[12px]
-                        font-normal text-[#4f4e4a] transition-colors
-                      "
-                      onClick={() => setShowInputBar(false)}
-                      title="Hide controls"
-                    >
-                      <EyeOff className="size-4" />
-                      Hide controls
-                    </Button>
-                  </div>
                 </div>
               </div>
             </div>

@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { Heart, Copy, Box, ChevronDown, Download, Play } from 'lucide-react';
 import Image from 'next/image';
-import { galleryCategories, getModelById, type GalleryCategoryId } from '@/lib/config';
+import { galleryCategories, getModelById, playgroundModes, type GalleryCategoryId } from '@/lib/config';
 import { useRouter } from 'next/navigation';
 import type { GalleryApp } from '@/types';
 
@@ -240,6 +240,8 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
   const [hasMore, setHasMore] = useState(true);
   const [, setTotal] = useState(0);
 
+  const currentCategory = playgroundModes.find(m => m.id === selectedCategory);
+
   const fetchApps = useCallback(async (pageNum: number, cat: GalleryCategoryId, append = false) => {
     try {
       setLoading(true);
@@ -291,6 +293,14 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
 
   return (
     <div>
+      {(selectedCategory !== 'all' && currentCategory) ? <div className="mb-8">
+        <h2 className="text-2xl font-semibold leading-[38px] text-[#292827] capitalize">
+          {currentCategory.label}
+        </h2>
+        <h2 className='text-[#4F4E4A] text-base font-normal leading-6 font-sans'>
+          {currentCategory.description}
+        </h2>
+      </div> : null}
       {/* Apps Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {apps.map((app) => (

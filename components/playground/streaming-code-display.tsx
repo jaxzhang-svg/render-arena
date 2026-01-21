@@ -8,6 +8,7 @@ import { math } from '@streamdown/math'
 import { cjk } from '@streamdown/cjk'
 import { Accordion } from '@base-ui/react/accordion'
 import { ChevronUp, ArrowDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import 'katex/dist/katex.min.css'
 
 interface StreamingCodeDisplayProps {
@@ -15,6 +16,7 @@ interface StreamingCodeDisplayProps {
   reasoning?: string
   onPreview?: (html: string) => void
   isStreaming?: boolean
+  scrollButtonPosition?: 'left' | 'right'
 }
 
 /**
@@ -23,8 +25,8 @@ interface StreamingCodeDisplayProps {
 export function StreamingCodeDisplay({
   content,
   reasoning,
-  onPreview,
   isStreaming = false,
+  scrollButtonPosition = 'right',
 }: StreamingCodeDisplayProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const accordionTriggerId = useId()
@@ -101,7 +103,10 @@ export function StreamingCodeDisplay({
       {showScrollButton && (
         <button
           onClick={scrollToBottom}
-          className="absolute bottom-8 right-8 z-10 flex size-8 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 transition-all hover:bg-gray-50 dark:bg-zinc-800 dark:ring-white/10"
+          className={cn(
+            "absolute bottom-8 z-10 flex size-8 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 transition-all hover:bg-gray-50 dark:bg-zinc-800 dark:ring-white/10",
+            scrollButtonPosition === 'left' ? "left-8" : "right-8"
+          )}
         >
           <ArrowDown className="size-4 text-gray-600 dark:text-gray-400" />
         </button>

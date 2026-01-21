@@ -402,7 +402,7 @@ export default function HomePage() {
         <section id="gallery" className="pt-16 pb-20">
           <div className="mx-auto max-w-7xl px-6">
             {/* Gallery Header */}
-            <div className="mb-12 flex items-center justify-between">
+            <div className="mb-8 flex items-center justify-between">
               <h2 className="
                 font-sans text-[48px]
                 leading-[48px] font-semibold tracking-[-0.96px] text-[#292827]

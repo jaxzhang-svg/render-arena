@@ -43,6 +43,8 @@ interface ModelPanelProps {
   showRightBorder?: boolean
   /** 自定义类名 */
   className?: string
+  /** 滚动到底部按钮的位置 */
+  scrollButtonPosition?: 'left' | 'right'
 }
 
 export function ModelPanel({
@@ -58,6 +60,7 @@ export function ModelPanel({
   onToggleMaximize,
   showRightBorder = false,
   className,
+  scrollButtonPosition = 'right',
 }: ModelPanelProps) {
   const menuTriggerId = useId()
   
@@ -252,6 +255,7 @@ export function ModelPanel({
             content={response.content}
             reasoning={response.reasoning}
             isStreaming={response.loading}
+            scrollButtonPosition={scrollButtonPosition}
             onPreview={(html) => {
               onResponseChange((prev) => ({ ...prev, html }))
               onViewModeChange('preview')
