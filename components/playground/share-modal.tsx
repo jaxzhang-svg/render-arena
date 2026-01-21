@@ -4,11 +4,12 @@ import { Dialog } from '@base-ui/react/dialog';
 import { Download, Copy, X, Link as LinkIcon, Check, Loader2, CloudUpload, CheckCircle, Lock } from 'lucide-react';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
+import { showToast } from '@/lib/toast';
 
 // Local Assets
-const imgLinkedin = "/images/linkedin-logo.svg";
-const imgTwitter = "/images/twitter-logo.png";
-const imgFacebook = "/images/facebook-logo.png";
+const imgLinkedin = "/logo/square-linkedin-brands-solid-full.svg";
+const imgTwitter = "/logo/square-x-twitter-brands-solid-full.svg";
+const imgFacebook = "/logo/square-facebook-brands-solid-full.svg";
 
 // Cloudflare Stream customer code - you can find this in your Cloudflare dashboard
 const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || '';
@@ -171,6 +172,7 @@ export function ShareModal({
 
     } catch (error) {
       console.error('Upload error:', error);
+      showToast.error(error instanceof Error ? error.message : 'Upload failed');
       setUploadStatus('error');
       setUploadError(error instanceof Error ? error.message : 'Upload failed');
       uploadedBlobRef.current = null; // Allow retry
@@ -209,10 +211,12 @@ export function ShareModal({
         onPublishSuccess?.();
       } else {
         console.error('Failed to publish');
+        showToast.error('Failed to publish');
         // Handle error (maybe show toast)
       }
     } catch (error) {
       console.error('Error publishing:', error);
+      showToast.error('Error publishing');
     } finally {
       setPublishLoading(false);
     }

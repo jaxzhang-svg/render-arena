@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
+import { showToast } from '@/lib/toast';
 
 interface AuthState {
   user: User | null;
@@ -41,6 +42,7 @@ export function useAuth(): UseAuthReturn {
       
       if (error) {
         console.error('Error fetching session:', error);
+        // showToast.error('Failed to fetch session'); // Optional: noisy if happens often on background
         setState({ user: null, session: null, loading: false });
         return;
       }
@@ -77,6 +79,7 @@ export function useAuth(): UseAuthReturn {
       window.location.href = '/';
     } catch (error) {
       console.error('Error during logout:', error);
+      showToast.error('Failed to logout');
       setState(prev => ({ ...prev, loading: false }));
     }
   }, [supabase]);

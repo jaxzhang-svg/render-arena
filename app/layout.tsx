@@ -1,6 +1,8 @@
+import NextTopLoader from 'nextjs-toploader';
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ToastProvider } from "@/components/providers/toast-provider";
 
 const interphases = localFont({
   src: [
@@ -52,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body
         className={`
           ${interphases.variable}
@@ -60,9 +62,15 @@ export default function RootLayout({
           antialiased
         `}
       >
+        <NextTopLoader 
+          color="#23d57c"
+          showSpinner={false} 
+          shadow="0 0 10px #23d57c,0 0 5px #23d57c"
+        />
         <div className="root">
         {children}
         </div>
+        <ToastProvider />
       </body>
     </html>
   );

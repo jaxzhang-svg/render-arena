@@ -16,6 +16,7 @@ import {
   RotateCcw,
   Share2,
 } from 'lucide-react'
+import { showToast } from '@/lib/toast'
 import { ShareModal } from '@/components/playground/share-modal'
 import { UserAvatar } from '@/components/app/user-avatar'
 import { ModelPanel } from '@/components/playground/model-panel'
@@ -119,6 +120,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     },
     onError: (error) => {
       console.error('Recording error:', error)
+      showToast.error('Recording failed')
     },
   })
 

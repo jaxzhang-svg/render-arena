@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import type { GalleryApp } from '@/types';
 import DOMPurify from 'isomorphic-dompurify';
 import { DOMPURIFY_CONFIG } from '@/lib/sanitizer';
+import { showToast } from '@/lib/toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Cloudflare Stream customer code
 const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || '';
@@ -26,7 +28,20 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   const router = useRouter();
   const [likeCount, setLikeCount] = useState(app.like_count);
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
-  const [isLiking, setIsLiking] = useState(false);
+  
+  // Refs to track state for synchronization without causing re-renders or staleness
+  const isLikedRef = useRef(app.isLiked || false);
+  const serverLikedRef = useRef(app.isLiked || false);
+  const isSyncingRef = useRef(false);
+
+  // Sync state with props when they change (e.g., list refresh)
+  useEffect(() => {
+    setLikeCount(app.like_count);
+    setIsLiked(app.isLiked || false);
+    isLikedRef.current = app.isLiked || false;
+    serverLikedRef.current = app.isLiked || false;
+  }, [app.like_count, app.isLiked]);
+
   const [isHovered, setIsHovered] = useState(false);
   const [hasHovered, setHasHovered] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -43,33 +58,83 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
     ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/thumbnails/thumbnail.jpg?time=1s`
     : '/images/default-poster.png';
 
-  const handleLike = async () => {
-    if (isLiking) return;
+  const handleLike = useCallback(async () => {
+    // 1. Optimistic Update
+    const nextIsLiked = !isLikedRef.current;
+    isLikedRef.current = nextIsLiked;
+    setIsLiked(nextIsLiked);
+    setLikeCount((prev) => (nextIsLiked ? prev + 1 : prev - 1));
 
-    setIsLiking(true);
-    try {
-      const response = await fetch(`/api/apps/${app.id}/like`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
+    // 2. Synchronization Logic
+    const sync = async () => {
+      if (isSyncingRef.current) return;
 
-      const data = await response.json();
+      // If server state matches user intent, no need to sync
+      if (serverLikedRef.current === isLikedRef.current) return;
 
-      if (response.status === 401) {
-        alert('请先登录后再点赞');
-        return;
+      isSyncingRef.current = true;
+
+      try {
+        // Loop until server state catches up with user intent
+        while (serverLikedRef.current !== isLikedRef.current) {
+          // Send the target state we WANT to achieve
+          const targetState = isLikedRef.current;
+          
+          const response = await fetch(`/api/apps/${app.id}/like`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ liked: targetState }),
+          });
+
+          if (response.status === 401) {
+            showToast.login('Please login to like');
+            // Revert code
+            isLikedRef.current = serverLikedRef.current;
+            setIsLiked(serverLikedRef.current);
+            setLikeCount(app.like_count); // Reset to original count as best guess
+            return;
+          }
+
+          const data = await response.json();
+
+          if (data.success) {
+            serverLikedRef.current = data.liked;
+            // Optionally update count from server to be precise, 
+            // but we must be careful not to override optimistic updates if user clicked again.
+            // Since we are in a loop, and 'data.liked' corresponds to the result of THIS call,
+            // we can trust 'data.likeCount' for THAT state. 
+            // However, if intended state changed again, we'll loop again.
+            // Using server count is safer for eventual consistency.
+            //  if (serverLikedRef.current === isLikedRef.current) {
+            //     setLikeCount(data.likeCount);
+            //  }
+          } else {
+            // Server error, revert
+            console.error('Like failed:', data);
+            isLikedRef.current = serverLikedRef.current;
+            setIsLiked(serverLikedRef.current);
+            // Revert count? Roughly:
+            setLikeCount((prev) => (serverLikedRef.current ? prev + 1 : prev - 1));
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Failed to like:', error);
+        // Network error, revert
+        isLikedRef.current = serverLikedRef.current;
+        setIsLiked(serverLikedRef.current);
+        setLikeCount((prev) => (serverLikedRef.current ? prev + 1 : prev - 1));
+      } finally {
+        isSyncingRef.current = false;
+        // Double check in case of race condition at the very end
+        if (serverLikedRef.current !== isLikedRef.current) {
+           sync();
+        }
       }
+    };
 
-      if (data.success) {
-        setLikeCount(data.likeCount);
-        setIsLiked(data.liked);
-      }
-    } catch (error) {
-      console.error('Failed to like:', error);
-    } finally {
-      setIsLiking(false);
-    }
-  };
+    sync();
+  }, [app.id, app.like_count]);
 
   const handleCopy = async () => {
     try {
@@ -77,6 +142,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
       router.push(`/playground/new?prompt=${encodeURIComponent(app.prompt)}&category=${encodeURIComponent(currentCategory)}`);
     } catch (error) {
       console.error('Failed to copy:', error);
+      showToast.error('Failed to copy');
     }
   };
 
@@ -110,12 +176,11 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               <iframe
                 ref={iframeRef}
                 src={videoUrl!}
-                className={`absolute inset-0 w-full h-full border-0 transition-opacity duration-300 ${
+                className={`absolute inset-0 w-full h-full border-0 transition-opacity duration-300 pointer-events-none ${
                   isHovered ? 'opacity-100' : 'opacity-0'
                 }`}
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 data-note="Video loads on first hover and persists to avoid reload flash"
-                style={{ pointerEvents: isHovered ? 'auto' : 'none' }}
                 allowFullScreen
               />
             )}
@@ -231,13 +296,11 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                 ? 'text-[#f23030] border-red-200 bg-red-50'
                 : 'text-[#4f4e4a] border-black/10 bg-[#f5f5f5] hover:border-gray-300'
               }
-              ${isLiking ? 'opacity-50' : ''}
             `}
             onClick={(e) => {
               e.stopPropagation();
               handleLike();
             }}
-            disabled={isLiking}
           >
             <Heart className={`size-5 ${isLiked ? 'fill-current' : ''}`} />
             <span className="font-sans">{likeCount}</span>
@@ -272,6 +335,7 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
       setHasMore(data?.apps?.length === 6 && pageNum * 6 < data.total);
     } catch (error) {
       console.error('Error fetching apps:', error);
+      showToast.error('Failed to fetch apps');
     } finally {
       setLoading(false);
     }
@@ -288,24 +352,6 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
     fetchApps(nextPage, selectedCategory, true);
   };
 
-  if (loading && apps.length === 0) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="size-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    );
-  }
-
-  if (apps.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center">
-        <Box className="size-16 text-muted-foreground/40 mb-4" />
-        <h3 className="text-lg font-semibold text-foreground/80">No apps yet</h3>
-        <p className="text-sm text-muted-foreground">Be the first to create and share an app!</p>
-      </div>
-    );
-  }
-
   return (
     <div>
       {(selectedCategory !== 'all' && currentCategory) ? <div className="mb-8">
@@ -316,34 +362,68 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
           {currentCategory.description}
         </h2>
       </div> : null}
-      {/* Apps Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {apps.map((app) => (
-          <GalleryAppCard key={app.id} app={app} currentCategory={selectedCategory} />
-        ))}
-      </div>
 
-      {/* Load More */}
-      {hasMore && (
-        <div className="mt-16 flex justify-center">
-          <button
-            onClick={handleLoadMore}
-            disabled={loading}
-            className="inline-flex cursor-pointer items-center gap-2 h-10 px-8 rounded-lg border border-gray-200 bg-white text-gray-900 hover:bg-gray-100 font-medium transition-colors disabled:opacity-50"
-          >
-            {loading ? (
-              <>
-                <div className="size-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
-                Loading...
-              </>
-            ) : (
-              <>
-                Load more apps
-                <ChevronDown className="size-5" />
-              </>
-            )}
-          </button>
+      {/* Loading State - Render Skeletons */}
+      {loading ? (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="flex flex-col gap-4">
+               {/* Card Image Skeleton */}
+               <Skeleton className="w-full aspect-[8/3] rounded-2xl" />
+               
+               {/* Card Footer Skeleton */}
+               <div className="flex flex-col justify-between px-0 pt-3 pb-0 space-y-3">
+                  <div className="space-y-2">
+                     <Skeleton className="h-8 w-3/4 rounded-md" />
+                     <Skeleton className="h-5 w-1/3 rounded-md" />
+                  </div>
+                  <div className="flex items-center justify-between">
+                     <Skeleton className="h-5 w-20 rounded-md" />
+                     <Skeleton className="h-8 w-16 rounded-full" />
+                  </div>
+               </div>
+            </div>
+          ))}
         </div>
+      ) : apps.length === 0 ? (
+        /* Empty State */
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <Box className="size-16 text-muted-foreground/40 mb-4" />
+          <h3 className="text-lg font-semibold text-foreground/80">No apps yet</h3>
+          <p className="text-sm text-muted-foreground">Be the first to create and share an app!</p>
+        </div>
+      ) : (
+        /* Apps Grid */
+        <>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {apps.map((app) => (
+              <GalleryAppCard key={app.id} app={app} currentCategory={selectedCategory} />
+            ))}
+          </div>
+
+          {/* Load More */}
+          {hasMore && (
+            <div className="mt-16 flex justify-center">
+              <button
+                onClick={handleLoadMore}
+                disabled={loading}
+                className="inline-flex cursor-pointer items-center gap-2 h-10 px-8 rounded-lg border border-gray-200 bg-white text-gray-900 hover:bg-gray-100 font-medium transition-colors disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <div className="size-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+                    Loading...
+                  </>
+                ) : (
+                  <>
+                    Load more apps
+                    <ChevronDown className="size-5" />
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -21,6 +21,7 @@ import { getModelById, models } from '@/lib/models'
 import type { App } from '@/types'
 import DOMPurify from 'isomorphic-dompurify'
 import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
+import { showToast } from '@/lib/toast'
 
 interface GalleryClientProps {
   app: App & { isOwner: boolean; isLiked: boolean }
@@ -51,10 +52,11 @@ export default function GalleryClient({ app }: GalleryClientProps) {
         setLiked(data.liked)
         setLikeCount(data.likeCount)
       } else if (response.status === 401) {
-        alert('请先登录后再点赞')
+        showToast.login('Please login to like')
       }
     } catch (error) {
       console.error('Like error:', error)
+      showToast.error('Failed to like')
     } finally {
       setIsLiking(false)
     }
@@ -67,6 +69,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
       setTimeout(() => setCopied(false), 2000)
     } catch (error) {
       console.error('Copy error:', error)
+      showToast.error('Failed to copy')
     }
   }, [app.prompt])
 
