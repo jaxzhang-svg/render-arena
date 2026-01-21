@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
                 headers: [
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self'; connect-src 'self' https:; frame-src 'self' blob: data: https://*.cloudflarestream.com;",
+                        value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; media-src 'self' blob: data: https://*.cloudflarestream.com; font-src 'self'; connect-src 'self' https:; frame-src 'self' blob: data: https://*.cloudflarestream.com;",
                     },
                     {
                         key: 'X-Content-Type-Options',

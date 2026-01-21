@@ -1,21 +1,16 @@
 import { useState, useRef, useEffect, useCallback, RefObject } from 'react'
 import RecordRTC from 'recordrtc'
 
-export type VideoFormat = 'webm' | 'mp4'
+export type VideoFormat = 'webm'
 
 export interface UseScreenRecorderOptions {
   onRecordingComplete?: (blob: Blob, format: VideoFormat) => void;
   onError?: (error: Error) => void;
-  preferredFormat?: VideoFormat;
-  /**
-   * Convert to MP4 after recording (requires FFmpeg.wasm)
-   * Note: This is async and may take time depending on video length
-   */
-  convertToMp4?: boolean;
 }
 
 export interface UseScreenRecorderReturn {
   isRecording: boolean;
+  isRecordingSupported: boolean;
   recordingTime: number;
   recordedBlob: Blob | null;
   recordedFormat: VideoFormat | null;
@@ -23,7 +18,6 @@ export interface UseScreenRecorderReturn {
   startRecording: () => Promise<void>;
   stopRecording: () => void;
   resetRecording: () => void;
-  isConverting: boolean;
 }
 
 /**
@@ -31,30 +25,17 @@ export interface UseScreenRecorderReturn {
  *
  * @param options - Configuration options
  * @returns Recording state and controls
- *
- * @example
- * ```tsx
- * const { isRecording, recordingTime, recordedBlob, previewContainerRef, startRecording, stopRecording } = useScreenRecorder({
- *   onRecordingComplete: (blob) => console.log('Recording complete:', blob),
- * })
- *
- * return (
- *   <div ref={previewContainerRef}>
- *     <button onClick={isRecording ? stopRecording : startRecording}>
- *       {isRecording ? 'Stop' : 'Start'}
- *     </button>
- *   </div>
- * )
- * ```
  */
 export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseScreenRecorderReturn {
-  const { onRecordingComplete, onError, preferredFormat = 'mp4', convertToMp4 = false } = options
+  const { onRecordingComplete, onError } = options
 
   const [isRecording, setIsRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null)
   const [recordedFormat, setRecordedFormat] = useState<VideoFormat | null>(null)
-  const [isConverting, setIsConverting] = useState(false)
+  
+  // Browser support flags
+  const [isRecordingSupported, setIsRecordingSupported] = useState(false)
 
   const recorderRef = useRef<RecordRTC | MediaRecorder | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -72,27 +53,33 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   onRecordingCompleteRef.current = onRecordingComplete
   recordedFormatRef.current = recordedFormat
 
+  // Check browser support on mount
+  useEffect(() => {
+    // Check if getDisplayMedia is supported
+    const hasDisplayMedia = !!(
+      typeof navigator !== 'undefined' &&
+      navigator.mediaDevices &&
+      navigator.mediaDevices.getDisplayMedia
+    )
+    setIsRecordingSupported(hasDisplayMedia)
+  }, [])
+
   // Detect supported video format - prefer WebM for simplicity (widely supported, no transcoding needed)
   const getSupportedFormat = useCallback((): { mimeType: string; format: VideoFormat } => {
     const formats = [
-      // WebM formats - preferred (native browser support, Cloudflare accepts it)
+      // WebM formats - native browser support
       { mimeType: 'video/webm; codecs=vp9', format: 'webm' as VideoFormat },
       { mimeType: 'video/webm; codecs=vp8', format: 'webm' as VideoFormat },
       { mimeType: 'video/webm', format: 'webm' as VideoFormat },
-      // MP4 as fallback (some browsers like Safari may need this)
-      { mimeType: 'video/mp4; codecs=avc1.42E01E,mp4a.40.2', format: 'mp4' as VideoFormat },
-      { mimeType: 'video/mp4', format: 'mp4' as VideoFormat },
     ]
 
     for (const { mimeType, format } of formats) {
-      if (MediaRecorder.isTypeSupported(mimeType)) {
-        console.log('[useScreenRecorder] Using format:', mimeType)
+      if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(mimeType)) {
         return { mimeType, format }
       }
     }
 
-    console.warn('[useScreenRecorder] No supported format found, falling back to webm')
-    return { mimeType: 'video/webm', format: 'webm' }
+    return { mimeType: 'video/webm', format: 'webm' as VideoFormat }
   }, [])
 
   // Cleanup on unmount
@@ -168,7 +155,7 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
         }
       }
 
-      // Get supported format (prefer MP4)
+      // Get supported format
       const { mimeType, format } = getSupportedFormat()
       console.log('[useScreenRecorder] Requested format:', format, 'with mimeType:', mimeType)
 
@@ -236,8 +223,8 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
           blobType: blob.type,
         })
 
-        // Update format based on actual blob type
-        const actualFormat = blob.type.includes('mp4') ? 'mp4' : 'webm'
+        // Always WebM now
+        const actualFormat: VideoFormat = 'webm'
 
         setRecordedBlob(blob)
         onRecordingCompleteRef.current?.(blob, actualFormat)
@@ -263,11 +250,11 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
     setRecordedFormat(null)
     setRecordingTime(0)
     setIsRecording(false)
-    setIsConverting(false)
   }, [])
 
   return {
     isRecording,
+    isRecordingSupported,
     recordingTime,
     recordedBlob,
     recordedFormat,
@@ -275,6 +262,5 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
     startRecording,
     stopRecording,
     resetRecording,
-    isConverting,
   }
 }

@@ -1,8 +1,8 @@
 'use client';
 
 import { Dialog } from '@base-ui/react/dialog';
-import { Download, Copy, X, Link as LinkIcon, Check, Loader2, CloudUpload, CheckCircle } from 'lucide-react';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { Download, Copy, X, Link as LinkIcon, Check, Loader2, CloudUpload, CheckCircle, Lock } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
 
 // Local Assets
@@ -20,10 +20,11 @@ interface ShareModalProps {
   onOpenChange?: (open: boolean) => void;
   appId?: string;
   shareUrl?: string;
-  previewImage?: string;
   videoBlob?: Blob | null;
   videoFormat?: 'webm' | 'mp4' | null;
   showVideoSection?: boolean;
+  isPublished?: boolean;
+  onPublishSuccess?: () => void;
 }
 
 export function ShareModal({
@@ -31,64 +32,47 @@ export function ShareModal({
   onOpenChange,
   appId,
   shareUrl = 'https://make.figma.com/s/9f8a7d6',
-  previewImage,
   videoBlob,
   videoFormat,
   showVideoSection = false,
+  isPublished = false,
+  onPublishSuccess,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
-  const [publishToGallery, setPublishToGallery] = useState(true);
-  const [isPublished, setIsPublished] = useState(false);
-  const [agreedToPolicy, setAgreedToPolicy] = useState(true);
+  const [agreedToPolicy, setAgreedToPolicy] = useState(false);
+  const [publishLoading, setPublishLoading] = useState(false);
 
   // Upload state
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [videoUid, setVideoUid] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  
+
   // Track if we've already uploaded this blob
   const uploadedBlobRef = useRef<Blob | null>(null);
-  
-  // Use ref for stable blob URL to avoid revocation issues
-  const videoUrlRef = useRef<string | null>(null);
-  
-  // Create or reuse video URL from blob for preview
-  const videoUrl = (() => {
-    if (!videoBlob) {
-      // Cleanup when no blob
-      if (videoUrlRef.current) {
-        URL.revokeObjectURL(videoUrlRef.current);
-        videoUrlRef.current = null;
-      }
-      return null;
-    }
-    // Only create new URL if blob changed
-    if (videoBlob !== uploadedBlobRef.current || !videoUrlRef.current) {
-      if (videoUrlRef.current) {
-        URL.revokeObjectURL(videoUrlRef.current);
-      }
-      videoUrlRef.current = URL.createObjectURL(videoBlob);
-    }
-    return videoUrlRef.current;
-  })();
-  
+
   const fileSize = videoBlob ? (videoBlob.size / (1024 * 1024)).toFixed(1) : '0';
 
-  // Cleanup object URL when component unmounts
+  // Create video URL from blob for preview
+  const videoUrl = useMemo(() => {
+    if (!videoBlob) return null;
+    return URL.createObjectURL(videoBlob);
+  }, [videoBlob]);
+
+  // Cleanup URL when component unmounts or blob changes
   useEffect(() => {
     return () => {
-      if (videoUrlRef.current) {
-        URL.revokeObjectURL(videoUrlRef.current);
-        videoUrlRef.current = null;
+      if (videoUrl) {
+        URL.revokeObjectURL(videoUrl);
       }
     };
-  }, []);
+  }, [videoUrl]);
 
   // Reset state when modal opens
   useEffect(() => {
     if (open) {
-      setIsPublished(false);
+      // We rely on parent to reset or maintain isPublished state
+
       // Only reset upload state if it's a new blob
       if (videoBlob && videoBlob !== uploadedBlobRef.current) {
         setUploadStatus('idle');
@@ -99,12 +83,15 @@ export function ShareModal({
     }
   }, [open, videoBlob]);
 
-  // Auto-upload when modal opens with a new video blob
+  // Auto-upload when modal opens with a new video blob - REMOVED for new flow
+  // We only upload when user clicks "Publish"
+  /* 
   useEffect(() => {
     if (open && videoBlob && appId && uploadStatus === 'idle' && videoBlob !== uploadedBlobRef.current) {
       handleUploadVideo();
     }
   }, [open, videoBlob, appId, uploadStatus]);
+  */
 
   // Upload video to Cloudflare Stream
   const handleUploadVideo = useCallback(async () => {
@@ -139,7 +126,7 @@ export function ShareModal({
       // Use XMLHttpRequest for progress tracking
       await new Promise<void>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        
+
         xhr.upload.addEventListener('progress', (event) => {
           if (event.lengthComputable) {
             const progress = Math.round((event.loaded / event.total) * 100);
@@ -165,7 +152,7 @@ export function ShareModal({
 
       // Step 3: Save video UID to database
       setUploadStatus('processing');
-      
+
       const saveResponse = await fetch(`/api/apps/${appId}/video`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -190,29 +177,48 @@ export function ShareModal({
     }
   }, [videoBlob, appId, videoFormat]);
 
-  const handlePublishToGallery = useCallback(() => {
-    if (!appId || isPublished || !publishToGallery) return;
+  /*
+   * Handle Publish to Gallery
+   * - Uploads video if needed
+   * - Calls publish API
+   */
+  const handlePublishToGallery = useCallback(async () => {
+    if (!appId || isPublished) return;
 
-    fetch(`/api/apps/${appId}/publish`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({}),
-    }).then(response => {
-      if (response.ok) {
-        setIsPublished(true);
+    try {
+      setPublishLoading(true);
+
+      // If there is a video AND it hasn't been uploaded yet, upload it first
+      if (videoBlob && uploadStatus === 'idle') {
+        await handleUploadVideo();
+        // Note: handleUploadVideo sets uploadStatus to 'processing' -> 'ready'
+        // We need to wait for it? handleUploadVideo is async so awaiting it should be fine
+        // BUT, handleUploadVideo catches its own errors. We should check logic.
+      } else if (uploadStatus === 'error') {
+        await handleUploadVideo();
       }
-    }).catch(error => {
-      console.error('Error publishing to gallery:', error);
-    });
-  }, [appId, isPublished, publishToGallery]);
+
+      // Now publish
+      const response = await fetch(`/api/apps/${appId}/publish`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+
+      if (response.ok) {
+        onPublishSuccess?.();
+      } else {
+        console.error('Failed to publish');
+        // Handle error (maybe show toast)
+      }
+    } catch (error) {
+      console.error('Error publishing:', error);
+    } finally {
+      setPublishLoading(false);
+    }
+  }, [appId, isPublished, videoBlob, uploadStatus, handleUploadVideo]);
 
   const handleCopy = () => {
-    if (!agreedToPolicy) return;
-
-    if (appId && !isPublished) {
-      handlePublishToGallery();
-    }
-
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -231,12 +237,6 @@ export function ShareModal({
   };
 
   const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
-    if (!agreedToPolicy) return;
-
-    if (appId && !isPublished) {
-      handlePublishToGallery();
-    }
-
     const encodedUrl = encodeURIComponent(shareUrl);
     const text = encodeURIComponent('Check out this AI-generated app battle! 🚀');
     let url = '';
@@ -294,7 +294,7 @@ export function ShareModal({
             </div>
           </>
         )}
-        
+
         {uploadStatus === 'processing' && (
           <>
             <Loader2 className="size-10 text-white animate-spin" />
@@ -303,7 +303,7 @@ export function ShareModal({
             </div>
           </>
         )}
-        
+
         {uploadStatus === 'error' && (
           <>
             <div className="size-12 rounded-full bg-red-500/20 flex items-center justify-center">
@@ -321,39 +321,6 @@ export function ShareModal({
           </>
         )}
       </div>
-    );
-  };
-
-  // Render video preview - always use local blob in share modal
-  // (Cloudflare Stream iframe is used in gallery after video is fully processed)
-  const renderVideoPreview = () => {
-    // Always use local video preview for immediate feedback
-    if (videoUrl) {
-      return (
-        <video
-          src={videoUrl}
-          className="w-full h-full object-cover opacity-90"
-          poster={previewImage}
-          controls
-          autoPlay
-          muted
-          loop
-        />
-      );
-    }
-
-    if (previewImage) {
-      return (
-        <img
-          src={previewImage}
-          alt="Preview"
-          className="w-full h-full object-cover opacity-90"
-        />
-      );
-    }
-
-    return (
-      <div className="w-full h-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 opacity-90" />
     );
   };
 
@@ -377,9 +344,21 @@ export function ShareModal({
             {/* Preview Container - Only show when triggered by recording */}
             {showVideoSection && (
               <div className="relative w-full h-[228.375px] bg-[#101828] rounded-[14px] overflow-hidden shadow-[inset_0px_2px_4px_0px_rgba(0,0,0,0.05)]">
-                {renderVideoPreview()}
+                {
+                  videoUrl ? <video
+                    key={videoUrl}
+                    src={videoUrl}
+                    className="w-full h-full object-cover opacity-90"
+                    controls
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    onError={(e) => console.error('Video playback error:', e.currentTarget.error)}
+                  /> : <div className="w-full h-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 opacity-90" />
+                }
                 {renderUploadOverlay()}
-                
+
                 {/* Upload Complete Badge */}
                 {uploadStatus === 'ready' && (
                   <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 bg-green-500/90 backdrop-blur-sm rounded-full text-white text-xs font-medium">
@@ -390,142 +369,84 @@ export function ShareModal({
               </div>
             )}
 
-            {/* Public Link Section */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
-                Public Link
-              </label>
-              <div className="flex gap-2">
-                <div className="flex-1 h-[42px] bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] flex items-center gap-2 px-[13px] min-w-0">
-                  <LinkIcon className="size-4 text-gray-500 shrink-0" />
-                  <span className="text-[14px] text-[#4a5565] leading-5 truncate flex-1">
-                    {shareUrl}
-                  </span>
+            {/* Publish To Gallery Component (Gatekeeper) */}
+            {!isPublished && (
+              <PublishToGallery
+                onPublish={handlePublishToGallery}
+                loading={publishLoading || uploadStatus === 'uploading' || uploadStatus === 'processing'}
+                agreedToPolicy={agreedToPolicy}
+                setAgreedToPolicy={setAgreedToPolicy}
+              />
+            )}
+
+            {/* Public Link & Social Share - Only show when published */}
+            {isPublished && (
+              <>
+                <div className="space-y-2">
+                  <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
+                    Public Link
+                  </label>
+                  <div className="flex gap-2">
+                    <div className="flex-1 h-[42px] bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] flex items-center gap-2 px-[13px] min-w-0">
+                      <LinkIcon className="size-4 text-gray-500 shrink-0" />
+                      <span className="text-[14px] text-[#4a5565] leading-5 truncate flex-1">
+                        {shareUrl}
+                      </span>
+                    </div>
+                    <button
+                      onClick={handleCopy}
+                      className="h-[42px] w-[90px] rounded-[10px] border border-[#e5e7eb] bg-white text-[#364153] text-[14px] font-medium tracking-[-0.1504px] transition-colors hover:bg-gray-50 flex gap-2 cursor-pointer items-center justify-center"
+                    >
+                      <Copy className="size-4 text-gray-500 shrink-0" />
+                      {copied ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
                 </div>
-                <button
-                  onClick={handleCopy}
-                  disabled={!agreedToPolicy}
-                  className={`h-[42px] w-[90px] rounded-[10px] border text-[14px] font-medium tracking-[-0.1504px] transition-colors flex cursor-pointer items-center justify-center
-                  ${!agreedToPolicy
-                      ? 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
-                      : 'border-[#e5e7eb] bg-white text-[#364153] hover:bg-gray-50'
-                    }`}
-                >
-                  {copied ? 'Copied' : 'Copy'}
-                </button>
-              </div>
-            </div>
 
-            {/* Share to Social Section */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
-                Share to Social
-              </label>
-              <div className="flex gap-3">
-                {/* Twitter */}
-                <button
-                  onClick={() => handleSocialShare('twitter')}
-                  disabled={!agreedToPolicy}
-                  className={`flex-1 cursor-pointer border rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors
-                  ${!agreedToPolicy
-                      ? 'border-gray-100 opacity-50 cursor-not-allowed bg-gray-50'
-                      : 'border-[#f3f4f6] hover:bg-gray-50'
-                    }`}
-                >
-                  <div className="size-8 rounded-full flex items-center justify-center overflow-hidden">
-                    <img src={imgTwitter} alt="Twitter" className="size-full object-cover" />
+                <div className="space-y-2">
+                  <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
+                    Share to Social
+                  </label>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => handleSocialShare('twitter')}
+                      className="flex-1 cursor-pointer border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors hover:bg-gray-50"
+                    >
+                      <div className="size-8 rounded-full flex items-center justify-center overflow-hidden">
+                        <img src={imgTwitter} alt="Twitter" className="size-full object-cover" />
+                      </div>
+                      <span className="text-[12px] font-medium text-[#4a5565] leading-4">
+                        Twitter
+                      </span>
+                    </button>
+
+                    <button
+                      onClick={() => handleSocialShare('linkedin')}
+                      className="flex-1 cursor-pointer border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors hover:bg-gray-50"
+                    >
+                      <div className="size-8 relative">
+                        <img alt="LinkedIn" className="block max-w-none size-full" src={imgLinkedin} />
+                      </div>
+                      <span className="text-[12px] font-medium text-[#4a5565] leading-4">
+                        LinkedIn
+                      </span>
+                    </button>
+
+                    <button
+                      onClick={() => handleSocialShare('facebook')}
+                      className="flex-1 cursor-pointer border border-[#f3f4f6] rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors hover:bg-gray-50"
+                    >
+                      <div className="size-8 rounded-full flex items-center justify-center overflow-hidden">
+                        <img src={imgFacebook} alt="Facebook" className="size-full object-cover" />
+                      </div>
+                      <span className="text-[12px] font-medium text-[#4a5565] leading-4">
+                        Facebook
+                      </span>
+                    </button>
                   </div>
-                  <span className="text-[12px] font-medium text-[#4a5565] leading-4">
-                    Twitter
-                  </span>
-                </button>
-
-                {/* LinkedIn */}
-                <button
-                  onClick={() => handleSocialShare('linkedin')}
-                  disabled={!agreedToPolicy}
-                  className={`flex-1 cursor-pointer border rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors
-                  ${!agreedToPolicy
-                      ? 'border-gray-100 opacity-50 cursor-not-allowed bg-gray-50'
-                      : 'border-[#f3f4f6] hover:bg-gray-50'
-                    }`}
-                >
-                  <div className="size-8 relative">
-                    <img alt="LinkedIn" className="block max-w-none size-full" src={imgLinkedin} />
-                  </div>
-                  <span className="text-[12px] font-medium text-[#4a5565] leading-4">
-                    LinkedIn
-                  </span>
-                </button>
-
-                {/* Facebook */}
-                <button
-                  onClick={() => handleSocialShare('facebook')}
-                  disabled={!agreedToPolicy}
-                  className={`flex-1 cursor-pointer border rounded-[14px] p-1 flex flex-col items-center justify-center gap-2 h-[82px] transition-colors
-                  ${!agreedToPolicy
-                      ? 'border-gray-100 opacity-50 cursor-not-allowed bg-gray-50'
-                      : 'border-[#f3f4f6] hover:bg-gray-50'
-                    }`}
-                >
-                  <div className="size-8 rounded-full flex items-center justify-center overflow-hidden">
-                    <img src={imgFacebook} alt="Facebook" className="size-full object-cover" />
-                  </div>
-                  <span className="text-[12px] font-medium text-[#4a5565] leading-4">
-                    Facebook
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 py-2">
-              {appId && (
-                <>
-                  <button
-                    type="button"
-                    role="checkbox"
-                    aria-checked={publishToGallery}
-                    onClick={() => setPublishToGallery(!publishToGallery)}
-                    className={`
-                      size-5 cursor-pointer rounded border-2 flex items-center justify-center transition-colors flex-shrink-0
-                      ${publishToGallery
-                        ? 'bg-[#23d57c] border-[#23d57c]'
-                        : 'bg-white border-gray-300 hover:border-gray-400'
-                      }
-                    `}
-                  >
-                    {publishToGallery && <Check className="size-3 text-white" />}
-                  </button>
-                  <span className="text-[14px] text-[#364153]">
-                    Publish to Gallery
-                  </span>
-                  
-                  {/* Separator */}
-                  <div className="w-[1px] h-4 bg-gray-200 mx-1" />
-                </>
-              )}
-
-              <button
-                type="button"
-                role="checkbox"
-                aria-checked={agreedToPolicy}
-                onClick={() => setAgreedToPolicy(!agreedToPolicy)}
-                className={`
-                  size-5 cursor-pointer rounded border-2 flex items-center justify-center transition-colors flex-shrink-0
-                  ${agreedToPolicy
-                    ? 'bg-[#23d57c] border-[#23d57c]'
-                    : 'bg-white border-gray-300 hover:border-gray-400'
-                  }
-                `}
-              >
-                {agreedToPolicy && <Check className="size-3 text-white" />}
-              </button>
-              <div className="flex items-center gap-2">
-                <span className="text-[14px] text-[#364153]">
-                  <a href="#" className="underline hover:text-black">Privacy Policy</a>
-                </span>
-              </div>
-            </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Footer - Only show download section when triggered by recording */}
@@ -537,7 +458,7 @@ export function ShareModal({
               </div>
               <button
                 onClick={handleDownload}
-                className="h-9 bg-[#101828] text-white rounded-[10px] px-4 flex cursor-pointer items-center gap-2 text-[14px] font-medium tracking-[-0.1504px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] hover:bg-[#101828]/90 transition-colors"
+                className="h-9 bg-white text-[#101828] rounded-[6px] px-4 flex cursor-pointer items-center gap-2 text-[14px] font-medium tracking-[-0.1504px] border border-[#E7E6E2] hover:border-primary hover:text-primary transition-colors"
               >
                 <Download className="size-4" />
                 Download Video
@@ -549,5 +470,79 @@ export function ShareModal({
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>
+  );
+}
+
+// ----------------------------------------------------------------------
+// Helper Components
+// ----------------------------------------------------------------------
+
+interface PublishToGalleryProps {
+  onPublish: () => void;
+  loading: boolean;
+  agreedToPolicy: boolean;
+  setAgreedToPolicy: (val: boolean) => void;
+}
+
+function PublishToGallery({ onPublish, loading, agreedToPolicy, setAgreedToPolicy }: PublishToGalleryProps) {
+  return (
+    <div className="flex flex-col items-center justify-center p-4 border border-[#F3F4F6] rounded-[16px]">
+      <div className="flex flex-col items-center gap-4 mb-4">
+        <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center">
+          <div className="flex items-center justify-center size-6">
+            <Lock className='size-6' />
+          </div>
+        </div>
+        <div className="text-center">
+          <h3 className="text-[20px] font-semibold text-[#101828] leading-[24px] mb-1">
+            This video is currently private
+          </h3>
+          <p className="text-[14px] text-[#4F4E4A] leading-[20px] text-center max-w-[280px]">
+            Publish to the gallery to generate a public link and share to social media.
+          </p>
+        </div>
+      </div>
+
+      <div className="w-full flex flex-col gap-3">
+        <button
+          onClick={onPublish}
+          disabled={!agreedToPolicy || loading}
+          className={`
+            w-full h-[44px] rounded-[10px] flex items-center justify-center gap-2
+            text-[16px] font-medium transition-colors
+            ${!agreedToPolicy || loading
+              ? 'bg-[#F5F5F5] text-[#9E9C98] cursor-not-allowed'
+              : 'bg-[#23D57C] text-white hover:bg-[#23D57C]/90'
+            }
+          `}
+        >
+          {loading && <Loader2 className="size-4 animate-spin" />}
+          Publish to Gallery
+        </button>
+
+        <div className="flex items-center justify-center gap-2">
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={agreedToPolicy}
+            onClick={() => setAgreedToPolicy(!agreedToPolicy)}
+            className={`
+                 size-5 cursor-pointer rounded border-2 flex items-center justify-center transition-colors flex-shrink-0
+                 ${agreedToPolicy
+                ? 'bg-[#23d57c] border-[#23d57c]'
+                : 'bg-white border-gray-300 hover:border-gray-400'
+              }
+               `}
+          >
+            {agreedToPolicy && <Check className="size-3 text-white" />}
+          </button>
+          <div className="flex items-center gap-1">
+            <span className="text-[14px] text-[#4F4E4A]">
+              I agree to the <a href="#" className="underline hover:text-black">Privacy Policy</a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
