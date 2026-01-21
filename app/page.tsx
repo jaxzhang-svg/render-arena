@@ -148,14 +148,6 @@ export default function HomePage() {
             {/* Featured Case */}
             <FeaturedCasesSection />
 
-            {/* Subtitle */}
-            {/* <p className="
-              max-w-[672px] font-sans text-lg/6
-              font-normal text-[#4f4e4a]
-            ">
-              Test how different models render the same idea. Compare, judge, and share the results.
-            </p> */}
-
             {/* Textarea Input Section */}
             <div className="
               flex w-full max-w-[787px] flex-col items-center gap-8
