@@ -246,7 +246,7 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
   const fetchApps = useCallback(async (pageNum: number, cat: GalleryCategoryId, append = false) => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/apps?category=${cat}&page=${pageNum}&limit=20`);
+      const response = await fetch(`/api/apps?category=${cat}&page=${pageNum}&limit=6`);
       const data = await response.json();
 
       if (append) {
@@ -255,7 +255,7 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
         setApps(data.apps);
       }
       setTotal(data.total);
-      setHasMore(data?.apps?.length === 20 && pageNum * 20 < data.total);
+      setHasMore(data?.apps?.length === 6 && pageNum * 6 < data.total);
     } catch (error) {
       console.error('Error fetching apps:', error);
     } finally {

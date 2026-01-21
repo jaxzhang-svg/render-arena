@@ -32,8 +32,8 @@ export async function GET(request: NextRequest) {
       query = query.eq('category', categoryFilter);
     }
 
-    // 默认按点赞数排序
-    query = query.order('like_count', { ascending: false });
+    // 默认按点赞数排序，增加创建时间作为二级排序保证稳定性
+    query = query.order('like_count', { ascending: false }).order('created_at', { ascending: false });
 
     // 分页
     query = query.range(offset, offset + limit - 1);
