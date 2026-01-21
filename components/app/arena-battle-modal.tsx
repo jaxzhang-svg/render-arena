@@ -20,6 +20,16 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
           "max-h-[90vh] max-w-[600px] overflow-y-auto rounded-[10px]",
           "border-[rgba(13,84,43,0.5)] bg-black p-0"
         )}>
+          {/* Close Button */}
+          <button
+            onClick={() => onOpenChange(false)}
+            className="absolute right-4 top-4 z-10 rounded-full p-2 text-white/50 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#05df72] focus:ring-offset-2 focus:ring-offset-black"
+            type="button"
+            aria-label="Close"
+          >
+            <X className="size-5" />
+          </button>
+
           {/* Header */}
           <div className="space-y-4 px-6 pt-6 pb-4">
             <div className="flex items-center gap-3">

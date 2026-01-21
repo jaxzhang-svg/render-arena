@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { Heart, Copy, Box, ChevronDown, Download, Play } from 'lucide-react';
+import { Heart, Copy, Box, ChevronDown, Download } from 'lucide-react';
 import Image from 'next/image';
 import { galleryCategories, getModelById, playgroundModes, type GalleryCategoryId } from '@/lib/config';
 import { useRouter } from 'next/navigation';
@@ -34,7 +34,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   // Check if this app has a video preview
   const hasVideo = !!app.preview_video_url && !!CLOUDFLARE_CUSTOMER_CODE;
   const videoUrl = hasVideo 
-    ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/iframe?muted=true&loop=true&autoplay=true&poster=https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/thumbnails/thumbnail.jpg`
+    ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/iframe?muted=true&loop=true&autoplay=true&controls=false&poster=https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/thumbnails/thumbnail.jpg`
     : null;
   const thumbnailUrl = hasVideo
     ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/thumbnails/thumbnail.jpg?time=1s`
@@ -88,22 +88,36 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
       "
     >
       <div className="bg-[#ececf0] relative flex h-[344px] w-full overflow-hidden rounded-2xl cursor-pointer">
-        {/* Video or Image Preview */}
-        {hasVideo && isHovered ? (
-          <iframe
-            ref={iframeRef}
-            src={videoUrl!}
-            className="absolute inset-0 w-full h-full border-0"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+        {/* Video or Image Preview or Iframe */}
+        {hasVideo ? (
+          isHovered ? (
+            <iframe
+              ref={iframeRef}
+              src={videoUrl!}
+              className="absolute inset-0 w-full h-full border-0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : (
+            <img
+              src={thumbnailUrl}
+              alt={app.name || 'App Preview'}
+              className="object-cover"
+            />
+          )
         ) : (
-          <Image
-            src={thumbnailUrl}
-            alt={app.name || 'App Preview'}
-            fill
-            className="object-cover"
-            unoptimized
+          <iframe
+            srcDoc={app.html_content_a || app.html_content_b || ''}
+            className="absolute inset-0 w-full h-full border-0 bg-white transition-opacity duration-500 opacity-100"
+            title={app.name || 'App Preview'}
+            sandbox="allow-scripts allow-forms allow-pointer-lock allow-same-origin allow-modals allow-popups"
+            style={{ 
+              pointerEvents: 'none', 
+              transform: 'scale(0.266)', 
+              transformOrigin: '0px 0px', 
+              width: '380%', 
+              height: '380%' 
+            }}
           />
         )}
 
@@ -142,36 +156,6 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
             </div>
           </div> : null
         }
-
-        {/* VS Badge / Run Button Interaction */}
-        <div className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-          <div className="relative flex items-center justify-center">
-            {/* VS Circle or Play icon for video */}
-            <div className={`
-              bg-white border-white/50 flex size-10 items-center
-              justify-center rounded-full border shadow-[0px_0px_15px_0px_rgba(255,255,255,0.3)]
-              transition-all duration-300
-              group-hover:scale-0 group-hover:opacity-0
-            `}>
-              {hasVideo ? (
-                <Play className="size-4 text-black fill-current ml-0.5" />
-              ) : (
-                <span className="text-black text-xs font-black tracking-tight">VS</span>
-              )}
-            </div>
-
-            {/* View Button (appears on hover) */}
-            <div className="
-              bg-primary text-primary-foreground absolute flex scale-0
-              items-center justify-center gap-2 rounded-full px-5 py-2.5
-              font-bold font-sans whitespace-nowrap opacity-0 shadow-2xl transition-all
-              duration-300
-              group-hover:scale-100 group-hover:opacity-100
-            ">
-              {hasVideo ? 'Watch Battle' : 'View Battle'}
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="flex flex-1 flex-col justify-between px-0 pt-3 pb-0">

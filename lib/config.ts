@@ -196,3 +196,8 @@ export const defaultModelBId = 'pa/gemini-3-flash-preview'
 export function getModelById(modelId: string): LLMModel | undefined {
   return models.find((m) => m.id === modelId)
 }
+
+// Hackathon Configuration
+export const HACKATHON_END_TIME = '2026-02-14T23:59:59Z'; // Hardcoded date for now
+export const HACKATHON_PARTICIPANTS = 1234;
+

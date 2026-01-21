@@ -158,11 +158,11 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                   size="icon"
                   className={cn(
                     "size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors hover:bg-foreground hover:text-background focus-visible:outline-none",
-                    isGuest && "cursor-not-allowed pointer-events-none opacity-50"
+                    (isGuest || !isAllCompleted) && "cursor-not-allowed pointer-events-none opacity-50"
                   )}
                   onClick={handleRecordToggle}
-                  title={isGuest ? undefined : (isRecording ? 'Stop recording' : 'Start recording')}
-                  disabled={isGuest || authLoading}
+                  title={isGuest || !isAllCompleted ? undefined : (isRecording ? 'Stop recording' : 'Start recording')}
+                  disabled={isGuest || authLoading || !isAllCompleted}
                 >
                   {isRecording ? (
                     <Square className="size-4 fill-red-500 text-red-500" />
@@ -172,11 +172,11 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                 </Button>
               }
             />
-            {isGuest && (
+            {(isGuest || (!isAllCompleted && !authLoading)) && (
               <Tooltip.Portal>
                 <Tooltip.Positioner sideOffset={4}>
                   <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
-                    Please login first
+                    {isGuest ? 'Please login first' : 'Please wait for generation to complete'}
                   </Tooltip.Popup>
                 </Tooltip.Positioner>
               </Tooltip.Portal>
@@ -193,24 +193,24 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                   size="icon"
                   className={cn(
                     "size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors hover:bg-foreground hover:text-background focus-visible:outline-none",
-                    isGuest && "cursor-not-allowed pointer-events-none opacity-50"
+                    (isGuest || !isAllCompleted) && "cursor-not-allowed pointer-events-none opacity-50"
                   )}
-                  title={isGuest ? undefined : "Share"}
+                  title={isGuest || !isAllCompleted ? undefined : "Share"}
                   onClick={() => {
                     setShareMode('poster')
                     setShowShareModal(true)
                   }}
-                  disabled={isGuest || authLoading}
+                  disabled={isGuest || authLoading || !isAllCompleted}
                 >
                   <Share2 className="size-4" />
                 </Button>
               }
             />
-            {isGuest && (
+            {(isGuest || (!isAllCompleted && !authLoading)) && (
               <Tooltip.Portal>
                 <Tooltip.Positioner sideOffset={4}>
                   <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
-                    Please login first
+                    {isGuest ? 'Please login first' : 'Please wait for generation to complete'}
                   </Tooltip.Popup>
                 </Tooltip.Positioner>
               </Tooltip.Portal>

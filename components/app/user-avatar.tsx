@@ -4,7 +4,6 @@ import { useState, useId } from 'react';
 import Link from 'next/link';
 import { Popover } from '@base-ui/react/popover';
 import { Button } from '@/components/base/button';
-import { User, LogOut, FileText, Shield } from 'lucide-react';
 import { useAuth, loginWithNovita } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
 import { ArenaBattleModal } from './arena-battle-modal';
@@ -83,61 +82,68 @@ export function UserAvatar({ className }: UserAvatarProps) {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Positioner sideOffset={8}>
-          <Popover.Popup className={cn(
-            "z-[100] w-56 overflow-hidden rounded-lg border border-gray-200 bg-white p-0 text-gray-900 shadow-lg"
+      <Popover.Popup className={cn(
+            "z-[100] w-[260px] overflow-hidden rounded-md border border-[#e7e6e2] bg-white p-2 text-[#292827] shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)]"
           )}>
-            {/* 用户信息 */}
-            <div className="border-b border-[#e7e6e2] px-4 py-3">
-              <p className="truncate font-mono text-sm font-medium text-[#292827]">
+            {/* Top: Email + Copy */}
+            <div className="flex items-center justify-between px-3 py-2">
+              <span className="truncate font-sans text-[16px] font-medium leading-[20px]">
                 {user.email || user.user_metadata?.username || 'User'}
-              </p>
+              </span>
+              <button
+                onClick={() => {
+                  if (user.email) {
+                    navigator.clipboard.writeText(user.email);
+                  }
+                }}
+                className="ml-2 flex size-4 items-center justify-center text-gray-500 hover:text-black cursor-pointer"
+                title="Copy email"
+              >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.33333 0.666667H4.66667C3.92933 0.666667 3.33333 1.26267 3.33333 2V3.33333H2C1.26267 3.33333 0.666667 3.92933 0.666667 4.66667V12C0.666667 12.7373 1.26267 13.3333 2 13.3333H9.33333C10.0707 13.3333 10.6667 12.7373 10.6667 12V10.6667H12C12.7373 10.6667 13.3333 10.0707 13.3333 9.33333V2C13.3333 1.26267 12.7373 0.666667 12 0.666667H9.33333ZM9.33333 12H2V4.66667H9.33333V12ZM12 9.33333H10.6667V4.66667C10.6667 3.92933 10.0707 3.33333 9.33333 3.33333H3.33333V2H12V9.33333Z" fill="currentColor"/>
+                  </svg>
+              </button>
             </div>
 
-            <div className="p-2">
+            <div className="my-[4px] h-px bg-[#e7e6e2]" />
+
+            <a
+              href="https://novita.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block cursor-pointer rounded px-3 py-2 text-[14px] leading-[20px] text-[#0F172A] hover:bg-[#F4F4F5]"
+            >
+              Go to Novita.ai
+            </a>
+
+            <div className="my-[4px] h-px bg-[#e7e6e2]" />
+
+            <div className="flex flex-col gap-[2px]">
               <a
                 href="https://novita.ai/console"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="
-                  flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-                  text-left transition-colors hover:bg-[#f5f5f3]
-                "
+                className="cursor-pointer rounded px-3 py-2 text-[14px] leading-[20px] text-[#0F172A] hover:bg-[#F4F4F5]"
               >
-                <User className="size-4 text-[#666]" />
-                <span className="font-mono text-sm text-[#292827]">Account</span>
+                Account Setting
               </a>
               <button
                 onClick={() => setIsHackathonModalOpen(true)}
-                className="
-                  flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-                  text-left transition-colors hover:bg-[#f5f5f3]
-                "
+                className="w-full cursor-pointer rounded px-3 py-2 text-left text-[14px] leading-[20px] text-[#0F172A] hover:bg-[#F4F4F5]"
               >
-                <FileText className="size-4 text-[#666]" />
-                <span className="font-mono text-sm text-[#292827]">Hackathon</span>
+                Hackathon
               </button>
               <Link
                 href="/privacy"
-                className="
-                  flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-                  text-left transition-colors hover:bg-[#f5f5f3]
-                "
+                className="block cursor-pointer rounded px-3 py-2 text-[14px] leading-[20px] text-[#0F172A] hover:bg-[#F4F4F5]"
               >
-                <Shield className="size-4 text-[#666]" />
-                <span className="font-mono text-sm text-[#292827]">Privacy</span>
+                Privacy
               </Link>
-
-              <div className="mx-2 my-1 h-px bg-[#e7e6e2]" />
-
               <button
                 onClick={handleLogout}
-                className="
-                  flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2
-                  text-left text-red-600 transition-colors hover:bg-red-50
-                "
+                className="w-full cursor-pointer rounded px-3 py-2 text-left text-[14px] leading-[20px] text-[#0F172A] hover:bg-[#F4F4F5]"
               >
-                <LogOut className="size-4" />
-                <span className="font-mono text-sm font-medium">Logout</span>
+                Log Out
               </button>
             </div>
           </Popover.Popup>

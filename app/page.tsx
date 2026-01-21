@@ -5,13 +5,13 @@ import { Header } from '@/components/app/header';
 import { Footer } from '@/components/app/footer';
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal';
 import { GalleryGrid } from '@/components/app/gallery-grid';
-import { Clock, Box, ArrowRight, ChevronUp, Sparkles } from 'lucide-react';
+import { Clock, Box, ArrowRight, ChevronUp, Sparkles, Trophy, Users, Zap, ZapIcon } from 'lucide-react';
 import { Accordion } from '@base-ui/react/accordion';
 
 import { useState, useEffect, useId } from 'react';
 import { Button } from '@/components/base/button';
 
-import { playgroundModes, getCategoryFromModeLabel, galleryCategories, type GalleryCategoryId } from '@/lib/config';
+import { playgroundModes, getCategoryFromModeLabel, galleryCategories, type GalleryCategoryId, HACKATHON_END_TIME, HACKATHON_PARTICIPANTS } from '@/lib/config';
 
 export default function HomePage() {
   const router = useRouter();
@@ -23,6 +23,28 @@ export default function HomePage() {
   const [typingSpeed, setTypingSpeed] = useState(50);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [galleryCategory, setGalleryCategory] = useState<GalleryCategoryId>('all');
+  const [timeLeft, setTimeLeft] = useState('');
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const difference = new Date(HACKATHON_END_TIME).getTime() - new Date().getTime();
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        if (days > 0) {
+            setTimeLeft(`${days} days left`);
+        } else {
+             const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+             setTimeLeft(`${hours} hours left`);
+        }
+      } else {
+        setTimeLeft('Ended');
+      }
+    };
+
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 60000); 
+    return () => clearInterval(timer);
+  }, []);
   
   // Generate stable IDs for accordion triggers
   const accordionId0 = useId();
@@ -44,13 +66,13 @@ export default function HomePage() {
 
   const handleSurpriseMe = () => {
     const currentMode = playgroundModes.find(m => m.label === activeMode);
-    const category = getCategoryFromModeLabel(activeMode);
     const activePrompts = currentMode?.prompts || [];
     if (activePrompts.length > 0) {
-      const randomIndex = Math.floor(Math.random() * activePrompts.length);
-      const randomPrompt = activePrompts[randomIndex];
-      // Automatically generate with the surprise prompt
-      router.push(`/playground/new?prompt=${encodeURIComponent(randomPrompt)}&category=${encodeURIComponent(category)}&autoStart=true`);
+      const availablePrompts = activePrompts.filter(p => p !== userPrompt);
+      const candidates = availablePrompts.length > 0 ? availablePrompts : activePrompts;
+      const randomIndex = Math.floor(Math.random() * candidates.length);
+      const randomPrompt = candidates[randomIndex];
+      setUserPrompt(randomPrompt);
     }
   };
 
@@ -197,17 +219,16 @@ export default function HomePage() {
                 `}>
                   <button 
                     onClick={handleSurpriseMe}
-                    className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[#9e9c98] transition-colors hover:bg-[#f5f5f5] hover:text-[#4f4e4a] cursor-pointer"
+                    className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[#4f4e4a] bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
                     title="Surprise me"
                   >
-                    <Sparkles className="size-5" />
-                    {(userPrompt.length > 38 || userPrompt.includes('\n')) && (
-                      <span className="text-sm font-medium">Surprise me</span>
-                    )}
+                    <Sparkles className="size-5 text-yellow-500" />
+                    <span className="text-sm font-medium">Surprise me</span>
                   </button>
                   
                   <Button 
                     onClick={handleGenerate}
+                    disabled={!userPrompt.trim()}
                     className={`
                       flex items-center justify-center gap-2 rounded-full
                       pl-5 pr-4 py-2.5
@@ -215,6 +236,7 @@ export default function HomePage() {
                       bg-[#1a1a1a] text-white hover:bg-black
                       hover:shadow-lg hover:scale-[1.02]
                       active:scale-[0.98]
+                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
                     `}
                   >
                     <span>Generate</span>
@@ -236,15 +258,12 @@ export default function HomePage() {
                       onClick={() => setActiveMode(mode.label)}
                       className={`
                         flex cursor-pointer items-center gap-2 rounded-full border px-4
-                        py-2 transition-all duration-200
+                        py-2 transition-all duration-200 text-[#4f4e4a]
                         ${
                         isActive
-                          ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-md scale-[1.05]"
-                          : `
-                            border-transparent bg-white text-[#4f4e4a]
-                            hover:bg-gray-50 hover:border-[#e7e6e2] hover:shadow-sm
-                          `
-                      }
+                          ? "border-[#23D57C] bg-[#CAF6E0]"
+                          : `border-[#e7e6e2] bg-white hover:bg-gray-50`
+                        }
                       `}
                     >
                       <Icon className="size-4" />
@@ -285,112 +304,108 @@ export default function HomePage() {
                   className="absolute max-w-none object-cover opacity-60 rounded-md size-full" 
                   src="/images/hackathon-bg-main.png" 
                 />
+                {/* Green Blur Effect */}
+                <div className="absolute inset-0 bg-[rgba(0,188,125,0.05)] blur-[120px] pointer-events-none" />
               </div>
 
               {/* Content */}
-              <div className="
-                absolute inset-0 flex flex-col justify-between p-12
-              ">
-                <div className="max-w-[672px] space-y-4">
+              <div className="relative h-full p-12 flex flex-col">
+                {/* Prize Pool Badge */}
+                <div className="
+                  relative inline-flex items-center rounded-full border border-[#05df72]/30
+                  bg-[#05df72]/10 pr-6 py-2 w-fit mb-6 backdrop-blur-sm
+                  h-[42px] ml-4
+                ">
+                  <img 
+                     src="/logo/prize-pool.png" 
+                     alt="Prize Pool"
+                     className="absolute bottom-2 left-2 w-10 max-w-none drop-shadow-md"
+                   />
+                  <div className="font-sans text-sm font-medium flex items-center gap-1 pl-12">
+                    <span className="text-[#05df72]">Prize Pool:</span>
+                    <span className="text-white">$5,000 Credits</span>
+                  </div>
+                </div>
+
+                <div className="max-w-[700px]">
+                  {/* Heading */}
                   <h2 className="
                     font-sans text-[56px]
                     leading-[56px] font-semibold tracking-[-1.12px] text-white
+                    mb-2
                   ">
                     Novita Arena Battle
                   </h2>
-                  <h3 className="
-                    bg-clip-text font-sans
+
+                  {/* Subheading */}
+                  <div className="
+                    flex flex-wrap items-center font-sans
                     text-[32px] leading-[40px] font-semibold tracking-[-0.64px]
-                    text-transparent
-                  " style={{backgroundImage: 'linear-gradient(90deg, #05df72 0%, #5ee9b5 100%)'}}>
-                    Build it. Compare it. Make it glow.
-                  </h3>
-                  <p className="
-                    max-w-[589px] font-sans
-                    text-lg leading-6 font-normal text-[#9e9c98]
+                    mb-6 gap-x-2
                   ">
-                    A 14-day fully remote battle. Arena battle focused on visual comparison, vibes, and shareability — not machines but artistic vibes.
-                  </p>
-                </div>
-
-                <div className="flex items-end justify-between">
-                  <div className="flex items-start gap-8">
-                    {/* Prize Pool */}
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2">
-                        <Clock className="size-4 text-[#fdc700]" />
-                        <span className="
-                          font-sans text-sm
-                          leading-5 font-normal text-[#fdc700]
-                        ">
-                          PRIZE POOL
-                        </span>
-                      </div>
-                      <p className="
-                        font-sans text-2xl
-                        leading-[38px] font-semibold text-white/90
-                      ">
-                        5,000 Credits
-                      </p>
-                    </div>
-
-                    <div className="h-12 w-px bg-white/10" />
-
-                    {/* Time Left */}
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2">
-                        <Clock className="size-4 text-[#00d3f2]" />
-                        <span className="
-                          font-sans text-sm
-                          leading-5 font-normal text-[#00d3f2]
-                        ">
-                          TIME LEFT
-                        </span>
-                      </div>
-                      <p className="
-                        font-sans text-2xl
-                        leading-[38px] font-semibold text-white/90
-                      ">
-                        10 days left
-                      </p>
-                    </div>
-
-                    <div className="h-12 w-px bg-white/10" />
-
-                    {/* Participants */}
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2">
-                        <Box className="size-4 text-[#c27aff]" />
-                        <span className="
-                          font-sans text-sm
-                          leading-5 font-normal text-[#c27aff]
-                        ">
-                          PARTICIPANTS
-                        </span>
-                      </div>
-                      <p className="
-                        font-sans text-2xl
-                        leading-[38px] font-semibold text-white/90
-                      ">
-                        1,234
-                      </p>
-                    </div>
+                    <span className="text-[#d1d5dc]">Build it.</span>
+                    <span className="text-[#f3f4f6]">Compare it.</span>
+                    <span className="
+                      text-[#05df72]
+                    ">
+                      Make it glow.
+                    </span>
                   </div>
 
-                  {/* Join Button */}
+                  {/* Description */}
+                  <div className="border-l-2 border-[#00c950]/30 pl-4 mb-8">
+                    <p className="
+                      max-w-[570px] font-sans
+                      text-[18px] leading-6 font-normal text-[#cbc9c4]
+                    ">
+                      A 14-day fully remote battle. Arena battle focused on visual comparison, vibes, and shareability — not machines but artistic vibes.
+                    </p>
+                  </div>
+
+                  {/* Stats Badges */}
+                  <div className="flex items-center gap-4">
+                    {/* Time Left */}
+                    <div className="
+                      flex items-center gap-2 rounded-[10px] border border-white/10
+                      bg-white/5 px-3 py-1.5 h-[34px]
+                    ">
+                      <Clock className="size-4 text-primary" />
+                      <span className="font-sans text-[16px] font-medium text-[#f5f5f5]">
+                        {timeLeft || '...'}
+                      </span>
+                    </div>
+
+                    {/* Participants */}
+                    <div className="
+                      flex items-center gap-2 rounded-[10px] border border-white/10
+                      bg-white/5 px-3 py-1.5 h-[34px]
+                    ">
+                      <Users className="size-4 text-primary" />
+                      <span className="font-sans text-[16px] font-medium text-[#f5f5f5]">
+                         {HACKATHON_PARTICIPANTS.toLocaleString()} participants
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Join Button - Bottom Right */}
+                <div className="absolute bottom-12 right-12">
                   <button
                     onClick={() => setIsModalOpen(true)}
                     className="
-                      flex cursor-pointer items-center justify-center gap-2 rounded-full
-                      bg-white px-8 py-4 font-['Inter',sans-serif] text-lg
-                      leading-7 font-bold text-black
-                      shadow-[0px_0px_20px_0px_rgba(255,255,255,0.3)]
-                      transition-all tracking-[-0.44px]
-                      hover:bg-primary
+                      flex cursor-pointer items-center justify-center gap-2 rounded-[14px]
+                      px-8 py-3.5 text-base
+                      leading-6 font-normal text-black
+                      border border-white/20
+                      transition-all hover:scale-[1.02] active:scale-[0.98]
                     "
+                    style={{
+                      background: 'linear-gradient(90deg, #05DF72 0%, #5EE9B5 100%)',
+                      boxShadow: '0 0 20px 0 rgba(34, 197, 94, 0.15)',
+                    }}
                   >
                     <span>Join Now</span>
-                    <ArrowRight className="size-5" />
+                    <Zap className="size-5" />
                   </button>
                 </div>
               </div>
