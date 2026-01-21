@@ -115,7 +115,6 @@ interface ModelGroup {
 }
 
 export const modelGroups: ModelGroup[] = [
-
   {
     group: 'DeepSeek',
     icon: '/logo/models/deepseek-color.svg',
@@ -127,7 +126,7 @@ export const modelGroups: ModelGroup[] = [
   },
   {
     group: 'GLM',
-    icon: '/logo/models/zhipu-color.svg',
+    icon: '/logo/models/zai.svg',
     color: '#000',
     items: [
       { id: 'zai-org/glm-4.7', name: 'GLM 4.7' },

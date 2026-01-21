@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { Heart, Copy, Box, ChevronDown, Download } from 'lucide-react';
 import Image from 'next/image';
 import { galleryCategories, getModelById, playgroundModes, type GalleryCategoryId } from '@/lib/config';
@@ -28,6 +28,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
   const [isLiking, setIsLiking] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [hasHovered, setHasHovered] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const modelA = getModelById(app.model_a);
@@ -81,32 +82,44 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
 
   return (
     <div
-      onClick={() => router.push(`/gallery/${app.id}`)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       className="
         group relative flex flex-col gap-4
         overflow-hidden
       "
     >
-      <div className="bg-[#ececf0] relative flex w-full aspect-[8/3] overflow-hidden rounded-2xl cursor-pointer">
+      <div 
+        onClick={() => router.push(`/gallery/${app.id}`)}
+        onMouseEnter={() => {
+          setIsHovered(true);
+          setHasHovered(true);
+        }}
+        onMouseLeave={() => setIsHovered(false)}
+        className="bg-[#ececf0] relative flex w-full aspect-[8/3] overflow-hidden rounded-2xl cursor-pointer"
+      >
         {/* Video or Image Preview or Iframe */}
         {hasVideo ? (
-          isHovered ? (
-            <iframe
-              ref={iframeRef}
-              src={videoUrl!}
-              className="absolute inset-0 w-full h-full border-0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : (
-            <img
+          <>
+            <Image
               src={thumbnailUrl}
               alt={app.name || 'App Preview'}
-              className="object-cover"
+              fill
+              className="w-full h-full object-contain"
+              unoptimized
             />
-          )
+            {hasHovered && (
+              <iframe
+                ref={iframeRef}
+                src={videoUrl!}
+                className={`absolute inset-0 w-full h-full border-0 transition-opacity duration-300 ${
+                  isHovered ? 'opacity-100' : 'opacity-0'
+                }`}
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                data-note="Video loads on first hover and persists to avoid reload flash"
+                style={{ pointerEvents: isHovered ? 'auto' : 'none' }}
+                allowFullScreen
+              />
+            )}
+          </>
         ) : (
           <div className='absolute inset-0 w-full h-full flex'>
             <iframe
@@ -118,7 +131,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               pointerEvents: 'none', 
               transform: 'scale(0.25)', 
               transformOrigin: '0px 0px', 
-              width: '400%',
+              width: '200%',
               height: '400%' 
             }}
           />
@@ -131,7 +144,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               pointerEvents: 'none', 
               transform: 'scale(0.25)', 
               transformOrigin: '0px 0px', 
-              width: '400%',
+              width: '200%',
               height: '400%' 
             }}
           />
@@ -151,7 +164,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               alt={modelA.name} 
               width={20} 
               height={20} 
-              className="size-5 rounded-sm"
+              className={`size-5 rounded-sm ${modelA.color === '#000' ? 'invert' : ''}`}
             />
             {modelA?.name}
           </div>
@@ -168,7 +181,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                 alt={modelB.name} 
                 width={20} 
                 height={20} 
-                className="size-5 rounded-sm"
+                className={`size-5 rounded-sm ${modelB.color === '#000' ? 'invert' : ''}`}
               />
               {modelB.name}
             </div>
