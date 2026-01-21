@@ -83,7 +83,7 @@ export function UserAvatar({ className }: UserAvatarProps) {
           </div>
         </Popover.Trigger>
         <Popover.Portal container={container}>
-          <Popover.Positioner sideOffset={8}>
+          <Popover.Positioner sideOffset={8} align="end">
             <Popover.Popup className={cn(
               "z-[100] w-[260px] overflow-hidden rounded-md border border-[#e7e6e2] bg-white p-2 text-[#292827] shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)]"
             )}>

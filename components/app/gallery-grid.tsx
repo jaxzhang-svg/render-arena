@@ -219,7 +219,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               }}
             >
               <Copy className="size-5" />
-              <span className="font-sans">Copy</span>
+              <span className="font-sans">Remix</span>
             </button>
           </div>
 

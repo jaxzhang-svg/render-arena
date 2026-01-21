@@ -25,13 +25,9 @@ export const playgroundModes = [
       badge: 'bg-violet-100 text-violet-700',
       dot: 'bg-violet-500'
     },
-    featuredCase: {
-      appId: 'mock-physics-id', // Placeholder
-      title: 'Music Video',
-      description: 'Create interactive physics simulations and dynamic experiences',
-      imageUrl: 'https://cdn.openart.ai/assets/music_video_home.webp',
-      prompt: 'A pendulum with realistic swing physics and friction...'
-    }
+    featuredAppId: '0395261f-0de0-4cbe-8c4e-587233674a77',
+    videoUrl: '04b2dbf15827311af1c49a6bad366450',
+    coverImage: '/images/physics-cover.png'
   },
   { 
     id: 'visual',
@@ -48,13 +44,9 @@ export const playgroundModes = [
       badge: 'bg-pink-100 text-pink-700',
       dot: 'bg-pink-500'
     },
-    featuredCase: {
-      appId: 'mock-visual-id', // Placeholder
-      title: 'Explainer Video',
-      description: 'Generate stunning visual effects and artistic creations',
-      imageUrl: 'https://cdn.openart.ai/assets/explainer_video_home_video.webp',
-      prompt: 'Liquid wave distortion effect with metallic reflections...'
-    }
+    featuredAppId: 'dfd160f5-aa5c-4851-80b9-079a9b85335b',
+    videoUrl: '23f0964d6af876cc60b5305386fb4cf9',
+    coverImage: '/images/visual-cover.png'
   },
   { 
     id: 'game',
@@ -71,13 +63,9 @@ export const playgroundModes = [
       badge: 'bg-cyan-100 text-cyan-700',
       dot: 'bg-cyan-500'
     },
-    featuredCase: {
-      appId: 'mock-game-id', // Placeholder
-      title: 'Micro Game Jam',
-      description: 'Build mini games and interactive entertainment',
-      imageUrl: 'https://cdn.openart.ai/assets/internal/uploads/image_un6XRgGs_1090x810_1757948286886.webp',
-      prompt: 'A dodge-the-obstacles endless runner with power-ups...'
-    }
+    featuredAppId: 'db30fa14-078d-4e00-a91e-e84022c92be6',
+    videoUrl: '678ba59932c2203dddc08178884666d4',
+    coverImage: '/images/game-cover.png'
   },
 ] as const;
 
@@ -221,42 +209,5 @@ export function getModelById(modelId: string): LLMModel | undefined {
 export const HACKATHON_END_TIME = '2026-02-14T23:59:59Z'; // Hardcoded date for now
 export const HACKATHON_PARTICIPANTS = 1234;
 
-export const FEATURED_CASES = [
-  {
-    id: 'music-video',
-    title: 'Physical',
-    appId: 'mock-music-video-id',
-    imageUrl: 'https://cdn.openart.ai/assets/music_video_home.webp',
-    category: 'physics',
-    prompt: 'A pendulum with realistic swing physics and friction...',
-    themeColor: '#8b5cf6' // violet-500
-  },
-  {
-    id: 'explainer-video',
-    title: 'Visual',
-    appId: 'mock-explainer-video-id',
-    imageUrl: 'https://cdn.openart.ai/assets/explainer_video_home_video.webp',
-    category: 'visual',
-    prompt: 'Liquid wave distortion effect with metallic reflections...',
-    themeColor: '#ec4899' // pink-500
-  },
-  {
-    id: 'character-vlog',
-    title: 'Game',
-    appId: 'mock-character-vlog-id',
-    imageUrl: 'https://cdn.openart.ai/assets/internal/uploads/image_un6XRgGs_1090x810_1757948286886.webp',
-    category: 'game',
-    prompt: 'A dodge-the-obstacles endless runner with power-ups...',
-    themeColor: '#06b6d4' // cyan-500
-  },
-  // {
-  //   id: 'asmr-video',
-  //   title: 'ASMR Video',
-  //   appId: 'mock-asmr-id',
-  //   imageUrl: 'https://cdn.openart.ai/assets/internal/uploads/image_un6XRgGs_1090x810_1757948286886.webp',
-  //   category: 'visual',
-  //   prompt: 'ASMR visual triggers with soft lighting and gentle movements...',
-  //   themeColor: '#10b981' // emerald-500
-  // }
-];
+
 

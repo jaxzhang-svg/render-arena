@@ -1,129 +1,86 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/base/button';
-import { Play } from 'lucide-react';
-import { FEATURED_CASES } from '@/lib/config';
-import type { App, AppDetailResponse } from '@/types';
+import { playgroundModes } from '@/lib/config';
 import { cn } from '@/lib/utils';
 
+// Cloudflare Stream customer code
+const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || '';
+
 interface FeaturedCaseCardProps {
-  caseData: typeof FEATURED_CASES[number];
+  mode: typeof playgroundModes[number];
 }
 
-function FeaturedCaseCard({ caseData }: FeaturedCaseCardProps) {
+function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
   const router = useRouter();
-  const [appData, setAppData] = useState<App | null>(null);
   const [isHovering, setIsHovering] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [hasHovered, setHasHovered] = useState(false);
+    
+  const videoId = mode.videoUrl;
+  const coverImage = mode.coverImage;
 
-  // Fetch app data when appId is available
-  useEffect(() => {
-    if (!caseData.appId) return;
-
-    const fetchApp = async () => {
-      try {
-        const res = await fetch(`/api/apps/${caseData.appId}`);
-        if (res.ok) {
-            const data: AppDetailResponse = await res.json();
-            setAppData(data.app);
-        }
-      } catch (error) {
-        console.error('Error fetching featured app:', error);
-      }
-    };
-
-    fetchApp();
-  }, [caseData.appId]);
-
-  // Handle video playback on hover
-  useEffect(() => {
-    if (isHovering && videoRef.current && appData?.preview_video_url) {
-      videoRef.current.play().catch(e => console.log('Video play failed:', e));
-    } else if (!isHovering && videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  }, [isHovering, appData?.preview_video_url]);
+  const hasVideo = !!videoId && !!CLOUDFLARE_CUSTOMER_CODE;
+  
+  const cfVideoUrl = hasVideo 
+    ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoId}/iframe?muted=true&loop=true&autoplay=true&controls=false&preload=auto`
+    : null;
 
   const handleCreate = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const promptText = appData?.prompt || caseData.prompt || '';
     
-    const params = new URLSearchParams();
-    if (promptText) params.set('prompt', promptText);
-    if (caseData.category) params.set('category', caseData.category);
-    
-    router.push(`/playground/new?${params.toString()}`);
+    router.push(`/gallery/${mode.featuredAppId}`);
   };
-
-  // Safe access to themeColor with fallback
-  const themeColor = (caseData as any).themeColor || '#ffffff';
 
   return (
     <div 
-        className="group relative flex h-[180px] w-[240px] shrink-0 flex-col overflow-hidden rounded-xl border border-white/10 bg-[#18181b] transition-all hover:border-white/20"
-        onMouseEnter={() => setIsHovering(true)}
+        className="group relative h-[146px] w-[260px] shrink-0 cursor-pointer overflow-hidden rounded-[14px] bg-[#18181b]"
+        onMouseEnter={() => {
+            setIsHovering(true);
+            setHasHovered(true);
+        }}
         onMouseLeave={() => setIsHovering(false)}
+        onClick={handleCreate}
     >
-        {/* Background Image Layer - Fills entire box */}
+        {/* Background Image & Video Layer */}
         <div className="absolute inset-0 size-full">
             <Image
-                src={caseData.imageUrl}
-                alt={caseData.title}
+                src={coverImage}
+                alt={mode.label}
                 fill
                 className={cn(
                     "object-cover transition-opacity duration-300",
-                    isHovering && appData?.preview_video_url ? "opacity-0" : "opacity-100" // Kept simple
                 )}
-                unoptimized
             />
-             {/* Gradient Overlay for text readability */}
-             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
+             {/* Gradient Overlay - Darker at bottom for text readability */}
+             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-            {/* Video Layer */}
-            {appData?.preview_video_url && (
-                <video
-                    ref={videoRef}
-                    src={appData.preview_video_url}
+            {/* Cloudflare Video Layer */}
+            {hasVideo && hasHovered && (
+                <iframe
+                    src={cfVideoUrl!}
                     className={cn(
-                        "absolute inset-0 size-full object-cover transition-opacity duration-300",
+                        "absolute inset-0 size-full border-0 transition-opacity duration-300",
                         isHovering ? "opacity-100" : "opacity-0"
                     )}
-                    muted
-                    loop
-                    playsInline
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    style={{ pointerEvents: isHovering ? 'auto' : 'none' }}
                 />
             )}
         </div>
 
-        {/* Content Layer */}
-        <div className="relative z-10 flex h-full flex-col justify-between items-start p-4">
-            {/* Header */}
-            <h3 
-              className="font-sans text-lg font-bold items-start text-white"
-            >
-              {caseData.title}
+        {/* Content Layer - Positioned at bottom */}
+        <div className="absolute bottom-0 left-0 z-10 w-full p-4 flex flex-col items-start gap-1">
+            {/* Title - Mode Label */}
+            <h3 className="font-sans text-[18px] font-semibold leading-6 text-white drop-shadow-sm text-left">
+              {mode.label}
             </h3>
 
-            {/* Footer / Create Button */}
-            <div className="mt-auto w-full">
-                <Button 
-                    onClick={handleCreate}
-                    className="w-full justify-center border transition-all duration-300"
-                    style={{
-                        backgroundColor: isHovering ? themeColor : 'rgba(39, 39, 42, 0.6)', 
-                        borderColor: isHovering ? themeColor : 'rgba(255, 255, 255, 0.2)',
-                        color: isHovering ? '#000' : '#FFF',
-                        transform: isHovering ? 'scale(1.05)' : 'scale(1)',
-                        fontWeight: isHovering ? 600 : 500
-                    }}
-                >
-                    Create
-                </Button>
-            </div>
+            {/* Description - Mode Description */}
+            <p className="font-sans text-[12px] font-normal leading-4 text-white/90 line-clamp-2 drop-shadow-sm text-left">
+               {mode.description}
+            </p>
         </div>
     </div>
   );
@@ -132,11 +89,10 @@ function FeaturedCaseCard({ caseData }: FeaturedCaseCardProps) {
 export function FeaturedCasesSection() {
   return (
     <div className="w-full overflow-hidden py-8">
-        <div className="mx-auto px-6"> 
-           {/* Scrollable Container */}
-           <div className="flex items-center justify-center w-full gap-4 overflow-x-auto pb-4 scrollbar-hide">
-              {FEATURED_CASES.map((item) => (
-                  <FeaturedCaseCard key={item.id} caseData={item} />
+        <div className="flex justify-center">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {playgroundModes.map((mode) => (
+                  <FeaturedCaseCard key={mode.id} mode={mode} />
               ))}
            </div>
         </div>
