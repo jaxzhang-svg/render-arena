@@ -98,7 +98,7 @@ export function useArenaPlayground({
   // 创建 App
   const createApp = useCallback(async (): Promise<string | null> => {
     try {
-      const response = await fetch('/api/apps/create', {
+      const response = await fetch('/api/apps', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
