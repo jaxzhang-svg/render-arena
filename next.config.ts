@@ -12,7 +12,10 @@ const nextConfig: NextConfig = {
         ],
     },
     transpilePackages: [
-        'isomorphic-dompurify'
+        'isomorphic-dompurify',
+        'jsdom',
+        'html-encoding-sniffer',
+        '@exodus/bytes',
     ],
     async headers() {
         return [
