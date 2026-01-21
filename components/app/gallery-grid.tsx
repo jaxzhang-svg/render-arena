@@ -103,16 +103,17 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
             alt={app.name || 'App Preview'}
             fill
             className="object-cover"
+            unoptimized
           />
         )}
 
         {/* Model Badge */}
         {modelA ? <div className="absolute top-[18px] left-3 z-10">
           <div className="
-              inline-flex items-center gap-1.5 rounded-full px-[11px] py-0.5
-              text-sm font-medium font-sans text-white backdrop-blur-md h-[29px]
+              inline-flex items-center gap-1.5 px-[10px]
+              text-sm font-medium font-sans text-white backdrop-blur-md h-[30px]
               bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
-            ">
+            " style={{ borderRadius: '15px' }}>
             <Image 
               src={modelA.icon} 
               alt={modelA.name} 
@@ -126,10 +127,10 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         {
           modelB ? <div className="absolute top-[18px] right-3 z-10">
             <div className="
-              inline-flex items-center gap-1.5 rounded-full px-[11px] py-0.5
-              text-sm font-medium text-white backdrop-blur-md h-[29px]
+              inline-flex items-center gap-1.5 px-[10px]
+              text-sm font-medium text-white backdrop-blur-md h-[30px]
               bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
-            ">
+            " style={{ borderRadius: '15px' }}>
               <Image 
                 src={modelB.icon}
                 alt={modelB.name} 

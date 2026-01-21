@@ -49,8 +49,8 @@ interface UseModelGenerationOptions {
   slot: ModelSlot
   /** 初始模型 ID */
   initialModelId?: string
-  /** 默认模型索引（如果初始模型 ID 无效） */
-  fallbackModelIndex: number
+  /** 默认模型 ID（如果初始模型 ID 无效） */
+  defaultModelId?: string
   /** 初始 HTML 内容 */
   initialHtml?: string
   /** 当生成完成时的回调，用于协调另一个模型 */
@@ -92,17 +92,18 @@ interface UseModelGenerationReturn {
 export function useModelGeneration({
   slot,
   initialModelId,
-  fallbackModelIndex,
+  defaultModelId,
   initialHtml,
   onGenerationComplete,
 }: UseModelGenerationOptions): UseModelGenerationReturn {
   // 获取初始模型
   const getInitialModel = (): LLMModel => {
-    if (initialModelId) {
-      const model = getModelById(initialModelId)
+    const targetId = initialModelId || defaultModelId
+    if (targetId) {
+      const model = getModelById(targetId)
       if (model) return model
     }
-    return models[fallbackModelIndex]
+    return models[0]
   }
 
   // 模型选择状态

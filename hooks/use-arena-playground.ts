@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useModelGeneration } from './use-model-generation'
 import type { App } from '@/types'
+import { defaultModelAId, defaultModelBId } from '@/lib/config'
 
 export type ArenaViewMode = 'a' | 'b' | 'split'
 
@@ -76,7 +77,7 @@ export function useArenaPlayground({
   const modelA = useModelGeneration({
     slot: 'a',
     initialModelId: initialApp?.model_a,
-    fallbackModelIndex: 0,
+    defaultModelId: defaultModelAId,
     initialHtml: initialApp?.html_content_a || undefined,
   })
 
@@ -84,7 +85,7 @@ export function useArenaPlayground({
   const modelB = useModelGeneration({
     slot: 'b',
     initialModelId: initialApp?.model_b,
-    fallbackModelIndex: 1,
+    defaultModelId: defaultModelBId,
     initialHtml: initialApp?.html_content_b || undefined,
   })
 

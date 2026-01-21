@@ -148,12 +148,8 @@ export default function HomePage() {
               >
                 {/* Mode Badge - Position depends on state */}
                 <div className={`
-                  inline-flex items-center gap-2 rounded-full px-3 py-1.5 shrink-0 transition-colors
+                  inline-flex items-center gap-2 rounded-full px-3 py-1.5 shrink-0 transition-colors bg-gray-100 text-gray-700
                   ${(userPrompt.length > 38 || userPrompt.includes('\n')) ? 'mb-4' : ''}
-                  ${(() => {
-                    const mode = playgroundModes.find(m => m.label === activeMode);
-                    return mode?.theme?.badge || 'bg-gray-100 text-gray-700';
-                  })()}
                 `}>
                   <div className={`size-2 rounded-full ${(() => {
                     const mode = playgroundModes.find(m => m.label === activeMode);

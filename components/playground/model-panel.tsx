@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { ModelSettingsPopover } from '@/components/playground/model-settings-modal'
 import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
 import { cn } from '@/lib/utils'
-import { models, LLMModel } from '@/lib/models'
+import { models, LLMModel, modelGroups } from '@/lib/config'
 import {
   ModelResponse,
   ModelSettings,
@@ -117,32 +117,48 @@ export function ModelPanel({
                       Select Model
                     </p>
                   </div>
-                  <div className="flex flex-col gap-[4px] p-[7px] pt-0">
-                    {models.map((model) => (
-                      <Menu.Item
-                        key={model.id}
-                        onClick={() => onModelChange(model)}
-                        className={cn(
-                          'relative flex cursor-pointer select-none items-center rounded-[10px] px-[8px] outline-none transition-colors',
-                          'h-[36px] w-[190px]',
-                          selectedModel.id === model.id
-                            ? 'bg-[#f5f5f5]'
-                            : 'hover:bg-[#f5f5f5] focus:bg-[#f5f5f5]',
-                          'gap-[8px]'
-                        )}
-                      >
-                        <Image 
-                          src={model.icon} 
-                          alt={model.name} 
-                          width={20} 
-                          height={20} 
-                          className="size-[20px] rounded-sm shrink-0"
-                        />
-                        <span className="text-[#292827] text-[16px] font-normal leading-[24px]">
-                          {model.name}
-                        </span>
-                      </Menu.Item>
-                    ))}
+                  <div className="max-h-[400px] overflow-y-auto flex flex-col gap-[4px] p-[7px] pt-0 scrollbar-hide">
+                    {modelGroups.map((group) => {
+                      if (group.items.length === 0) return null;
+                      
+                      return (
+                        <div key={group.group} className="flex flex-col mb-2">
+                          <p className="text-[#9e9c98] text-[12px] font-medium px-[8px] py-1 uppercase tracking-tight">
+                            {group.group}
+                          </p>
+                          {group.items.map((model) => (
+                            <Menu.Item
+                              key={model.id}
+                              onClick={() => onModelChange({
+                                ...model,
+                                group: group.group,
+                                color: group.color,
+                                icon: group.icon,
+                              })}
+                              className={cn(
+                                'relative flex cursor-pointer select-none items-center rounded-[10px] px-[8px] outline-none transition-colors',
+                                'h-[36px] w-full',
+                                selectedModel.id === model.id
+                                  ? 'bg-[#f5f5f5]'
+                                  : 'hover:bg-[#f5f5f5] focus:bg-[#f5f5f5]',
+                                'gap-[8px]'
+                              )}
+                            >
+                              <Image 
+                                src={group.icon} 
+                                alt={model.name} 
+                                width={20} 
+                                height={20} 
+                                className="size-[20px] rounded-sm shrink-0"
+                              />
+                              <span className="text-[#292827] text-[15px] font-normal leading-tight truncate">
+                                {model.name}
+                              </span>
+                            </Menu.Item>
+                          ))}
+                        </div>
+                      );
+                    })}
                   </div>
                 </Menu.Popup>
               </Menu.Positioner>

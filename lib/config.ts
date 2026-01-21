@@ -78,38 +78,120 @@ export function getModeByCategory(categoryId: string) {
 export type LLMModel = {
   id: string
   name: string
-  provider: string
-  providerId: string
   color: string
   icon: string
+  group: string
 }
 
-export const models: LLMModel[] = [
+interface ModelGroup {
+  group: string
+  icon: string
+  color: string
+  items: Array<{
+    id: string
+    name: string
+  }>
+}
+
+export const modelGroups: ModelGroup[] = [
+
   {
-    id: 'zai-org/glm-4.7',
-    name: 'GLM 4.7',
-    provider: 'Novita',
-    providerId: 'novita',
-    color: 'bg-blue-500',
-    icon: '/logo/glm-logo.svg',
+    group: 'DeepSeek',
+    icon: '/logo/models/deepseek-color.svg',
+    color: '#4D6BFE',
+    items: [
+      { id: 'deepseek/deepseek-v3.2', name: 'DeepSeek V3.2' },
+      { id: 'deepseek/deepseek-v3.1', name: 'DeepSeek V3.1' },
+    ]
   },
   {
-    id: 'deepseek/deepseek-v3.2',
-    name: 'DeepSeek V3.2',
-    provider: 'Novita',
-    providerId: 'novita',
-    color: 'bg-purple-500',
-    icon: '/logo/deepseek-logo.png',
+    group: 'GLM',
+    icon: '/logo/models/zhipu-color.svg',
+    color: '#000',
+    items: [
+      { id: 'zai-org/glm-4.7', name: 'GLM 4.7' },
+      { id: 'zai-org/glm-4.6', name: 'GLM 4.6' },
+    ]
   },
   {
-    id: 'minimax/minimax-m2.1',
-    name: 'Minimax M2.1',
-    provider: 'Novita',
-    providerId: 'novita',
-    color: 'bg-emerald-500',
-    icon: '/logo/minimax-logo.svg',
+    group: 'Minimax',
+    icon: '/logo/models/minimax-color.svg',
+    color: '#F23F5D',
+    items: [
+      { id: 'minimax/minimax-m2.1', name: 'Minimax M2.1' },
+      { id: 'minimax/minimax-m2', name: 'Minimax M2' },
+    ]
   },
+  {
+    group: 'Kimi',
+    icon: '/logo/models/kimi-color.svg',
+    color: '#000',
+    items: [
+      { id: 'moonshotai/kimi-k2-thinking', name: 'Kimi K2 Thinking' },
+      { id: 'moonshotai/kimi-k2-0905', name: 'Kimi K2 0905' },
+    ]
+  },
+  {
+    group: 'GPT',
+    icon: '/logo/models/openai.svg',
+    color: '#000',
+    items: [
+      { id: 'pa/gpt-5.2', name: 'GPT 5.2' },
+      { id: 'pa/gpt-5.1-codex', name: 'GPT 5.1 Codex' },
+      { id: 'pa/gt-4.1', name: 'GPT 4.1' },
+    ]
+  },
+  {
+    group: 'Claude',
+    icon: '/logo/models/claude-color.svg',
+    color: '#D97757',
+    items: [
+      { id: 'pa/claude-opus-4-5-20251101', name: 'Claude Opus 4.5' },
+      { id: 'pa/claude-sonnet-4-5-20250929', name: 'Claude Sonnet 4.5' },
+      { id: 'pa/claude-haiku-4-5-20251001', name: 'Claude Haiku 4.5' },
+    ]
+  },
+  {
+    group: 'Gemini',
+    icon: '/logo/models/gemini-color.svg',
+    color: '#FFF',
+    items: [
+      { id: 'pa/gemini-3-pro-preview', name: 'Gemini 3 Pro' },
+      { id: 'pa/gemini-3-flash-preview', name: 'Gemini 3 Flash' },
+    ]
+  },
+  {
+    group: 'Grok',
+    icon: '/logo/models/grok.svg',
+    color: '#000',
+    items: [
+      { id: 'pa/grok-4-1-fast-reasoning', name: 'Grok 4.1 Fast Reasoning' },
+      { id: 'pa/grok-code-fast-1', name: 'Grok Code Fast 1' },
+    ]
+  },
+  {
+    group: 'Doubao',
+    icon: '/logo/models/doubao-color.svg',
+    color: '#FFF',
+    items: [
+      { id: 'pa/doubao-1-5-pro-32k-250115', name: 'Doubao 1.5 Pro' },
+      { id: 'pa/doubao-seed-1.6', name: 'Doubao Seed 1.6' },
+    ]
+  }
 ]
+
+export const models: LLMModel[] = modelGroups.flatMap((group) =>
+  group.items.map((item) => ({
+    id: item.id,
+    name: item.name,
+    group: group.group,
+    color: group.color,
+    icon: group.icon,
+  }))
+)
+
+export const defaultModelAId = 'deepseek/deepseek-v3.2'
+export const defaultModelBId = 'pa/gemini-3-flash-preview'
 
 export function getModelById(modelId: string): LLMModel | undefined {
   return models.find((m) => m.id === modelId)
