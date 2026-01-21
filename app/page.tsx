@@ -159,14 +159,13 @@ export default function HomePage() {
             ">
               <div 
                 className={`
-                  relative w-full transition-all duration-300 ease-in-out
-                  border border-[#e7e6e2] bg-white shadow-sm
+                  relative w-full
+                  border border-[#e7e6e2] bg-white shadow-sm overflow-hidden
                   ${(userPrompt.length > 38 || userPrompt.includes('\n')) 
                     ? 'rounded-[32px] p-6 flex flex-col items-start' // Multi-line state
                     : 'rounded-full px-2 pl-4 py-2 flex items-center gap-3' // One-line state
                   }
                 `}
-
               >
                 {/* Mode Badge - Position depends on state */}
                 <div className={`
