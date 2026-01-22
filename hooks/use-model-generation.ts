@@ -202,7 +202,7 @@ export function useModelGeneration({
     flushIntervalRef.current = setInterval(flushBuffer, 50)
 
     try {
-      await fetchEventSource(`/api/apps/${appId}/generate?model=${slot}`, {
+      await fetchEventSource(`/api/apps/${appId}/generate?model=${slot}&temperature=${settings.temperature}`, {
         method: 'GET',
         openWhenHidden: true,
         signal,

@@ -19,6 +19,7 @@ export async function GET(
   const { id } = await params;
   const { searchParams } = new URL(request.url);
   const model = searchParams.get('model'); // 'a' or 'b'
+  const temperature = Number(searchParams.get('temperature'));
 
   if (!model || !['a', 'b'].includes(model)) {
     return new Response(
@@ -81,6 +82,8 @@ export async function GET(
         },
         { role: 'user', content: app.prompt },
       ],
+      temperature: Number.isNaN(temperature) ? 0.7 : temperature < 0 ? 0 : temperature > 2 ? 2 : temperature,
+      max_tokens: 32768,
       stream: true,
       separate_reasoning: true,
     }),
