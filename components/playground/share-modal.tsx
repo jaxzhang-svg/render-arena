@@ -417,8 +417,8 @@ export function ShareModal({
                       onClick={handleCopy}
                       className="h-[42px] w-[90px] rounded-[10px] border border-[#e5e7eb] bg-white text-[#364153] text-[14px] font-medium tracking-[-0.1504px] transition-colors hover:bg-gray-50 flex gap-2 cursor-pointer items-center justify-center"
                     >
-                      <Copy className="size-4 text-gray-500 shrink-0" />
-                      {copied ? 'Copied' : 'Copy'}
+                      {copied ? <Check className="size-4 text-green-500 shrink-0" /> : <Copy className="size-4 text-gray-500 shrink-0" />}
+                      {copied ? 'Copied!' : 'Copy'}
                     </button>
                   </div>
                 </div>
