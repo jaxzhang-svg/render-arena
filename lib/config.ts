@@ -28,7 +28,7 @@ export const playgroundModes = [
       dot: 'bg-violet-500'
     },
     featuredAppId: '2f40ffd2-1e27-42e4-91a2-db16f0a9dc2d',
-    videoUrl: 'fa9fd2f45d94d3ffcc2c6eb589ceff32',
+    videoUrl: '141bd195b3f9da2a14184dc0923555db',
     coverImage: '/images/physics-cover.png'
   },
   { 
@@ -48,7 +48,7 @@ export const playgroundModes = [
       dot: 'bg-pink-500'
     },
     featuredAppId: '40bf7a51-d616-462c-8ab6-5c6d6c7ef7e0',
-    videoUrl: '654399c351e0af436cd752137c7a1159',
+    videoUrl: '0f20294d577fcb399a49a7c9de707556',
     coverImage: '/images/visual-cover.png'
   },
   { 
@@ -66,7 +66,7 @@ export const playgroundModes = [
       dot: 'bg-cyan-500'
     },
     featuredAppId: '522f487f-3c52-40d3-95fb-b988bec41aff',
-    videoUrl: '854ec832510ed4ef713d2b206a21617a',
+    videoUrl: '1ae1febdc7b45c9204b1b2b06e4d6a96',
     coverImage: '/images/game-cover.png'
   },
 ] as const;
