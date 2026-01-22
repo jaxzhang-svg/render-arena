@@ -6,7 +6,7 @@ const NOVITA_API_KEY = process.env.NEXT_NOVITA_API_KEY!;
 const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions';
 
 // HTML 生成系统提示词
-const SYSTEM_PROMPT = ``;
+
 
 /**
  * GET /api/apps/[id]/generate
@@ -75,8 +75,11 @@ export async function GET(
     body: JSON.stringify({
       model: modelId,
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: `${app.prompt} using HTML/CSS/JS in a single HTML file.` },
+        {
+          role: 'system',
+          content: `You are an expert web developer. Your goal is to generate a single, self-contained HTML file for a "${app.category}" application. Strictly adhere to the "${app.category}" category. If user's prompt conflicts with this category, you MUST refuse the request.`,
+        },
+        { role: 'user', content: app.prompt },
       ],
       stream: true,
       separate_reasoning: true,

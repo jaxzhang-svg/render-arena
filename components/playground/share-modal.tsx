@@ -513,7 +513,7 @@ function PublishToGallery({ onPublish, loading, agreedToPolicy, setAgreedToPolic
           disabled={!agreedToPolicy || loading}
           className={`
             w-full h-[44px] rounded-[10px] flex items-center justify-center gap-2
-            text-[16px] font-medium transition-colors
+            text-[16px] font-medium transition-colors cursor-pointer
             ${!agreedToPolicy || loading
               ? 'bg-[#F5F5F5] text-[#9E9C98] cursor-not-allowed'
               : 'bg-[#23D57C] text-white hover:bg-[#23D57C]/90'
