@@ -428,7 +428,7 @@ export function ShareModal({
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
                     {videoBlob ? 'SHARE VIDEO' : "SHARE TO SOCIAL"}
                   </label>
@@ -469,7 +469,7 @@ export function ShareModal({
                       </span>
                     </button>
                   </div>
-                </div>
+                </div> */}
               </>
             )}
           </div>
