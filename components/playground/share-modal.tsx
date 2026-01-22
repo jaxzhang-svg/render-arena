@@ -224,11 +224,6 @@ export function ShareModal({
     }
   }, [appId, isPublished, videoBlob, uploadStatus, handleUploadVideo]);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(shareUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   const handleDownload = () => {
     if (videoBlob && videoUrl) {
@@ -242,6 +237,16 @@ export function ShareModal({
     }
   };
 
+  const videoLink = useMemo(() => {
+    return `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoUid}/watch`;
+  }, [videoUid])
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(videoBlob ?videoLink : shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
     // Truncate prompt to 5 words
     const truncatedPrompt = prompt.split(/\s+/).slice(0, 5).join(' ') + (prompt.split(/\s+/).length > 5 ? ' …' : '');
@@ -252,7 +257,7 @@ export function ShareModal({
        finalLink = `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoUid}/watch`;
     }
 
-    const shareText = `Render Arena — Side-by-Side\nPrompt: “${truncatedPrompt}”\n👉 Which model wins?`;
+    const shareText = `Novita Render Arena — Side-by-Side\nPrompt: “${truncatedPrompt}”\n👉 Which model wins?\n`;
     
     const encodedUrl = encodeURIComponent(finalLink);
     const encodedText = encodeURIComponent(shareText);
@@ -352,7 +357,7 @@ export function ShareModal({
           {/* Header */}
           <div className="flex items-center justify-between h-[69px] px-5 pr-3 border-b border-[#f3f4f6]">
             <h2 className="text-[18px] font-semibold text-[#101828] tracking-[-0.4395px] leading-7">
-              Share Generation
+              {videoBlob ? 'Share Video' : 'Share Generation'}
             </h2>
             <Dialog.Close className="flex cursor-pointer items-center justify-center size-9 rounded-full hover:bg-gray-100 transition-colors">
               <X className="size-5 text-gray-600" />
@@ -404,13 +409,13 @@ export function ShareModal({
               <>
                 <div className="space-y-2">
                   <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
-                    Public Link
+                    {videoBlob ? 'PUBLIC VIDEO LINK' : 'PUBLIC LINK'}
                   </label>
                   <div className="flex gap-2">
                     <div className="flex-1 h-[42px] bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] flex items-center gap-2 px-[13px] min-w-0">
                       <LinkIcon className="size-4 text-gray-500 shrink-0" />
                       <span className="text-[14px] text-[#4a5565] leading-5 truncate flex-1">
-                        {shareUrl}
+                        {videoBlob ? videoLink : shareUrl}
                       </span>
                     </div>
                     <button
@@ -425,7 +430,7 @@ export function ShareModal({
 
                 <div className="space-y-2">
                   <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
-                    Share to Social
+                    {videoBlob ? 'SHARE VIDEO' : "SHARE TO SOCIAL"}
                   </label>
                   <div className="flex gap-3">
                     <button
@@ -515,7 +520,7 @@ function PublishToGallery({ onPublish, loading, agreedToPolicy, setAgreedToPolic
         </div>
         <div className="text-center">
           <h3 className="text-[20px] font-semibold text-[#101828] leading-[24px] mb-1">
-            This video is currently private
+            This content is currently private
           </h3>
           <p className="text-[14px] text-[#4F4E4A] leading-[20px] text-center max-w-[280px]">
             Publish to the gallery to generate a public link and share to social media.

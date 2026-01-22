@@ -326,7 +326,7 @@ export default function HomePage() {
                    />
                   <div className="font-sans text-sm font-medium flex items-center gap-1 pl-12">
                     <span className="text-[#05df72]">Prize Pool:</span>
-                    <span className="text-white">$5,000 Credits</span>
+                    <span className="text-white">$1,650 Credits</span>
                   </div>
                 </div>
 
@@ -374,7 +374,8 @@ export default function HomePage() {
                     ">
                       <Clock className="size-4 text-primary" />
                       <span className="font-sans text-[16px] font-medium text-[#f5f5f5]">
-                        {timeLeft || '...'}
+                        Coming soon
+                        {/* {timeLeft || '...'} */}
                       </span>
                     </div>
 
@@ -385,7 +386,7 @@ export default function HomePage() {
                     ">
                       <Users className="size-4 text-primary" />
                       <span className="font-sans text-[16px] font-medium text-[#f5f5f5]">
-                         {HACKATHON_PARTICIPANTS.toLocaleString()} participants
+                         120 Interested
                       </span>
                     </div>
                   </div>
