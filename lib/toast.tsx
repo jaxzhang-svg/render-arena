@@ -10,7 +10,7 @@ const defaultOptions: ToastOptions = {
   closeOnClick: true,
   pauseOnHover: true,
   draggable: true,
-  theme: 'dark',
+  theme: 'light',
 };
 
 // Custom toast wrapper

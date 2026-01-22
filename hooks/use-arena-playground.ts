@@ -3,6 +3,7 @@ import { useSearchParams } from 'next/navigation'
 import { useModelGeneration } from './use-model-generation'
 import type { App } from '@/types'
 import { defaultModelAId, defaultModelBId } from '@/lib/config'
+import { showToast } from '@/lib/toast'
 
 export type ArenaViewMode = 'a' | 'b' | 'split'
 
@@ -113,7 +114,7 @@ export function useArenaPlayground({
 
       if (!data.success) {
         if (data.error === 'FREE_QUOTA_EXCEEDED') {
-          alert(data.message || '免费额度已用完，请登录后继续使用')
+          showToast.login(data.message || '免费额度已用完，请登录后继续使用')
           return null
         }
         throw new Error(data.message || 'Failed to create app')
@@ -122,7 +123,7 @@ export function useArenaPlayground({
       return data.appId
     } catch (error) {
       console.error('Error creating app:', error)
-      alert('创建失败，请稍后重试')
+      showToast.error('创建失败，请稍后重试')
       return null
     }
   }, [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id])

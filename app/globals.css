@@ -77,6 +77,16 @@
     --spacing: 0.25rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.172 0.006 82.66);
+    
+    /* React Toastify Overrides */
+    --toastify-color-light: oklch(1 0 0);
+    --toastify-color-dark: oklch(0.172 0.006 82.66);
+    --toastify-color-info: var(--primary);
+    --toastify-color-success: var(--primary);
+    --toastify-color-warning: var(--accent);
+    --toastify-color-error: var(--destructive);
+    --toastify-text-color-light: var(--foreground);
+    --toastify-text-color-dark: oklch(1 0 0);
 }
 
 .dark {

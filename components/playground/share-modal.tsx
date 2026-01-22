@@ -420,7 +420,7 @@ export function ShareModal({
                         <img src={imgTwitter} alt="Twitter" className="size-full object-cover" />
                       </div>
                       <span className="text-[12px] font-medium text-[#4a5565] leading-4">
-                        Twitter
+                        X
                       </span>
                     </button>
 
