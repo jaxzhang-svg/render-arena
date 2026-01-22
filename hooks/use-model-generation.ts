@@ -202,8 +202,16 @@ export function useModelGeneration({
     flushIntervalRef.current = setInterval(flushBuffer, 50)
 
     try {
-      await fetchEventSource(`/api/apps/${appId}/generate?model=${slot}&temperature=${settings.temperature}`, {
-        method: 'GET',
+      await fetchEventSource(`/api/apps/${appId}/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          slot,
+          model: selectedModel.id,
+          temperature: settings.temperature,
+        }),
         openWhenHidden: true,
         signal,
         onopen: async (res) => {
@@ -303,7 +311,7 @@ export function useModelGeneration({
         completed: true,
       }))
     }
-  }, [slot, stop, onGenerationComplete])
+  }, [slot, stop, onGenerationComplete, selectedModel.id, settings.temperature])
 
   return {
     selectedModel,

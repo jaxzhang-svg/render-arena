@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { models } from '@/lib/config';
 
 const NOVITA_API_KEY = process.env.NEXT_NOVITA_API_KEY!;
 const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions';
@@ -12,18 +13,17 @@ const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions';
  * GET /api/apps/[id]/generate
  * 流式生成 HTML（SSE）- 直接透传 Novita API 的原始 SSE 流
  */
-export async function GET(
+export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const { searchParams } = new URL(request.url);
-  const model = searchParams.get('model'); // 'a' or 'b'
-  const temperature = Number(searchParams.get('temperature'));
+  const body = await request.json();
+  const { slot, model: modelIdParam, temperature } = body;
 
-  if (!model || !['a', 'b'].includes(model)) {
+  if (!slot || !['a', 'b'].includes(slot)) {
     return new Response(
-      JSON.stringify({ error: 'Invalid model parameter. Must be "a" or "b"' }),
+      JSON.stringify({ error: 'Invalid slot parameter. Must be "a" or "b"' }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
     );
   }
@@ -56,7 +56,29 @@ export async function GET(
     );
   }
 
-  const modelId = model === 'a' ? app.model_a : app.model_b;
+  let modelId = slot === 'a' ? app.model_a : app.model_b;
+
+  // 如果传入了 specific model (id)，验证并使用
+  if (modelIdParam) {
+    const isAllowed = models.some(m => m.id === modelIdParam);
+    if (!isAllowed) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid model. Must be one of the allowed models.' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // 如果模型ID发生了变化，更新数据库
+    if (modelId !== modelIdParam) {
+      const updateField = slot === 'a' ? 'model_a' : 'model_b';
+      await adminClient
+        .from('apps')
+        .update({ [updateField]: modelIdParam })
+        .eq('id', id);
+      
+      modelId = modelIdParam;
+    }
+  }
 
   // 创建 AbortController，用于在前端断开连接时取消 Novita API 请求
   const abortController = new AbortController();
@@ -82,7 +104,7 @@ export async function GET(
         },
         { role: 'user', content: app.prompt },
       ],
-      temperature: Number.isNaN(temperature) ? 0.7 : temperature < 0 ? 0 : temperature > 2 ? 2 : temperature,
+      temperature: Number.isNaN(Number(temperature)) ? 0.7 : Number(temperature) < 0 ? 0 : Number(temperature) > 2 ? 2 : Number(temperature),
       max_tokens: 32768,
       stream: true,
       separate_reasoning: true,
