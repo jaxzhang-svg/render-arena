@@ -431,6 +431,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
         showVideoSection={shareMode === 'video'}
         isPublished={isAppPublished}
         onPublishSuccess={() => setIsAppPublished(true)}
+        prompt={prompt}
       />
     </div>
   )

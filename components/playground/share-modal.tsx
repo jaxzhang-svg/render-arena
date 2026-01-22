@@ -24,6 +24,7 @@ interface ShareModalProps {
   videoBlob?: Blob | null;
   videoFormat?: 'webm' | 'mp4' | null;
   showVideoSection?: boolean;
+  prompt?: string;
   isPublished?: boolean;
   onPublishSuccess?: () => void;
 }
@@ -36,6 +37,7 @@ export function ShareModal({
   videoBlob,
   videoFormat,
   showVideoSection = false,
+  prompt = '',
   isPublished = false,
   onPublishSuccess,
 }: ShareModalProps) {
@@ -241,19 +243,33 @@ export function ShareModal({
   };
 
   const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
-    const encodedUrl = encodeURIComponent(shareUrl);
-    const text = encodeURIComponent('Check out this AI-generated app battle! 🚀');
+    // Truncate prompt to 5 words
+    const truncatedPrompt = prompt.split(/\s+/).slice(0, 5).join(' ') + (prompt.split(/\s+/).length > 5 ? ' …' : '');
+    
+    // Determine link
+    let finalLink = shareUrl;
+    if (videoUid && CLOUDFLARE_CUSTOMER_CODE) {
+       finalLink = `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoUid}/watch`;
+    }
+
+    const shareText = `Render Arena — Side-by-Side\nPrompt: “${truncatedPrompt}”\n👉 Which model wins?`;
+    
+    const encodedUrl = encodeURIComponent(finalLink);
+    const encodedText = encodeURIComponent(shareText);
+    
     let url = '';
 
     switch (platform) {
       case 'twitter':
-        url = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${text}`;
+        url = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
         break;
       case 'linkedin':
+        // LinkedIn doesn't support pre-filling text as easily as Twitter, mostly just the URL
         url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
         break;
       case 'facebook':
-        url = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+        // Facebook primarily shares the URL
+        url = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
         break;
     }
 
