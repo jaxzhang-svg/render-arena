@@ -129,7 +129,16 @@ export async function PATCH(
     }
 
     // 允许更新的字段
-    const allowedFields = ['name', 'description', 'html_content_a', 'html_content_b'];
+    const allowedFields = [
+      'name', 
+      'description', 
+      'html_content_a', 
+      'html_content_b',
+      'duration_a',
+      'tokens_a',
+      'duration_b',
+      'tokens_b'
+    ];
     const updateData: Record<string, unknown> = {};
     
     for (const field of allowedFields) {

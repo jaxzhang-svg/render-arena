@@ -40,7 +40,17 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
     setIsLiked(app.isLiked || false);
     isLikedRef.current = app.isLiked || false;
     serverLikedRef.current = app.isLiked || false;
+    serverLikedRef.current = app.isLiked || false;
   }, [app.like_count, app.isLiked]);
+
+  // Debug log
+  console.log('GalleryAppCard app data:', { 
+    id: app.id, 
+    duration_a: app.duration_a, 
+    tokens_a: app.tokens_a,
+    duration_b: app.duration_b, 
+    tokens_b: app.tokens_b 
+  });
 
   const [isHovered, setIsHovered] = useState(false);
   const [hasHovered, setHasHovered] = useState(false);
@@ -224,7 +234,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         )}
 
         {/* Model Badge */}
-        {modelA ? <div className="absolute top-[18px] left-3 z-10">
+        {modelA ? <div className="absolute top-[18px] left-3 z-10 flex flex-col gap-1 items-start">
           <div className="
               inline-flex items-center gap-1.5 px-[10px]
               text-sm font-medium font-sans text-white backdrop-blur-md h-[30px]
@@ -239,9 +249,20 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
             />
             {modelA?.name}
           </div>
+          {(app.duration_a || app.tokens_a) && (
+            <div className="
+              inline-flex items-center gap-1 px-2
+              text-[10px] font-medium font-sans text-white/80 backdrop-blur-md h-[20px]
+              bg-black/50 border border-white/5 rounded-full
+            ">
+              {app.duration_a && <span>{app.duration_a.toFixed(1)}s</span>}
+              {app.duration_a && app.tokens_a && <span className="text-white/40">|</span>}
+              {app.tokens_a && <span>{app.tokens_a}t</span>}
+            </div>
+          )}
         </div> : null}
         {
-          modelB ? <div className="absolute top-[18px] right-3 z-10">
+          modelB ? <div className="absolute top-[18px] right-3 z-10 flex flex-col gap-1 items-end">
             <div className="
               inline-flex items-center gap-1.5 px-[10px]
               text-sm font-medium text-white backdrop-blur-md h-[30px]
@@ -256,6 +277,17 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               />
               {modelB.name}
             </div>
+            {(app.duration_b || app.tokens_b) && (
+              <div className="
+                inline-flex items-center gap-1 px-2
+                text-[10px] font-medium font-sans text-white/80 backdrop-blur-md h-[20px]
+                bg-black/50 border border-white/5 rounded-full
+              ">
+                {app.duration_b && <span>{app.duration_b.toFixed(1)}s</span>}
+                {app.duration_b && app.tokens_b && <span className="text-white/40">|</span>}
+                {app.tokens_b && <span>{app.tokens_b}t</span>}
+              </div>
+            )}
           </div> : null
         }
       </div>
@@ -329,7 +361,9 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
   const fetchApps = useCallback(async (pageNum: number, cat: GalleryCategoryId, append = false) => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/apps?category=${cat}&page=${pageNum}&limit=6`);
+      const response = await fetch(`/api/apps?category=${cat}&page=${pageNum}&limit=6`, {
+        cache: 'no-store'
+      });
       const data = await response.json();
 
       if (append) {

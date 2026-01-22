@@ -53,6 +53,10 @@ interface UseModelGenerationOptions {
   defaultModelId?: string
   /** 初始 HTML 内容 */
   initialHtml?: string
+  /** 初始生成时间 */
+  initialDuration?: number
+  /** 初始 token 数 */
+  initialTokens?: number
   /** 当生成完成时的回调，用于协调另一个模型 */
   onGenerationComplete?: (html: string | undefined) => void
 }
@@ -94,6 +98,8 @@ export function useModelGeneration({
   initialModelId,
   defaultModelId,
   initialHtml,
+  initialDuration,
+  initialTokens,
   onGenerationComplete,
 }: UseModelGenerationOptions): UseModelGenerationReturn {
   // 获取初始模型
@@ -115,6 +121,8 @@ export function useModelGeneration({
     content: initialHtml ? `\`\`\`html\n${initialHtml}\n\`\`\`` : '',
     html: initialHtml || undefined,
     completed: !!initialHtml,
+    duration: initialDuration,
+    tokens: initialTokens,
   })
 
   // 视图模式
@@ -269,10 +277,17 @@ export function useModelGeneration({
             // 保存 HTML 到数据库
             if (html) {
               const fieldName = slot === 'a' ? 'html_content_a' : 'html_content_b'
+              const durationField = slot === 'a' ? 'duration_a' : 'duration_b'
+              const tokensField = slot === 'a' ? 'tokens_a' : 'tokens_b'
+
               fetch(`/api/apps/${appId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ [fieldName]: html }),
+                body: JSON.stringify({ 
+                  [fieldName]: html,
+                  [durationField]: duration,
+                  [tokensField]: tokens
+                }),
               }).catch((err) => {
                 console.error(`Failed to save HTML for model ${slot}:`, err)
               })

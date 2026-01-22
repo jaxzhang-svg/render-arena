@@ -71,13 +71,13 @@ export function UserAvatar({ className }: UserAvatarProps) {
       <div className="relative" ref={setContainer}>
         <Popover.Trigger id={popoverTriggerId}>
           <div className={`
-          flex size-10 cursor-pointer items-center justify-center
+          flex size-8 cursor-pointer items-center justify-center
           overflow-hidden rounded-full border border-[#e7e6e2]
           bg-black text-white ring-2 ring-transparent
           transition-all hover:ring-[#23d57c]/30
           ${className || ''}
         `}>
-            <span className="font-mono text-[16px] font-semibold">
+            <span className="font-mono text-[14px] font-semibold">
               {getInitial()}
             </span>
           </div>

@@ -190,6 +190,13 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                   <span className="text-sm font-medium text-[#4f4e4a]">
                     {modelA.name}
                   </span>
+                  {(app.duration_a || app.tokens_a) && (
+                    <div className="flex items-center gap-3 text-xs text-[#9e9c98]">
+                      {app.tokens_a && <span className="font-medium">{app.tokens_a} tokens</span>}
+                      {app.tokens_a && app.duration_a && <span className="text-[#e7e6e2]">•</span>}
+                      {app.duration_a && <span className="font-medium">{app.duration_a.toFixed(1)}s</span>}
+                    </div>
+                  )}
                 </div>
 
                 <Button
@@ -240,6 +247,13 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                   <span className="text-sm font-medium text-[#4f4e4a]">
                     {modelB.name}
                   </span>
+                  {(app.duration_b || app.tokens_b) && (
+                    <div className="flex items-center gap-3 text-xs text-[#9e9c98]">
+                      {app.tokens_b && <span className="font-medium">{app.tokens_b} tokens</span>}
+                      {app.tokens_b && app.duration_b && <span className="text-[#e7e6e2]">•</span>}
+                      {app.duration_b && <span className="font-medium">{app.duration_b.toFixed(1)}s</span>}
+                    </div>
+                  )}
                 </div>
 
                 <Button

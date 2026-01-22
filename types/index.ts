@@ -31,6 +31,10 @@ export interface App {
   is_public: boolean;
   created_at: string;
   updated_at: string;
+  duration_a: number | null;
+  tokens_a: number | null;
+  duration_b: number | null;
+  tokens_b: number | null;
 }
 
 export interface IpUsage {

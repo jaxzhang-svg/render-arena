@@ -80,6 +80,8 @@ export function useArenaPlayground({
     initialModelId: initialApp?.model_a,
     defaultModelId: defaultModelAId,
     initialHtml: initialApp?.html_content_a || undefined,
+    initialDuration: initialApp?.duration_a || undefined,
+    initialTokens: initialApp?.tokens_a || undefined,
   })
 
   // Model B
@@ -88,6 +90,8 @@ export function useArenaPlayground({
     initialModelId: initialApp?.model_b,
     defaultModelId: defaultModelBId,
     initialHtml: initialApp?.html_content_b || undefined,
+    initialDuration: initialApp?.duration_b || undefined,
+    initialTokens: initialApp?.tokens_b || undefined,
   })
 
   // 停止所有生成
