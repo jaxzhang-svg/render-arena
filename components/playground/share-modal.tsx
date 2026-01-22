@@ -542,7 +542,7 @@ function PublishToGallery({ onPublish, loading, agreedToPolicy, setAgreedToPolic
           </button>
           <div className="flex items-center gap-1">
             <span className="text-[14px] text-[#4F4E4A]">
-              I agree to the <a href="#" className="underline hover:text-black">Privacy Policy</a>
+              I agree to the <a href="https://novita.ai/legal/privacy-policy" target="_blank" className="underline hover:text-black">Privacy Policy</a>
             </span>
           </div>
         </div>

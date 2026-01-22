@@ -13,57 +13,59 @@ export const playgroundModes = [
   { 
     id: 'physics',
     label: 'Physics Playground', 
-    description: 'Create interactive physics simulations and dynamic experiences',
+    description: 'Which model can master the laws of nature?',
     color: 'bg-violet-400/80',
     icon: Box,
     prompts: [
-      "A pendulum with realistic swing physics and friction...",
-      "Bouncing balls with gravity and elastic collision physics...",
-      "A rope bridge swaying and deforming under dynamic forces..."
+      "Create an interactive simulation of multiple balls colliding elastically inside a bounded area, with realistic motion, clear collision responses, and smooth visual feedback.",
+      "Create a physics playground where users can stack blocks of different sizes and knock them down to observe realistic gravity and collisions.",
+      "Create a 3D simulation of a formula 1 car performing a continuous drifting donut in the street",
+      `3D scientific data visualization animation.  A massive rotating white wireframe sphere centered in the frame.  Inside the sphere, hundreds of multi-colored circular nodes of varying sizes are interconnected by thin, glowing plexus lines, forming a dense and complex network structure.  Solid black background with subtle floating particles for depth. High-tech, futuristic interface style. Clean, precise, non-organic geometry.  Smooth cinematic camera orbit around the sphere. Slow rotation, nodes softly pulsating with light. Ultra-sharp details, high contrast lighting. 4K resolution, seamless looping animation.  No text, no labels, no humans, no organic shapes.`,
+      `Flat illustration of a Great White Pelican riding a red bicycle. The pelican is drawn in a cartoonish style with a goofy expression and holds a large yellow sphere in its beak, representing the sun.  The pelican appears to be actively pedaling, with its feet in motion on the bicycle pedals. Motion lines and pink dots emphasize speed and movement. The background is a simplified blue sky with flat white clouds and small flying birds, creating a lively and playful atmosphere.`
     ],
     theme: {
       badge: 'bg-violet-100 text-violet-700',
       dot: 'bg-violet-500'
     },
-    featuredAppId: '0395261f-0de0-4cbe-8c4e-587233674a77',
+    featuredAppId: '17913d46-aed4-4580-8908-31bfbe70b546',
     videoUrl: '04b2dbf15827311af1c49a6bad366450',
     coverImage: '/images/physics-cover.png'
   },
   { 
     id: 'visual',
     label: 'Visual Magic', 
-    description: 'Generate stunning visual effects and artistic creations',
+    description: 'Which model can turn math and code into breathtaking visuals?',
     color: 'bg-pink-400/80',
     icon: Sparkles,
     prompts: [
-      "Neon particles dancing in mesmerizing spiral patterns...",
-      "Liquid wave distortion effect with metallic reflections...",
-      "Kaleidoscopic mandala pattern with smooth color transitions..."
+      `create a high-end visual experience in a single HTML file. Build a "Sacred Geometry Morphing" animation using Three.js. Start with a wireframe Platonic solid (like a Dodecahedron) that smoothly morphs into a complex Menger Sponge or a Mandelbulb-inspired fractal. The lines should glow with a gradient of gold and electric blue. Add a "cinematic camera" script that slowly orbits and zooms according to a mathematical sine wave.`,
+      `create a flow field. Use 2D Perlin noise to determine the angle of movement for 5,000 particles. Particles should leave a persistent, semi-transparent trail to create a silk-like texture, and the noise offset should evolve over time`,
+      `Create A futuristic 3D scientific visualization featuring a massive rotating white wireframe sphere filled with glowing, multicolored nodes connected by fine luminous lines, floating in a pitch-black space, with smooth cinematic motion, pulsing light, crisp geometry, high contrast, and a seamless looping feel—purely abstract, precise, and non-organic.`,
+      `Create a spectacular fireworks scene in a pitch-black night sky, with continuous overlapping launches that burst into massive, glowing spheres of particles, realistically rising, exploding, slowing down, drifting under gravity, fading with subtle trails, viewed from a static camera looking slightly upward, and adapting smoothly to any screen size.`
     ],
     theme: {
       badge: 'bg-pink-100 text-pink-700',
       dot: 'bg-pink-500'
     },
-    featuredAppId: 'dfd160f5-aa5c-4851-80b9-079a9b85335b',
+    featuredAppId: '40bf7a51-d616-462c-8ab6-5c6d6c7ef7e0',
     videoUrl: '23f0964d6af876cc60b5305386fb4cf9',
     coverImage: '/images/visual-cover.png'
   },
   { 
     id: 'game',
     label: 'Micro Game Jam', 
-    description: 'Build mini games and interactive entertainment',
+    description: 'Which model can create the most fun game in minutes?',
     color: 'bg-cyan-400/80',
     icon: Gamepad2,
     prompts: [
-      "A fast-paced tap-the-tiles rhythm game with increasing difficulty...",
-      "A simple puzzle game where you match falling colored blocks...",
-      "A dodge-the-obstacles endless runner with power-ups..."
+      "Create a Breakout-style game with paddle control and ball physics",
+      "Create a playable Snake game with increasing difficulty.",
     ],
     theme: {
       badge: 'bg-cyan-100 text-cyan-700',
       dot: 'bg-cyan-500'
     },
-    featuredAppId: 'db30fa14-078d-4e00-a91e-e84022c92be6',
+    featuredAppId: '522f487f-3c52-40d3-95fb-b988bec41aff',
     videoUrl: '678ba59932c2203dddc08178884666d4',
     coverImage: '/images/game-cover.png'
   },

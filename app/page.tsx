@@ -52,8 +52,7 @@ export default function HomePage() {
   const accordionId1 = useId();
   const accordionId2 = useId();
   const accordionId3 = useId();
-  const accordionId4 = useId();
-  const accordionId5 = useId();
+
 
   const handleGenerate = () => {
     const promptToUse = userPrompt.trim() || placeholderText.trim();
@@ -122,7 +121,7 @@ export default function HomePage() {
         {/* Hero Section */}
         <section id="home" className="relative w-full px-6 py-16">
           <div className="
-            mx-auto flex max-w-4xl flex-col items-center gap-8 text-center
+            mx-auto flex max-w-4xl flex-col items-center gap-4 text-center
           ">
             {/* Live Badge */}
             <div className="
@@ -139,11 +138,21 @@ export default function HomePage() {
 
             {/* Heading */}
             <h1 className="
-              max-w-[820px] font-sans text-[68px]
+              max-w-[820px] font-sans text-[58px]
               leading-[74px] font-semibold tracking-[-1.6px] text-[#292827]
             ">
-              <span>One prompt, Side Compare.</span>
+              <span>One Prompt</span>
+              <br />
+              <span>Multiple Models, Side by Side</span>
             </h1>
+
+            {/* Subtitle */}
+            <p className="
+              max-w-[820px] font-sans text-lg/6
+              font-normal text-[#4f4e4a]
+            ">
+              Test how different models render the same idea. Compare, judge, and share the results.
+            </p>
 
             {/* Featured Case */}
             <FeaturedCasesSection />
@@ -233,7 +242,7 @@ export default function HomePage() {
                       disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
                     `}
                   >
-                    <span>Generate</span>
+                    <span>Run Arena</span>
                     <ArrowRight className="size-4" />
                   </Button>
                 </div>
@@ -463,7 +472,7 @@ export default function HomePage() {
                   group transition-colors cursor-pointer
                   hover:bg-[#f0f0ed]
                 ">
-                  <span>How does the Novita affiliate program work?</span>
+                  <span>What am I supposed to do here?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
@@ -471,7 +480,14 @@ export default function HomePage() {
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
-                  The Novita affiliate program allows you to earn commissions by referring new customers to our platform. Once you sign up, you'll receive a unique tracking link. Share this link on your website, blog, or social media channels. When someone clicks your link and makes a purchase, you earn a percentage of the sale.
+                  <p>Model Arena lets you submit a single task (prompt) and watch two models attempt to solve it under identical conditions.</p>
+                  <p className="mt-2">Instead of chatting, you observe how models:</p>
+                  <ul className="list-disc pl-5 mt-2 space-y-1">
+                    <li>reason about the task</li>
+                    <li>generate code or logic</li>
+                    <li>build and execute a real solution</li>
+                  </ul>
+                  <p className="mt-2">Think of it as models proving themselves by doing real work.</p>
                 </Accordion.Panel>
               </Accordion.Item>
 
@@ -486,7 +502,7 @@ export default function HomePage() {
                   group transition-colors cursor-pointer
                   hover:bg-[#f0f0ed]
                 ">
-                  <span>Do I need a website or blog to be part of the Novita affiliate program?</span>
+                  <span>Is this a real build or just a demo simulation?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
@@ -494,7 +510,14 @@ export default function HomePage() {
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
-                  No, you don't need a website or blog to participate. You can share your affiliate link through social media, email newsletters, or any other platform where you have an audience.
+                  <p>This is a real execution, not a mock or animation.</p>
+                  <p className="mt-2">Models:</p>
+                  <ul className="list-disc pl-5 mt-2 space-y-1">
+                    <li>generate actual code</li>
+                    <li>run inside an isolated sandbox</li>
+                    <li>build and launch real previews when applicable</li>
+                  </ul>
+                  <p className="mt-2">Failures, delays, and unexpected behavior are all part of the evaluation — and often the most informative signals.</p>
                 </Accordion.Panel>
               </Accordion.Item>
 
@@ -509,7 +532,7 @@ export default function HomePage() {
                   group transition-colors cursor-pointer
                   hover:bg-[#f0f0ed]
                 ">
-                  <span>If a customer clicks my link but buys later without the link, do I still get commission?</span>
+                  <span>How should I decide which model is better?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
@@ -517,7 +540,14 @@ export default function HomePage() {
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
-                  Yes, our tracking system uses cookies that typically last 30 days. If a customer clicks your link and makes a purchase within that timeframe, you'll receive credit for the referral.
+                  <p>Model Arena does not assign scores or rankings.</p>
+                  <p className="mt-2">You evaluate models based on:</p>
+                  <ul className="list-disc pl-5 mt-2 space-y-1">
+                    <li>Task completion — does it actually work?</li>
+                    <li>Engineering judgment — are the decisions reasonable?</li>
+                    <li>Creativity & robustness — does it handle edge cases or go beyond expectations?</li>
+                  </ul>
+                  <p className="mt-2">The best model is the one you’d trust in a real project.</p>
                 </Accordion.Panel>
               </Accordion.Item>
 
@@ -532,7 +562,7 @@ export default function HomePage() {
                   group transition-colors cursor-pointer
                   hover:bg-[#f0f0ed]
                 ">
-                  <span>When do I receive my rewards?</span>
+                  <span>Can I reuse or share what I see here?</span>
                   <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
                 </Accordion.Trigger>
                 <Accordion.Panel className="
@@ -540,53 +570,14 @@ export default function HomePage() {
                   font-sans text-base
                   leading-6 text-[#4f4e4a]
                 ">
-                  Rewards are typically processed monthly. Once you reach the minimum payout threshold, your earnings will be transferred to your designated payment method.
-                </Accordion.Panel>
-              </Accordion.Item>
-
-              <Accordion.Item value="item-4" className="
-                rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
-              ">
-                <Accordion.Trigger id={accordionId4} className="
-                  flex items-center justify-between w-full h-[72.75px] px-6 py-0
-                  font-sans text-xl
-                  leading-6 font-semibold tracking-[-0.4px]
-                  hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
-                  group transition-colors cursor-pointer
-                  hover:bg-[#f0f0ed]
-                ">
-                  <span>Where can I find Affiliate Terms of Service?</span>
-                  <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
-                </Accordion.Trigger>
-                <Accordion.Panel className="
-                  border-t border-[#f3f4f6] px-6 py-4
-                  font-sans text-base
-                  leading-6 text-[#4f4e4a]
-                ">
-                  You can find our Affiliate Terms of Service in your affiliate dashboard or on our website's legal section. Make sure to review them carefully before participating in the program.
-                </Accordion.Panel>
-              </Accordion.Item>
-
-              <Accordion.Item value="item-5" className="
-                rounded-[10px] border-none bg-[#f9fafb] overflow-hidden
-              ">
-                <Accordion.Trigger id={accordionId5} className="
-                  flex items-center justify-between w-full h-[72.75px] px-6 py-0
-                  font-sans text-xl
-                  leading-6 font-semibold tracking-[-0.4px]
-                  hover:no-underline aria-expanded:text-[#23d57c] text-[#1e2939]
-                  group transition-colors cursor-pointer
-                  hover:bg-[#f0f0ed]
-                ">
-                  <span>Are there any restrictions on the affiliate program?</span>
-                  <ChevronUp className="size-5 group-aria-expanded:rotate-0 rotate-180 transition-transform" />
-                </Accordion.Trigger>
-                <Accordion.Panel className="
-                  border-t border-[#f3f4f6] px-6 py-4
-                  font-sans text-base
-                  leading-6 text-[#4f4e4a]
-                ">
-                  Yes, there are some restrictions including prohibited promotional methods and content guidelines. Please refer to our Affiliate Terms of Service for complete details.
+                  <p>Yes — and you’re encouraged to.</p>
+                  <p className="mt-2">You can:</p>
+                  <ul className="list-disc pl-5 mt-2 space-y-1">
+                    <li>inspect generated outputs</li>
+                    <li>rerun tasks with modified prompts</li>
+                    <li>share results via demos, blogs, or social posts</li>
+                  </ul>
+                  <p className="mt-2">Model Arena is designed for reproducible, shareable model experiments.</p>
                 </Accordion.Panel>
               </Accordion.Item>
             </Accordion.Root>

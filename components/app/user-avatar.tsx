@@ -134,7 +134,8 @@ export function UserAvatar({ className }: UserAvatarProps) {
                     Hackathon
                   </button>
                   <Link
-                    href="/privacy"
+                    href="https://novita.ai/legal/privacy-policy"
+                    target="_blank"
                     className="block cursor-pointer rounded px-3 py-2 text-[14px] leading-[20px] text-[#0F172A] hover:bg-[#F4F4F5]"
                   >
                     Privacy
