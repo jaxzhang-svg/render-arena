@@ -462,7 +462,7 @@ export function ShareModal({
               </div>
               <button
                 onClick={handleDownload}
-                className="h-9 bg-white text-[#101828] rounded-[6px] px-4 flex cursor-pointer items-center gap-2 text-[14px] font-medium tracking-[-0.1504px] border border-[#E7E6E2] hover:border-primary hover:text-primary transition-colors"
+                className="h-9 bg-white text-[#101828] rounded-[6px] px-4 flex cursor-pointer items-center gap-2 text-[14px] font-medium tracking-[-0.1504px] border border-[#E7E6E2] hover:bg-[#f5f5f5] transition-colors"
               >
                 <Download className="size-4" />
                 Download Video

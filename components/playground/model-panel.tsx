@@ -65,7 +65,7 @@ export function ModelPanel({
   scrollButtonPosition = 'right',
 }: ModelPanelProps) {
   const menuTriggerId = useId()
-  
+
   return (
     <div
       className={cn(
@@ -81,94 +81,89 @@ export function ModelPanel({
           <div suppressHydrationWarning>
             <Menu.Root>
               <Menu.Trigger
-              id={menuTriggerId}
-              openOnHover
-              className={cn(
-                'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors',
-                'h-8 cursor-pointer gap-2 bg-white px-3 py-1.5',
-                'hover:bg-[#F5F5F5]',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
-              )}
-            >
-              <Image 
-                src={selectedModel.icon} 
-                alt={selectedModel.name} 
-                width={20} 
-                height={20} 
-                className="size-5 rounded-sm"
-              />
-              <span className="font-sans text-[16px] font-medium text-[#4f4e4a]">
-                {selectedModel.name}
-              </span>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path
-                  d="M5 7.5L10 12.5L15 7.5"
-                  stroke="#9e9c98"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                id={menuTriggerId}
+                openOnHover
+                className={cn(
+                  'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors',
+                  'h-8 cursor-pointer gap-2 bg-white px-3 py-1.5',
+                  'hover:bg-[#F5F5F5]',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
+                )}
+              >
+                <Image
+                  src={selectedModel.icon}
+                  alt={selectedModel.name}
+                  width={20}
+                  height={20}
+                  className="size-5 rounded-sm"
                 />
-              </svg>
-            </Menu.Trigger>
-            <Menu.Portal>
-              <Menu.Positioner sideOffset={8}>
-                <Menu.Popup
-                  className={cn(
-                    'z-50 min-w-[8rem] overflow-hidden rounded-[14px] border border-[#e7e6e2] bg-white shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]'
-                  )}
-                >
-                  <div className="px-[8px] pt-[14px] pb-[4px]">
-                    <p className="text-[#9e9c98] text-[16px] font-normal leading-[24px] px-[8px] py-0">
-                      Select Model
-                    </p>
-                  </div>
-                  <div className="max-h-[400px] overflow-y-auto flex flex-col gap-[4px] p-[7px] pt-0 scrollbar-hide">
-                    {modelGroups.map((group) => {
-                      if (group.items.length === 0) return null;
-                      
-                      return (
-                        <div key={group.group} className="flex flex-col mb-2">
-                          <p className="text-[#9e9c98] text-[12px] font-medium px-[8px] py-1 uppercase tracking-tight">
-                            {group.group}
-                          </p>
-                          {group.items.map((model) => (
-                            <Menu.Item
-                              key={model.id}
-                              onClick={() => onModelChange({
-                                ...model,
-                                group: group.group,
-                                color: group.color,
-                                icon: group.icon,
-                              })}
-                              className={cn(
-                                'relative flex cursor-pointer select-none items-center rounded-[10px] px-[8px] outline-none transition-colors',
-                                'h-[36px] w-full',
-                                selectedModel.id === model.id
-                                  ? 'bg-[#f5f5f5]'
-                                  : 'hover:bg-[#f5f5f5] focus:bg-[#f5f5f5]',
-                                'gap-[8px]'
-                              )}
-                            >
-                              <Image 
-                                src={group.icon} 
-                                alt={model.name} 
-                                width={20} 
-                                height={20} 
-                                className="size-[20px] rounded-sm shrink-0"
-                              />
-                              <span className="text-[#292827] text-[15px] font-normal leading-tight truncate">
-                                {model.name}
-                              </span>
-                            </Menu.Item>
-                          ))}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </Menu.Popup>
-              </Menu.Positioner>
-            </Menu.Portal>
-          </Menu.Root>
+                <span className="font-sans text-[16px] font-medium text-[#4f4e4a]">
+                  {selectedModel.name}
+                </span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M5 7.5L10 12.5L15 7.5"
+                    stroke="#9e9c98"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Menu.Trigger>
+              <Menu.Portal>
+                <Menu.Positioner sideOffset={8} align="start">
+                  <Menu.Popup
+                    className={cn(
+                      'z-50 min-w-[8rem] overflow-hidden rounded-[14px] border border-[#e7e6e2] bg-white shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]'
+                    )}
+                  >
+                    <div className="max-h-[400px] overflow-y-auto flex flex-col gap-[4px] pt-[12px] p-[7px] pt-0 scrollbar-hide">
+                      {modelGroups.map((group) => {
+                        if (group.items.length === 0) return null;
+
+                        return (
+                          <div key={group.group} className="flex flex-col mb-2">
+                            <p className="text-[#9e9c98] text-[12px] font-medium px-[8px] py-1 uppercase tracking-tight">
+                              {group.group}
+                            </p>
+                            {group.items.map((model) => (
+                              <Menu.Item
+                                key={model.id}
+                                onClick={() => onModelChange({
+                                  ...model,
+                                  group: group.group,
+                                  color: group.color,
+                                  icon: group.icon,
+                                })}
+                                className={cn(
+                                  'relative flex cursor-pointer select-none items-center rounded-[10px] px-[8px] outline-none transition-colors',
+                                  'h-[36px] w-full',
+                                  selectedModel.id === model.id
+                                    ? 'bg-[#f5f5f5]'
+                                    : 'hover:bg-[#f5f5f5] focus:bg-[#f5f5f5]',
+                                  'gap-[8px]'
+                                )}
+                              >
+                                <Image
+                                  src={group.icon}
+                                  alt={model.name}
+                                  width={20}
+                                  height={20}
+                                  className="size-[20px] rounded-sm shrink-0"
+                                />
+                                <span className="text-[#292827] text-[15px] font-normal leading-tight truncate">
+                                  {model.name}
+                                </span>
+                              </Menu.Item>
+                            ))}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </Menu.Popup>
+                </Menu.Positioner>
+              </Menu.Portal>
+            </Menu.Root>
           </div>
 
           {/* Status Indicator */}

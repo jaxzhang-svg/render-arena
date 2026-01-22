@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useCallback, useEffect } from 'react';
-import { Heart, Copy, Box, ChevronDown, Download } from 'lucide-react';
+import { Heart, Copy, Box, ChevronDown, Download, Combine } from 'lucide-react';
 import Image from 'next/image';
 import { galleryCategories, getModelById, playgroundModes, type GalleryCategoryId } from '@/lib/config';
 import { useRouter } from 'next/navigation';
@@ -28,7 +28,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   const router = useRouter();
   const [likeCount, setLikeCount] = useState(app.like_count);
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
-  
+
   // Refs to track state for synchronization without causing re-renders or staleness
   const isLikedRef = useRef(app.isLiked || false);
   const serverLikedRef = useRef(app.isLiked || false);
@@ -48,10 +48,10 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
 
   const modelA = getModelById(app.model_a);
   const modelB = getModelById(app.model_b);
-  
+
   // Check if this app has a video preview
   const hasVideo = !!app.preview_video_url && !!CLOUDFLARE_CUSTOMER_CODE;
-  const videoUrl = hasVideo 
+  const videoUrl = hasVideo
     ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/iframe?muted=true&loop=true&autoplay=true&controls=false&poster=https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/thumbnails/thumbnail.jpg`
     : null;
   const thumbnailUrl = hasVideo
@@ -79,7 +79,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         while (serverLikedRef.current !== isLikedRef.current) {
           // Send the target state we WANT to achieve
           const targetState = isLikedRef.current;
-          
+
           const response = await fetch(`/api/apps/${app.id}/like`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -128,7 +128,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         isSyncingRef.current = false;
         // Double check in case of race condition at the very end
         if (serverLikedRef.current !== isLikedRef.current) {
-           sync();
+          sync();
         }
       }
     };
@@ -149,11 +149,11 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   return (
     <div
       className="
-        group relative flex flex-col gap-4
+        group relative flex flex-col
         overflow-hidden
       "
     >
-      <div 
+      <div
         onClick={() => router.push(`/gallery/${app.id}`)}
         onMouseEnter={() => {
           setIsHovered(true);
@@ -176,9 +176,8 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               <iframe
                 ref={iframeRef}
                 src={videoUrl!}
-                className={`absolute inset-0 w-full h-full border-0 transition-opacity duration-300 pointer-events-none ${
-                  isHovered ? 'opacity-100' : 'opacity-0'
-                }`}
+                className={`absolute inset-0 w-full h-full border-0 transition-opacity duration-300 pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'
+                  }`}
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 data-note="Video loads on first hover and persists to avoid reload flash"
                 allowFullScreen
@@ -194,12 +193,12 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                   className="absolute inset-0 w-full h-full border-0 bg-white"
                   title={app.name || 'App Preview'}
                   sandbox="allow-scripts"
-                  style={{ 
-                    pointerEvents: 'none', 
-                    transform: 'scale(0.25)', 
-                    transformOrigin: '0px 0px', 
-                    width: '400%', 
-                    height: '400%' 
+                  style={{
+                    pointerEvents: 'none',
+                    transform: 'scale(0.25)',
+                    transformOrigin: '0px 0px',
+                    width: '400%',
+                    height: '400%'
                   }}
                 />
               </div>
@@ -211,12 +210,12 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                   className="absolute inset-0 w-full h-full border-0 bg-white"
                   title={app.name || 'App Preview'}
                   sandbox="allow-scripts"
-                  style={{ 
-                    pointerEvents: 'none', 
-                    transform: 'scale(0.25)', 
-                    transformOrigin: '0px 0px', 
-                    width: '400%', 
-                    height: '400%' 
+                  style={{
+                    pointerEvents: 'none',
+                    transform: 'scale(0.25)',
+                    transformOrigin: '0px 0px',
+                    width: '400%',
+                    height: '400%'
                   }}
                 />
               </div>
@@ -231,11 +230,11 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               text-sm font-medium font-sans text-white backdrop-blur-md h-[30px]
               bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
             " style={{ borderRadius: '15px' }}>
-            <Image 
-              src={modelA.icon} 
-              alt={modelA.name} 
-              width={20} 
-              height={20} 
+            <Image
+              src={modelA.icon}
+              alt={modelA.name}
+              width={20}
+              height={20}
               className={`size-5 rounded-sm ${modelA.color === '#000' ? 'invert' : ''}`}
             />
             {modelA?.name}
@@ -248,11 +247,11 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               text-sm font-medium text-white backdrop-blur-md h-[30px]
               bg-black/70 border border-white/10 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
             " style={{ borderRadius: '15px' }}>
-              <Image 
+              <Image
                 src={modelB.icon}
-                alt={modelB.name} 
-                width={20} 
-                height={20} 
+                alt={modelB.name}
+                width={20}
+                height={20}
                 className={`size-5 rounded-sm ${modelB.color === '#000' ? 'invert' : ''}`}
               />
               {modelB.name}
@@ -265,7 +264,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         <div className="space-y-1">
           <h3 className="
             text-[#0a0a0a]
-            line-clamp-1 text-2xl font-semibold leading-[38px] font-sans
+            line-clamp-1 text-2xl font-semibold leading-[28px] font-sans
           ">
             {app.name || 'Untitled App'}
           </h3>
@@ -276,7 +275,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
           </p>
         </div>
 
-        <div className="mt-3 flex items-center justify-between">
+        <div className="mt-3 flex items-center justify-between pb-1">
           <div className="flex items-center gap-4">
             <button
               className="
@@ -290,18 +289,18 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                 handleCopy();
               }}
             >
-              <Copy className="size-5" />
+              <Combine className="size-5" />
               <span className="font-sans">Remix</span>
             </button>
           </div>
 
           <button
             className={`
-              flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm
+              flex items-center gap-1.5 px-3 py-1 rounded-full border text-sm
               font-medium transition-all cursor-pointer shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)]
               ${isLiked
                 ? 'text-[#f23030] border-red-200 bg-red-50'
-                : 'text-[#4f4e4a] border-black/10 bg-[#f5f5f5] hover:border-gray-300'
+                : 'text-[#4f4e4a] border-black/10 hover:bg-[#f5f5f5] hover:border-gray-300'
               }
             `}
             onClick={(e) => {
@@ -375,20 +374,20 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {Array.from({ length: 2 }).map((_, i) => (
             <div key={i} className="flex flex-col gap-4">
-               {/* Card Image Skeleton */}
-               <Skeleton className="w-full aspect-[8/3] rounded-2xl" />
-               
-               {/* Card Footer Skeleton */}
-               <div className="flex flex-col justify-between px-0 pt-3 pb-0 space-y-3">
-                  <div className="space-y-2">
-                     <Skeleton className="h-8 w-3/4 rounded-md" />
-                     <Skeleton className="h-5 w-1/3 rounded-md" />
-                  </div>
-                  <div className="flex items-center justify-between">
-                     <Skeleton className="h-5 w-20 rounded-md" />
-                     <Skeleton className="h-8 w-16 rounded-full" />
-                  </div>
-               </div>
+              {/* Card Image Skeleton */}
+              <Skeleton className="w-full aspect-[8/3] rounded-2xl" />
+
+              {/* Card Footer Skeleton */}
+              <div className="flex flex-col justify-between px-0 pt-3 pb-0 space-y-3">
+                <div className="space-y-2">
+                  <Skeleton className="h-8 w-3/4 rounded-md" />
+                  <Skeleton className="h-5 w-1/3 rounded-md" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-5 w-20 rounded-md" />
+                  <Skeleton className="h-8 w-16 rounded-full" />
+                </div>
+              </div>
             </div>
           ))}
         </div>
