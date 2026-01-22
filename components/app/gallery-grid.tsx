@@ -43,15 +43,6 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
     serverLikedRef.current = app.isLiked || false;
   }, [app.like_count, app.isLiked]);
 
-  // Debug log
-  console.log('GalleryAppCard app data:', { 
-    id: app.id, 
-    duration_a: app.duration_a, 
-    tokens_a: app.tokens_a,
-    duration_b: app.duration_b, 
-    tokens_b: app.tokens_b 
-  });
-
   const [isHovered, setIsHovered] = useState(false);
   const [hasHovered, setHasHovered] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -199,7 +190,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
             <div className='relative w-1/2 h-full overflow-hidden group/pane'>
               <div className='w-full h-full transition-transform duration-700 ease-in-out group-hover/pane:scale-110 origin-center'>
                 <iframe
-                  srcDoc={DOMPurify.sanitize(app.html_content_a || '', DOMPURIFY_CONFIG)}
+                  srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${DOMPurify.sanitize(app.html_content_a || '', DOMPURIFY_CONFIG)}`}
                   className="absolute inset-0 w-full h-full border-0 bg-white"
                   title={app.name || 'App Preview'}
                   sandbox="allow-scripts"
@@ -216,7 +207,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
             <div className='relative w-1/2 h-full overflow-hidden group/pane'>
               <div className='w-full h-full transition-transform duration-700 ease-in-out group-hover/pane:scale-110 origin-center'>
                 <iframe
-                  srcDoc={DOMPurify.sanitize(app.html_content_b || '', DOMPURIFY_CONFIG)}
+                  srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${DOMPurify.sanitize(app.html_content_b || '', DOMPURIFY_CONFIG)}`}
                   className="absolute inset-0 w-full h-full border-0 bg-white"
                   title={app.name || 'App Preview'}
                   sandbox="allow-scripts"
