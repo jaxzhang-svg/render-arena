@@ -27,8 +27,8 @@ export const playgroundModes = [
       badge: 'bg-violet-100 text-violet-700',
       dot: 'bg-violet-500'
     },
-    featuredAppId: '17913d46-aed4-4580-8908-31bfbe70b546',
-    videoUrl: '04b2dbf15827311af1c49a6bad366450',
+    featuredAppId: '2f40ffd2-1e27-42e4-91a2-db16f0a9dc2d',
+    videoUrl: 'fa9fd2f45d94d3ffcc2c6eb589ceff32',
     coverImage: '/images/physics-cover.png'
   },
   { 
@@ -48,7 +48,7 @@ export const playgroundModes = [
       dot: 'bg-pink-500'
     },
     featuredAppId: '40bf7a51-d616-462c-8ab6-5c6d6c7ef7e0',
-    videoUrl: '23f0964d6af876cc60b5305386fb4cf9',
+    videoUrl: '654399c351e0af436cd752137c7a1159',
     coverImage: '/images/visual-cover.png'
   },
   { 
@@ -66,7 +66,7 @@ export const playgroundModes = [
       dot: 'bg-cyan-500'
     },
     featuredAppId: '522f487f-3c52-40d3-95fb-b988bec41aff',
-    videoUrl: '678ba59932c2203dddc08178884666d4',
+    videoUrl: '854ec832510ed4ef713d2b206a21617a',
     coverImage: '/images/game-cover.png'
   },
 ] as const;
