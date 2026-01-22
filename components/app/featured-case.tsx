@@ -43,14 +43,14 @@ function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
         onMouseLeave={() => setIsHovering(false)}
         onClick={handleCreate}
     >
-        {/* Background Image & Video Layer */}
-        <div className="absolute inset-0 size-full">
+        {/* Background Image & Video Layer - with zoom effect */}
+        <div className="absolute inset-0 size-full transition-transform duration-700 ease-in-out group-hover:scale-110 origin-center">
             <Image
                 src={coverImage}
                 alt={mode.label}
                 fill
                 className={cn(
-                    "object-cover transition-opacity duration-300 cursor-pointer",
+                    "object-cover transition-opacity duration-300",
                 )}
             />
              {/* Gradient Overlay - Darker at bottom for text readability */}
@@ -61,13 +61,18 @@ function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
                 <iframe
                     src={cfVideoUrl!}
                     className={cn(
-                        "absolute inset-0 size-full border-0 transition-opacity duration-300 cursor-pointer",
+                        "absolute inset-0 size-full border-0 transition-opacity duration-300",
                         isHovering ? "opacity-100" : "opacity-0"
                     )}
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     style={{ pointerEvents: 'none' }}
                 />
             )}
+        </div>
+
+        {/* GENERATED Badge */}
+        <div className="absolute left-3 top-3 z-20 rounded-[4px] bg-[#1f1f1f] px-2 py-1 text-[10px] font-bold uppercase leading-none tracking-wide text-white shadow-sm">
+            GENERATED
         </div>
 
         {/* Content Layer - Positioned at bottom */}

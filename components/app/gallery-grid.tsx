@@ -160,11 +160,11 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
           setHasHovered(true);
         }}
         onMouseLeave={() => setIsHovered(false)}
-        className="bg-[#ececf0] relative flex w-full aspect-[8/3] overflow-hidden rounded-2xl cursor-pointer"
+        className="bg-[#ececf0] group/card relative flex w-full aspect-[8/3] overflow-hidden rounded-2xl cursor-pointer"
       >
         {/* Video or Image Preview or Iframe */}
         {hasVideo ? (
-          <>
+          <div className="absolute inset-0 size-full transition-transform duration-700 ease-in-out group-hover/card:scale-110 origin-center">
             <Image
               src={thumbnailUrl}
               alt={app.name || 'App Preview'}
@@ -184,37 +184,44 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                 allowFullScreen
               />
             )}
-          </>
+          </div>
         ) : (
           <div className='absolute inset-0 w-full h-full flex'>
-            <iframe
-            srcDoc={DOMPurify.sanitize(app.html_content_a || '', DOMPURIFY_CONFIG)}
-            className="absolute inset-0 w-1/2 h-full border-0 bg-white transition-opacity duration-500 opacity-100"
-            title={app.name || 'App Preview'}
-            sandbox="allow-scripts"
-            style={{ 
-              pointerEvents: 'none', 
-              transform: 'scale(0.25)', 
-              transformOrigin: '0px 0px', 
-              width: '200%',
-              height: '400%' 
-            }}
-          />
-          <iframe
-            srcDoc={DOMPurify.sanitize(app.html_content_b || '', DOMPURIFY_CONFIG)}
-            className="absolute inset-0 w-1/2 left-1/2 border-0 bg-white transition-opacity duration-500 opacity-100"
-            title={app.name || 'App Preview'}
-            sandbox="allow-scripts"
-            style={{ 
-              pointerEvents: 'none', 
-              transform: 'scale(0.25)', 
-              transformOrigin: '0px 0px', 
-              width: '200%',
-              height: '400%' 
-            }}
-          />
+            <div className='relative w-1/2 h-full overflow-hidden group/pane'>
+              <div className='w-full h-full transition-transform duration-700 ease-in-out group-hover/pane:scale-110 origin-center'>
+                <iframe
+                  srcDoc={DOMPurify.sanitize(app.html_content_a || '', DOMPURIFY_CONFIG)}
+                  className="absolute inset-0 w-full h-full border-0 bg-white"
+                  title={app.name || 'App Preview'}
+                  sandbox="allow-scripts"
+                  style={{ 
+                    pointerEvents: 'none', 
+                    transform: 'scale(0.25)', 
+                    transformOrigin: '0px 0px', 
+                    width: '400%', 
+                    height: '400%' 
+                  }}
+                />
+              </div>
             </div>
-          
+            <div className='relative w-1/2 h-full overflow-hidden group/pane'>
+              <div className='w-full h-full transition-transform duration-700 ease-in-out group-hover/pane:scale-110 origin-center'>
+                <iframe
+                  srcDoc={DOMPurify.sanitize(app.html_content_b || '', DOMPURIFY_CONFIG)}
+                  className="absolute inset-0 w-full h-full border-0 bg-white"
+                  title={app.name || 'App Preview'}
+                  sandbox="allow-scripts"
+                  style={{ 
+                    pointerEvents: 'none', 
+                    transform: 'scale(0.25)', 
+                    transformOrigin: '0px 0px', 
+                    width: '400%', 
+                    height: '400%' 
+                  }}
+                />
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Model Badge */}
