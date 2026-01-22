@@ -139,7 +139,7 @@ export default function HomePage() {
             {/* Heading */}
             <h1 className="
               max-w-[820px] font-sans text-[58px]
-              leading-[74px] font-semibold tracking-[-1.6px] text-[#292827]
+              leading-[64px] font-semibold tracking-[-1.6px] text-[#292827]
             ">
               <span>One Prompt</span>
               <br />
@@ -400,7 +400,7 @@ export default function HomePage() {
                       px-8 py-3.5 text-base
                       leading-6 font-normal text-black
                       border border-white/20
-                      transition-all hover:scale-[1.02] active:scale-[0.98]
+                      transition-all hover:brightness-110
                     "
                     style={{
                       background: 'linear-gradient(90deg, #05DF72 0%, #5EE9B5 100%)',
