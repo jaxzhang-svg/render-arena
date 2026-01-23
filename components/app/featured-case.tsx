@@ -46,7 +46,7 @@ function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
         {/* Background Image & Video Layer - with zoom effect */}
         <div className="absolute inset-0 size-full transition-transform duration-700 ease-in-out group-hover:scale-110 origin-center">
             <Image
-                src={coverImage}
+                src={coverImage || ''}
                 alt={mode.label}
                 fill
                 className={cn(
