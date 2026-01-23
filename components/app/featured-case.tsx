@@ -17,24 +17,24 @@ function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
   const router = useRouter();
   const [isHovering, setIsHovering] = useState(false);
   const [hasHovered, setHasHovered] = useState(false);
-    
+
   const videoId = mode.videoUrl;
   const coverImage = mode.coverImage;
 
   const hasVideo = !!videoId && !!CLOUDFLARE_CUSTOMER_CODE;
-  
-  const cfVideoUrl = hasVideo 
+
+  const cfVideoUrl = hasVideo
     ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoId}/iframe?muted=true&loop=true&autoplay=true&controls=false&preload=auto`
     : null;
 
   const handleCreate = (e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     router.push(`/gallery/${mode.featuredAppId}`);
   };
 
   return (
-    <div 
+    <div
         className="group relative h-[146px] w-[260px] shrink-0 cursor-pointer overflow-hidden rounded-[14px] bg-[#18181b]"
         onMouseEnter={() => {
             setIsHovering(true);
@@ -96,7 +96,7 @@ export function FeaturedCasesSection() {
     <div className="w-full overflow-hidden py-4">
         <div className="flex justify-center">
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {playgroundModes.map((mode) => (
+              {playgroundModes.filter((mode) => mode.id !== 'general').map((mode) => (
                   <FeaturedCaseCard key={mode.id} mode={mode} />
               ))}
            </div>

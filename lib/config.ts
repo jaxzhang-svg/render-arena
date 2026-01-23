@@ -5,14 +5,15 @@ export const galleryCategories = [
   { id: 'physics', label: 'Physics' },
   { id: 'visual', label: 'Visual Magic' },
   { id: 'game', label: 'Micro Game Jam' },
+  { id: 'general', label: 'General' },
 ] as const;
 
 export type GalleryCategoryId = typeof galleryCategories[number]['id'];
 
 export const playgroundModes = [
-  { 
+  {
     id: 'physics',
-    label: 'Physics Playground', 
+    label: 'Physics Playground',
     description: 'Which model can master the laws of nature?',
     color: 'bg-violet-400/80',
     icon: Box,
@@ -31,9 +32,9 @@ export const playgroundModes = [
     videoUrl: '141bd195b3f9da2a14184dc0923555db',
     coverImage: '/images/physics-cover.png'
   },
-  { 
+  {
     id: 'visual',
-    label: 'Visual Magic', 
+    label: 'Visual Magic',
     description: 'Which model can turn math and code into breathtaking visuals?',
     color: 'bg-pink-400/80',
     icon: Sparkles,
@@ -51,9 +52,9 @@ export const playgroundModes = [
     videoUrl: '0f20294d577fcb399a49a7c9de707556',
     coverImage: '/images/visual-cover.png'
   },
-  { 
+  {
     id: 'game',
-    label: 'Micro Game Jam', 
+    label: 'Micro Game Jam',
     description: 'Which model can create the most fun game in minutes?',
     color: 'bg-cyan-400/80',
     icon: Gamepad2,
@@ -68,6 +69,26 @@ export const playgroundModes = [
     featuredAppId: '522f487f-3c52-40d3-95fb-b988bec41aff',
     videoUrl: '1ae1febdc7b45c9204b1b2b06e4d6a96',
     coverImage: '/images/game-cover.png'
+  },
+  {
+    id: 'general',
+    label: 'General',
+    description: 'Universal category for all types of prompts',
+    color: 'bg-gray-400/80',
+    icon: Sparkles,
+    prompts: [
+      "Create a beautiful interactive web experience",
+      "Build a modern web application with smooth animations",
+      "Design an elegant data visualization dashboard",
+      "Create a responsive landing page with modern design",
+    ],
+    theme: {
+      badge: 'bg-gray-100 text-gray-700',
+      dot: 'bg-gray-500'
+    },
+    featuredAppId: null,
+    videoUrl: null,
+    coverImage: null
   },
 ] as const;
 
@@ -210,6 +231,3 @@ export function getModelById(modelId: string): LLMModel | undefined {
 // Hackathon Configuration
 export const HACKATHON_END_TIME = '2026-02-14T23:59:59Z'; // Hardcoded date for now
 export const HACKATHON_PARTICIPANTS = 1234;
-
-
-

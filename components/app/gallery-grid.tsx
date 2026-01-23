@@ -375,7 +375,9 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
     fetchApps(1, selectedCategory);
   }, [selectedCategory, fetchApps]);
 
-  const handleLoadMore = () => {
+  const handleLoadMore = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.currentTarget.blur();
     const nextPage = page + 1;
     setPage(nextPage);
     fetchApps(nextPage, selectedCategory, true);

@@ -57,6 +57,7 @@ export interface CreateAppRequest {
   modelA: string;
   modelB: string;
   category?: string;
+  name?: string;
 }
 
 export interface CreateAppResponse {

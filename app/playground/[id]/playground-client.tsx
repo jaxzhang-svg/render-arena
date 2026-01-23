@@ -57,9 +57,10 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   const recordTooltipId = useId()
   const shareTooltipId = useId()
   const isGuest = !authLoading && !user
-  
+
   // App Published State
   const [isAppPublished, setIsAppPublished] = useState(initialApp?.is_public ?? false)
+  const [appCategory, setAppCategory] = useState<string | null>(initialApp?.category ?? null)
 
   // 分享相关状态
   const [showShareModal, setShowShareModal] = useState(false)
@@ -69,9 +70,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   // 自动开始生成逻辑
   const searchParams = useSearchParams()
   const autoStart = searchParams.get('autoStart') === 'true'
-  const categoryParam = searchParams.get('category')
-  const currentMode = playgroundModes.find((m) => m.id === categoryParam) || playgroundModes[0]
-  
+
   const hasAutoStartedRef = useRef(false)
   const handleGenerateRef = useRef(handleGenerate)
   const modelsReady = modelA.selectedModel.id && modelB.selectedModel.id
@@ -85,6 +84,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   useEffect(() => {
     if (currentAppId && currentAppId !== initialApp?.id) {
        setIsAppPublished(false)
+       setAppCategory(null)
     }
   }, [currentAppId, initialApp])
 
@@ -300,10 +300,6 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
               backdrop-blur
             ">
               <div className="flex flex-col gap-2 p-4 pb-0">
-                <div className={cn("flex items-center gap-2 rounded-full px-2 py-1.5 w-fit", currentMode.theme.badge)}>
-                  <div className={cn("size-2 rounded-full", currentMode.theme.dot)} />
-                  <span className="text-sm font-medium">{currentMode.label}</span>
-                </div>
                 <div className="relative w-full">
                   <Textarea
                     placeholder="Describe your app... (Press Enter to send)"
@@ -422,7 +418,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
         open={showShareModal}
         onOpenChange={setShowShareModal}
         appId={currentAppId}
-        shareUrl={currentAppId 
+        shareUrl={currentAppId
           ? `${typeof window !== 'undefined' ? window.location.origin : ''}/gallery/${currentAppId}`
           : undefined
         }
@@ -430,8 +426,12 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
         videoFormat={recordedFormat}
         showVideoSection={shareMode === 'video'}
         isPublished={isAppPublished}
-        onPublishSuccess={() => setIsAppPublished(true)}
+        onPublishSuccess={(category) => {
+          setIsAppPublished(true)
+          if (category) setAppCategory(category)
+        }}
         prompt={prompt}
+        category={appCategory}
       />
     </div>
   )

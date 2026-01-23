@@ -5,6 +5,7 @@ import { Download, Copy, X, Link as LinkIcon, Check, Loader2, CloudUpload, Check
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import { showToast } from '@/lib/toast';
+import { getModeByCategory } from '@/lib/config';
 
 // Local Assets
 const imgLinkedin = "/logo/square-linkedin-brands-solid-full.svg";
@@ -26,7 +27,8 @@ interface ShareModalProps {
   showVideoSection?: boolean;
   prompt?: string;
   isPublished?: boolean;
-  onPublishSuccess?: () => void;
+  onPublishSuccess?: (category?: string | null) => void;
+  category?: string | null;
 }
 
 export function ShareModal({
@@ -40,6 +42,7 @@ export function ShareModal({
   prompt = '',
   isPublished = false,
   onPublishSuccess,
+  category,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
   const [agreedToPolicy, setAgreedToPolicy] = useState(false);
@@ -210,7 +213,8 @@ export function ShareModal({
       });
 
       if (response.ok) {
-        onPublishSuccess?.();
+        const data = await response.json();
+        onPublishSuccess?.(data.category);
       } else {
         console.error('Failed to publish');
         showToast.error('Failed to publish');
@@ -356,9 +360,23 @@ export function ShareModal({
         <Dialog.Popup className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[446px] bg-white rounded-2xl border border-[#f3f4f6] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] overflow-hidden outline-none">
           {/* Header */}
           <div className="flex items-center justify-between h-[69px] px-5 pr-3 border-b border-[#f3f4f6]">
-            <h2 className="text-[18px] font-semibold text-[#101828] tracking-[-0.4395px] leading-7">
-              {videoBlob ? 'Share Video' : 'Share Generation'}
-            </h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-[18px] font-semibold text-[#101828] tracking-[-0.4395px] leading-7">
+                {videoBlob ? 'Share Video' : 'Share Generation'}
+              </h2>
+              {/* Category Badge */}
+              {isPublished && category && (() => {
+                const mode = getModeByCategory(category);
+                if (!mode) return null;
+                const Icon = mode.icon;
+                return (
+                  <div className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 ${mode.theme.badge}`}>
+                    <div className={`size-2 rounded-full ${mode.theme.dot}`} />
+                    <span className="text-xs font-medium">{mode.label}</span>
+                  </div>
+                );
+              })()}
+            </div>
             <Dialog.Close className="flex cursor-pointer items-center justify-center size-9 rounded-full hover:bg-gray-100 transition-colors">
               <X className="size-5 text-gray-600" />
             </Dialog.Close>

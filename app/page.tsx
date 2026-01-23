@@ -8,23 +8,45 @@ import { GalleryGrid } from '@/components/app/gallery-grid';
 import { Clock, Box, ArrowRight, ChevronUp, Sparkles, Trophy, Users, Zap, ZapIcon } from 'lucide-react';
 import { Accordion } from '@base-ui/react/accordion';
 
-import { useState, useEffect, useId } from 'react';
+import { useState, useEffect, useId, useRef } from 'react';
 import { Button } from '@/components/base/button';
 import { FeaturedCasesSection } from '@/components/app/featured-case';
 
-import { playgroundModes, getCategoryFromModeLabel, galleryCategories, type GalleryCategoryId, HACKATHON_END_TIME, HACKATHON_PARTICIPANTS } from '@/lib/config';
+import {
+  playgroundModes,
+  galleryCategories,
+  type GalleryCategoryId,
+  HACKATHON_END_TIME,
+  HACKATHON_PARTICIPANTS,
+  models,
+  type LLMModel,
+  defaultModelAId,
+  defaultModelBId,
+  getModelById,
+} from '@/lib/config';
+import { ModelSelector } from '@/components/base/model-selector';
 
 export default function HomePage() {
   const router = useRouter();
-  const [activeMode, setActiveMode] = useState('Physics Playground');
   const [userPrompt, setUserPrompt] = useState('');
   const [placeholderText, setPlaceholderText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [loopNum, setLoopNum] = useState(0);
   const [typingSpeed, setTypingSpeed] = useState(50);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [galleryCategory, setGalleryCategory] = useState<GalleryCategoryId>('all');
   const [timeLeft, setTimeLeft] = useState('');
+  const hasUserInteractedRef = useRef(false);
+
+  // Static placeholder text for typewriter effect
+  const STATIC_PLACEHOLDER = "Enter a prompt to start the Arena battle.";
+
+  // Model selection state
+  const [selectedModelA, setSelectedModelA] = useState<LLMModel>(
+    getModelById(defaultModelAId) || models[0]
+  );
+  const [selectedModelB, setSelectedModelB] = useState<LLMModel>(
+    getModelById(defaultModelBId) || models[1]
+  );
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -43,75 +65,71 @@ export default function HomePage() {
     };
 
     calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 60000); 
+    const timer = setInterval(calculateTimeLeft, 60000);
     return () => clearInterval(timer);
   }, []);
-  
+
   // Generate stable IDs for accordion triggers
   const accordionId0 = useId();
   const accordionId1 = useId();
   const accordionId2 = useId();
   const accordionId3 = useId();
 
-
-  const handleGenerate = () => {
-    const promptToUse = userPrompt.trim() || placeholderText.trim();
-    const category = getCategoryFromModeLabel(activeMode);
-    if (promptToUse) {
-      router.push(`/playground/new?prompt=${encodeURIComponent(promptToUse)}&category=${encodeURIComponent(category)}&autoStart=true`);
-    } else {
-      router.push(`/playground/new?category=${encodeURIComponent(category)}`);
-    }
-  };
-
-  const handleSurpriseMe = () => {
-    const currentMode = playgroundModes.find(m => m.label === activeMode);
-    const activePrompts = currentMode?.prompts || [];
-    if (activePrompts.length > 0) {
-      const availablePrompts = activePrompts.filter(p => p !== userPrompt);
-      const candidates = availablePrompts.length > 0 ? availablePrompts : activePrompts;
-      const randomIndex = Math.floor(Math.random() * candidates.length);
-      const randomPrompt = candidates[randomIndex];
-      setUserPrompt(randomPrompt);
-    }
-  };
-
+  // Typewriter effect for placeholder
   useEffect(() => {
-    const currentMode = playgroundModes.find(m => m.label === activeMode);
-    const activePrompts = currentMode?.prompts || [];
-    const i = loopNum % activePrompts.length;
-    const fullText = activePrompts[i];
+    // Only run typewriter effect if user hasn't interacted and prompt is empty
+    if (hasUserInteractedRef.current || userPrompt) {
+      setPlaceholderText('');
+      return;
+    }
 
     const handleTyping = () => {
-      setPlaceholderText(isDeleting 
-        ? fullText.substring(0, placeholderText.length - 1) 
-        : fullText.substring(0, placeholderText.length + 1)
+      setPlaceholderText(isDeleting
+        ? STATIC_PLACEHOLDER.substring(0, placeholderText.length - 1)
+        : STATIC_PLACEHOLDER.substring(0, placeholderText.length + 1)
       );
 
-      setTypingSpeed(isDeleting ? 20 : 50);
+      setTypingSpeed(isDeleting ? 30 : 50);
 
-      if (!isDeleting && placeholderText === fullText) {
-        setTimeout(() => setIsDeleting(true), 1500); // Pause before deleting
+      if (!isDeleting && placeholderText === STATIC_PLACEHOLDER) {
+        setTimeout(() => setIsDeleting(true), 2000); // Pause before deleting
       } else if (isDeleting && placeholderText === '') {
         setIsDeleting(false);
-        setLoopNum(loopNum + 1);
       }
     };
 
     const timer = setTimeout(handleTyping, typingSpeed);
     return () => clearTimeout(timer);
-  }, [placeholderText, isDeleting, loopNum, activeMode, typingSpeed]);
+  }, [placeholderText, isDeleting, userPrompt]);
 
-  // Reset typewriter when mode changes
-  useEffect(() => {
-    // Use a timeout to avoid synchronous setState in effect
-    const timer = setTimeout(() => {
-      setPlaceholderText('');
-      setIsDeleting(false);
-      setLoopNum(0);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [activeMode]);
+
+  const handleGenerate = () => {
+    const promptToUse = userPrompt.trim();
+
+    if (!promptToUse) {
+      // TODO: Show error toast
+      return;
+    }
+
+    // Navigate with all params
+    const params = new URLSearchParams({
+      prompt: promptToUse,
+      modelA: selectedModelA.id,
+      modelB: selectedModelB.id,
+      autoStart: 'true'
+    });
+
+    router.push(`/playground/new?${params.toString()}`);
+  };
+
+  const handleModeClick = (mode: typeof playgroundModes[number]) => {
+    // Fill textarea with a random prompt from this mode
+    if (mode.prompts && mode.prompts.length > 0) {
+      const randomIndex = Math.floor(Math.random() * mode.prompts.length);
+      setUserPrompt(mode.prompts[randomIndex]);
+      hasUserInteractedRef.current = true;
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -161,37 +179,15 @@ export default function HomePage() {
             <div className="
               flex w-full max-w-[787px] flex-col items-center gap-8
             ">
-              <div 
-                className={`
-                  relative w-full
-                  border border-[#e7e6e2] bg-white shadow-sm overflow-hidden
-                  ${(userPrompt.length > 38 || userPrompt.includes('\n')) 
-                    ? 'rounded-[32px] p-6 flex flex-col items-start' // Multi-line state
-                    : 'rounded-full px-2 pl-4 py-2 flex items-center gap-3' // One-line state
-                  }
-                `}
-              >
-                {/* Mode Badge - Position depends on state */}
-                <div className={`
-                  inline-flex items-center gap-2 rounded-full px-3 py-1.5 shrink-0 transition-colors bg-gray-100 text-gray-700
-                  ${(userPrompt.length > 38 || userPrompt.includes('\n')) ? 'mb-4' : ''}
-                `}>
-                  <div className={`size-2 rounded-full ${(() => {
-                    const mode = playgroundModes.find(m => m.label === activeMode);
-                    return mode?.theme?.dot || 'bg-gray-500';
-                  })()}`} />
-                  <span className="font-sans text-sm font-medium">
-                    {playgroundModes.find(m => m.label === activeMode)?.label || activeMode}
-                  </span>
-                </div>
-
-                {/* Input Area */}
-                <div className={`relative flex-1 ${(userPrompt.length > 38 || userPrompt.includes('\n')) ? 'w-full min-h-[120px]' : 'h-full flex items-center'}`}>
+              <div className="relative w-full border border-[#e7e6e2] bg-white shadow-sm overflow-hidden rounded-[16px] p-6">
+                {/* Textarea */}
+                <div className="relative w-full min-h-[120px] mb-4">
                   <textarea
                     value={userPrompt}
-                    placeholder={"Enter a prompt to start the Arena battle."}
+                    placeholder={placeholderText || "Enter a prompt to start the Arena battle."}
                     onChange={(e) => {
                       setUserPrompt(e.target.value);
+                      hasUserInteractedRef.current = true;
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
@@ -199,48 +195,50 @@ export default function HomePage() {
                         handleGenerate();
                       }
                     }}
-                    className={`
+                    className="
                       w-full bg-transparent font-sans text-base
                       font-normal text-[#4f4e4a] outline-none
                       placeholder:text-[#9e9c98] resize-none
-                      ${(userPrompt.length > 38 || userPrompt.includes('\n')) 
-                        ? 'h-full' 
-                        : 'h-[28px] overflow-hidden leading-[28px]'
-                      }
-                    `}
+                    "
                     spellCheck={false}
                   />
                 </div>
 
-                {/* Actions - Position depends on state */}
-                <div className={`
-                  flex items-center gap-3
-                  ${(userPrompt.length > 38 || userPrompt.includes('\n')) 
-                    ? 'absolute bottom-6 right-6' 
-                    : 'shrink-0'
-                  }
-                `}>
-                  <button 
-                    onClick={handleSurpriseMe}
-                    className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[#4f4e4a] bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
-                    title="Surprise me"
-                  >
-                    <Sparkles className="size-5 text-yellow-500" />
-                    <span className="text-sm font-medium">Surprise me</span>
-                  </button>
-                  
-                  <Button 
+                {/* Bottom Actions: Model Selectors and Run Arena Button */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                  <ModelSelector
+                    selectedModel={selectedModelA}
+                    onModelChange={setSelectedModelA}
+                    variant="minimal"
+                    size="small"
+                    className="w-[185px]"
+                  />
+                  <div className="h-[16px] w-px bg-[rgba(0,0,0,0.06)]" />
+                  <ModelSelector
+                    selectedModel={selectedModelB}
+                    onModelChange={setSelectedModelB}
+                    variant="default"
+                    size="small"
+                    className="w-[185px]"
+                    />
+                  </div>
+
+                  {/* Run Arena Button */}
+                  <Button
                     onClick={handleGenerate}
                     disabled={!userPrompt.trim()}
-                    className={`
-                      flex items-center justify-center gap-2 rounded-full
+                    className="
+                      flex items-center justify-center gap-2 rounded-2xl
                       pl-5 pr-4 py-2.5
                       font-mono text-base font-normal transition-all
-                      bg-[#1a1a1a] text-white hover:bg-black
+                      bg-black text-white hover:bg-black/90
                       hover:shadow-lg hover:scale-[1.02]
                       active:scale-[0.98]
-                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
-                    `}
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                      disabled:hover:scale-100 disabled:hover:shadow-none
+                      shrink-0
+                    "
                   >
                     <span>Run Arena</span>
                     <ArrowRight className="size-4" />
@@ -254,20 +252,15 @@ export default function HomePage() {
               ">
                 {playgroundModes.map((mode) => {
                   const Icon = mode.icon;
-                  const isActive = activeMode === mode.label;
                   return (
                     <button
                       key={mode.label}
-                      onClick={() => setActiveMode(mode.label)}
-                      className={`
+                      onClick={() => handleModeClick(mode)}
+                      className="
                         flex cursor-pointer items-center gap-2 rounded-full border px-4
                         py-2 transition-all duration-200 text-[#4f4e4a]
-                        ${
-                        isActive
-                          ? "border-[#23D57C] bg-[#CAF6E0]"
-                          : `border-[#e7e6e2] bg-white hover:bg-gray-50`
-                        }
-                      `}
+                        border-[#e7e6e2] bg-white hover:bg-gray-50
+                      "
                     >
                       <Icon className="size-4" />
                       <span className="
@@ -292,20 +285,20 @@ export default function HomePage() {
             ">
               {/* Background container image (grid/line pattern) */}
               <div className="absolute left-0 top-0 h-[368px] w-[1253px] opacity-40">
-                <img 
-                  alt="" 
-                  className="absolute inset-0 max-w-none object-cover opacity-70 pointer-events-none size-full" 
-                  src="/images/hackathon-bg-container.png" 
+                <img
+                  alt=""
+                  className="absolute inset-0 max-w-none object-cover opacity-70 pointer-events-none size-full"
+                  src="/images/hackathon-bg-container.png"
                 />
               </div>
 
               {/* Main artistic background image */}
               <div className="absolute left-1/2 top-1/2 h-[380px] w-[1248px] -translate-x-1/2 -translate-y-1/2 rounded-md">
                 <div className="absolute inset-0 bg-black rounded-md" />
-                <img 
-                  alt="" 
-                  className="absolute max-w-none object-cover opacity-60 rounded-md size-full" 
-                  src="/images/hackathon-bg-main.png" 
+                <img
+                  alt=""
+                  className="absolute max-w-none object-cover opacity-60 rounded-md size-full"
+                  src="/images/hackathon-bg-main.png"
                 />
                 {/* Green Blur Effect */}
                 <div className="absolute inset-0 bg-[rgba(0,188,125,0.05)] blur-[120px] pointer-events-none" />
@@ -319,8 +312,8 @@ export default function HomePage() {
                   bg-[#05df72]/10 pr-6 py-2 w-fit mb-6 backdrop-blur-sm
                   h-[42px] ml-4
                 ">
-                  <img 
-                     src="/logo/prize-pool.png" 
+                  <img
+                     src="/logo/prize-pool.png"
                      alt="Prize Pool"
                      className="absolute bottom-2 left-2 w-10 max-w-none drop-shadow-md"
                    />
@@ -587,7 +580,7 @@ export default function HomePage() {
       </main>
 
       <Footer />
-      
+
       <ArenaBattleModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </div>
   );

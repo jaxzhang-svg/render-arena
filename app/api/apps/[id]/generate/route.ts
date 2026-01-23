@@ -67,7 +67,7 @@ export async function POST(
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
-    
+
     // 如果模型ID发生了变化，更新数据库
     if (modelId !== modelIdParam) {
       const updateField = slot === 'a' ? 'model_a' : 'model_b';
@@ -75,7 +75,7 @@ export async function POST(
         .from('apps')
         .update({ [updateField]: modelIdParam })
         .eq('id', id);
-      
+
       modelId = modelIdParam;
     }
   }
@@ -100,12 +100,12 @@ export async function POST(
       messages: [
         {
           role: 'system',
-          content: `You are an expert web developer. Your goal is to generate a single, self-contained HTML file for a "${app.category}" application. Strictly adhere to the "${app.category}" category. If user's prompt conflicts with this category, you MUST refuse the request.`,
+          content: `You are an expert web developer. Your goal is to generate a single, self-contained HTML file for user's prompt.`,
         },
         { role: 'user', content: app.prompt },
       ],
       temperature: Number.isNaN(Number(temperature)) ? 0.7 : Number(temperature) < 0 ? 0 : Number(temperature) > 2 ? 2 : Number(temperature),
-      max_tokens: 32768,
+      max_tokens: 32000,
       stream: true,
       separate_reasoning: true,
     }),

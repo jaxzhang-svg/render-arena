@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 
     const supabase = await createClient();
     const adminClient = await createAdminClient();
-    
+
     // 获取当前用户
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -79,18 +79,18 @@ const FREE_QUOTA = 5; // 匿名用户免费次数
  */
 function getClientIP(request: NextRequest): string {
   const headersList = request.headers;
-  
+
   // 尝试从各种 header 获取真实 IP
   const forwardedFor = headersList.get('x-forwarded-for');
   if (forwardedFor) {
     return forwardedFor.split(',')[0].trim();
   }
-  
+
   const realIP = headersList.get('x-real-ip');
   if (realIP) {
     return realIP;
   }
-  
+
   // 默认返回一个占位符
   return '127.0.0.1';
 }
@@ -103,7 +103,7 @@ function getClientIP(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     const body: CreateAppRequest = await request.json();
-    const { prompt, modelA, modelB, category = '' } = body;
+    const { prompt, modelA, modelB, category = '', name } = body;
 
     if (!prompt?.trim()) {
       return NextResponse.json(
@@ -121,29 +121,29 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient();
     const adminClient = await createAdminClient();
-    
+
     // 获取当前用户
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     let userId: string | null = null;
     let userEmail: string | null = null;
 
     if (user) {
       // 登录用户 - 获取用户信息
       userId = user.id;
-      
+
       // 从 users 表获取 email
       const { data: userData } = await adminClient
         .from('users')
         .select('email')
         .eq('id', user.id)
         .single();
-      
+
       userEmail = userData?.email || null;
     } else {
       // 匿名用户 - 检查 IP 额度
       const clientIP = getClientIP(request);
-      
+
       // 查询 IP 使用记录
       const { data: ipUsage, error: ipError } = await adminClient
         .from('ip_usage')
@@ -158,10 +158,10 @@ export async function POST(request: NextRequest) {
 
       if (ipUsage && ipUsage.used_count >= FREE_QUOTA) {
         return NextResponse.json(
-          { 
-            success: false, 
-            error: 'FREE_QUOTA_EXCEEDED', 
-            message: '免费额度已用完，请登录后继续使用' 
+          {
+            success: false,
+            error: 'FREE_QUOTA_EXCEEDED',
+            message: 'Free credits has exhasuted, Please login to continue.'
           },
           { status: 403 }
         );
@@ -171,7 +171,7 @@ export async function POST(request: NextRequest) {
       if (ipUsage) {
         await adminClient
           .from('ip_usage')
-          .update({ 
+          .update({
             used_count: ipUsage.used_count + 1,
             last_used_at: new Date().toISOString()
           })
@@ -179,9 +179,9 @@ export async function POST(request: NextRequest) {
       } else {
         await adminClient
           .from('ip_usage')
-          .insert({ 
-            ip: clientIP, 
-            used_count: 1 
+          .insert({
+            ip: clientIP,
+            used_count: 1
           });
       }
     }
@@ -196,6 +196,7 @@ export async function POST(request: NextRequest) {
         model_a: modelA,
         model_b: modelB,
         category: DOMPurify.sanitize(category),
+        name: name ? name.slice(0, 100) : null,
       })
       .select('id')
       .single();

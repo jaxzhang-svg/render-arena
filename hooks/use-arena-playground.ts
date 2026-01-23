@@ -66,9 +66,12 @@ export function useArenaPlayground({
   const searchParams = useSearchParams()
   const urlPrompt = searchParams.get('prompt')
   const urlCategory = searchParams.get('category') || ''
+  const urlModelA = searchParams.get('modelA')
+  const urlModelB = searchParams.get('modelB')
+  const urlTitle = searchParams.get('title')
   const [currentAppId, setCurrentAppId] = useState<string | undefined>(appId)
   const [prompt, setPrompt] = useState(initialApp?.prompt || urlPrompt || '')
-  const [category] = useState(initialApp?.category || urlCategory || '')
+  const [category] = useState(initialApp?.category || urlCategory || 'general')
 
   // 视图状态
   const [arenaViewMode, setArenaViewMode] = useState<ArenaViewMode>('split')
@@ -77,7 +80,7 @@ export function useArenaPlayground({
   // Model A
   const modelA = useModelGeneration({
     slot: 'a',
-    initialModelId: initialApp?.model_a,
+    initialModelId: urlModelA || initialApp?.model_a,
     defaultModelId: defaultModelAId,
     initialHtml: initialApp?.html_content_a || undefined,
     initialDuration: initialApp?.duration_a || undefined,
@@ -87,7 +90,7 @@ export function useArenaPlayground({
   // Model B
   const modelB = useModelGeneration({
     slot: 'b',
-    initialModelId: initialApp?.model_b,
+    initialModelId: urlModelB || initialApp?.model_b,
     defaultModelId: defaultModelBId,
     initialHtml: initialApp?.html_content_b || undefined,
     initialDuration: initialApp?.duration_b || undefined,
@@ -111,6 +114,7 @@ export function useArenaPlayground({
           modelA: modelA.selectedModel.id,
           modelB: modelB.selectedModel.id,
           category: category,
+          name: urlTitle || undefined,
         }),
       })
 
@@ -130,7 +134,7 @@ export function useArenaPlayground({
       showToast.error('创建失败，请稍后重试')
       return null
     }
-  }, [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id])
+  }, [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id, urlTitle])
 
   // 同时生成两个模型
   const handleGenerate = useCallback(async () => {
