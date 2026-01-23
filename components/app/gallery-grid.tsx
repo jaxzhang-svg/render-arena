@@ -186,9 +186,9 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
             )}
           </div>
         ) : (
-          <div className='absolute inset-0 w-full h-full flex'>
-            <div className='relative w-1/2 h-full overflow-hidden group/pane'>
-              <div className='w-full h-full transition-transform duration-700 ease-in-out group-hover/pane:scale-110 origin-center'>
+          <div className='absolute inset-0 size-full transition-transform duration-700 ease-in-out group-hover/card:scale-110 origin-center'>
+            <div className='absolute inset-0 w-full h-full flex'>
+              <div className='relative w-1/2 h-full overflow-hidden'>
                 <iframe
                   srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${DOMPurify.sanitize(app.html_content_a || '', DOMPURIFY_CONFIG)}`}
                   className="absolute inset-0 w-full h-full border-0 bg-white"
@@ -203,9 +203,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                   }}
                 />
               </div>
-            </div>
-            <div className='relative w-1/2 h-full overflow-hidden group/pane'>
-              <div className='w-full h-full transition-transform duration-700 ease-in-out group-hover/pane:scale-110 origin-center'>
+              <div className='relative w-1/2 h-full overflow-hidden'>
                 <iframe
                   srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${DOMPurify.sanitize(app.html_content_b || '', DOMPURIFY_CONFIG)}`}
                   className="absolute inset-0 w-full h-full border-0 bg-white"
