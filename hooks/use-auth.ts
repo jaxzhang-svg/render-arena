@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 import { showToast } from '@/lib/toast';
 import { trackAuthLoginSuccess, trackAuthLoginFailed } from '@/lib/analytics';
+import { getStoredTrackingParams, appendTrackingParamsToUrl, applyTrackingDefaults } from '@/lib/tracking';
 
 interface AuthState {
   user: User | null;
@@ -156,10 +157,15 @@ export function getNovitaLoginUrl(next?: string): string {
   if (next) {
     callbackUrl.searchParams.set('next', next);
   }
-  
+
+  // Append tracking params to callback URL with defaults
+  const trackingParams = getStoredTrackingParams();
+  const paramsWithDefaults = applyTrackingDefaults(trackingParams);
+  const callbackUrlWithTracking = appendTrackingParamsToUrl(callbackUrl.toString(), paramsWithDefaults);
+
   const loginUrl = new URL('https://novita.ai/user/login');
-  loginUrl.searchParams.set('redirect', callbackUrl.toString());
-  
+  loginUrl.searchParams.set('redirect', callbackUrlWithTracking);
+
   return loginUrl.toString();
 }
 

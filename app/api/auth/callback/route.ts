@@ -5,7 +5,7 @@ import { getNovitaUserInfo } from '@/lib/novita';
 
 /**
  * Novita OAuth 回调处理器
- * 
+ *
  * 流程：
  * 1. 从 Novita 获取用户信息（通过透传的 Cookie）
  * 2. 在 Supabase Auth 中查找或创建对应用户

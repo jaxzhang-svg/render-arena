@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ToastProvider } from "@/components/providers/toast-provider";
+import { TrackingProvider } from "@/components/providers/tracking-provider";
 import { GoogleAnalytics } from '@next/third-parties/google'
 
 const interphases = localFont({
@@ -68,6 +69,7 @@ export default function RootLayout({
           showSpinner={false}
           shadow="0 0 10px #23d57c,0 0 5px #23d57c"
         />
+        <TrackingProvider />
         <div className="root">
         {children}
         </div>

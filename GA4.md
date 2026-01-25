@@ -245,3 +245,54 @@ ORDER BY event_count DESC
 2. Enable debug mode
 3. Go to **Admin > Data display > DebugView**
 4. Trigger events and verify they appear with correct parameters
+
+---
+
+## Attribution Tracking
+
+Captures marketing/referral parameters on first visit and passes to Novita main site for backend attribution.
+
+### Tracked Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `referrer` | HTTP referrer header | (none) |
+| `utm_source` | Traffic source | `direct` |
+| `utm_campaign` | Campaign name | `none` |
+| `utm_medium` | Medium type | `none` |
+| `landingpage` | First landing page | (none) |
+
+### Storage Rules
+
+- **localStorage key**: `arena_tracking_params`
+- **First capture only**: Parameters captured on first visit, never overwritten
+- **No defaults stored**: Only actual values stored
+- **Referrer logic**: Updates for external referrers only (non-Novita sites)
+
+### Data Flow
+
+```
+User visits Arena
+    ↓
+Extract params from URL → Store to localStorage (first visit only)
+    ↓
+User clicks Login
+    ↓
+Read localStorage + apply defaults → Append to OAuth redirect URL
+    ↓
+Novita main site receives params → Backend attribution
+```
+
+### Example
+
+```
+Visit: https://arena.novita.ai/?utm_source=google&utm_campaign=launch
+localStorage: {"utm_source":"google","utm_campaign":"launch","landingpage":"/"}
+Sent to main site: utm_source=google&utm_campaign=launch&utm_medium=none
+```
+
+### Files
+
+- `/lib/tracking.ts` - Core utilities
+- `/hooks/use-tracking-params.ts` - React hook
+- `/components/providers/tracking-provider.tsx` - Root layout initializer
