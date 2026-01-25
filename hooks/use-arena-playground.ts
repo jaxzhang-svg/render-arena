@@ -4,6 +4,11 @@ import { useModelGeneration } from './use-model-generation'
 import type { App } from '@/types'
 import { defaultModelAId, defaultModelBId } from '@/lib/config'
 import { showToast } from '@/lib/toast'
+import {
+  trackArenaGenerateStarted,
+  trackFreeQuotaExceeded,
+  trackGenerationRegenerated,
+} from '@/lib/analytics'
 
 export type ArenaViewMode = 'a' | 'b' | 'split'
 
@@ -41,7 +46,7 @@ interface UseArenaPlaygroundReturn {
 
   // 生成操作
   /** 同时生成两个模型 */
-  handleGenerate: () => Promise<void>
+  handleGenerate: (isAuthenticated?: boolean) => Promise<void>
   /** 重新生成 Model A */
   handleGenerateModelA: () => Promise<void>
   /** 重新生成 Model B */
@@ -104,7 +109,7 @@ export function useArenaPlayground({
   }, [modelA, modelB])
 
   // 创建 App
-  const createApp = useCallback(async (): Promise<string | null> => {
+  const createApp = useCallback(async (isAuthenticated: boolean): Promise<string | null> => {
     try {
       const response = await fetch('/api/apps', {
         method: 'POST',
@@ -122,11 +127,22 @@ export function useArenaPlayground({
 
       if (!data.success) {
         if (data.error === 'FREE_QUOTA_EXCEEDED') {
+          // Track free quota exceeded
+          trackFreeQuotaExceeded(data.usageCount || 5)
           showToast.login(data.message || '免费额度已用完，请登录后继续使用')
           return null
         }
         throw new Error(data.message || 'Failed to create app')
       }
+
+      // Track arena generate started
+      trackArenaGenerateStarted({
+        model_a: modelA.selectedModel.id,
+        model_b: modelB.selectedModel.id,
+        prompt_length: prompt.trim().length,
+        category: category,
+        is_authenticated: isAuthenticated,
+      })
 
       return data.appId
     } catch (error) {
@@ -137,7 +153,7 @@ export function useArenaPlayground({
   }, [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id, urlTitle])
 
   // 同时生成两个模型
-  const handleGenerate = useCallback(async () => {
+  const handleGenerate = useCallback(async (isAuthenticated = false) => {
     if (!prompt.trim()) return
 
     // 隐藏输入框
@@ -147,7 +163,7 @@ export function useArenaPlayground({
     stopAllGeneration()
 
     // 创建新的 App
-    const newAppId = await createApp()
+    const newAppId = await createApp(isAuthenticated)
     if (!newAppId) return
 
     // 更新状态
@@ -169,8 +185,14 @@ export function useArenaPlayground({
       return
     }
 
+    // Track regeneration
+    trackGenerationRegenerated({
+      model_id: modelA.selectedModel.id,
+      slot: 'a',
+    })
+
     await modelA.generate(currentAppId)
-  }, [currentAppId, handleGenerate, modelA])
+  }, [currentAppId, modelA])
 
   // 单独重新生成 Model B
   const handleGenerateModelB = useCallback(async () => {
@@ -178,8 +200,14 @@ export function useArenaPlayground({
       return
     }
 
+    // Track regeneration
+    trackGenerationRegenerated({
+      model_id: modelB.selectedModel.id,
+      slot: 'b',
+    })
+
     await modelB.generate(currentAppId)
-  }, [currentAppId, handleGenerate, modelB])
+  }, [currentAppId, modelB])
 
 // 自动开始生成逻辑已移动到 PlaygroundClient 组件中
 

@@ -2,6 +2,11 @@ import { useState, useRef, useCallback } from 'react'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { extractHTMLFromMarkdown } from '@/lib/html-extractor'
 import { LLMModel, getModelById, models } from '@/lib/models'
+import {
+  trackGenerationCompleted,
+  trackGenerationError,
+  trackGenerationStopped,
+} from '@/lib/analytics'
 
 /**
  * 模型响应状态
@@ -178,11 +183,16 @@ export function useModelGeneration({
       if (prev.loading) {
         const duration = prev.startTime ? (Date.now() - prev.startTime) / 1000 : undefined
         const tokens = Math.floor(prev.content.length / 4)
+        // Track generation stopped
+        trackGenerationStopped({
+          model_id: selectedModel.id,
+          slot,
+        })
         return { ...prev, loading: false, completed: true, duration, tokens }
       }
       return prev
     })
-  }, [flushBuffer])
+  }, [flushBuffer, selectedModel.id, slot])
 
   // 生成内容
   const generate = useCallback(async (appId: string) => {
@@ -296,6 +306,14 @@ export function useModelGeneration({
             // 通知生成完成
             onGenerationComplete?.(html || undefined)
 
+            // Track generation completed
+            trackGenerationCompleted({
+              model_id: selectedModel.id,
+              slot,
+              duration_ms: Math.round(duration * 1000),
+              tokens,
+            })
+
             return {
               ...prev,
               content: mergedContent,
@@ -319,6 +337,12 @@ export function useModelGeneration({
         return
       }
       console.error(`Model ${slot} error:`, error)
+      // Track generation error
+      trackGenerationError({
+        model_id: selectedModel.id,
+        slot,
+        error_code: (error as Error).message || 'unknown_error',
+      })
       setResponse((prev) => ({
         ...prev,
         content: prev.content + '\n\nError: ' + (error as Error).message,

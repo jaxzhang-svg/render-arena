@@ -27,6 +27,7 @@ import { Tooltip } from '@base-ui/react/tooltip'
 import { cn } from '@/lib/utils'
 import { playgroundModes } from '@/lib/config'
 import type { App } from '@/types'
+import { trackVideoRecordingStarted, trackVideoRecordingStopped } from '@/lib/analytics'
 
 interface PlaygroundClientProps {
   initialApp?: App | null
@@ -96,18 +97,19 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
       const timer = setTimeout(() => {
         if (!hasAutoStartedRef.current) {
           hasAutoStartedRef.current = true
-          handleGenerateRef.current()
+          handleGenerateRef.current(!!user)
         }
       }, 100)
       return () => clearTimeout(timer)
     }
-  }, [autoStart, initialApp, currentAppId, modelsReady])
+  }, [autoStart, initialApp, currentAppId, modelsReady, user])
 
   // 屏幕录制
   const {
     isRecording,
     isRecordingSupported,
     recordedBlob,
+    recordingTime,
     previewContainerRef,
     startRecording,
     stopRecording,
@@ -124,6 +126,16 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     },
   })
 
+  // Track recording stopped when blob is created
+  useEffect(() => {
+    if (recordedBlob && currentAppId && recordingTime > 0) {
+      trackVideoRecordingStopped({
+        app_id: currentAppId,
+        duration_seconds: recordingTime,
+      })
+    }
+  }, [recordedBlob, currentAppId, recordingTime])
+
   const handleRecordToggle = async () => {
     if (!isRecordingSupported || isGuest || authLoading || !isAllCompleted) {
       return
@@ -131,11 +143,15 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     if (isRecording) {
       stopRecording()
       setShowInputBar(true)
+      // Note: recording stopped tracking is done in onRecordingComplete callback
     } else {
       if (recordedBlob && !window.confirm('Starting a new recording will discard your previous recording. Do you want to continue?')) {
         return
       }
       setShowInputBar(false)
+      if (currentAppId) {
+        trackVideoRecordingStarted(currentAppId)
+      }
       await startRecording()
     }
   }
@@ -317,7 +333,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault()
-                        handleGenerate()
+                        handleGenerate(!!user)
                       }
                     }}
                   />
@@ -348,7 +364,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                       if (isAnyLoading) {
                         stopAllGeneration()
                       } else {
-                        handleGenerate()
+                        handleGenerate(!!user)
                       }
                     }}
                     size="icon"

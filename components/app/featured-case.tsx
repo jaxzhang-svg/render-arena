@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { playgroundModes } from '@/lib/config';
 import { cn } from '@/lib/utils';
+import { trackFeaturedCaseClicked } from '@/lib/analytics';
 
 // Cloudflare Stream customer code
 const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || '';
@@ -29,6 +30,11 @@ function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
 
   const handleCreate = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    trackFeaturedCaseClicked({
+      mode: mode.id as 'physics' | 'visual' | 'game',
+      app_id: mode.featuredAppId || '',
+    });
 
     router.push(`/gallery/${mode.featuredAppId}`);
   };

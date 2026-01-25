@@ -10,6 +10,7 @@ import DOMPurify from 'isomorphic-dompurify';
 import { DOMPURIFY_CONFIG } from '@/lib/sanitizer';
 import { showToast } from '@/lib/toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { trackGalleryCaseClicked } from '@/lib/analytics';
 
 // Cloudflare Stream customer code
 const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || '';
@@ -22,9 +23,10 @@ interface GalleryGridProps {
 interface GalleryAppCardProps {
   app: GalleryApp;
   currentCategory: GalleryCategoryId;
+  position: number;
 }
 
-function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
+function GalleryAppCard({ app, currentCategory, position }: GalleryAppCardProps) {
   const router = useRouter();
   const [likeCount, setLikeCount] = useState(app.like_count);
   const [isLiked, setIsLiked] = useState(app.isLiked || false);
@@ -155,7 +157,14 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
       "
     >
       <div
-        onClick={() => router.push(`/gallery/${app.id}`)}
+        onClick={() => {
+          trackGalleryCaseClicked({
+            app_id: app.id,
+            category: currentCategory,
+            position,
+          });
+          router.push(`/gallery/${app.id}`);
+        }}
         onMouseEnter={() => {
           setIsHovered(true);
           setHasHovered(true);
@@ -427,8 +436,8 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
         /* Apps Grid */
         <>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {apps.map((app) => (
-              <GalleryAppCard key={app.id} app={app} currentCategory={selectedCategory} />
+            {apps.map((app, index) => (
+              <GalleryAppCard key={app.id} app={app} currentCategory={selectedCategory} position={index} />
             ))}
           </div>
 

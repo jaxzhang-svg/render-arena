@@ -6,6 +6,14 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import { showToast } from '@/lib/toast';
 import { getModeByCategory } from '@/lib/config';
+import {
+  trackShareModalOpened,
+  trackShareLinkCopied,
+  trackPublishStarted,
+  trackVideoUploadStarted,
+  trackVideoUploadCompleted,
+  trackVideoUploadError,
+} from '@/lib/analytics';
 
 // Local Assets
 const imgLinkedin = "/logo/square-linkedin-brands-solid-full.svg";
@@ -77,6 +85,11 @@ export function ShareModal({
   // Reset state when modal opens
   useEffect(() => {
     if (open) {
+      // Track modal opened
+      if (appId) {
+        trackShareModalOpened(appId);
+      }
+
       // We rely on parent to reset or maintain isPublished state
 
       // Only reset upload state if it's a new blob
@@ -87,7 +100,7 @@ export function ShareModal({
         setUploadError(null);
       }
     }
-  }, [open, videoBlob]);
+  }, [open, videoBlob, appId]);
 
   // Auto-upload when modal opens with a new video blob - REMOVED for new flow
   // We only upload when user clicks "Publish"
@@ -103,11 +116,20 @@ export function ShareModal({
   const handleUploadVideo = useCallback(async () => {
     if (!videoBlob || !appId) return;
 
+    const uploadStartTime = Date.now();
+    const fileSizeMb = videoBlob.size / (1024 * 1024);
+
     try {
       setUploadStatus('uploading');
       setUploadProgress(0);
       setUploadError(null);
       uploadedBlobRef.current = videoBlob;
+
+      // Track upload started
+      trackVideoUploadStarted({
+        app_id: appId,
+        file_size_mb: parseFloat(fileSizeMb.toFixed(2)),
+      });
 
       // Step 1: Get upload URL from our backend
       const uploadUrlResponse = await fetch('/api/media/upload-url', {
@@ -173,14 +195,26 @@ export function ShareModal({
       // In production, you might want to poll for status, but for UX we'll just show ready
       setTimeout(() => {
         setUploadStatus('ready');
+        // Track upload completed
+        const uploadDuration = (Date.now() - uploadStartTime) / 1000;
+        trackVideoUploadCompleted({
+          app_id: appId,
+          upload_duration_seconds: parseFloat(uploadDuration.toFixed(2)),
+        });
       }, 1000);
 
     } catch (error) {
       console.error('Upload error:', error);
-      showToast.error(error instanceof Error ? error.message : 'Upload failed');
+      const errorMessage = error instanceof Error ? error.message : 'Upload failed';
+      showToast.error(errorMessage);
       setUploadStatus('error');
-      setUploadError(error instanceof Error ? error.message : 'Upload failed');
+      setUploadError(errorMessage);
       uploadedBlobRef.current = null; // Allow retry
+      // Track upload error
+      trackVideoUploadError({
+        app_id: appId,
+        error_type: errorMessage,
+      });
     }
   }, [videoBlob, appId, videoFormat]);
 
@@ -191,6 +225,12 @@ export function ShareModal({
    */
   const handlePublishToGallery = useCallback(async () => {
     if (!appId || isPublished) return;
+
+    // Track publish started
+    trackPublishStarted({
+      app_id: appId,
+      category: category || 'general',
+    });
 
     try {
       setPublishLoading(true);
@@ -247,6 +287,12 @@ export function ShareModal({
 
   const handleCopy = () => {
     navigator.clipboard.writeText(videoBlob ?videoLink : shareUrl);
+    if (appId) {
+      trackShareLinkCopied({
+        app_id: appId,
+        share_mode: videoBlob ? 'video' : 'poster',
+      });
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

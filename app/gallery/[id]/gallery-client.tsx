@@ -22,6 +22,7 @@ import type { App } from '@/types'
 import DOMPurify from 'isomorphic-dompurify'
 import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
 import { showToast } from '@/lib/toast'
+import { trackGalleryPromptCopied, trackGalleryOpenInPlayground } from '@/lib/analytics'
 
 interface GalleryClientProps {
   app: App & { isOwner: boolean; isLiked: boolean }
@@ -65,15 +66,21 @@ export default function GalleryClient({ app }: GalleryClientProps) {
   const handleCopyPrompt = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(app.prompt)
+      trackGalleryPromptCopied(app.id)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (error) {
       console.error('Copy error:', error)
       showToast.error('Failed to copy')
     }
-  }, [app.prompt])
+  }, [app.prompt, app.id])
 
   const handleOpenPlayground = useCallback(() => {
+    trackGalleryOpenInPlayground({
+      app_id: app.id,
+      model_a: app.model_a,
+      model_b: app.model_b,
+    })
     const params = new URLSearchParams()
     params.set('prompt', app.prompt)
     if (app.category) {
@@ -81,7 +88,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
     }
     params.set('autoStart', 'true')
     router.push(`/playground/new?${params.toString()}`)
-  }, [app.prompt, app.category, router])
+  }, [app.id, app.prompt, app.category, app.model_a, app.model_b, router])
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">

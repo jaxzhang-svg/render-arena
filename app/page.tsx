@@ -25,6 +25,13 @@ import {
   getModelById,
 } from '@/lib/config';
 import { ModelSelector } from '@/components/base/model-selector';
+import {
+  trackModelSelected,
+  trackArenaGenerateStarted,
+  trackGalleryFiltered,
+  trackGalleryViewed,
+  trackHackathonModalOpened,
+} from '@/lib/analytics';
 
 export default function HomePage() {
   const router = useRouter();
@@ -36,6 +43,8 @@ export default function HomePage() {
   const [galleryCategory, setGalleryCategory] = useState<GalleryCategoryId>('all');
   const [timeLeft, setTimeLeft] = useState('');
   const hasUserInteractedRef = useRef(false);
+  const gallerySectionRef = useRef<HTMLElement>(null);
+  const hasTrackedGalleryViewRef = useRef(false);
 
   // Static placeholder text for typewriter effect
   const STATIC_PLACEHOLDER = "Enter a prompt to start the Arena battle.";
@@ -68,6 +77,27 @@ export default function HomePage() {
     const timer = setInterval(calculateTimeLeft, 60000);
     return () => clearInterval(timer);
   }, []);
+
+  // Track gallery section visibility
+  useEffect(() => {
+    const gallerySection = gallerySectionRef.current;
+    if (!gallerySection) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasTrackedGalleryViewRef.current) {
+            hasTrackedGalleryViewRef.current = true;
+            trackGalleryViewed(galleryCategory);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(gallerySection);
+    return () => observer.disconnect();
+  }, [galleryCategory]);
 
   // Generate stable IDs for accordion triggers
   const accordionId0 = useId();
@@ -110,6 +140,15 @@ export default function HomePage() {
       // TODO: Show error toast
       return;
     }
+
+    // Track arena generate started
+    trackArenaGenerateStarted({
+      model_a: selectedModelA.id,
+      model_b: selectedModelB.id,
+      prompt_length: promptToUse.length,
+      category: 'general',
+      is_authenticated: false, // Homepage doesn't have auth context
+    });
 
     // Navigate with all params
     const params = new URLSearchParams({
@@ -209,7 +248,15 @@ export default function HomePage() {
                   <div className="flex items-center gap-4">
                   <ModelSelector
                     selectedModel={selectedModelA}
-                    onModelChange={setSelectedModelA}
+                    onModelChange={(model) => {
+                      trackModelSelected({
+                        model_id: model.id,
+                        model_name: model.name,
+                        slot: 'a',
+                        location: 'homepage',
+                      });
+                      setSelectedModelA(model);
+                    }}
                     variant="minimal"
                     size="small"
                     className="w-[185px]"
@@ -217,7 +264,15 @@ export default function HomePage() {
                   <div className="h-[16px] w-px bg-[rgba(0,0,0,0.06)]" />
                   <ModelSelector
                     selectedModel={selectedModelB}
-                    onModelChange={setSelectedModelB}
+                    onModelChange={(model) => {
+                      trackModelSelected({
+                        model_id: model.id,
+                        model_name: model.name,
+                        slot: 'b',
+                        location: 'homepage',
+                      });
+                      setSelectedModelB(model);
+                    }}
                     variant="default"
                     size="small"
                     className="w-[185px]"
@@ -388,7 +443,10 @@ export default function HomePage() {
                 {/* Join Button - Bottom Right */}
                 <div className="absolute bottom-12 right-12">
                   <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                      trackHackathonModalOpened('join_button');
+                      setIsModalOpen(true);
+                    }}
                     className="
                       flex cursor-pointer items-center justify-center gap-2 rounded-[14px]
                       px-8 py-3.5 text-base
@@ -411,7 +469,7 @@ export default function HomePage() {
         </section>
 
         {/* Gallery Grid */}
-        <section id="gallery" className="pt-16 pb-20">
+        <section id="gallery" ref={gallerySectionRef} className="pt-16 pb-20">
           <div className="mx-auto max-w-7xl px-6">
             {/* Gallery Header */}
             <div className="mb-8 flex items-center justify-between">
@@ -426,7 +484,15 @@ export default function HomePage() {
                 {galleryCategories.map((cat) => (
                   <button
                     key={cat.id}
-                    onClick={() => setGalleryCategory(cat.id)}
+                    onClick={() => {
+                      if (cat.id !== galleryCategory) {
+                        trackGalleryFiltered({
+                          category: cat.id,
+                          previous_category: galleryCategory,
+                        });
+                      }
+                      setGalleryCategory(cat.id);
+                    }}
                     className={`
                       flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-medium font-sans transition-all
                       ${galleryCategory === cat.id

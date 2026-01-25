@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 import { showToast } from '@/lib/toast';
+import { trackAuthLoginSuccess, trackAuthLoginFailed } from '@/lib/analytics';
 
 interface AuthState {
   user: User | null;
@@ -32,6 +33,7 @@ export function useAuth(): UseAuthReturn {
     session: null,
     loading: true,
   });
+  const hasTrackedLoginRef = useRef(false);
 
   const supabase = createClient();
 
@@ -88,9 +90,28 @@ export function useAuth(): UseAuthReturn {
     // 初始化时获取用户
     fetchUser();
 
+    // Check for auth error in URL params
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const authError = urlParams.get('error');
+      if (authError && !hasTrackedLoginRef.current) {
+        hasTrackedLoginRef.current = true;
+        trackAuthLoginFailed(authError as 'auth_failed' | 'sync_failed' | 'session_failed');
+        // Clean up URL param
+        urlParams.delete('error');
+        const newUrl = urlParams.toString()
+          ? `${window.location.pathname}?${urlParams.toString()}`
+          : window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+      }
+    }
+
     // 监听认证状态变化
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        const wasLoggedOut = !state.user;
+        const isNowLoggedIn = !!session?.user;
+
         setState({
           user: session?.user ?? null,
           session: session ?? null,
@@ -98,8 +119,15 @@ export function useAuth(): UseAuthReturn {
         });
 
         // 处理特定事件
-        if (event === 'SIGNED_OUT') {
-          // 可以在这里添加额外的清理逻辑
+        if (event === 'SIGNED_IN' && wasLoggedOut && isNowLoggedIn && !hasTrackedLoginRef.current) {
+          // Track login success - check if this is a new user by looking at created_at
+          const isNewUser = session?.user?.created_at
+            ? (Date.now() - new Date(session.user.created_at).getTime()) < 60000 // Created within last minute
+            : false;
+          hasTrackedLoginRef.current = true;
+          trackAuthLoginSuccess(isNewUser);
+        } else if (event === 'SIGNED_OUT') {
+          hasTrackedLoginRef.current = false;
         } else if (event === 'TOKEN_REFRESHED') {
           // Token 刷新成功
         }
