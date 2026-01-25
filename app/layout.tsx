@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ToastProvider } from "@/components/providers/toast-provider";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const interphases = localFont({
   src: [
@@ -62,15 +63,16 @@ export default function RootLayout({
           antialiased
         `}
       >
-        <NextTopLoader 
+        <NextTopLoader
           color="#23d57c"
-          showSpinner={false} 
+          showSpinner={false}
           shadow="0 0 10px #23d57c,0 0 5px #23d57c"
         />
         <div className="root">
         {children}
         </div>
         <ToastProvider />
+        <GoogleAnalytics gaId="G-6E3YJT3N0F" />
       </body>
     </html>
   );
