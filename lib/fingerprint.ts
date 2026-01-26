@@ -1,70 +1,9 @@
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import Cookies from 'js-cookie'
 
 const FP_COOKIE_KEY = 'browser_fingerprint'
-const FP_COOKIE_MAX_AGE = 365 * 24 * 60 * 60 // 1 year in seconds
+const FP_COOKIE_MAX_AGE = 365 // 1 year in days
 let fpPromise: Promise<any> | null = null
-
-/**
- * Get cookie value by name
- */
-function getCookie(name: string): string | null {
-  if (typeof window === 'undefined') return null
-
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-
-  if (parts.length === 2) {
-    return parts.pop()?.split(';').shift() || null
-  }
-  return null
-}
-
-/**
- * Set cookie value
- */
-function setCookie(name: string, value: string, maxAge: number): void {
-  if (typeof window === 'undefined') return
-
-  // Detect if we're on HTTPS (production)
-  const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:'
-
-  // Get the domain (handle both localhost and production domains)
-  let domain = ''
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname
-    // Set domain for production domains (e.g., .novita.ai for cookie to work across subdomains)
-    if (hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '192.168.31.100') {
-      const parts = hostname.split('.')
-      if (parts.length >= 2) {
-        domain = `; domain=.${parts.slice(-2).join('.')}`
-      }
-    }
-  }
-
-  const secureFlag = isSecure ? '; Secure' : ''
-  document.cookie = `${name}=${value}; path=/${domain}; max-age=${maxAge}; SameSite=Lax${secureFlag}`
-}
-
-/**
- * Delete cookie
- */
-function deleteCookie(name: string): void {
-  if (typeof window === 'undefined') return
-
-  // Get the domain to match how it was set
-  let domain = ''
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname
-    if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-      const parts = hostname.split('.')
-      if (parts.length >= 2) {
-        domain = `; domain=.${parts.slice(-2).join('.')}`
-      }
-    }
-  }
-
-  document.cookie = `${name}=; path=/${domain}; max-age=0`
-}
 
 /**
  * Initialize FingerprintJS and get the visitor identifier
@@ -126,7 +65,7 @@ export async function getFingerprint(): Promise<string> {
   // Try to load from cookie first
   if (typeof window !== 'undefined') {
     try {
-      const stored = getCookie(FP_COOKIE_KEY)
+      const stored = Cookies.get(FP_COOKIE_KEY)
       if (stored) {
         return stored
       }
@@ -145,7 +84,12 @@ export async function getFingerprint(): Promise<string> {
 
     // Store in cookie (accessible to both client and server)
     try {
-      setCookie(FP_COOKIE_KEY, fingerprint, FP_COOKIE_MAX_AGE)
+      Cookies.set(FP_COOKIE_KEY, fingerprint, {
+        expires: FP_COOKIE_MAX_AGE, // days
+        path: '/',
+        sameSite: 'lax',
+        secure: window.location.protocol === 'https:',
+      })
     } catch (error) {
       console.error('Cookie write error:', error)
     }
@@ -163,7 +107,7 @@ export async function getFingerprint(): Promise<string> {
 export function clearFingerprint(): void {
   if (typeof window !== 'undefined') {
     try {
-      deleteCookie(FP_COOKIE_KEY)
+      Cookies.remove(FP_COOKIE_KEY)
     } catch (error) {
       console.error('Cookie delete error:', error)
     }
