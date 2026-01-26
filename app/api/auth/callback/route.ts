@@ -11,7 +11,8 @@ import { getNovitaUserInfo } from '@/lib/novita'
  * 2. 在 Supabase Auth 中查找或创建对应用户
  * 3. 使用 generateLink 生成魔法链接并提取 token
  * 4. 用 token 交换 Supabase 会话
- * 5. 设置会话 Cookie 并重定向
+ * 5. 迁移匿名用户的 apps（通过 fingerprint 参数）
+ * 6. 设置会话 Cookie 并重定向
  */
 export async function GET(request: NextRequest) {
   const novitaUser = await getNovitaUserInfo()
@@ -143,7 +144,32 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/?error=session_failed', request.url))
   }
 
-  // 6. 重定向到首页（会话 Cookie 会通过 @supabase/ssr 自动设置）
+  // 6. 迁移匿名用户的 apps（通过 fingerprint 参数）
+  const fingerprint = request.nextUrl.searchParams.get('fingerprint')
+  if (fingerprint && userId) {
+    try {
+      const { error: migrateError } = await adminClient
+        .from('apps')
+        .update({
+          user_id: userId,
+          user_email: userEmail,
+          fingerprint_id: null,
+        })
+        .eq('fingerprint_id', fingerprint)
+        .is('user_id', null)
+
+      if (migrateError) {
+        console.error('Failed to migrate anonymous apps:', migrateError)
+        // 不要因为迁移失败而阻止登录，用户仍然可以登录
+      } else {
+        console.log(`Migrated anonymous apps for fingerprint: ${fingerprint}`)
+      }
+    } catch (error) {
+      console.error('Error migrating anonymous apps:', error)
+    }
+  }
+
+  // 7. 重定向到首页（会话 Cookie 会通过 @supabase/ssr 自动设置）
   const redirectTo = request.nextUrl.searchParams.get('next') || '/'
   return NextResponse.redirect(new URL(redirectTo, request.url))
 }

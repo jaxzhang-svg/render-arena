@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useModelGeneration } from './use-model-generation'
+import { useFingerprint } from './useFingerprint'
 import type { App } from '@/types'
 import { defaultModelAId, defaultModelBId } from '@/lib/config'
 import { showToast } from '@/lib/toast'
@@ -57,6 +58,10 @@ interface UseArenaPlaygroundReturn {
   isAnyLoading: boolean
   /** 是否所有模型都已完成 */
   isAllCompleted: boolean
+
+  // 指纹
+  /** 浏览器指纹 */
+  fingerprint: string | null
 }
 
 /**
@@ -81,6 +86,9 @@ export function useArenaPlayground({
   // 视图状态
   const [arenaViewMode, setArenaViewMode] = useState<ArenaViewMode>('split')
   const [showInputBar, setShowInputBar] = useState(true)
+
+  // 获取浏览器指纹
+  const { fingerprint } = useFingerprint()
 
   // Model A
   const modelA = useModelGeneration({
@@ -121,6 +129,7 @@ export function useArenaPlayground({
             modelB: modelB.selectedModel.id,
             category: category,
             name: urlTitle || undefined,
+            fingerprint: fingerprint || undefined,
           }),
         })
 
@@ -130,7 +139,7 @@ export function useArenaPlayground({
           if (data.error === 'FREE_QUOTA_EXCEEDED') {
             // Track free quota exceeded
             trackFreeQuotaExceeded(data.usageCount || 5)
-            showToast.login(data.message || '免费额度已用完，请登录后继续使用')
+            showToast.login(data.message || '免费额度已用完，请登录后继续使用', fingerprint)
             return null
           }
           throw new Error(data.message || 'Failed to create app')
@@ -152,7 +161,7 @@ export function useArenaPlayground({
         return null
       }
     },
-    [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id, urlTitle]
+    [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id, urlTitle, fingerprint]
   )
 
   // 同时生成两个模型
@@ -237,5 +246,8 @@ export function useArenaPlayground({
     stopAllGeneration,
     isAnyLoading: modelA.isLoading || modelB.isLoading,
     isAllCompleted: modelA.response.completed && modelB.response.completed,
+
+    // 指纹
+    fingerprint,
   }
 }

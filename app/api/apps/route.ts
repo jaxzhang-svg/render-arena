@@ -98,7 +98,7 @@ function getClientIP(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     const body: CreateAppRequest = await request.json()
-    const { prompt, modelA, modelB, category = '', name } = body
+    const { prompt, modelA, modelB, category = '', name, fingerprint } = body
 
     if (!prompt?.trim()) {
       return NextResponse.json(
@@ -187,6 +187,7 @@ export async function POST(request: NextRequest) {
       .insert({
         user_id: userId,
         user_email: userEmail,
+        fingerprint_id: userId ? null : fingerprint || null,
         prompt: DOMPurify.sanitize(prompt.trim()),
         model_a: modelA,
         model_b: modelB,
