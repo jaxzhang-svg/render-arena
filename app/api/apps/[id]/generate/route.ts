@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { models } from '@/lib/config'
+import { checkAppOwnerPermission } from '@/lib/permissions'
 
 const NOVITA_API_KEY = process.env.NEXT_NOVITA_API_KEY!
 const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions'
@@ -9,7 +10,7 @@ const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions'
 // HTML 生成系统提示词
 
 /**
- * GET /api/apps/[id]/generate
+ * POST /api/apps/[id]/generate
  * 流式生成 HTML（SSE）- 直接透传 Novita API 的原始 SSE 流
  */
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -42,30 +43,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     data: { user },
   } = await supabase.auth.getUser()
 
-  // 获取 fingerprint cookie（用于匿名用户权限验证）
-  const fingerprint = request.cookies.get('browser_fingerprint')?.value || null
+  // 权限检查：只有作者或匿名创建者可以生成
+  const { canAccess } = await checkAppOwnerPermission(user, app)
 
-  // 权限检查：
-  // - 已登录用户：必须是 owner (user_id 匹配)
-  // - 匿名用户：必须通过 fingerprint 验证 (fingerprint_id 匹配)
-  const isAuthenticated = !!user
-  const isOwner = app.user_id === user?.id
-
-  if (isAuthenticated && !isOwner) {
+  if (!canAccess) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json' },
     })
-  }
-
-  // 匿名用户：检查 fingerprint_id
-  if (!isAuthenticated) {
-    if (app.fingerprint_id !== fingerprint) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 403,
-        headers: { 'Content-Type': 'application/json' },
-      })
-    }
   }
 
   let modelId = slot === 'a' ? app.model_a : app.model_b
