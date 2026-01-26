@@ -10,15 +10,14 @@ import { cookies } from 'next/headers'
  */
 export async function checkAppOwnerPermission(
   user: { id: string } | null,
-  app: { user_id: string | null; fingerprint_id: string | null },
-  fingerprint?: string | null
+  app: { user_id: string | null; fingerprint_id: string | null }
 ): Promise<{
   isOwner: boolean
   isAuthenticated: boolean
   canAccess: boolean
 }> {
-  // Get fingerprint from parameter or cookie
-  const fp = fingerprint ?? (await cookies()).get('browser_fingerprint')?.value || null
+  // Get fingerprint from cookie
+  const fp = (await cookies()).get('browser_fingerprint')?.value || null
 
   const isAuthenticated = !!user
   const isOwner = isAuthenticated ? app.user_id === user.id : app.fingerprint_id === fp

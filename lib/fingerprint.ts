@@ -25,7 +25,24 @@ function getCookie(name: string): string | null {
 function setCookie(name: string, value: string, maxAge: number): void {
   if (typeof window === 'undefined') return
 
-  document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`
+  // Detect if we're on HTTPS (production)
+  const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:'
+
+  // Get the domain (handle both localhost and production domains)
+  let domain = ''
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname
+    // Set domain for production domains (e.g., .novita.ai for cookie to work across subdomains)
+    if (hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '192.168.31.100') {
+      const parts = hostname.split('.')
+      if (parts.length >= 2) {
+        domain = `; domain=.${parts.slice(-2).join('.')}`
+      }
+    }
+  }
+
+  const secureFlag = isSecure ? '; Secure' : ''
+  document.cookie = `${name}=${value}; path=/${domain}; max-age=${maxAge}; SameSite=Lax${secureFlag}`
 }
 
 /**
@@ -34,7 +51,19 @@ function setCookie(name: string, value: string, maxAge: number): void {
 function deleteCookie(name: string): void {
   if (typeof window === 'undefined') return
 
-  document.cookie = `${name}=; path=/; max-age=0`
+  // Get the domain to match how it was set
+  let domain = ''
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname
+    if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+      const parts = hostname.split('.')
+      if (parts.length >= 2) {
+        domain = `; domain=.${parts.slice(-2).join('.')}`
+      }
+    }
+  }
+
+  document.cookie = `${name}=; path=/${domain}; max-age=0`
 }
 
 /**
