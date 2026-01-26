@@ -2,6 +2,7 @@
 
 import { useState, useId } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Popover } from '@base-ui/react/popover';
 import { Button } from '@/components/base/button';
 import { useAuth, loginWithNovita } from '@/hooks/use-auth';
@@ -21,6 +22,7 @@ interface UserAvatarProps {
  */
 export function UserAvatar({ className }: UserAvatarProps) {
   const { user, loading, logout } = useAuth();
+  const pathname = usePathname();
   const [isHackathonModalOpen, setIsHackathonModalOpen] = useState(false);
   const popoverTriggerId = useId();
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
@@ -41,7 +43,7 @@ export function UserAvatar({ className }: UserAvatarProps) {
       <Button
         onClick={() => {
           trackAuthLoginInitiated('header');
-          loginWithNovita();
+          loginWithNovita(pathname);
         }}
         variant="outline"
         className="
