@@ -144,8 +144,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/?error=session_failed', request.url))
   }
 
-  // 6. 迁移匿名用户的 apps（通过 fingerprint 参数）
-  const fingerprint = request.nextUrl.searchParams.get('fingerprint')
+  // 6. 迁移匿名用户的 apps（通过 fingerprint cookie）
+  const fingerprint = request.cookies.get('browser_fingerprint')?.value || null
   if (fingerprint && userId) {
     try {
       const { error: migrateError } = await adminClient

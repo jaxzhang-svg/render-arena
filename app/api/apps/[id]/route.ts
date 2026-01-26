@@ -25,9 +25,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       data: { user },
     } = await supabase.auth.getUser()
 
-    // 获取请求中的 fingerprint (从 query 参数)
-    const { searchParams } = new URL(request.url)
-    const fingerprint = searchParams.get('fingerprint')
+    // 获取请求中的 fingerprint (从 cookie)
+    const fingerprint = request.cookies.get('browser_fingerprint')?.value || null
 
     // 获取 App
     const { data: app, error } = await adminClient.from('apps').select('*').eq('id', id).single()
@@ -111,7 +110,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     // 权限检查：已登录用户检查 user_id，未登录用户检查 fingerprint_id
     const isAuthenticated = !!user
     const isOwner = app.user_id === user?.id
-    const fingerprint = body.fingerprint
+    // Read fingerprint from cookie (set by client-side FingerprintJS)
+    const fingerprint = request.cookies.get('browser_fingerprint')?.value || null
 
     // 已登录用户：必须是 owner
     if (isAuthenticated && !isOwner) {

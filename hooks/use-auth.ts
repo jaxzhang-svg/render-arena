@@ -158,15 +158,11 @@ export function useAuth(): UseAuthReturn {
 /**
  * 获取 Novita 登录 URL
  * @param next - 登录后重定向的路径
- * @param fingerprint - 浏览器指纹，用于迁移匿名用户的 apps
  */
-export function getNovitaLoginUrl(next?: string, fingerprint?: string): string {
+export function getNovitaLoginUrl(next?: string): string {
   const callbackUrl = new URL('/api/auth/callback', window.location.origin)
   if (next) {
     callbackUrl.searchParams.set('next', next)
-  }
-  if (fingerprint) {
-    callbackUrl.searchParams.set('fingerprint', fingerprint)
   }
 
   // Append tracking params to callback URL with defaults
@@ -186,10 +182,9 @@ export function getNovitaLoginUrl(next?: string, fingerprint?: string): string {
 /**
  * 触发 Novita 登录
  * @param next - 登录后重定向的路径
- * @param fingerprint - 浏览器指纹，用于迁移匿名用户的 apps
  */
-export function loginWithNovita(next?: string, fingerprint?: string): void {
-  const loginUrl = getNovitaLoginUrl(next, fingerprint)
+export function loginWithNovita(next?: string): void {
+  const loginUrl = getNovitaLoginUrl(next)
 
   // Set redirect cookie for novita.ai main site
   // Parse the login URL to get the callback URL

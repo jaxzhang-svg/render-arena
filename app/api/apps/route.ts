@@ -98,7 +98,10 @@ function getClientIP(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     const body: CreateAppRequest = await request.json()
-    const { prompt, modelA, modelB, category = '', name, fingerprint } = body
+    const { prompt, modelA, modelB, category = '', name } = body
+
+    // Read fingerprint from cookie (set by client-side FingerprintJS)
+    const fingerprint = request.cookies.get('browser_fingerprint')?.value || null
 
     if (!prompt?.trim()) {
       return NextResponse.json(

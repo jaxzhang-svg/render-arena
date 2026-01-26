@@ -58,7 +58,6 @@ export interface CreateAppRequest {
   modelB: string
   category?: string
   name?: string
-  fingerprint?: string
 }
 
 export interface CreateAppResponse {

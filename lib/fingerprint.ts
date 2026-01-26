@@ -1,7 +1,41 @@
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
-const FP_STORAGE_KEY = 'browser_fingerprint'
+const FP_COOKIE_KEY = 'browser_fingerprint'
+const FP_COOKIE_MAX_AGE = 365 * 24 * 60 * 60 // 1 year in seconds
 let fpPromise: Promise<any> | null = null
+
+/**
+ * Get cookie value by name
+ */
+function getCookie(name: string): string | null {
+  if (typeof window === 'undefined') return null
+
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+
+  if (parts.length === 2) {
+    return parts.pop()?.split(';').shift() || null
+  }
+  return null
+}
+
+/**
+ * Set cookie value
+ */
+function setCookie(name: string, value: string, maxAge: number): void {
+  if (typeof window === 'undefined') return
+
+  document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`
+}
+
+/**
+ * Delete cookie
+ */
+function deleteCookie(name: string): void {
+  if (typeof window === 'undefined') return
+
+  document.cookie = `${name}=; path=/; max-age=0`
+}
 
 /**
  * Initialize FingerprintJS and get the visitor identifier
@@ -57,18 +91,18 @@ function getFallbackFingerprint(): string {
 
 /**
  * Get or create browser fingerprint
- * Attempts to load from localStorage first, then generates using FingerprintJS
+ * Attempts to load from cookie first, then generates using FingerprintJS
  */
 export async function getFingerprint(): Promise<string> {
-  // Try to load from localStorage first
+  // Try to load from cookie first
   if (typeof window !== 'undefined') {
     try {
-      const stored = localStorage.getItem(FP_STORAGE_KEY)
+      const stored = getCookie(FP_COOKIE_KEY)
       if (stored) {
         return stored
       }
     } catch (error) {
-      console.error('localStorage read error:', error)
+      console.error('Cookie read error:', error)
     }
 
     // Generate new fingerprint
@@ -80,11 +114,11 @@ export async function getFingerprint(): Promise<string> {
       fingerprint = getFallbackFingerprint()
     }
 
-    // Store in localStorage
+    // Store in cookie (accessible to both client and server)
     try {
-      localStorage.setItem(FP_STORAGE_KEY, fingerprint)
+      setCookie(FP_COOKIE_KEY, fingerprint, FP_COOKIE_MAX_AGE)
     } catch (error) {
-      console.error('localStorage write error:', error)
+      console.error('Cookie write error:', error)
     }
 
     return fingerprint
@@ -100,9 +134,9 @@ export async function getFingerprint(): Promise<string> {
 export function clearFingerprint(): void {
   if (typeof window !== 'undefined') {
     try {
-      localStorage.removeItem(FP_STORAGE_KEY)
+      deleteCookie(FP_COOKIE_KEY)
     } catch (error) {
-      console.error('localStorage clear error:', error)
+      console.error('Cookie delete error:', error)
     }
   }
 }

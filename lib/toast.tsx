@@ -30,10 +30,9 @@ export const showToast = {
   // Custom login toast
   login: (
     message: string = 'Please login to continue',
-    fingerprint?: string | null,
     options?: ToastOptions
   ) => {
-    toast(<LoginToast message={message} fingerprint={fingerprint} />, {
+    toast(<LoginToast message={message} />, {
       ...defaultOptions,
       autoClose: false, // Don't auto-close login prompt usually
       closeOnClick: false,
