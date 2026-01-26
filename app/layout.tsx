@@ -5,6 +5,7 @@ import "./globals.css";
 import { ToastProvider } from "@/components/providers/toast-provider";
 import { TrackingProvider } from "@/components/providers/tracking-provider";
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const interphases = localFont({
   src: [
@@ -74,6 +75,7 @@ export default function RootLayout({
         {children}
         </div>
         <ToastProvider />
+        <SpeedInsights/>
         <GoogleAnalytics gaId="G-6E3YJT3N0F" />
       </body>
     </html>
