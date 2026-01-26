@@ -7,6 +7,7 @@ Get started with the Python or TypeScript Agent SDK to build AI agents that work
 Use the Agent SDK to build an AI agent that reads your code, finds bugs, and fixes them, all without manual intervention.
 
 **What you'll do:**
+
 1. Set up a project with the Agent SDK
 2. Create a file with some buggy code
 3. Run an agent that finds and fixes the bugs automatically
@@ -45,6 +46,7 @@ Use the Agent SDK to build an AI agent that reads your code, finds bugs, and fix
     <Tip>
     For more information on Claude Code installation, see [Claude Code setup](https://code.claude.com/docs/en/setup).
     </Tip>
+
   </Step>
 
   <Step title="Create a project folder">
@@ -55,6 +57,7 @@ Use the Agent SDK to build an AI agent that reads your code, finds bugs, and fix
     ```
 
     For your own projects, you can run the SDK from any folder; it will have access to files in that directory and its subdirectories by default.
+
   </Step>
 
   <Step title="Install the SDK">
@@ -80,6 +83,7 @@ Use the Agent SDK to build an AI agent that reads your code, finds bugs, and fix
         ```
       </Tab>
     </Tabs>
+
   </Step>
 
   <Step title="Set your API key">
@@ -98,6 +102,7 @@ Use the Agent SDK to build an AI agent that reads your code, finds bugs, and fix
 
     Unless previously approved, Anthropic does not allow third party developers to offer claude.ai login or rate limits for their products, including agents built on the Claude Agent SDK. Please use the API key authentication methods described in this document instead.
     </Note>
+
   </Step>
 </Steps>
 
@@ -117,6 +122,7 @@ def get_user_name(user):
 ```
 
 This code has two bugs:
+
 1. `calculate_average([])` crashes with division by zero
 2. `get_user_name(None)` crashes with a TypeError
 
@@ -129,27 +135,26 @@ Create `agent.py` if you're using the Python SDK, or `agent.ts` for TypeScript:
 import asyncio
 from claude_agent_sdk import query, ClaudeAgentOptions, AssistantMessage, ResultMessage
 
-async def main():
-    # Agentic loop: streams messages as Claude works
-    async for message in query(
-        prompt="Review utils.py for bugs that would cause crashes. Fix any issues you find.",
-        options=ClaudeAgentOptions(
-            allowed_tools=["Read", "Edit", "Glob"],  # Tools Claude can use
-            permission_mode="acceptEdits"            # Auto-approve file edits
-        )
-    ):
-        # Print human-readable output
-        if isinstance(message, AssistantMessage):
-            for block in message.content:
-                if hasattr(block, "text"):
-                    print(block.text)              # Claude's reasoning
-                elif hasattr(block, "name"):
-                    print(f"Tool: {block.name}")   # Tool being called
-        elif isinstance(message, ResultMessage):
-            print(f"Done: {message.subtype}")      # Final result
+async def main(): # Agentic loop: streams messages as Claude works
+async for message in query(
+prompt="Review utils.py for bugs that would cause crashes. Fix any issues you find.",
+options=ClaudeAgentOptions(
+allowed_tools=["Read", "Edit", "Glob"], # Tools Claude can use
+permission_mode="acceptEdits" # Auto-approve file edits
+)
+): # Print human-readable output
+if isinstance(message, AssistantMessage):
+for block in message.content:
+if hasattr(block, "text"):
+print(block.text) # Claude's reasoning
+elif hasattr(block, "name"):
+print(f"Tool: {block.name}") # Tool being called
+elif isinstance(message, ResultMessage):
+print(f"Done: {message.subtype}") # Final result
 
 asyncio.run(main())
-```
+
+````
 
 ```typescript TypeScript
 import { query } from "@anthropic-ai/claude-agent-sdk";
@@ -175,7 +180,8 @@ for await (const message of query({
     console.log(`Done: ${message.subtype}`); // Final result
   }
 }
-```
+````
+
 </CodeGroup>
 
 This code has three main parts:
@@ -251,6 +257,7 @@ options: {
   permissionMode: "acceptEdits"
 }
 ```
+
 </CodeGroup>
 
 **Give Claude a custom system prompt:**
@@ -271,6 +278,7 @@ options: {
   systemPrompt: "You are a senior Python developer. Always follow PEP 8 style guidelines."
 }
 ```
+
 </CodeGroup>
 
 **Run commands in the terminal:**
@@ -289,6 +297,7 @@ options: {
   permissionMode: "acceptEdits"
 }
 ```
+
 </CodeGroup>
 
 With `Bash` enabled, try: `"Write unit tests for utils.py, run them, and fix any failures"`
@@ -297,19 +306,19 @@ With `Bash` enabled, try: `"Write unit tests for utils.py, run them, and fix any
 
 **Tools** control what your agent can do:
 
-| Tools | What the agent can do |
-|-------|----------------------|
-| `Read`, `Glob`, `Grep` | Read-only analysis |
-| `Read`, `Edit`, `Glob` | Analyze and modify code |
-| `Read`, `Edit`, `Bash`, `Glob`, `Grep` | Full automation |
+| Tools                                  | What the agent can do   |
+| -------------------------------------- | ----------------------- |
+| `Read`, `Glob`, `Grep`                 | Read-only analysis      |
+| `Read`, `Edit`, `Glob`                 | Analyze and modify code |
+| `Read`, `Edit`, `Bash`, `Glob`, `Grep` | Full automation         |
 
 **Permission modes** control how much human oversight you want:
 
-| Mode | Behavior | Use case |
-|------|----------|----------|
-| `acceptEdits` | Auto-approves file edits, asks for other actions | Trusted development workflows |
-| `bypassPermissions` | Runs without prompts | CI/CD pipelines, automation |
-| `default` | Requires a `canUseTool` callback to handle approval | Custom approval flows |
+| Mode                | Behavior                                            | Use case                      |
+| ------------------- | --------------------------------------------------- | ----------------------------- |
+| `acceptEdits`       | Auto-approves file edits, asks for other actions    | Trusted development workflows |
+| `bypassPermissions` | Runs without prompts                                | CI/CD pipelines, automation   |
+| `default`           | Requires a `canUseTool` callback to handle approval | Custom approval flows         |
 
 The example above uses `acceptEdits` mode, which auto-approves file operations so the agent can run without interactive prompts. If you want to prompt users for approval, use `default` mode and provide a [`canUseTool` callback](/docs/en/agent-sdk/user-input) that collects user input. For more control, see [Permissions](/docs/en/agent-sdk/permissions).
 

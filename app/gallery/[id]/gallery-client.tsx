@@ -4,15 +4,7 @@ import React, { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/base/button'
-import {
-  ArrowLeft,
-  Heart,
-  Copy,
-  ExternalLink,
-  Maximize,
-  Check,
-  Loader2,
-} from 'lucide-react'
+import { ArrowLeft, Heart, Copy, ExternalLink, Maximize, Check, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { UserAvatar } from '@/components/app/user-avatar'
@@ -92,26 +84,18 @@ export default function GalleryClient({ app }: GalleryClientProps) {
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">
       {/* Header */}
-      <header className="
-        z-30 flex h-16 shrink-0 items-center justify-between border-b
-        border-[#f3f4f6] bg-white px-4
-      ">
+      <header className="z-30 flex h-16 shrink-0 items-center justify-between border-b border-[#f3f4f6] bg-white px-4">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
-              className="
-                hover:bg-muted/80
-                size-9 cursor-pointer rounded-full p-2
-              "
+              className="hover:bg-muted/80 size-9 cursor-pointer rounded-full p-2"
             >
               <ArrowLeft className="size-5" />
             </Button>
           </Link>
-          <h1 className="
-            font-sans text-[20px] font-semibold tracking-tight text-black
-          ">
+          <h1 className="font-sans text-[20px] font-semibold tracking-tight text-black">
             {app.name || 'Untitled App'}
           </h1>
         </div>
@@ -122,8 +106,8 @@ export default function GalleryClient({ app }: GalleryClientProps) {
             variant="outline"
             size="sm"
             className={cn(
-              "gap-2 rounded-lg border-[#e4e4e7] transition-colors",
-              liked && "border-red-200 bg-red-50 text-red-500 hover:bg-red-100"
+              'gap-2 rounded-lg border-[#e4e4e7] transition-colors',
+              liked && 'border-red-200 bg-red-50 text-red-500 hover:bg-red-100'
             )}
             onClick={handleLike}
             disabled={isLiking}
@@ -131,7 +115,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
             {isLiking ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <Heart className={cn("size-4", liked && "fill-current")} />
+              <Heart className={cn('size-4', liked && 'fill-current')} />
             )}
             <span>{likeCount}</span>
           </Button>
@@ -176,15 +160,10 @@ export default function GalleryClient({ app }: GalleryClientProps) {
         <div className="flex w-full flex-1">
           {/* Model A Preview */}
           {viewMode !== 'b' && (
-            <div className={`
-              ${viewMode === 'split' ? 'w-1/2' : 'flex-1'}
-              relative flex flex-col overflow-hidden border-r border-[#f4f4f5]
-              bg-white
-            `}>
-              <div className="
-                flex h-12 shrink-0 items-center justify-between border-b
-                border-[#e7e6e2] bg-white px-4
-              ">
+            <div
+              className={` ${viewMode === 'split' ? 'w-1/2' : 'flex-1'} relative flex flex-col overflow-hidden border-r border-[#f4f4f5] bg-white`}
+            >
+              <div className="flex h-12 shrink-0 items-center justify-between border-b border-[#e7e6e2] bg-white px-4">
                 <div className="flex items-center gap-2">
                   <Image
                     src={modelA.icon}
@@ -193,14 +172,14 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                     height={16}
                     className="size-4 rounded-sm"
                   />
-                  <span className="text-sm font-medium text-[#4f4e4a]">
-                    {modelA.name}
-                  </span>
+                  <span className="text-sm font-medium text-[#4f4e4a]">{modelA.name}</span>
                   {(app.duration_a || app.tokens_a) && (
                     <div className="flex items-center gap-3 text-xs text-[#9e9c98]">
                       {app.tokens_a && <span className="font-medium">{app.tokens_a} tokens</span>}
                       {app.tokens_a && app.duration_a && <span className="text-[#e7e6e2]">•</span>}
-                      {app.duration_a && <span className="font-medium">{app.duration_a.toFixed(1)}s</span>}
+                      {app.duration_a && (
+                        <span className="font-medium">{app.duration_a.toFixed(1)}s</span>
+                      )}
                     </div>
                   )}
                 </div>
@@ -208,7 +187,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="size-8 cursor-pointer rounded-lg hover:bg-muted/80"
+                  className="hover:bg-muted/80 size-8 cursor-pointer rounded-lg"
                   onClick={() => setViewMode(viewMode === 'a' ? 'split' : 'a')}
                 >
                   <Maximize className="size-4 text-[#9e9c98]" />
@@ -224,7 +203,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                     sandbox="allow-scripts"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-muted-foreground">
+                  <div className="text-muted-foreground flex h-full items-center justify-center">
                     No HTML content available
                   </div>
                 )}
@@ -234,14 +213,10 @@ export default function GalleryClient({ app }: GalleryClientProps) {
 
           {/* Model B Preview */}
           {viewMode !== 'a' && (
-            <div className={`
-              ${viewMode === 'split' ? 'w-1/2' : 'flex-1'}
-              relative flex flex-col overflow-hidden bg-white
-            `}>
-              <div className="
-                flex h-12 shrink-0 items-center justify-between border-b
-                border-[#e7e6e2] bg-white px-4
-              ">
+            <div
+              className={` ${viewMode === 'split' ? 'w-1/2' : 'flex-1'} relative flex flex-col overflow-hidden bg-white`}
+            >
+              <div className="flex h-12 shrink-0 items-center justify-between border-b border-[#e7e6e2] bg-white px-4">
                 <div className="flex items-center gap-2">
                   <Image
                     src={modelB.icon}
@@ -250,14 +225,14 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                     height={16}
                     className="size-4 rounded-sm"
                   />
-                  <span className="text-sm font-medium text-[#4f4e4a]">
-                    {modelB.name}
-                  </span>
+                  <span className="text-sm font-medium text-[#4f4e4a]">{modelB.name}</span>
                   {(app.duration_b || app.tokens_b) && (
                     <div className="flex items-center gap-3 text-xs text-[#9e9c98]">
                       {app.tokens_b && <span className="font-medium">{app.tokens_b} tokens</span>}
                       {app.tokens_b && app.duration_b && <span className="text-[#e7e6e2]">•</span>}
-                      {app.duration_b && <span className="font-medium">{app.duration_b.toFixed(1)}s</span>}
+                      {app.duration_b && (
+                        <span className="font-medium">{app.duration_b.toFixed(1)}s</span>
+                      )}
                     </div>
                   )}
                 </div>
@@ -265,7 +240,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="size-8 cursor-pointer rounded-lg hover:bg-muted/80"
+                  className="hover:bg-muted/80 size-8 cursor-pointer rounded-lg"
                   onClick={() => setViewMode(viewMode === 'b' ? 'split' : 'b')}
                 >
                   <Maximize className="size-4 text-[#9e9c98]" />
@@ -281,7 +256,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                     sandbox="allow-scripts"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-muted-foreground">
+                  <div className="text-muted-foreground flex h-full items-center justify-center">
                     No HTML content available
                   </div>
                 )}

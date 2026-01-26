@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/base/button";
-import { UserAvatar } from "@/components/app/user-avatar";
+import { Skeleton } from '@/components/ui/skeleton'
+import { ArrowLeft } from 'lucide-react'
+import { Button } from '@/components/base/button'
+import { UserAvatar } from '@/components/app/user-avatar'
 
 export default function GalleryLoading() {
   return (
@@ -25,7 +25,7 @@ export default function GalleryLoading() {
           <Skeleton className="h-9 w-32 rounded-lg" />
           {/* Open in Playground Button */}
           <Skeleton className="h-9 w-40 rounded-lg" />
-          
+
           <UserAvatar />
         </div>
       </header>
@@ -36,38 +36,38 @@ export default function GalleryLoading() {
           {/* Left Panel */}
           <div className="relative flex w-1/2 flex-col border-r border-[#e7e6e2] bg-white">
             <div className="flex h-12 shrink-0 items-center justify-between border-b border-[#e7e6e2] px-4">
-               {/* Model Info */}
-               <div className="flex items-center gap-2">
-                  <Skeleton className="size-4 rounded-sm" />
-                  <Skeleton className="h-4 w-32 rounded" />
-               </div>
-               {/* Maximize Button */}
-               <Skeleton className="size-8 rounded-lg" />
+              {/* Model Info */}
+              <div className="flex items-center gap-2">
+                <Skeleton className="size-4 rounded-sm" />
+                <Skeleton className="h-4 w-32 rounded" />
+              </div>
+              {/* Maximize Button */}
+              <Skeleton className="size-8 rounded-lg" />
             </div>
             {/* Viewport content */}
-            <div className="flex-1 bg-muted/10 p-4">
-               <Skeleton className="size-full rounded-xl" />
+            <div className="bg-muted/10 flex-1 p-4">
+              <Skeleton className="size-full rounded-xl" />
             </div>
           </div>
 
           {/* Right Panel */}
           <div className="relative flex w-1/2 flex-col bg-white">
             <div className="flex h-12 shrink-0 items-center justify-between border-b border-[#e7e6e2] px-4">
-               {/* Model Info */}
-               <div className="flex items-center gap-2">
-                  <Skeleton className="size-4 rounded-sm" />
-                  <Skeleton className="h-4 w-32 rounded" />
-               </div>
-               {/* Maximize Button */}
-               <Skeleton className="size-8 rounded-lg" />
+              {/* Model Info */}
+              <div className="flex items-center gap-2">
+                <Skeleton className="size-4 rounded-sm" />
+                <Skeleton className="h-4 w-32 rounded" />
+              </div>
+              {/* Maximize Button */}
+              <Skeleton className="size-8 rounded-lg" />
             </div>
-             {/* Viewport content */}
-            <div className="flex-1 bg-muted/10 p-4">
-               <Skeleton className="size-full rounded-xl" />
+            {/* Viewport content */}
+            <div className="bg-muted/10 flex-1 p-4">
+              <Skeleton className="size-full rounded-xl" />
             </div>
           </div>
         </div>
       </main>
     </div>
-  );
+  )
 }

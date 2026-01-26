@@ -10,19 +10,17 @@ interface GalleryPageProps {
 
 export default async function GalleryPage({ params }: GalleryPageProps) {
   const { id } = await params
-  
+
   const adminClient = await createAdminClient()
   const supabase = await createClient()
-  
+
   // 获取当前用户
-  const { data: { user } } = await supabase.auth.getUser()
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   // 获取 App
-  const { data: app, error } = await adminClient
-    .from('apps')
-    .select('*')
-    .eq('id', id)
-    .single()
+  const { data: app, error } = await adminClient.from('apps').select('*').eq('id', id).single()
 
   if (error || !app) {
     notFound()

@@ -3,12 +3,15 @@
 ## Top Navigation Bar
 
 ### Structure
+
 The top navigation bar consists of:
+
 1. **Logo** - Left-aligned
 2. **Navigation Items** - Center/Right-aligned
 3. **Action Buttons** - Right-aligned (Sign In, Get Started)
 
 ### Dimensions
+
 - **Height**: 80px
 - **Horizontal padding**: 120px
 - **Vertical padding**: 32px
@@ -19,6 +22,7 @@ The top navigation bar consists of:
 ### States
 
 #### Default State
+
 - Background: Transparent
 - Text color: Black (`#000000`)
 - Font: TT Interphases Pro Mono, 14px
@@ -26,16 +30,19 @@ The top navigation bar consists of:
 - Padding: 8px
 
 #### Hover State
+
 - Background: Transparent
 - Text color: Black (`#000000`)
 - Icon: Chevron up (flipped)
 
 #### Active State
+
 - Background: Transparent
 - Text color: Brand 1 (`#16B063`)
 - Icon: Chevron up (filled with Brand 1)
 
 ### Navigation Item Labels
+
 - Model Library
 - GPUs
 - Playground
@@ -44,33 +51,25 @@ The top navigation bar consists of:
 - Blog
 
 ### Implementation
+
 ```tsx
 interface NavigationItemProps {
-  label: string;
-  active?: boolean;
-  href?: string;
+  label: string
+  active?: boolean
+  href?: string
 }
 
 export function NavigationItem({ label, active, href }: NavigationItemProps) {
   return (
     <a
       href={href}
-      className={`
-        flex items-center gap-1 h-8 px-2 rounded-lg
-        font-mono text-sm
-        ${active ? 'text-[#16B063]' : 'text-black'}
-        hover:bg-transparent
-      `}
+      className={`flex h-8 items-center gap-1 rounded-lg px-2 font-mono text-sm ${active ? 'text-[#16B063]' : 'text-black'} hover:bg-transparent`}
     >
       {label}
-      {!active && (
-        <CaretDown className="w-6 h-6" />
-      )}
-      {active && (
-        <CaretUp className="w-6 h-6 text-[#16B063]" />
-      )}
+      {!active && <CaretDown className="h-6 w-6" />}
+      {active && <CaretUp className="h-6 w-6 text-[#16B063]" />}
     </a>
-  );
+  )
 }
 ```
 
@@ -79,6 +78,7 @@ export function NavigationItem({ label, active, href }: NavigationItemProps) {
 ### Menu Item Structure
 
 #### Default State
+
 - Background: White (`#FFFFFF`)
 - Border: None
 - Border radius: 8px
@@ -86,6 +86,7 @@ export function NavigationItem({ label, active, href }: NavigationItemProps) {
 - Gap: 14px between icon and text
 
 #### Hover State
+
 - Background: Gray 3 (`#F5F5F5`)
 - Border radius: 8px
 - Padding: 24px
@@ -94,12 +95,14 @@ export function NavigationItem({ label, active, href }: NavigationItemProps) {
 ### Menu Item Content
 
 **Title**
+
 - Font: TT Interphases Pro Regular
 - Size: 16px
 - Line height: 24px
 - Color: Black (`#000000`)
 
 **Description**
+
 - Font: TT Interphases Pro Mono Regular
 - Size: 14px
 - Line height: 16px
@@ -107,6 +110,7 @@ export function NavigationItem({ label, active, href }: NavigationItemProps) {
 - Maximum: 2 lines
 
 ### Dropdown Container
+
 - Background: White (`#FFFFFF`)
 - Border: 1px solid Gray 1 (`#CBC9C4`)
 - Border radius: 4px (bottom corners only)
@@ -115,43 +119,35 @@ export function NavigationItem({ label, active, href }: NavigationItemProps) {
 - Background overlay: Brand 2 (`#CAF6E0`)
 
 ### Implementation Example
+
 ```tsx
 interface MenuItemProps {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  href?: string;
+  title: string
+  description: string
+  icon: React.ReactNode
+  href?: string
 }
 
 export function MenuItem({ title, description, icon, href }: MenuItemProps) {
   return (
     <a
       href={href}
-      className="
-        flex items-center gap-3.5 p-6 rounded-lg
-        hover:bg-[#F5F5F5]
-        transition-colors
-      "
+      className="flex items-center gap-3.5 rounded-lg p-6 transition-colors hover:bg-[#F5F5F5]"
     >
-      <div className="w-16 h-16 flex-shrink-0">
-        {icon}
-      </div>
+      <div className="h-16 w-16 flex-shrink-0">{icon}</div>
       <div className="flex flex-col gap-1">
-        <p className="font-sans text-base leading-6 text-black">
-          {title}
-        </p>
-        <p className="font-mono text-sm leading-4 text-[#4F4E4A]">
-          {description}
-        </p>
+        <p className="font-sans text-base leading-6 text-black">{title}</p>
+        <p className="font-mono text-sm leading-4 text-[#4F4E4A]">{description}</p>
       </div>
     </a>
-  );
+  )
 }
 ```
 
 ## Action Buttons
 
 ### Sign In Button
+
 - **Variant**: Secondary
 - **Size**: M (32px height)
 - **Border**: 1px solid Black
@@ -159,6 +155,7 @@ export function MenuItem({ title, description, icon, href }: MenuItemProps) {
 - **Text**: "Sign In"
 
 ### Get Started Button
+
 - **Variant**: Primary
 - **Size**: M (32px height)
 - **Background**: Brand 0 (`#23D57C`)
@@ -168,7 +165,9 @@ export function MenuItem({ title, description, icon, href }: MenuItemProps) {
 ## Logo
 
 ### Structure
+
 The logo consists of:
+
 1. **Icon**: 24px × 24px
 2. **Text mark**: Specific width
 
@@ -177,11 +176,13 @@ See [Logo & Branding](./logo.md) for detailed specifications.
 ## Navigation Contexts
 
 ### Above the Fold
+
 - **Background**: White
 - **Border**: Bottom border only (`#E7E6E2`)
 - **Shadow**: None
 
 ### Down the Fold
+
 - **Background**: White
 - **Border**: Bottom border only (`#E7E6E2`)
 - **Shadow**: None
@@ -190,15 +191,18 @@ See [Logo & Branding](./logo.md) for detailed specifications.
 ## Responsive Behavior
 
 ### Desktop (1280px+)
+
 - Full navigation with all items
 - Horizontal layout
 - Dropdown menus on hover
 
 ### Tablet (768px - 1279px)
+
 - Condensed navigation
 - Some menu items may collapse into dropdown
 
 ### Mobile (< 768px)
+
 - Hamburger menu
 - Full-screen navigation drawer
 - Stacked navigation items

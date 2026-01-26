@@ -13,7 +13,7 @@ export interface TrackingParams {
   landingpage?: string
 }
 
-const STORAGE_KEY = 'arena_tracking_params';
+const STORAGE_KEY = 'arena_tracking_params'
 
 /**
  * Extract tracking parameters from URL query string and document context
@@ -22,10 +22,10 @@ const STORAGE_KEY = 'arena_tracking_params';
  */
 export function extractTrackingParams(): TrackingParams {
   if (typeof window === 'undefined') {
-    return {};
+    return {}
   }
 
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams(window.location.search)
 
   return {
     referrer: document.referrer || undefined,
@@ -33,7 +33,7 @@ export function extractTrackingParams(): TrackingParams {
     utm_campaign: urlParams.get('utm_campaign') || undefined,
     utm_medium: urlParams.get('utm_medium') || undefined,
     landingpage: window.location.pathname + window.location.search,
-  };
+  }
 }
 
 /**
@@ -44,33 +44,35 @@ export function extractTrackingParams(): TrackingParams {
  */
 export function storeTrackingParams(params: TrackingParams): void {
   if (typeof window === 'undefined') {
-    return;
+    return
   }
 
   try {
-    const existing = getStoredTrackingParams();
+    const existing = getStoredTrackingParams()
 
     // If no existing data, store everything (only defined values)
     if (!existing) {
       const cleanParams = Object.fromEntries(
         Object.entries(params).filter(([_, v]) => v !== undefined)
-      );
+      )
       if (Object.keys(cleanParams).length > 0) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanParams));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanParams))
       }
-      return;
+      return
     }
 
     // Helper: check if referrer is from Novita
     const isNovitaReferrer = (referrer: string | null | undefined) => {
-      if (!referrer) return false;
+      if (!referrer) return false
       try {
-        const referrerUrl = new URL(referrer);
-        return referrerUrl.hostname.includes('novita.ai') || referrerUrl.hostname.includes('novita.com');
+        const referrerUrl = new URL(referrer)
+        return (
+          referrerUrl.hostname.includes('novita.ai') || referrerUrl.hostname.includes('novita.com')
+        )
       } catch {
-        return false;
+        return false
       }
-    };
+    }
 
     // Merge logic:
     // - landingpage, utm_*: keep first value (existing takes precedence)
@@ -81,17 +83,19 @@ export function storeTrackingParams(params: TrackingParams): void {
       utm_campaign: existing.utm_campaign || params.utm_campaign, // Keep first UTM campaign
       utm_medium: existing.utm_medium || params.utm_medium, // Keep first UTM medium
       referrer: isNovitaReferrer(existing.referrer)
-        ? (params.referrer && !isNovitaReferrer(params.referrer) ? params.referrer : existing.referrer) // Update only if new referrer is external
-        : (params.referrer || existing.referrer), // Keep existing if it's already external
-    };
+        ? params.referrer && !isNovitaReferrer(params.referrer)
+          ? params.referrer
+          : existing.referrer // Update only if new referrer is external
+        : params.referrer || existing.referrer, // Keep existing if it's already external
+    }
 
     // Only store defined values
     const cleanMerged = Object.fromEntries(
       Object.entries(merged).filter(([_, v]) => v !== undefined)
-    );
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanMerged));
+    )
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanMerged))
   } catch (error) {
-    console.error('Failed to store tracking params:', error);
+    console.error('Failed to store tracking params:', error)
   }
 }
 
@@ -100,15 +104,15 @@ export function storeTrackingParams(params: TrackingParams): void {
  */
 export function getStoredTrackingParams(): TrackingParams | null {
   if (typeof window === 'undefined') {
-    return null;
+    return null
   }
 
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : null;
+    const stored = localStorage.getItem(STORAGE_KEY)
+    return stored ? JSON.parse(stored) : null
   } catch (error) {
-    console.error('Failed to retrieve tracking params:', error);
-    return null;
+    console.error('Failed to retrieve tracking params:', error)
+    return null
   }
 }
 
@@ -117,13 +121,13 @@ export function getStoredTrackingParams(): TrackingParams | null {
  */
 export function clearTrackingParams(): void {
   if (typeof window === 'undefined') {
-    return;
+    return
   }
 
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY)
   } catch (error) {
-    console.error('Failed to clear tracking params:', error);
+    console.error('Failed to clear tracking params:', error)
   }
 }
 
@@ -134,8 +138,8 @@ export function clearTrackingParams(): void {
 export function trackingParamsToQueryString(params: TrackingParams): string {
   const cleanParams = Object.fromEntries(
     Object.entries(params).filter(([_, v]) => v !== undefined && v !== '')
-  );
-  return new URLSearchParams(cleanParams as Record<string, string>).toString();
+  )
+  return new URLSearchParams(cleanParams as Record<string, string>).toString()
 }
 
 /**
@@ -143,16 +147,16 @@ export function trackingParamsToQueryString(params: TrackingParams): string {
  */
 export function appendTrackingParamsToUrl(url: string, params: TrackingParams): string {
   try {
-    const urlObj = new URL(url);
+    const urlObj = new URL(url)
     Object.entries(params).forEach(([key, value]) => {
       if (value) {
-        urlObj.searchParams.set(key, value);
+        urlObj.searchParams.set(key, value)
       }
-    });
-    return urlObj.toString();
+    })
+    return urlObj.toString()
   } catch (error) {
-    console.error('Failed to append tracking params to URL:', error);
-    return url;
+    console.error('Failed to append tracking params to URL:', error)
+    return url
   }
 }
 
@@ -167,7 +171,7 @@ export function applyTrackingDefaults(params: TrackingParams | null): TrackingPa
     utm_campaign: params?.utm_campaign || 'none',
     utm_medium: params?.utm_medium || 'none',
     landingpage: params?.landingpage,
-  };
+  }
 }
 
 /**
@@ -176,12 +180,12 @@ export function applyTrackingDefaults(params: TrackingParams | null): TrackingPa
  */
 export function initTracking(): void {
   if (typeof window === 'undefined') {
-    return;
+    return
   }
 
   // Only capture if not already stored (first visit only)
   if (!getStoredTrackingParams()) {
-    const params = extractTrackingParams();
-    storeTrackingParams(params);
+    const params = extractTrackingParams()
+    storeTrackingParams(params)
   }
 }

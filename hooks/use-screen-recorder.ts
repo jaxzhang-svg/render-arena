@@ -4,20 +4,20 @@ import RecordRTC from 'recordrtc'
 export type VideoFormat = 'webm'
 
 export interface UseScreenRecorderOptions {
-  onRecordingComplete?: (blob: Blob, format: VideoFormat) => void;
-  onError?: (error: Error) => void;
+  onRecordingComplete?: (blob: Blob, format: VideoFormat) => void
+  onError?: (error: Error) => void
 }
 
 export interface UseScreenRecorderReturn {
-  isRecording: boolean;
-  isRecordingSupported: boolean;
-  recordingTime: number;
-  recordedBlob: Blob | null;
-  recordedFormat: VideoFormat | null;
-  previewContainerRef: RefObject<HTMLDivElement | null>;
-  startRecording: () => Promise<void>;
-  stopRecording: () => void;
-  resetRecording: () => void;
+  isRecording: boolean
+  isRecordingSupported: boolean
+  recordingTime: number
+  recordedBlob: Blob | null
+  recordedFormat: VideoFormat | null
+  previewContainerRef: RefObject<HTMLDivElement | null>
+  startRecording: () => Promise<void>
+  stopRecording: () => void
+  resetRecording: () => void
 }
 
 /**
@@ -33,7 +33,7 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   const [recordingTime, setRecordingTime] = useState(0)
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null)
   const [recordedFormat, setRecordedFormat] = useState<VideoFormat | null>(null)
-  
+
   // Browser support flags
   const [isRecordingSupported, setIsRecordingSupported] = useState(false)
 
@@ -42,12 +42,12 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   const previewContainerRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const chunksRef = useRef<Blob[]>([])
-  
+
   // Use refs to avoid stale closure issues
   const isRecordingRef = useRef(false)
   const onRecordingCompleteRef = useRef(onRecordingComplete)
   const recordedFormatRef = useRef<VideoFormat | null>(null)
-  
+
   // Keep refs in sync with state
   isRecordingRef.current = isRecording
   onRecordingCompleteRef.current = onRecordingComplete
@@ -96,7 +96,7 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
         }
       }
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop())
+        streamRef.current.getTracks().forEach(track => track.stop())
       }
     }
   }, [])
@@ -105,7 +105,7 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   useEffect(() => {
     if (isRecording) {
       timerRef.current = setInterval(() => {
-        setRecordingTime((prev) => prev + 1)
+        setRecordingTime(prev => prev + 1)
       }, 1000)
     } else {
       if (timerRef.current) {
@@ -163,7 +163,10 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
       const mediaRecorder = new MediaRecorder(stream, { mimeType })
 
       // Log the actual mimeType that the recorder is using
-      console.log('[useScreenRecorder] Recorder created with actual mimeType:', mediaRecorder.mimeType)
+      console.log(
+        '[useScreenRecorder] Recorder created with actual mimeType:',
+        mediaRecorder.mimeType
+      )
 
       // If the actual mimeType differs from what we requested, log it
       if (mediaRecorder.mimeType !== mimeType) {
@@ -171,7 +174,7 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
       }
 
       // Collect data chunks
-      mediaRecorder.ondataavailable = (event) => {
+      mediaRecorder.ondataavailable = event => {
         if (event.data && event.data.size > 0) {
           chunksRef.current.push(event.data)
         }
@@ -194,12 +197,17 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   }, [onError, getSupportedFormat])
 
   const stopRecording = useCallback(() => {
-    console.log('[useScreenRecorder] stopRecording called, recorderRef:', !!recorderRef.current, 'isRecordingRef:', isRecordingRef.current)
-    
+    console.log(
+      '[useScreenRecorder] stopRecording called, recorderRef:',
+      !!recorderRef.current,
+      'isRecordingRef:',
+      isRecordingRef.current
+    )
+
     // Use ref to check recording state instead of state variable (avoids stale closure)
     if (recorderRef.current && isRecordingRef.current) {
       const recorder = recorderRef.current as MediaRecorder
-      
+
       // Check if recorder is in a valid state
       if (recorder.state === 'inactive') {
         console.warn('[useScreenRecorder] Recorder already inactive')

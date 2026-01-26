@@ -45,6 +45,7 @@ This works fine for a short demo but breaks down with longer responses. Every to
 - Instead of re-rendering on every token, ChatGPT separates the process of **receiving tokens** from **updating the UI**.
 
 **Buffering**: Tokens are collected in a temporary store (like a ref) without re-rendering.
+
 - **Batching**: At regular intervals, the buffered tokens are moved into state.
 
 The user still sees text streaming naturally, but React only re-renders a handful of times per second instead of hundreds.

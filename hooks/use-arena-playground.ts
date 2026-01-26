@@ -61,7 +61,7 @@ interface UseArenaPlaygroundReturn {
 
 /**
  * Arena Playground 的核心 Hook
- * 
+ *
  * 管理两个模型的对比、生成和状态
  */
 export function useArenaPlayground({
@@ -109,75 +109,78 @@ export function useArenaPlayground({
   }, [modelA, modelB])
 
   // 创建 App
-  const createApp = useCallback(async (isAuthenticated: boolean): Promise<string | null> => {
-    try {
-      const response = await fetch('/api/apps', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: prompt.trim(),
-          modelA: modelA.selectedModel.id,
-          modelB: modelB.selectedModel.id,
-          category: category,
-          name: urlTitle || undefined,
-        }),
-      })
+  const createApp = useCallback(
+    async (isAuthenticated: boolean): Promise<string | null> => {
+      try {
+        const response = await fetch('/api/apps', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: prompt.trim(),
+            modelA: modelA.selectedModel.id,
+            modelB: modelB.selectedModel.id,
+            category: category,
+            name: urlTitle || undefined,
+          }),
+        })
 
-      const data = await response.json()
+        const data = await response.json()
 
-      if (!data.success) {
-        if (data.error === 'FREE_QUOTA_EXCEEDED') {
-          // Track free quota exceeded
-          trackFreeQuotaExceeded(data.usageCount || 5)
-          showToast.login(data.message || '免费额度已用完，请登录后继续使用')
-          return null
+        if (!data.success) {
+          if (data.error === 'FREE_QUOTA_EXCEEDED') {
+            // Track free quota exceeded
+            trackFreeQuotaExceeded(data.usageCount || 5)
+            showToast.login(data.message || '免费额度已用完，请登录后继续使用')
+            return null
+          }
+          throw new Error(data.message || 'Failed to create app')
         }
-        throw new Error(data.message || 'Failed to create app')
+
+        // Track arena generate started
+        trackArenaGenerateStarted({
+          model_a: modelA.selectedModel.id,
+          model_b: modelB.selectedModel.id,
+          prompt_length: prompt.trim().length,
+          category: category,
+          is_authenticated: isAuthenticated,
+        })
+
+        return data.appId
+      } catch (error) {
+        console.error('Error creating app:', error)
+        showToast.error('创建失败，请稍后重试')
+        return null
       }
-
-      // Track arena generate started
-      trackArenaGenerateStarted({
-        model_a: modelA.selectedModel.id,
-        model_b: modelB.selectedModel.id,
-        prompt_length: prompt.trim().length,
-        category: category,
-        is_authenticated: isAuthenticated,
-      })
-
-      return data.appId
-    } catch (error) {
-      console.error('Error creating app:', error)
-      showToast.error('创建失败，请稍后重试')
-      return null
-    }
-  }, [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id, urlTitle])
+    },
+    [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id, urlTitle]
+  )
 
   // 同时生成两个模型
-  const handleGenerate = useCallback(async (isAuthenticated = false) => {
-    if (!prompt.trim()) return
+  const handleGenerate = useCallback(
+    async (isAuthenticated = false) => {
+      if (!prompt.trim()) return
 
-    // 隐藏输入框
-    setShowInputBar(false)
+      // 隐藏输入框
+      setShowInputBar(false)
 
-    // 先停止之前的生成
-    stopAllGeneration()
+      // 先停止之前的生成
+      stopAllGeneration()
 
-    // 创建新的 App
-    const newAppId = await createApp(isAuthenticated)
-    if (!newAppId) return
+      // 创建新的 App
+      const newAppId = await createApp(isAuthenticated)
+      if (!newAppId) return
 
-    // 更新状态
-    setCurrentAppId(newAppId)
+      // 更新状态
+      setCurrentAppId(newAppId)
 
-    // 使用 history.replaceState 更新 URL，不触发 Next.js 路由导航
-    window.history.replaceState(null, '', `/playground/${newAppId}`)
+      // 使用 history.replaceState 更新 URL，不触发 Next.js 路由导航
+      window.history.replaceState(null, '', `/playground/${newAppId}`)
 
-    // 并行生成两个模型
-    await Promise.allSettled([
-      modelA.generate(newAppId),
-      modelB.generate(newAppId),
-    ])
-  }, [prompt, createApp, stopAllGeneration, modelA, modelB])
+      // 并行生成两个模型
+      await Promise.allSettled([modelA.generate(newAppId), modelB.generate(newAppId)])
+    },
+    [prompt, createApp, stopAllGeneration, modelA, modelB]
+  )
 
   // 单独重新生成 Model A
   const handleGenerateModelA = useCallback(async () => {
@@ -209,7 +212,7 @@ export function useArenaPlayground({
     await modelB.generate(currentAppId)
   }, [currentAppId, modelB])
 
-// 自动开始生成逻辑已移动到 PlaygroundClient 组件中
+  // 自动开始生成逻辑已移动到 PlaygroundClient 组件中
 
   return {
     // App 状态

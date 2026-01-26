@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { useTrackingParams } from '@/hooks/use-tracking-params';
+import { useTrackingParams } from '@/hooks/use-tracking-params'
 
 /**
  * Tracking Provider
@@ -12,7 +12,7 @@ import { useTrackingParams } from '@/hooks/use-tracking-params';
  * This component should be placed in the root layout.
  */
 export function TrackingProvider() {
-  useTrackingParams(); // Initialize tracking once
+  useTrackingParams() // Initialize tracking once
 
-  return null; // This component doesn't render anything
+  return null // This component doesn't render anything
 }

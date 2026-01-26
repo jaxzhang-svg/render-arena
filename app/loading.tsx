@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Loading() {
   return (
@@ -24,25 +24,24 @@ export default function Loading() {
         {/* Hero Section Skeleton */}
         <section className="relative w-full px-6 py-16">
           <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 text-center">
-            
             {/* Live Badge */}
             <Skeleton className="h-[26px] w-[200px] rounded-full" />
 
             {/* Heading */}
-            <div className="flex flex-col items-center gap-2 w-full max-w-[820px]">
-               <Skeleton className="h-[60px] w-3/4 rounded-lg" />
-               <Skeleton className="h-[60px] w-1/2 rounded-lg" />
+            <div className="flex w-full max-w-[820px] flex-col items-center gap-2">
+              <Skeleton className="h-[60px] w-3/4 rounded-lg" />
+              <Skeleton className="h-[60px] w-1/2 rounded-lg" />
             </div>
 
             {/* Featured Case / Content Placeholder */}
-             <Skeleton className="h-[200px] w-full rounded-xl" />
+            <Skeleton className="h-[200px] w-full rounded-xl" />
 
             {/* Textarea Input Section */}
             <div className="flex w-full max-w-[787px] flex-col items-center gap-8">
-               <Skeleton className="h-[50px] w-full rounded-full" />
+              <Skeleton className="h-[50px] w-full rounded-full" />
 
               {/* Category Buttons */}
-              <div className="flex flex-wrap items-center justify-center gap-3 w-full">
+              <div className="flex w-full flex-wrap items-center justify-center gap-3">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Skeleton key={i} className="h-10 w-24 rounded-full" />
                 ))}
@@ -52,5 +51,5 @@ export default function Loading() {
         </section>
       </main>
     </div>
-  );
+  )
 }

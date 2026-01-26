@@ -28,6 +28,7 @@ This documentation captures the design specifications from the Figma UI Kit for 
 ## Implementation Notes
 
 When implementing these designs:
+
 - Use the exact font sizes, weights, and spacing specified
 - Follow the color palette strictly for consistency
 - Implement all hover and disabled states for interactive elements
@@ -36,4 +37,4 @@ When implementing these designs:
 
 ---
 
-*Last updated: 2025-01-09*
+_Last updated: 2025-01-09_

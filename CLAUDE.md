@@ -20,6 +20,7 @@ No test runner is configured.
 ## Architecture
 
 ### Tech Stack
+
 - **Framework:** Next.js 16 (App Router) + React 19 + TypeScript
 - **Styling:** Tailwind CSS v4
 - **UI:** shadcn/ui patterns + Base UI React
@@ -28,6 +29,7 @@ No test runner is configured.
 - **Auth:** Novita OAuth → Supabase session bridge
 
 ### Directory Structure
+
 ```
 /app
   /api              # API routes (auth, apps, media)
@@ -46,12 +48,14 @@ No test runner is configured.
 ```
 
 ### Data Flow
+
 ```
 User Input → useModelGeneration → POST /api/apps/[id]/generate (streaming)
 → Model API via Novita → HTML Response → StreamingCodeDisplay → Supabase → Gallery
 ```
 
 ### Key API Routes
+
 - `POST /api/apps` - Create app
 - `POST /api/apps/[id]/generate` - Trigger model generation (streaming)
 - `POST /api/apps/[id]/publish` - Publish to gallery
@@ -60,14 +64,18 @@ User Input → useModelGeneration → POST /api/apps/[id]/generate (streaming)
 ## Code Conventions
 
 ### Imports
+
 Use `@/` path alias for all internal imports:
+
 ```typescript
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 ```
 
 ### Base UI Triggers (CRITICAL)
+
 Never nest `<button>` inside Base UI triggers. Use `render` prop:
+
 ```tsx
 // ✓ Correct
 <Popover.Trigger render={<button>Click me</button>} />
@@ -79,21 +87,26 @@ Never nest `<button>` inside Base UI triggers. Use `render` prop:
 ```
 
 ### API Route Pattern
+
 ```typescript
 export async function POST(req: Request) {
   try {
     const body = await req.json()
     return Response.json({ data })
   } catch (error) {
-    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
+    return Response.json(
+      { error: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    )
   }
 }
-export const maxDuration = 60;
+export const maxDuration = 60
 ```
 
 ## Environment Variables
 
 Required in `.env.local`:
+
 ```bash
 NOVITA_API_KEY=
 NEXT_PUBLIC_SUPABASE_URL=
@@ -105,6 +118,7 @@ NEXT_ENCRYPTION_MASTER_KEY=  # 32-char hex for pgcrypto
 ## Models Configuration
 
 Models are defined in `/lib/config.ts`. Default models:
+
 - Model A: `pa/grok-code-fast-1`
 - Model B: `pa/gemini-3-flash-preview`
 
@@ -113,6 +127,7 @@ Categories: Physics, Visual Magic, Game Jam, General
 ## State Management
 
 No Redux/Zustand. Uses React hooks:
+
 - `useAuth()` - Authentication
 - `useModelGeneration()` - Streaming generation
 - `useArenaPlayground()` - Arena state

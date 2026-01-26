@@ -1,13 +1,13 @@
-import { cookies } from 'next/headers';
+import { cookies } from 'next/headers'
 
 export interface NovitaUserInfo {
-  uuid: string;
-  uid: string;
-  email?: string;
-  username?: string;
-  firstName?: string;
-  lastName?: string;
-  tier?: string;
+  uuid: string
+  uid: string
+  email?: string
+  username?: string
+  firstName?: string
+  lastName?: string
+  tier?: string
 }
 
 /**
@@ -15,12 +15,12 @@ export interface NovitaUserInfo {
  * 注意：Cookie名称为 'token'（由 Novita 设置）
  */
 export async function getNovitaUserInfo(): Promise<NovitaUserInfo | null> {
-  const cookieStore = await cookies();
-  const tokenCookie = cookieStore.get('token');
+  const cookieStore = await cookies()
+  const tokenCookie = cookieStore.get('token')
 
   if (!tokenCookie) {
-    console.warn('Novita token cookie not found');
-    return null;
+    console.warn('Novita token cookie not found')
+    return null
   }
 
   try {
@@ -28,17 +28,17 @@ export async function getNovitaUserInfo(): Promise<NovitaUserInfo | null> {
       headers: {
         Authorization: `Bearer ${tokenCookie.value}`,
       },
-    });
+    })
 
     if (!response.ok) {
-      console.error('Failed to fetch Novita user info:', response.status, response.statusText);
-      return null;
+      console.error('Failed to fetch Novita user info:', response.status, response.statusText)
+      return null
     }
 
-    const data = await response.json();
-    return data;
+    const data = await response.json()
+    return data
   } catch (error) {
-    console.error('Failed to fetch Novita user info:', error);
-    return null;
+    console.error('Failed to fetch Novita user info:', error)
+    return null
   }
 }

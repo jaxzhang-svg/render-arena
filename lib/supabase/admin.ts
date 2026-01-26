@@ -1,5 +1,5 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
 /**
  * 创建使用 SERVICE_ROLE_KEY 的 Supabase 管理客户端
@@ -7,7 +7,7 @@ import { cookies } from 'next/headers';
  * 注意：此函数只能在服务端调用
  */
 export async function createAdminClient() {
-  const cookieStore = await cookies();
+  const cookieStore = await cookies()
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -15,18 +15,18 @@ export async function createAdminClient() {
     {
       cookies: {
         getAll() {
-          return cookieStore.getAll();
+          return cookieStore.getAll()
         },
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
-            );
+            )
           } catch {
             // 在 Server Component 中可能无法设置 Cookie，这是正常的
           }
         },
       },
     }
-  );
+  )
 }

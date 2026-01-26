@@ -15,7 +15,7 @@ This guide explains how to use the features provided by the Captured Surface Con
 - [Stopping the user from zooming in and out too far](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#stopping_the_user_from_zooming_in_and_out_too_far)
 - [Finished demo](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#finished_demo)
 
-## [Background](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#background)
+## [Background](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#background)
 
 The Screen Capture API is most commonly used to share another open tab or window on your device with other conference participants in a conferencing app, for example to demo a new feature or present a report.
 
@@ -53,7 +53,7 @@ controller.increaseZoomLevel();
 
 In this article we will walk through the code for a basic screen sharing app that shows how to implement such features.
 
-## [A note on permissions](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#a_note_on_permissions)
+## [A note on permissions](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#a_note_on_permissions)
 
 A website can control access to the Captured Surface Control API using the [`Permissions-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy) [`captured-surface-control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy/captured-surface-control) directive, or the equivalent [`<iframe>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe) [`allow`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe#allow) attribute value:
 
@@ -65,7 +65,7 @@ htmlCopy
 </iframe>
 ```
 
-Specifically, the [`forwardWheel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/forwardWheel "forwardWheel()"), [`increaseZoomLevel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/increaseZoomLevel "increaseZoomLevel()"), [`decreaseZoomLevel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/decreaseZoomLevel "decreaseZoomLevel()"), and [`resetZoomLevel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/resetZoomLevel "resetZoomLevel()") methods are controlled by this directive.
+Specifically, the [`forwardWheel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/forwardWheel 'forwardWheel()'), [`increaseZoomLevel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/increaseZoomLevel 'increaseZoomLevel()'), [`decreaseZoomLevel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/decreaseZoomLevel 'decreaseZoomLevel()'), and [`resetZoomLevel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/resetZoomLevel 'resetZoomLevel()') methods are controlled by this directive.
 
 The default allowlist for `captured-surface-control` is `self`, which lets any content within the same origin use Captured Surface Control.
 
@@ -73,7 +73,7 @@ If permission is allowed by the website policy, the user may then grant (or deny
 
 See also [Screen Capture API > Security considerations](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API#security_considerations).
 
-## [App HTML](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#app_html)
+## [App HTML](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#app_html)
 
 The markup for our sample app is as follows:
 
@@ -100,7 +100,7 @@ This contains two sets of [`<button>`](https://developer.mozilla.org/en-US/docs/
 
 Finally, we include a [`<video>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video) element to display the captured display surface into.
 
-## [App CSS](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#app_css)
+## [App CSS](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#app_css)
 
 The app CSS is minimal; it is worth noting that we have given the `<video>` a [`max-width`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/max-width) of `100%`, so that it is constrained inside the `<body>`. The `<video>` could grow dramatically when the captured display surface is embedded inside it (its size is the capture's intrinsic size), which could cause overflow issues if we didn't constrain it.
 
@@ -117,7 +117,7 @@ video {
 }
 ```
 
-## [Initial setup](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#initial_setup)
+## [Initial setup](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#initial_setup)
 
 In our first section of script, we define the variables we need to set up the app:
 
@@ -154,7 +154,7 @@ zoomControls.style.display = "none";
 stopBtn.disabled = true;
 ```
 
-## [Controlling screen capture](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#controlling_screen_capture)
+## [Controlling screen capture](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#controlling_screen_capture)
 
 Next up, we add `click` event listeners (using [`EventTarget.addEventListener()`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)) to the start and stop buttons, to start and stop screen capture when they are pressed.
 
@@ -167,11 +167,11 @@ stopBtn.addEventListener("click", stopCapture);
 
 The `startCapture()` function, which starts screen capture, looks like so. We first create a new `CaptureController`, and pass it into our [`MediaDisplayOptions`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia#options) object, along with a [`displaySurface`](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface) constraint that causes the app to recommend sharing browser tabs.
 
-Now it's time to capture our media; we do so using a [`MediaDevices.getDisplayMedia()`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia) call, to which we pass our options, and set the resulting promise as the value of the `<video>` element's [`srcObject`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/srcObject "srcObject") property. When it resolves, we continue the function by calling [`CaptureController.resetZoomLevel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/resetZoomLevel) and setting the `<output>` element's contents to `100%`. This is not strictly necessary, but it can be a bit confusing when you capture a tab to find it is already zoomed out or in. Setting the zoom level to `100%` on capture feels a bit more logical. These lines of code deal with the case where the app is refreshed without pressing "Stop Capture", then capture is started again.
+Now it's time to capture our media; we do so using a [`MediaDevices.getDisplayMedia()`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia) call, to which we pass our options, and set the resulting promise as the value of the `<video>` element's [`srcObject`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/srcObject 'srcObject') property. When it resolves, we continue the function by calling [`CaptureController.resetZoomLevel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/resetZoomLevel) and setting the `<output>` element's contents to `100%`. This is not strictly necessary, but it can be a bit confusing when you capture a tab to find it is already zoomed out or in. Setting the zoom level to `100%` on capture feels a bit more logical. These lines of code deal with the case where the app is refreshed without pressing "Stop Capture", then capture is started again.
 
 Our next step is to call [`CaptureController.getSupportedZoomLevels()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/getSupportedZoomLevels) to retrieve the zoom levels the captured display surface supports, and store the resulting array in the `zoomLevels` variable.
 
-Next, we use the controller's [`zoomlevelchange`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/zoomlevelchange_event "zoomlevelchange") event to detect when the zoom level is changed, print the current [`zoomLevel`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/zoomLevel "zoomLevel") to the `<output>` element, and call the user-defined `updateZoomButtonState()` function. This function will query the `zoomLevels` array to check whether the user can zoom in or out any further after each zoom change. We'll explain `updateZoomButtonState()` later on.
+Next, we use the controller's [`zoomlevelchange`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/zoomlevelchange_event 'zoomlevelchange') event to detect when the zoom level is changed, print the current [`zoomLevel`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/zoomLevel 'zoomLevel') to the `<output>` element, and call the user-defined `updateZoomButtonState()` function. This function will query the `zoomLevels` array to check whether the user can zoom in or out any further after each zoom change. We'll explain `updateZoomButtonState()` later on.
 
 We next unhide our zoom controls with `display: block`, enable our stop button, and disable our start button, so that the state of the controls makes sense after capture has bene started.
 
@@ -227,7 +227,7 @@ async function startCapture() {
 
 Now on to the definition of our `stopCapture()` function, which stops screen capture. We start this function by again calling [`CaptureController.resetZoomLevel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/resetZoomLevel) and setting the `<output>` element's contents to `100%` so the zoom level is reset. This deals with the case where you stop the capture by pressing "Stop Capture" and then start it again.
 
-We then loop through all of the [`MediaStreamTrack`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack) objects associated with the [`MediaStream`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) and [`stop()`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop "stop()") them all. We then call the `resetApp()` function, which sets the `<video>` element's `srcObject` back to `null`, hides the zoom controls, disables the stop button, and enables the start button.
+We then loop through all of the [`MediaStreamTrack`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack) objects associated with the [`MediaStream`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) and [`stop()`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop 'stop()') them all. We then call the `resetApp()` function, which sets the `<video>` element's `srcObject` back to `null`, hides the zoom controls, disables the stop button, and enables the start button.
 
 jsCopyPlay
 
@@ -246,7 +246,7 @@ function resetApp() {
 }
 ```
 
-## [Implementing zoom controls](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#implementing_zoom_controls)
+## [Implementing zoom controls](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#implementing_zoom_controls)
 
 In the next section of our script, we wire up our zoom buttons to appropriate `click` handler functions so we can zoom the captured display surface in and out. The functions they run when clicked are as follows:
 
@@ -285,7 +285,7 @@ async function resetZoom() {
 **Note:**
 It is generally a best practice to call `decreaseZoomLevel()` and `increaseZoomLevel()` from within a [`try...catch`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch) block because the zoom level could be changed asynchronously by an entity other than the application, which might lead to an error being thrown. For example, the user might directly interact with the captured surface to zoom in or out.
 
-When the zoom changes, the controller's [`zoomlevelchange`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/zoomlevelchange_event "zoomlevelchange") event fires, which causes the code we saw earlier in the `startCapture()` function to run, writing the updated zoom level to the `<output>` element and running the `updateZoomButtonState()` function to stop the user from zooming in and out too far.
+When the zoom changes, the controller's [`zoomlevelchange`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/zoomlevelchange_event 'zoomlevelchange') event fires, which causes the code we saw earlier in the `startCapture()` function to run, writing the updated zoom level to the `<output>` element and running the `updateZoomButtonState()` function to stop the user from zooming in and out too far.
 
 jsCopy
 
@@ -296,9 +296,9 @@ controller.addEventListener("zoomlevelchange", () => {
 });
 ```
 
-## [Forwarding wheel events to the captured display surface](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#forwarding_wheel_events_to_the_captured_display_surface)
+## [Forwarding wheel events to the captured display surface](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#forwarding_wheel_events_to_the_captured_display_surface)
 
-Earlier on, at bottom of the `startCapture()` function, we ran the `startForwarding()` function, which allows the captured display surface to be scrolled from the capturing app. This runs the [`CaptureController.forwardWheel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/forwardWheel) method, to which we pass a reference to the `<video>` element. When the resulting promise resolves, the browser starts to forward all [`wheel`](https://developer.mozilla.org/en-US/docs/Web/API/Element/wheel_event "wheel") events fired on the `<video>` to the captured tab or window, so it will scroll.
+Earlier on, at bottom of the `startCapture()` function, we ran the `startForwarding()` function, which allows the captured display surface to be scrolled from the capturing app. This runs the [`CaptureController.forwardWheel()`](https://developer.mozilla.org/en-US/docs/Web/API/CaptureController/forwardWheel) method, to which we pass a reference to the `<video>` element. When the resulting promise resolves, the browser starts to forward all [`wheel`](https://developer.mozilla.org/en-US/docs/Web/API/Element/wheel_event 'wheel') events fired on the `<video>` to the captured tab or window, so it will scroll.
 
 jsCopyPlay
 
@@ -312,7 +312,7 @@ async function startForwarding() {
 }
 ```
 
-## [Stopping the user from zooming in and out too far](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#stopping_the_user_from_zooming_in_and_out_too_far)
+## [Stopping the user from zooming in and out too far](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#stopping_the_user_from_zooming_in_and_out_too_far)
 
 Finally, it's time to define the `updateZoomButtonState()` function, which is run inside the `zoomlevelchange` event handler function you saw earlier. The problem this solves is that, if you try to zoom out below the minimum supported zoom level, or zoom in above the maximum supported zoom level, `decreaseZoomLevel()`/`increaseZoomLevel()` will throw an `InvalidStateError` [`DOMException`](https://developer.mozilla.org/en-US/docs/Web/API/DOMException).
 
@@ -335,7 +335,7 @@ function updateZoomButtonState() {
 }
 ```
 
-## [Finished demo](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control\#finished_demo)
+## [Finished demo](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Captured_Surface_Control#finished_demo)
 
 The finished demo renders like this:
 

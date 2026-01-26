@@ -127,7 +127,7 @@ vercel --env KEY1=value1 --env KEY2=value2
 
 ### Name
 
-> **💡 Note:** The  option has been deprecated in favor of
+> **💡 Note:** The option has been deprecated in favor of
 > [Vercel project linking](/docs/cli/project-linking), which allows you to link
 > a Vercel project to your local codebase when you run
 > .
@@ -241,7 +241,6 @@ The `--guidance` option displays suggested next steps and commands after deploym
 ```bash filename="terminal"
 vercel deploy --guidance
 ```
-
 
 ---
 

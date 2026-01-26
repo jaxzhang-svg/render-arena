@@ -12,7 +12,7 @@ This guide provides a walkthrough of typical usage of the Element Capture and Re
 - [The Region Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#the_region_capture_api)
 - [See also](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#see_also)
 
-## [Background](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#background)
+## [Background](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#background)
 
 By default, the [Screen Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API) captures an entire screen, window, or tab. The Element Capture and Region Capture APIs respectively enable you to restrict the captured stream to a specific rendered DOM tree, or to the part of the screen defined by a specific DOM tree's bounding box.
 
@@ -20,7 +20,7 @@ This is useful when you want to share only a limited region to cut down on unnec
 
 In addition, when capturing your web cam output, you can end up with one of those undesirable "infinite wormhole" or "hall of mirrors" type effects. The Element Capture and Region Capture APIs can help you avoid these kinds of problems too.
 
-## [When to use each API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#when_to_use_each_api)
+## [When to use each API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#when_to_use_each_api)
 
 The Element Capture API captures the element itself (and its descendants), whereas the Region Capture API captures the area of the browser tab defined by the bounding box of the target element. Element Capture will always show just the captured element, even if other DOM content overlaps it, whereas Region Capture can result in overlapping content being shown over the top of the content you intended to share.
 
@@ -31,11 +31,11 @@ There are legitimate use cases for both:
 
 In the next section we'll start with a basic Screen Capture API demo to illustrate the issues that the Element Capture and Region Capture APIs were created to solve.
 
-## [Screen Capture API demo](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#screen_capture_api_demo)
+## [Screen Capture API demo](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#screen_capture_api_demo)
 
 This demo uses the Screen Capture API to capture a window, screen, or tab, and broadcast the stream via a [`<video>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video) element on the same page. You can see it running live at [Screen Capture API example](https://mdn.github.io/dom-examples/screen-capture-api/basic-screen-capture/) (also see the [source code](https://github.com/mdn/dom-examples/tree/main/screen-capture-api/basic-screen-capture)).
 
-### [HTML](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#html)
+### [HTML](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#html)
 
 The HTML starts off with a main heading and intro text, then includes two [`<button>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button) elements to start and stop the capture:
 
@@ -71,7 +71,7 @@ htmlCopy
 </div>
 ```
 
-### [CSS](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#css)
+### [CSS](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#css)
 
 The CSS for this demo is mostly unremarkable, but the following few rules are worth explaining. We've hidden the rest of the CSS for brevity.
 
@@ -136,7 +136,7 @@ video {
 
 Layout shift can also cause problems when using the Region and Element Capture APIs, hence this code is included in all three demos.
 
-### [JavaScript](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#javascript)
+### [JavaScript](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#javascript)
 
 The JavaScript for this example is adapted from the [Streaming screen capture](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Using_Screen_Capture#streaming_screen_capture) example in our "Using the Screen Capture API" guide. We won't repeat the full code explanation here; we'll just explain the most relevant capture code.
 
@@ -170,7 +170,7 @@ async function startCapture() {
 }
 ```
 
-## [Screen Capture API issues](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#screen_capture_api_issues)
+## [Screen Capture API issues](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#screen_capture_api_issues)
 
 Run the demo above in a [supporting browser](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API#browser_compatibility), click "Start Capture", and select the same tab the demo is running in. You will see the "hall of mirrors effect", as mentioned earlier:
 
@@ -178,7 +178,7 @@ Run the demo above in a [supporting browser](https://developer.mozilla.org/en-US
 
 This obviously isn't ideal, and would cause issues in any kind of conferencing application with a built-in "share screen" option.
 
-## [The Element Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#the_element_capture_api)
+## [The Element Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#the_element_capture_api)
 
 The Element Capture API restricts the captured region to a specified rendered DOM tree (a selected element and its descendants). In this section we will explore a second demo that is identical to the one presented above, except that it uses Element Capture on top of basic Screen Capture. See this demo running live at [Element Capture API example](https://mdn.github.io/dom-examples/screen-capture-api/element-capture/) (also see the [source code](https://github.com/mdn/dom-examples/tree/main/screen-capture-api/element-capture)).
 
@@ -213,7 +213,7 @@ async function startCapture() {
 
 1. Here, we start by grabbing the media stream as before, using `mediaDevices.getDisplayMedia()`.
 2. We then isolate the video track from the stream using [`MediaStream.getVideoTracks()`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream/getVideoTracks).
-3. We create the necessary `restrictionTarget` object to apply the restriction to the video track by running [`RestrictionTarget.fromElement()`](https://developer.mozilla.org/en-US/docs/Web/API/RestrictionTarget/fromElement_static "RestrictionTarget.fromElement()"), passing to it the DOM element reference we grabbed earlier.
+3. We create the necessary `restrictionTarget` object to apply the restriction to the video track by running [`RestrictionTarget.fromElement()`](https://developer.mozilla.org/en-US/docs/Web/API/RestrictionTarget/fromElement_static 'RestrictionTarget.fromElement()'), passing to it the DOM element reference we grabbed earlier.
 4. We apply the restriction target to the track by calling [`BrowserCaptureMediaStreamTrack.restrictTo()`](https://developer.mozilla.org/en-US/docs/Web/API/BrowserCaptureMediaStreamTrack/restrictTo) on it, passing it the `restrictionTarget` object.
 5. Once all the above is done, we then set the `<video>` element's `srcObject` property value to the stream, to start broadcasting it.
 
@@ -228,7 +228,7 @@ jsCopy
 await track.restrictTo(null);
 ```
 
-### [Restrictions on the Element Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#restrictions_on_the_element_capture_api)
+### [Restrictions on the Element Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#restrictions_on_the_element_capture_api)
 
 To ensure that the element is **eligible for restriction**, that is, it will be captured when chosen as the restriction target element, it must form a [stacking context](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Positioned_layout/Stacking_context) and be flattened in 3D space.
 
@@ -251,7 +251,7 @@ The [`isolation`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Pro
 
 For the full list of restrictions on the elements that can be used as restriction targets, see the [`RestrictionTarget.fromElement()`](https://developer.mozilla.org/en-US/docs/Web/API/RestrictionTarget/fromElement_static#element) reference page.
 
-## [The Region Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#the_region_capture_api)
+## [The Region Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#the_region_capture_api)
 
 The Region Capture API has a very similar effect to the Element Capture API, except that rather than restricting the captured region to a specific rendered DOM tree, it crops the stream to the area of the current browser tab defined by the bounding box of the target element. Let's look at a demo and then explore the differences between the two in more detail later on.
 
@@ -287,7 +287,7 @@ async function startCapture() {
 ```
 
 1. As before, we start by grabbing the media stream using `mediaDevices.getDisplayMedia()`, then isolate the video track from the stream using [`MediaStream.getVideoTracks()`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream/getVideoTracks).
-2. We create the necessary `cropTarget` object to apply the crop to the video track by running [`fromElement()`](https://developer.mozilla.org/en-US/docs/Web/API/CropTarget/fromElement_static "fromElement()"), passing to it the DOM element reference we grabbed earlier.
+2. We create the necessary `cropTarget` object to apply the crop to the video track by running [`fromElement()`](https://developer.mozilla.org/en-US/docs/Web/API/CropTarget/fromElement_static 'fromElement()'), passing to it the DOM element reference we grabbed earlier.
 3. We apply the crop target to the track by calling [`BrowserCaptureMediaStreamTrack.cropTo()`](https://developer.mozilla.org/en-US/docs/Web/API/BrowserCaptureMediaStreamTrack/cropTo) on it, passing it the `cropTarget` object.
 4. Once all the above is done, we then set the `<video>` element's `srcObject` property value to the stream, to start broadcasting it.
 
@@ -302,7 +302,7 @@ jsCopy
 await track.cropTo(null);
 ```
 
-### [Restrictions on the Region Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#restrictions_on_the_region_capture_api)
+### [Restrictions on the Region Capture API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#restrictions_on_the_region_capture_api)
 
 Region Capture doesn't have the same level of restrictions as Element Capture — it is cropping the stream to a particular size, rather than broadcasting a specific rendered DOM tree, so it doesn't require this rule:
 
@@ -321,7 +321,7 @@ cssCopy
 
 However, there are still restrictions on the elements that can be used as crop targets. For the full list, see the [`CropTarget.fromElement()`](https://developer.mozilla.org/en-US/docs/Web/API/CropTarget/fromElement_static#element) reference page.
 
-## [See also](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture\#see_also)
+## [See also](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Element_Region_Capture#see_also)
 
 - [Capture a video stream from any element](https://developer.chrome.com/docs/web-platform/element-capture) on developer.chrome.com (2025)
 - [Better tab sharing with Region Capture](https://developer.chrome.com/docs/web-platform/region-capture) on developer.chrome.com (2023)

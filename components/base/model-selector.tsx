@@ -49,14 +49,14 @@ export function ModelSelector({
       <Menu.Root>
         <Menu.Trigger
           className={cn(
-            'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors',
+            'inline-flex items-center justify-center rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
             config.triggerHeight,
             'cursor-pointer gap-2',
             config.padding,
             variant === 'minimal'
               ? 'hover:bg-[#F5F5F5]' // Minimal: no background, hover only
               : 'bg-white hover:bg-[#F5F5F5]', // Default: white background with hover
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+            'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
             'w-full',
             className
           )}
@@ -69,7 +69,7 @@ export function ModelSelector({
             className="rounded-sm"
             style={{ width: config.iconSize, height: config.iconSize }}
           />
-          <span className={cn('font-sans font-medium text-[#4f4e4a] truncate', config.textSize)}>
+          <span className={cn('truncate font-sans font-medium text-[#4f4e4a]', config.textSize)}>
             {selectedModel.name}
           </span>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="ml-auto">
@@ -89,26 +89,28 @@ export function ModelSelector({
                 'z-50 min-w-[8rem] overflow-hidden rounded-[14px] border border-[#e7e6e2] bg-white shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]'
               )}
             >
-              <div className="max-h-[400px] overflow-y-auto flex flex-col gap-[4px] pt-[12px] p-[7px] pt-0 scrollbar-hide">
-                {modelGroups.map((group) => {
-                  if (group.items.length === 0) return null;
+              <div className="scrollbar-hide flex max-h-[400px] flex-col gap-[4px] overflow-y-auto p-[7px] pt-0 pt-[12px]">
+                {modelGroups.map(group => {
+                  if (group.items.length === 0) return null
 
                   return (
-                    <div key={group.group} className="flex flex-col mb-2">
-                      <p className="text-[#9e9c98] text-[12px] font-medium px-[8px] py-1 uppercase tracking-tight">
+                    <div key={group.group} className="mb-2 flex flex-col">
+                      <p className="px-[8px] py-1 text-[12px] font-medium tracking-tight text-[#9e9c98] uppercase">
                         {group.group}
                       </p>
-                      {group.items.map((model) => (
+                      {group.items.map(model => (
                         <Menu.Item
                           key={model.id}
-                          onClick={() => onModelChange({
-                            ...model,
-                            group: group.group,
-                            color: group.color,
-                            icon: group.icon,
-                          })}
+                          onClick={() =>
+                            onModelChange({
+                              ...model,
+                              group: group.group,
+                              color: group.color,
+                              icon: group.icon,
+                            })
+                          }
                           className={cn(
-                            'relative flex cursor-pointer select-none items-center rounded-[10px] px-[8px] outline-none transition-colors',
+                            'relative flex cursor-pointer items-center rounded-[10px] px-[8px] transition-colors outline-none select-none',
                             'h-[36px] w-full',
                             selectedModel.id === model.id
                               ? 'bg-[#f5f5f5]'
@@ -121,15 +123,15 @@ export function ModelSelector({
                             alt={model.name}
                             width={20}
                             height={20}
-                            className="size-[20px] rounded-sm shrink-0"
+                            className="size-[20px] shrink-0 rounded-sm"
                           />
-                          <span className="text-[#292827] text-[15px] font-normal leading-tight truncate">
+                          <span className="truncate text-[15px] leading-tight font-normal text-[#292827]">
                             {model.name}
                           </span>
                         </Menu.Item>
                       ))}
                     </div>
-                  );
+                  )
                 })}
               </div>
             </Menu.Popup>

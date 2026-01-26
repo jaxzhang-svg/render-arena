@@ -1,23 +1,23 @@
-import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 
 /**
  * 获取当前登录用户信息
- * 
+ *
  * 返回 Supabase Auth 用户和 public.users 表中的额外信息
  */
 export async function GET() {
   try {
-    const supabase = await createClient();
-    
+    const supabase = await createClient()
+
     // 从 Supabase Auth 获取当前用户
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // 从 public.users 表获取完整用户资料
@@ -25,7 +25,7 @@ export async function GET() {
       .from('users')
       .select('id, email, username, first_name, last_name, tier, created_at, updated_at')
       .eq('id', user.id)
-      .single();
+      .single()
 
     if (dbError) {
       // 用户在 auth.users 中存在但在 public.users 中不存在
@@ -38,7 +38,7 @@ export async function GET() {
           created_at: user.created_at,
         },
         profile: null,
-      });
+      })
     }
 
     return NextResponse.json({
@@ -48,12 +48,9 @@ export async function GET() {
         ...user.user_metadata,
       },
       profile,
-    });
+    })
   } catch (error) {
-    console.error('Error fetching user:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error('Error fetching user:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

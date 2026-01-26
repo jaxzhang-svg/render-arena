@@ -1,14 +1,15 @@
-<page>
----
+## <page>
+
 title: Overview · Cloudflare Stream docs
 description: Cloudflare Stream lets you or your end users upload, store, encode,
-  and deliver live and on-demand video with one API, without configuring or
-  maintaining infrastructure.
+and deliver live and on-demand video with one API, without configuring or
+maintaining infrastructure.
 lastUpdated: 2025-03-14T16:33:10.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/
-  md: https://developers.cloudflare.com/stream/index.md
+html: https://developers.cloudflare.com/stream/
+md: https://developers.cloudflare.com/stream/index.md
+
 ---
 
 Serverless live and on-demand video streaming
@@ -21,7 +22,7 @@ Cloudflare Stream runs on [Cloudflare’s global cloud network](https://www.clou
 
 [Get started ](https://developers.cloudflare.com/stream/get-started/)[Stream dashboard](https://dash.cloudflare.com/?to=/:account/stream)
 
-***
+---
 
 ## Features
 
@@ -49,7 +50,7 @@ Understand and analyze which videos and live streams are viewed most and break d
 
 [Explore Analytics](https://developers.cloudflare.com/stream/getting-analytics/)
 
-***
+---
 
 ## More resources
 
@@ -59,13 +60,14 @@ Join the Stream developer community
 
 </page>
 
-<page>
----
+## <page>
+
 title: 404 - Page Not Found · Cloudflare Stream docs
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/404/
-  md: https://developers.cloudflare.com/stream/404/index.md
+html: https://developers.cloudflare.com/stream/404/
+md: https://developers.cloudflare.com/stream/404/index.md
+
 ---
 
 # 404
@@ -74,15 +76,16 @@ Check the URL, try using our [search](https://developers.cloudflare.com/search/)
 
 </page>
 
-<page>
----
+## <page>
+
 title: Changelog · Cloudflare Stream docs
 description: Subscribe to RSS
 lastUpdated: 2025-02-13T19:35:19.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/changelog/
-  md: https://developers.cloudflare.com/stream/changelog/index.md
+html: https://developers.cloudflare.com/stream/changelog/
+md: https://developers.cloudflare.com/stream/changelog/index.md
+
 ---
 
 [Subscribe to RSS](https://developers.cloudflare.com/stream/changelog/index.xml)
@@ -231,10 +234,10 @@ Generating MP4 downloads of live stream recordings is now significantly faster. 
 
 Stream now supports adding multiple audio tracks to an existing video upload. This allows you to:
 
-* Provide viewers with audio tracks in multiple languages
-* Provide dubbed audio tracks, or audio commentary tracks (ex: Director’s Commentary)
-* Allow your users to customize the customize the audio mix, by providing separate audio tracks for music, speech or other audio tracks.
-* Provide Audio Description tracks to ensure your content is accessible. ([WCAG 2.0 Guideline 1.2 1](https://www.w3.org/TR/WCAG20/#media-equiv-audio-desc-only))
+- Provide viewers with audio tracks in multiple languages
+- Provide dubbed audio tracks, or audio commentary tracks (ex: Director’s Commentary)
+- Allow your users to customize the customize the audio mix, by providing separate audio tracks for music, speech or other audio tracks.
+- Provide Audio Description tracks to ensure your content is accessible. ([WCAG 2.0 Guideline 1.2 1](https://www.w3.org/TR/WCAG20/#media-equiv-audio-desc-only))
 
 To request an invite to the beta, refer to [this post](https://community.cloudflare.com/t/new-in-beta-support-for-multiple-audio-tracks/439629).
 
@@ -498,10 +501,10 @@ Cloudflare Stream now delivers video using 3-10x less bandwidth, with no reducti
 
 A brand new version of the Stream Player is now available for preview. New features include:
 
-* Unified controls across desktop and mobile devices
-* Keyboard shortcuts
-* Intelligent mouse cursor interactions with player controls
-* Phased out support for Internet Explorer 11
+- Unified controls across desktop and mobile devices
+- Keyboard shortcuts
+- Intelligent mouse cursor interactions with player controls
+- Phased out support for Internet Explorer 11
 
 For more, refer to [this post](https://community.cloudflare.com/t/announcing-the-preview-build-for-stream-player-2-0/243095) on the Cloudflare Community Forum.
 
@@ -539,32 +542,34 @@ Cloudflare now emails you if your account is using 75% or more of your prepaid v
 
 </page>
 
-<page>
----
+## <page>
+
 title: Edit videos · Cloudflare Stream docs
 lastUpdated: 2024-08-30T13:02:26.000Z
 chatbotDeprioritize: true
 source_url:
-  html: https://developers.cloudflare.com/stream/edit-videos/
-  md: https://developers.cloudflare.com/stream/edit-videos/index.md
+html: https://developers.cloudflare.com/stream/edit-videos/
+md: https://developers.cloudflare.com/stream/edit-videos/index.md
+
 ---
 
-* [Add additional audio tracks](https://developers.cloudflare.com/stream/edit-videos/adding-additional-audio-tracks/)
-* [Add captions](https://developers.cloudflare.com/stream/edit-videos/adding-captions/)
-* [Apply watermarks](https://developers.cloudflare.com/stream/edit-videos/applying-watermarks/)
-* [Add player enhancements](https://developers.cloudflare.com/stream/edit-videos/player-enhancements/)
-* [Clip videos](https://developers.cloudflare.com/stream/edit-videos/video-clipping/)
+- [Add additional audio tracks](https://developers.cloudflare.com/stream/edit-videos/adding-additional-audio-tracks/)
+- [Add captions](https://developers.cloudflare.com/stream/edit-videos/adding-captions/)
+- [Apply watermarks](https://developers.cloudflare.com/stream/edit-videos/applying-watermarks/)
+- [Add player enhancements](https://developers.cloudflare.com/stream/edit-videos/player-enhancements/)
+- [Clip videos](https://developers.cloudflare.com/stream/edit-videos/video-clipping/)
 
 </page>
 
-<page>
----
+## <page>
+
 title: Examples · Cloudflare Stream docs
 lastUpdated: 2025-08-18T14:27:42.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/
-  md: https://developers.cloudflare.com/stream/examples/index.md
+html: https://developers.cloudflare.com/stream/examples/
+md: https://developers.cloudflare.com/stream/examples/index.md
+
 ---
 
 [dash.js](https://developers.cloudflare.com/stream/examples/dash-js/)
@@ -613,19 +618,20 @@ source_url:
 
 </page>
 
-<page>
----
+## <page>
+
 title: Frequently asked questions about Cloudflare Stream · Cloudflare Stream docs
 description: Cloudflare decides on which bitrate, resolution, and codec is best
-  for you. We deliver all videos to industry standard H264 codec. We use a few
-  different adaptive streaming levels from 360p to 1080p to ensure smooth
-  streaming for your audience watching on different devices and bandwidth
-  constraints.
+for you. We deliver all videos to industry standard H264 codec. We use a few
+different adaptive streaming levels from 360p to 1080p to ensure smooth
+streaming for your audience watching on different devices and bandwidth
+constraints.
 lastUpdated: 2025-11-17T14:08:01.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/faq/
-  md: https://developers.cloudflare.com/stream/faq/index.md
+html: https://developers.cloudflare.com/stream/faq/
+md: https://developers.cloudflare.com/stream/faq/index.md
+
 ---
 
 ## Stream
@@ -636,19 +642,19 @@ Cloudflare decides on which bitrate, resolution, and codec is best for you. We d
 
 ### Can I download original video files from Stream?
 
-You cannot download the *exact* input file that you uploaded. However, depending on your use case, you can use the [Downloadable Videos](https://developers.cloudflare.com/stream/viewing-videos/download-videos/) feature to get encoded MP4s for use cases like offline viewing.
+You cannot download the _exact_ input file that you uploaded. However, depending on your use case, you can use the [Downloadable Videos](https://developers.cloudflare.com/stream/viewing-videos/download-videos/) feature to get encoded MP4s for use cases like offline viewing.
 
 ### Is there a limit to the amount of videos I can upload?
 
-* By default, a video upload can be at most 30 GB.
+- By default, a video upload can be at most 30 GB.
 
-* By default, you can have up to 120 videos queued or being encoded simultaneously. Videos in the `ready` status are playable but may still be encoding certain quality levels until the `pctComplete` reaches 100. Videos in the `error`, `ready`, or `pendingupload` state do not count toward this limit. If you need the concurrency limit raised, [contact Cloudflare support](https://developers.cloudflare.com/support/contacting-cloudflare-support/) explaining your use case and why you would like the limit raised.
+- By default, you can have up to 120 videos queued or being encoded simultaneously. Videos in the `ready` status are playable but may still be encoding certain quality levels until the `pctComplete` reaches 100. Videos in the `error`, `ready`, or `pendingupload` state do not count toward this limit. If you need the concurrency limit raised, [contact Cloudflare support](https://developers.cloudflare.com/support/contacting-cloudflare-support/) explaining your use case and why you would like the limit raised.
 
 Note
 
 The limit to the number of videos only applies to videos being uploaded to Cloudflare Stream. This limit is not related to the number of end users streaming videos.
 
-* An account cannot upload videos if the total video duration exceeds the video storage capacity purchased.
+- An account cannot upload videos if the total video duration exceeds the video storage capacity purchased.
 
 Limits apply to Direct Creator Uploads at the time of upload URL creation.
 
@@ -686,13 +692,13 @@ Cloudflare Stream is not available on Chromium, as Chromium does not support H.2
 
 If you are producing a brand new file for Cloudflare Stream, we recommend you use the following settings:
 
-* MP4 containers, AAC audio codec, H264 video codec, 30 or below frames per second
-* moov atom should be at the front of the file (Fast Start)
-* H264 progressive scan (no interlacing)
-* H264 high profile
-* Closed GOP
-* Content should be encoded and uploaded in the same frame rate it was recorded
-* Mono or Stereo audio (Stream will mix audio tracks with more than 2 channels down to stereo)
+- MP4 containers, AAC audio codec, H264 video codec, 30 or below frames per second
+- moov atom should be at the front of the file (Fast Start)
+- H264 progressive scan (no interlacing)
+- H264 high profile
+- Closed GOP
+- Content should be encoded and uploaded in the same frame rate it was recorded
+- Mono or Stereo audio (Stream will mix audio tracks with more than 2 channels down to stereo)
 
 Below are bitrate recommendations for encoding new videos for Stream:
 
@@ -738,24 +744,25 @@ If multiple players are on the same page, you can lazy load any players that are
 
 </page>
 
-<page>
----
+## <page>
+
 title: Get started · Cloudflare Stream docs
 description: You can upload videos using the API or directly on the Stream page
-  of the Cloudflare dashboard.
+of the Cloudflare dashboard.
 lastUpdated: 2025-11-17T14:08:01.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/get-started/
-  md: https://developers.cloudflare.com/stream/get-started/index.md
+html: https://developers.cloudflare.com/stream/get-started/
+md: https://developers.cloudflare.com/stream/get-started/index.md
+
 ---
 
 Media Transformations is now GA:
 
 Billing for Media Transformations will begin on November 1st, 2025.
 
-* [Upload your first video](https://developers.cloudflare.com/stream/get-started#upload-your-first-video)
-* [Start your first live stream](https://developers.cloudflare.com/stream/get-started#start-your-first-live-stream)
+- [Upload your first video](https://developers.cloudflare.com/stream/get-started#upload-your-first-video)
+- [Start your first live stream](https://developers.cloudflare.com/stream/get-started#start-your-first-live-stream)
 
 ## Upload your first video
 
@@ -834,8 +841,8 @@ The embed code above can also be found on the **Stream** page of the Cloudflare 
 
 ### Next steps
 
-* [Edit your video](https://developers.cloudflare.com/stream/edit-videos/) and add captions or watermarks
-* [Customize the Stream player](https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/)
+- [Edit your video](https://developers.cloudflare.com/stream/edit-videos/) and add captions or watermarks
+- [Customize the Stream player](https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/)
 
 ## Start your first live stream
 
@@ -902,8 +909,8 @@ The embed code above can also be found on the **Stream** page of the Cloudflare 
 
 ### Next steps
 
-* [Secure your stream](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/)
-* [View live viewer counts](https://developers.cloudflare.com/stream/getting-analytics/live-viewer-count/)
+- [Secure your stream](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/)
+- [View live viewer counts](https://developers.cloudflare.com/stream/getting-analytics/live-viewer-count/)
 
 ## Accessibility considerations
 
@@ -911,59 +918,61 @@ To make your video content more accessible, include [captions](https://developer
 
 </page>
 
-<page>
----
+## <page>
+
 title: Analytics · Cloudflare Stream docs
 description: "Stream provides server-side analytics that can be used to:"
 lastUpdated: 2025-09-09T16:21:39.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/getting-analytics/
-  md: https://developers.cloudflare.com/stream/getting-analytics/index.md
+html: https://developers.cloudflare.com/stream/getting-analytics/
+md: https://developers.cloudflare.com/stream/getting-analytics/index.md
+
 ---
 
 Stream provides server-side analytics that can be used to:
 
-* Identify most viewed video content in your app or platform.
-* Identify where content is viewed from and when it is viewed.
-* Understand which creators on your platform are publishing the most viewed content, and analyze trends.
+- Identify most viewed video content in your app or platform.
+- Identify where content is viewed from and when it is viewed.
+- Understand which creators on your platform are publishing the most viewed content, and analyze trends.
 
 You can access data on either:
 
-* The Stream **Analytics** page of the Cloudflare dashboard.
+- The Stream **Analytics** page of the Cloudflare dashboard.
 
   [Go to **Analytics**](https://dash.cloudflare.com/?to=/:account/stream/analytics)
 
-* The [GraphQL Analytics API](https://developers.cloudflare.com/stream/getting-analytics/fetching-bulk-analytics).
+- The [GraphQL Analytics API](https://developers.cloudflare.com/stream/getting-analytics/fetching-bulk-analytics).
 
 Users will need the **Analytics** permission to access analytics via Dash or GraphQL.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Manage videos · Cloudflare Stream docs
 lastUpdated: 2024-08-22T17:44:03.000Z
 chatbotDeprioritize: true
 source_url:
-  html: https://developers.cloudflare.com/stream/manage-video-library/
-  md: https://developers.cloudflare.com/stream/manage-video-library/index.md
----
+html: https://developers.cloudflare.com/stream/manage-video-library/
+md: https://developers.cloudflare.com/stream/manage-video-library/index.md
 
+---
 
 </page>
 
-<page>
----
+## <page>
+
 title: Pricing · Cloudflare Stream docs
 description: "Cloudflare Stream lets you broadcast, store, and deliver video
-  using a simple, unified API and simple pricing. Stream bills on two dimensions
-  only:"
+using a simple, unified API and simple pricing. Stream bills on two dimensions
+only:"
 lastUpdated: 2025-11-17T14:08:01.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/pricing/
-  md: https://developers.cloudflare.com/stream/pricing/index.md
+html: https://developers.cloudflare.com/stream/pricing/
+md: https://developers.cloudflare.com/stream/pricing/index.md
+
 ---
 
 Media Transformations is now GA:
@@ -974,8 +983,8 @@ Billing for Media Transformations will begin on November 1st, 2025.
 
 Cloudflare Stream lets you broadcast, store, and deliver video using a simple, unified API and simple pricing. Stream bills on two dimensions only:
 
-* **Minutes of video stored:** the total duration of uploaded video and live recordings
-* **Minutes of video delivered:** the total duration of video delivered to end users
+- **Minutes of video stored:** the total duration of uploaded video and live recordings
+- **Minutes of video delivered:** the total duration of video delivered to end users
 
 On-demand and live video are billed the same way.
 
@@ -989,17 +998,17 @@ Storage is a prepaid pricing dimension purchased in increments of $5 per 1,000 m
 
 Storage is consumed by:
 
-* Original videos uploaded to your account
-* Recordings of live broadcasts
-* The reserved `maxDurationSeconds` for Direct Creator and TUS uploads which have not been completed. After these uploads are complete or the upload link expires, this reservation is released.
+- Original videos uploaded to your account
+- Recordings of live broadcasts
+- The reserved `maxDurationSeconds` for Direct Creator and TUS uploads which have not been completed. After these uploads are complete or the upload link expires, this reservation is released.
 
 Storage is not consumed by:
 
-* Videos in an unplayable or errored state
-* Expired Direct Creator upload links
-* Deleted videos
-* Downloadable files generated for [MP4 Downloads](https://developers.cloudflare.com/stream/viewing-videos/download-videos/)
-* Multiple quality levels that Stream generates for each uploaded original
+- Videos in an unplayable or errored state
+- Expired Direct Creator upload links
+- Deleted videos
+- Downloadable files generated for [MP4 Downloads](https://developers.cloudflare.com/stream/viewing-videos/download-videos/)
+- Multiple quality levels that Stream generates for each uploaded original
 
 Storage consumption is rounded up to the second of video duration; file size does not matter. Video stored in Stream does not incur additional storage fees from other storage products such as R2.
 
@@ -1007,7 +1016,7 @@ Note
 
 If you run out of storage, you will not be able to upload new videos or start new live streams until you purchase more storage or delete videos.
 
-Enterprise customers *may* continue to upload new content beyond their contracted quota without interruption.
+Enterprise customers _may_ continue to upload new content beyond their contracted quota without interruption.
 
 ### Minutes of video delivered
 
@@ -1017,17 +1026,17 @@ Delivery is a post-paid, usage-based pricing dimension billed at $1 per 1,000 mi
 
 Delivery is counted for the following uses:
 
-* Playback on the web or an app using [Stream's built-in player](https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/) or the [HLS or DASH manifests](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/)
-* MP4 Downloads
-* Simulcasting via SRT or RTMP live outputs
+- Playback on the web or an app using [Stream's built-in player](https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/) or the [HLS or DASH manifests](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/)
+- MP4 Downloads
+- Simulcasting via SRT or RTMP live outputs
 
 Delivery is counted by HTTP requests for video segments or parts of the MP4. Therefore:
 
-* Client-side preloading and buffering is counted as billable delivery.
-* Content played from client-side/browser cache is *not* billable, like a short looping video. Some mobile app player libraries do not cache HLS segments by default.
-* MP4 Downloads are billed by percentage of the file delivered.
+- Client-side preloading and buffering is counted as billable delivery.
+- Content played from client-side/browser cache is _not_ billable, like a short looping video. Some mobile app player libraries do not cache HLS segments by default.
+- MP4 Downloads are billed by percentage of the file delivered.
 
-Minutes delivered for web playback (Stream Player, HLS, and DASH) are rounded to the *segment* length: for uploaded content, segments are four seconds. Live broadcast and recording segments are determined by the keyframe interval or GOP size of the original broadcast.
+Minutes delivered for web playback (Stream Player, HLS, and DASH) are rounded to the _segment_ length: for uploaded content, segments are four seconds. Live broadcast and recording segments are determined by the keyframe interval or GOP size of the original broadcast.
 
 ### Example scenarios
 
@@ -1041,10 +1050,10 @@ The cost to store a video is based only on its duration, not its file size. If t
 
 **If I make a Direct Creator Upload link with a maximum duration (`maxDurationSeconds`) of 600 seconds which expires in 1 hour, how is storage consumed?**
 
-* Ten minutes (600 seconds) will be subtracted from your available storage immediately.
-* If the link is unused in one hour, those 10 minutes will be released.
-* If the creator link is used to upload a five minute video, when the video is uploaded and processed, the 10 minute reservation will be released and the true five minute duration of the file will be counted.
-* If the creator link is used to upload a five minute video but it fails to encode, the video will be marked as errored, the reserved storage will be released, and no storage use will be counted.
+- Ten minutes (600 seconds) will be subtracted from your available storage immediately.
+- If the link is unused in one hour, those 10 minutes will be released.
+- If the creator link is used to upload a five minute video, when the video is uploaded and processed, the 10 minute reservation will be released and the true five minute duration of the file will be counted.
+- If the creator link is used to upload a five minute video but it fails to encode, the video will be marked as errored, the reserved storage will be released, and no storage use will be counted.
 
 **I am broadcasting live, but no one is watching. How much does that cost?**
 
@@ -1062,37 +1071,38 @@ Yes, contact our [Sales Team](https://www.cloudflare.com/plans/enterprise/contac
 
 After November 1st, 2025, Media Transforamtions and Image Transformations will use the same subscriptions and usage metrics.
 
-* Generating a still frame (single image) from a video counts as 1 transformation.
-* Generating an optimized video or extracting audio counts as 1 transformation *per second of the output* content.
-* Each unique transformation, as determined by input and unique combination of flags, is only billed once per calendar month.
-* All Media and Image Transformations cost $0.50 per 1,000 monthly unique transformation operations, with a free monthly allocation of 5,000.
+- Generating a still frame (single image) from a video counts as 1 transformation.
+- Generating an optimized video or extracting audio counts as 1 transformation _per second of the output_ content.
+- Each unique transformation, as determined by input and unique combination of flags, is only billed once per calendar month.
+- All Media and Image Transformations cost $0.50 per 1,000 monthly unique transformation operations, with a free monthly allocation of 5,000.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Stream API Reference · Cloudflare Stream docs
 lastUpdated: 2024-12-16T22:33:26.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-api/
-  md: https://developers.cloudflare.com/stream/stream-api/index.md
----
+html: https://developers.cloudflare.com/stream/stream-api/
+md: https://developers.cloudflare.com/stream/stream-api/index.md
 
+---
 
 </page>
 
-<page>
----
+## <page>
+
 title: Stream live video · Cloudflare Stream docs
 description: Cloudflare Stream lets you or your users stream live video, and
-  play live video in your website or app, without managing and configuring any
-  of your own infrastructure.
+play live video in your website or app, without managing and configuring any
+of your own infrastructure.
 lastUpdated: 2024-08-13T19:56:56.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/
-  md: https://developers.cloudflare.com/stream/stream-live/index.md
+html: https://developers.cloudflare.com/stream/stream-live/
+md: https://developers.cloudflare.com/stream/stream-live/index.md
+
 ---
 
 Cloudflare Stream lets you or your users [stream live video](https://www.cloudflare.com/learning/video/what-is-live-streaming/), and play live video in your website or app, without managing and configuring any of your own infrastructure.
@@ -1142,37 +1152,38 @@ After the live stream ends, you can [replay live stream recordings](https://deve
 
 Stream Live is billed identically to the rest of Cloudflare Stream.
 
-* You pay $5 per 1000 minutes of recorded video.
-* You pay $1 per 1000 minutes of delivered video.
+- You pay $5 per 1000 minutes of recorded video.
+- You pay $1 per 1000 minutes of delivered video.
 
 All Stream Live videos are automatically recorded. There is no additional cost for encoding and packaging live videos.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Transform videos · Cloudflare Stream docs
 description: You can optimize and manipulate videos stored outside of Cloudflare
-  Stream with Media Transformations. Transformed videos and images are served
-  from one of your zones on Cloudflare.
+Stream with Media Transformations. Transformed videos and images are served
+from one of your zones on Cloudflare.
 lastUpdated: 2025-10-07T04:57:08.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/transform-videos/
-  md: https://developers.cloudflare.com/stream/transform-videos/index.md
+html: https://developers.cloudflare.com/stream/transform-videos/
+md: https://developers.cloudflare.com/stream/transform-videos/index.md
+
 ---
 
 Media Transformations is now GA:
 
 Billing for Media Transformations will begin on November 1st, 2025.
 
-You can optimize and manipulate videos stored *outside* of Cloudflare Stream with Media Transformations. Transformed videos and images are served from one of your zones on Cloudflare.
+You can optimize and manipulate videos stored _outside_ of Cloudflare Stream with Media Transformations. Transformed videos and images are served from one of your zones on Cloudflare.
 
 To transform a video or image, you must [enable transformations](https://developers.cloudflare.com/stream/transform-videos/#getting-started) for your zone. If your zone already has Image Transformations enabled, you can also optimize videos with Media Transformations.
 
 ## Getting started
 
-You can dynamically optimize and generate still images from videos that are stored *outside* of Cloudflare Stream with Media Transformations.
+You can dynamically optimize and generate still images from videos that are stored _outside_ of Cloudflare Stream with Media Transformations.
 
 Cloudflare will automatically cache every transformed video or image on our global network so that you store only the original image at your origin.
 
@@ -1194,10 +1205,10 @@ You can convert and resize videos by requesting them via a specially-formatted U
 https://example.com/cdn-cgi/media/<OPTIONS>/<SOURCE-VIDEO>
 ```
 
-* `example.com`: Your website or zone on Cloudflare, with Transformations enabled.
-* `/cdn-cgi/media/`: A prefix that identifies a special path handled by Cloudflare's built-in media transformation service.
-* `<OPTIONS>`: A comma-separated list of options. Refer to the available options below.
-* `<SOURCE-VIDEO>`: A full URL (starting with `https://` or `http://`) of the original asset to resize.
+- `example.com`: Your website or zone on Cloudflare, with Transformations enabled.
+- `/cdn-cgi/media/`: A prefix that identifies a special path handled by Cloudflare's built-in media transformation service.
+- `<OPTIONS>`: A comma-separated list of options. Refer to the available options below.
+- `<SOURCE-VIDEO>`: A full URL (starting with `https://` or `http://`) of the original asset to resize.
 
 For example, this URL will source an HD video from an R2 bucket, shorten it, crop and resize it as a square, and remove the audio.
 
@@ -1213,57 +1224,57 @@ The result is an MP4 that can be used in an HTML video element without a player 
 
 Specifies the kind of output to generate.
 
-* `video`: Outputs an H.264/AAC optimized MP4 file.
-* `frame`: Outputs a still image.
-* `spritesheet`: Outputs a JPEG with multiple frames.
-* `audio`: Outputs an AAC encoded M4A file.
+- `video`: Outputs an H.264/AAC optimized MP4 file.
+- `frame`: Outputs a still image.
+- `spritesheet`: Outputs a JPEG with multiple frames.
+- `audio`: Outputs an AAC encoded M4A file.
 
 ### `time`
 
 Specifies when to start extracting the output in the input file. Depends on `mode`:
 
-* When `mode` is `spritesheet`, `video`, or `audio`, specifies the timestamp where the output will start.
-* When `mode` is `frame`, specifies the timestamp from which to extract the still image.
-* Formats as a time string, for example: 5s, 2m
-* Acceptable range: 0 – 10m
-* Default: 0
+- When `mode` is `spritesheet`, `video`, or `audio`, specifies the timestamp where the output will start.
+- When `mode` is `frame`, specifies the timestamp from which to extract the still image.
+- Formats as a time string, for example: 5s, 2m
+- Acceptable range: 0 – 10m
+- Default: 0
 
 ### `duration`
 
 The duration of the output video or spritesheet. Depends on `mode`:
 
-* When `mode` is `video` or `audio`, specifies the duration of the output.
-* When `mode` is `spritesheet`, specifies the time range from which to select frames.
-* Acceptable range: 1s - 60s (or 1m)
-* Default: input duration or 60 seconds, whichever is shorter
+- When `mode` is `video` or `audio`, specifies the duration of the output.
+- When `mode` is `spritesheet`, specifies the time range from which to select frames.
+- Acceptable range: 1s - 60s (or 1m)
+- Default: input duration or 60 seconds, whichever is shorter
 
 ### `fit`
 
 In combination with `width` and `height`, specifies how to resize and crop the output. If the output is resized, it will always resize proportionally so content is not stretched.
 
-* `contain`: Respecting aspect ratio, scales a video up or down to be entirely contained within output dimensions.
-* `scale-down`: Same as contain, but downscales to fit only. Do not upscale.
-* `cover`: Respecting aspect ratio, scales a video up or down to entirely cover the output dimensions, with a center-weighted crop of the remainder.
+- `contain`: Respecting aspect ratio, scales a video up or down to be entirely contained within output dimensions.
+- `scale-down`: Same as contain, but downscales to fit only. Do not upscale.
+- `cover`: Respecting aspect ratio, scales a video up or down to entirely cover the output dimensions, with a center-weighted crop of the remainder.
 
 ### `height`
 
 Specifies maximum height of the output in pixels. Exact behavior depends on `fit`.
 
-* Acceptable range: 10-2000 pixels
+- Acceptable range: 10-2000 pixels
 
 ### `width`
 
 Specifies the maximum width of the image in pixels. Exact behavior depends on `fit`.
 
-* Acceptable range: 10-2000 pixels
+- Acceptable range: 10-2000 pixels
 
 ### `audio`
 
 When `mode` is `video`, specifies whether or not to include the source audio in the output.
 
-* `true`: Includes source audio.
-* `false`: Output will be silent.
-* Default: `true`
+- `true`: Includes source audio.
+- `false`: Output will be silent.
+- Default: `true`
 
 When `mode` is `audio`, audio cannot be false.
 
@@ -1271,71 +1282,71 @@ When `mode` is `audio`, audio cannot be false.
 
 If `mode` is `frame`, specifies the image output format.
 
-* Acceptable options: `jpg`, `png`
+- Acceptable options: `jpg`, `png`
 
 If `mode` is `audio`, specifies the audio output format.
 
-* Acceptable options: `m4a` (default)
+- Acceptable options: `m4a` (default)
 
 ### `filename`
 
 Specifies the filename to use in the returned Content-Disposition header. If not specified, the filename will be derived from the source URL.
 
-* Acceptable values:
+- Acceptable values:
+  - Maximum of 120 characters in length.
+  - Can only contain lowercase letters (a-z), numbers (0-9), hyphens (-), underscores (\_), and an optional extension. A valid name satisfies this regular expression: `^[a-zA-Z0-9-_]+.?[a-zA-Z0-9-_]+$`.
 
-  * Maximum of 120 characters in length.
-  * Can only contain lowercase letters (a-z), numbers (0-9), hyphens (-), underscores (\_), and an optional extension. A valid name satisfies this regular expression: `^[a-zA-Z0-9-_]+.?[a-zA-Z0-9-_]+$`.
-
-* Examples: `default.mp4`, `shortened-clip_5s`
+- Examples: `default.mp4`, `shortened-clip_5s`
 
 ## Source video requirements
 
-* Input video must be less than 100MB.
-* Input video should be an MP4 with H.264 encoded video and AAC or MP3 encoded audio. Other formats may work but are untested.
-* Origin must support either HTTP HEAD and range requests, and must return a Content-Range header.
+- Input video must be less than 100MB.
+- Input video should be an MP4 with H.264 encoded video and AAC or MP3 encoded audio. Other formats may work but are untested.
+- Origin must support either HTTP HEAD and range requests, and must return a Content-Range header.
 
 ## Limitations
 
 Media Transformations are currently in beta. During this period:
 
-* Transformations are available for all enabled zones free-of-charge.
-* Outputs from Media Transformations will be cached, but if they must be regenerated, the origin fetch is not cached and may result in subsequent requests to the origin asset.
-* Maximum input file size is 100 MB. Maximum duration of input video is 10 minutes.
-* Media Transformations are not compatible with [Bring Your Own IP (BYOIP)](https://developers.cloudflare.com/byoip/).
-* Input video should be an MP4 with H.264 encoded video and AAC or MP3 encoded audio. Other formats may work but are untested.
+- Transformations are available for all enabled zones free-of-charge.
+- Outputs from Media Transformations will be cached, but if they must be regenerated, the origin fetch is not cached and may result in subsequent requests to the origin asset.
+- Maximum input file size is 100 MB. Maximum duration of input video is 10 minutes.
+- Media Transformations are not compatible with [Bring Your Own IP (BYOIP)](https://developers.cloudflare.com/byoip/).
+- Input video should be an MP4 with H.264 encoded video and AAC or MP3 encoded audio. Other formats may work but are untested.
 
 ## Pricing
 
 After November 1st, 2025, Media Transformations and Image Transformations will use the same subscriptions and usage metrics.
 
-* Generating a still frame (single image) from a video counts as 1 transformation.
-* Generating an optimized video or extracting audio counts as 1 transformation *per second of the output* content.
-* Each unique transformation, as determined by input and unique combination of flags, is only billed once per calendar month.
-* All Media and Image Transformations cost $0.50 per 1,000 monthly unique transformation operations, with a free monthly allocation of 5,000.
+- Generating a still frame (single image) from a video counts as 1 transformation.
+- Generating an optimized video or extracting audio counts as 1 transformation _per second of the output_ content.
+- Each unique transformation, as determined by input and unique combination of flags, is only billed once per calendar month.
+- All Media and Image Transformations cost $0.50 per 1,000 monthly unique transformation operations, with a free monthly allocation of 5,000.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Upload videos · Cloudflare Stream docs
 description: Before you upload your video, review the options for uploading a
-  video, supported formats, and recommendations.
+video, supported formats, and recommendations.
 lastUpdated: 2025-07-28T14:52:18.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/uploading-videos/
-  md: https://developers.cloudflare.com/stream/uploading-videos/index.md
+html: https://developers.cloudflare.com/stream/uploading-videos/
+md: https://developers.cloudflare.com/stream/uploading-videos/index.md
+
 ---
 
 Before you upload your video, review the options for uploading a video, supported formats, and recommendations.
 
 ## Upload options
 
-| Upload method | When to use |
-| - | - |
-| [Stream Dashboard](https://dash.cloudflare.com/?to=/:account/stream) | Upload videos from the Stream Dashboard without writing any code. |
-| [Upload with a link](https://developers.cloudflare.com/stream/uploading-videos/upload-via-link/) | Upload videos using a link, such as an S3 bucket or content management system. |
-| [Upload video file](https://developers.cloudflare.com/stream/uploading-videos/upload-video-file/) | Upload videos stored on a computer. |
+| Upload method                                                                                               | When to use                                                                             |
+| ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [Stream Dashboard](https://dash.cloudflare.com/?to=/:account/stream)                                        | Upload videos from the Stream Dashboard without writing any code.                       |
+| [Upload with a link](https://developers.cloudflare.com/stream/uploading-videos/upload-via-link/)            | Upload videos using a link, such as an S3 bucket or content management system.          |
+| [Upload video file](https://developers.cloudflare.com/stream/uploading-videos/upload-video-file/)           | Upload videos stored on a computer.                                                     |
 | [Direct creator uploads](https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/) | Allows end users of your website or app to upload videos directly to Cloudflare Stream. |
 
 ## Supported video formats
@@ -1344,73 +1355,74 @@ Note
 
 Files must be less than 30 GB, and content should be encoded and uploaded in the same frame rate it was recorded.
 
-* MP4
-* MKV
-* MOV
-* AVI
-* FLV
-* MPEG-2 TS
-* MPEG-2 PS
-* MXF
-* LXF
-* GXF
-* 3GP
-* WebM
-* MPG
-* Quicktime
+- MP4
+- MKV
+- MOV
+- AVI
+- FLV
+- MPEG-2 TS
+- MPEG-2 PS
+- MXF
+- LXF
+- GXF
+- 3GP
+- WebM
+- MPG
+- Quicktime
 
 ## Recommendations for on-demand videos
 
-* Optional but ideal settings:
+- Optional but ideal settings:
+  - MP4 containers
+  - AAC audio codec
+  - H264 video codec
+  - 60 or fewer frames per second
 
-  * MP4 containers
-  * AAC audio codec
-  * H264 video codec
-  * 60 or fewer frames per second
+- Closed GOP (_Only required for live streaming._)
 
-* Closed GOP (*Only required for live streaming.*)
-
-* Mono or Stereo audio. Stream will mix audio tracks with more than two channels down to stereo.
+- Mono or Stereo audio. Stream will mix audio tracks with more than two channels down to stereo.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Play video · Cloudflare Stream docs
 lastUpdated: 2024-08-30T13:02:26.000Z
 chatbotDeprioritize: true
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/
-  md: https://developers.cloudflare.com/stream/viewing-videos/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/
+md: https://developers.cloudflare.com/stream/viewing-videos/index.md
+
 ---
 
-* [Use your own player](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/)
-* [Use the Stream Player](https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/)
-* [Secure your Stream](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/)
-* [Display thumbnails](https://developers.cloudflare.com/stream/viewing-videos/displaying-thumbnails/)
-* [Download video or audio](https://developers.cloudflare.com/stream/viewing-videos/download-videos/)
+- [Use your own player](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/)
+- [Use the Stream Player](https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/)
+- [Secure your Stream](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/)
+- [Display thumbnails](https://developers.cloudflare.com/stream/viewing-videos/displaying-thumbnails/)
+- [Download video or audio](https://developers.cloudflare.com/stream/viewing-videos/download-videos/)
 
 </page>
 
-<page>
----
+## <page>
+
 title: WebRTC · Cloudflare Stream docs
 description: Sub-second latency live streaming (using WHIP) and playback (using
-  WHEP) to unlimited concurrent viewers.
+WHEP) to unlimited concurrent viewers.
 lastUpdated: 2025-09-09T16:21:39.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/webrtc-beta/
-  md: https://developers.cloudflare.com/stream/webrtc-beta/index.md
+html: https://developers.cloudflare.com/stream/webrtc-beta/
+md: https://developers.cloudflare.com/stream/webrtc-beta/index.md
+
 ---
 
 Sub-second latency live streaming (using WHIP) and playback (using WHEP) to unlimited concurrent viewers.
 
 WebRTC is ideal for when you need live video to playback in near real-time, such as:
 
-* When the outcome of a live event is time-sensitive (live sports, financial news)
-* When viewers interact with the live stream (live Q\&A, auctions, etc.)
-* When you want your end users to be able to easily go live or create their own video content, from a web browser or native app
+- When the outcome of a live event is time-sensitive (live sports, financial news)
+- When viewers interact with the live stream (live Q\&A, auctions, etc.)
+- When you want your end users to be able to easily go live or create their own video content, from a web browser or native app
 
 Note
 
@@ -1420,11 +1432,11 @@ WebRTC streaming is currently in beta, and we'd love to hear what you think. Joi
 
 Create a live input using one of the two options:
 
-* Use the **Live inputs** page of the Cloudflare dashboard.
+- Use the **Live inputs** page of the Cloudflare dashboard.
 
   [Go to **Live inputs**](https://dash.cloudflare.com/?to=/:account/stream/inputs)
 
-* Make a POST request to the [`/live_inputs` API endpoint](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/methods/create/)
+- Make a POST request to the [`/live_inputs` API endpoint](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/methods/create/)
 
 ```json
 {
@@ -1442,15 +1454,15 @@ Create a live input using one of the two options:
 
 ## Step 2: Go live using WHIP
 
-Every live input has a unique URL that one creator can be stream to. This URL should *only* be shared with the creator — anyone with this URL has the ability to stream live video to this live input.
+Every live input has a unique URL that one creator can be stream to. This URL should _only_ be shared with the creator — anyone with this URL has the ability to stream live video to this live input.
 
 Copy the URL from either:
 
-* The **Live inputs** page of the Cloudflare dashboard.
+- The **Live inputs** page of the Cloudflare dashboard.
 
   [Go to **Live inputs**](https://dash.cloudflare.com/?to=/:account/stream/inputs)
 
-* The `webRTC` key in the API response (see above).
+- The `webRTC` key in the API response (see above).
 
 Paste this URL into the example code.
 
@@ -1458,13 +1470,11 @@ Paste this URL into the example code.
 // Add a <video> element to the HTML page this code runs in:
 // <video id="input-video" autoplay muted></video>
 
+import WHIPClient from './WHIPClient.js'
 
-import WHIPClient from "./WHIPClient.js";
-
-
-const url = "<WEBRTC_URL_FROM_YOUR_LIVE_INPUT>"; // add the webRTC URL from your live input here
-const videoElement = document.getElementById("input-video");
-const client = new WHIPClient(url, videoElement);
+const url = '<WEBRTC_URL_FROM_YOUR_LIVE_INPUT>' // add the webRTC URL from your live input here
+const videoElement = document.getElementById('input-video')
+const client = new WHIPClient(url, videoElement)
 ```
 
 Once the creator grants permission to their camera and microphone, live video and audio will automatically start being streamed to Cloudflare, using WebRTC.
@@ -1475,11 +1485,11 @@ You can also use this URL with any client that supports the [WebRTC-HTTP ingesti
 
 Copy the URL from either:
 
-* The **Live inputs** page of the Cloudflare dashboard.
+- The **Live inputs** page of the Cloudflare dashboard.
 
   [Go to **Live inputs**](https://dash.cloudflare.com/?to=/:account/stream/inputs)
 
-* The `webRTCPlayback` key in the API response (see above)
+- The `webRTCPlayback` key in the API response (see above)
 
 There are no limits on the number of concurrent viewers.
 
@@ -1489,13 +1499,11 @@ Paste this URL into the example code.
 // Add a <video> element to the HTML page this code runs in:
 // <video id="output-video" autoplay muted></video>
 
+import WHEPClient from './WHEPClient.js'
 
-import WHEPClient from "./WHEPClient.js";
-
-
-const url = "<WEBRTC_URL_FROM_YOUR_LIVE_INPUT>"; // add the webRTCPlayback URL from your live input here
-const videoElement = document.getElementById("output-video");
-const client = new WHEPClient(url, videoElement);
+const url = '<WEBRTC_URL_FROM_YOUR_LIVE_INPUT>' // add the webRTCPlayback URL from your live input here
+const videoElement = document.getElementById('output-video')
+const client = new WHEPClient(url, videoElement)
 ```
 
 As long as the creator is actively streaming, viewers should see their broadcast in their browser, with less than 1 second of latency.
@@ -1508,9 +1516,9 @@ If you are building a native app, the example code above can run within a [WkWeb
 
 ## Debugging WebRTC
 
-* **Chrome**: Navigate to `chrome://webrtc-internals` to view detailed logs and graphs.
-* **Firefox**: Navigate to `about:webrtc` to view information about WebRTC sessions, similar to Chrome.
-* **Safari**: To enable WebRTC logs, from the inspector, open the settings tab (cogwheel icon), and set WebRTC logging to "Verbose" in the dropdown menu.
+- **Chrome**: Navigate to `chrome://webrtc-internals` to view detailed logs and graphs.
+- **Firefox**: Navigate to `about:webrtc` to view information about WebRTC sessions, similar to Chrome.
+- **Safari**: To enable WebRTC logs, from the inspector, open the settings tab (cogwheel icon), and set WebRTC logging to "Verbose" in the dropdown menu.
 
 ## Supported WHIP and WHEP clients
 
@@ -1518,57 +1526,58 @@ Beyond the example WHIP client and example WHEP client used in the examples abov
 
 ### WHIP
 
-* [OBS (Open Broadcaster Software)](https://obsproject.com)
-* [@eyevinn/whip-web-client](https://www.npmjs.com/package/@eyevinn/whip-web-client) (TypeScript)
-* [whip-go](https://github.com/ggarber/whip-go) (Go)
-* [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs) (Gstreamer plugins, written in Rust)
-* [Larix Broadcaster](https://softvelum.com/larix/) (free apps for iOS and Android with WebRTC based on Pion, SDK available)
+- [OBS (Open Broadcaster Software)](https://obsproject.com)
+- [@eyevinn/whip-web-client](https://www.npmjs.com/package/@eyevinn/whip-web-client) (TypeScript)
+- [whip-go](https://github.com/ggarber/whip-go) (Go)
+- [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs) (Gstreamer plugins, written in Rust)
+- [Larix Broadcaster](https://softvelum.com/larix/) (free apps for iOS and Android with WebRTC based on Pion, SDK available)
 
 ### WHEP
 
-* [@eyevinn/webrtc-player](https://www.npmjs.com/package/@eyevinn/webrtc-player) (TypeScript)
-* [@eyevinn/wrtc-egress](https://www.npmjs.com/package/@eyevinn/wrtc-egress) (TypeScript)
-* [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs) (Gstreamer plugins, written in Rust)
+- [@eyevinn/webrtc-player](https://www.npmjs.com/package/@eyevinn/webrtc-player) (TypeScript)
+- [@eyevinn/wrtc-egress](https://www.npmjs.com/package/@eyevinn/wrtc-egress) (TypeScript)
+- [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs) (Gstreamer plugins, written in Rust)
 
 As more WHIP and WHEP clients are published, we are committed to supporting them and being fully compliant with the both protocols.
 
 ## Supported codecs
 
-* [VP9](https://developers.google.com/media/vp9) (recommended for highest quality)
-* [VP8](https://en.wikipedia.org/wiki/VP8)
-* [h264](https://en.wikipedia.org/wiki/Advanced_Video_Coding) (Constrained Baseline Profile Level 3.1, referred to as `42e01f` in the SDP offer's `profile-level-id` parameter.)
+- [VP9](https://developers.google.com/media/vp9) (recommended for highest quality)
+- [VP8](https://en.wikipedia.org/wiki/VP8)
+- [h264](https://en.wikipedia.org/wiki/Advanced_Video_Coding) (Constrained Baseline Profile Level 3.1, referred to as `42e01f` in the SDP offer's `profile-level-id` parameter.)
 
 ## Conformance with WHIP and WHEP specifications
 
 Cloudflare Stream fully supports all aspects of the [WHIP](https://www.ietf.org/archive/id/draft-ietf-wish-whip-16.html) and [WHEP](https://www.ietf.org/archive/id/draft-murillo-whep-01.html) specifications, including:
 
-* [Trickle ICE](https://datatracker.ietf.org/doc/rfc8838/)
-* [Server and client offer modes](https://www.ietf.org/archive/id/draft-murillo-whep-01.html#section-3) for WHEP
+- [Trickle ICE](https://datatracker.ietf.org/doc/rfc8838/)
+- [Server and client offer modes](https://www.ietf.org/archive/id/draft-murillo-whep-01.html#section-3) for WHEP
 
 You can find the specific version of WHIP and WHEP being used in the `protocol-version` header in WHIP and WHEP API responses. The value of this header references the IETF draft slug for each protocol. Currently, Stream uses `draft-ietf-wish-whip-06` (expected to be the final WHIP draft revision) and `draft-murillo-whep-01` (the most current WHEP draft).
 
 ## Limitations while in beta
 
-* [Recording](https://developers.cloudflare.com/stream/stream-live/watch-live-stream/#live-stream-recording-playback) is not yet supported (coming soon)
-* [Simulcasting](https://developers.cloudflare.com/stream/stream-live/simulcasting) (restreaming) is not yet supported (coming soon)
-* [Live viewer counts](https://developers.cloudflare.com/stream/getting-analytics/live-viewer-count/) are not yet supported (coming soon)
-* [Analytics](https://developers.cloudflare.com/stream/getting-analytics/fetching-bulk-analytics/) are not yet supported (coming soon)
-* WHIP and WHEP must be used together — we do not yet support streaming using RTMP/SRT and playing using WHEP, or streaming using WHIP and playing using HLS or DASH. (coming soon)
-* Once generally available, WebRTC streaming will be priced just like the rest of Cloudflare Stream, based on minutes stored and minutes of video delivered.
+- [Recording](https://developers.cloudflare.com/stream/stream-live/watch-live-stream/#live-stream-recording-playback) is not yet supported (coming soon)
+- [Simulcasting](https://developers.cloudflare.com/stream/stream-live/simulcasting) (restreaming) is not yet supported (coming soon)
+- [Live viewer counts](https://developers.cloudflare.com/stream/getting-analytics/live-viewer-count/) are not yet supported (coming soon)
+- [Analytics](https://developers.cloudflare.com/stream/getting-analytics/fetching-bulk-analytics/) are not yet supported (coming soon)
+- WHIP and WHEP must be used together — we do not yet support streaming using RTMP/SRT and playing using WHEP, or streaming using WHIP and playing using HLS or DASH. (coming soon)
+- Once generally available, WebRTC streaming will be priced just like the rest of Cloudflare Stream, based on minutes stored and minutes of video delivered.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Add additional audio tracks · Cloudflare Stream docs
 description: A video must be uploaded before additional audio tracks can be
-  attached to it. In the following example URLs, the video’s UID is referenced
-  as VIDEO_UID.
+attached to it. In the following example URLs, the video’s UID is referenced
+as VIDEO_UID.
 lastUpdated: 2024-11-15T20:22:28.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/edit-videos/adding-additional-audio-tracks/
-  md: https://developers.cloudflare.com/stream/edit-videos/adding-additional-audio-tracks/index.md
+html: https://developers.cloudflare.com/stream/edit-videos/adding-additional-audio-tracks/
+md: https://developers.cloudflare.com/stream/edit-videos/adding-additional-audio-tracks/index.md
+
 ---
 
 A video must be uploaded before additional audio tracks can be attached to it. In the following example URLs, the video’s UID is referenced as `VIDEO_UID`.
@@ -1730,15 +1739,16 @@ If there is an entry in `errors` response field, the audio track has not been de
 
 </page>
 
-<page>
----
+## <page>
+
 title: Add captions · Cloudflare Stream docs
 description: Adding captions and subtitles to your video library.
 lastUpdated: 2025-08-18T14:27:42.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/edit-videos/adding-captions/
-  md: https://developers.cloudflare.com/stream/edit-videos/adding-captions/index.md
+html: https://developers.cloudflare.com/stream/edit-videos/adding-captions/
+md: https://developers.cloudflare.com/stream/edit-videos/adding-captions/index.md
+
 ---
 
 Adding captions and subtitles to your video library.
@@ -1774,18 +1784,18 @@ A video must be uploaded and in a ready state before captions can be generated. 
 
 Captions can be generated for the following languages:
 
-* `cs` - Czech
-* `nl` - Dutch
-* `en` - English
-* `fr` - French
-* `de` - German
-* `it` - Italian
-* `ja` - Japanese
-* `ko` - Korean
-* `pl` - Polish
-* `pt` - Portuguese
-* `ru` - Russian
-* `es` - Spanish
+- `cs` - Czech
+- `nl` - Dutch
+- `en` - English
+- `fr` - French
+- `de` - German
+- `it` - Italian
+- `ja` - Japanese
+- `ko` - Korean
+- `pl` - Polish
+- `pt` - Portuguese
+- `ru` - Russian
+- `es` - Spanish
 
 When generating captions, generate them for the spoken language in the audio.
 
@@ -1935,50 +1945,51 @@ If there is an entry in `errors` response field, the caption has not been delete
 
 ## Limitations
 
-* A video must be uploaded before a caption can be attached to it. In the following example URLs, the video's ID is referenced as `media_id`.
-* Stream only supports [WebVTT](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API) formatted caption files. If you have a differently formatted caption file, use [a tool to convert your file to WebVTT](https://subtitletools.com/convert-to-vtt-online) prior to uploading it.
-* Videos may include several language captions, but each language must be unique. For example, a video may have English, French, and German captions associated with it, but it cannot have two French captions.
-* Each caption file is limited to 10 MB in size. [Contact support](https://developers.cloudflare.com/support/contacting-cloudflare-support/) if you need to upload a larger file.
+- A video must be uploaded before a caption can be attached to it. In the following example URLs, the video's ID is referenced as `media_id`.
+- Stream only supports [WebVTT](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API) formatted caption files. If you have a differently formatted caption file, use [a tool to convert your file to WebVTT](https://subtitletools.com/convert-to-vtt-online) prior to uploading it.
+- Videos may include several language captions, but each language must be unique. For example, a video may have English, French, and German captions associated with it, but it cannot have two French captions.
+- Each caption file is limited to 10 MB in size. [Contact support](https://developers.cloudflare.com/support/contacting-cloudflare-support/) if you need to upload a larger file.
 
 ## Most common language codes
 
-| Language Code | Language |
-| - | - |
-| zh | Mandarin Chinese |
-| hi | Hindi |
-| es | Spanish |
-| en | English |
-| ar | Arabic |
-| pt | Portuguese |
-| bn | Bengali |
-| ru | Russian |
-| ja | Japanese |
-| de | German |
-| pa | Panjabi |
-| jv | Javanese |
-| ko | Korean |
-| vi | Vietnamese |
-| fr | French |
-| ur | Urdu |
-| it | Italian |
-| tr | Turkish |
-| fa | Persian |
-| pl | Polish |
-| uk | Ukrainian |
-| my | Burmese |
-| th | Thai |
+| Language Code | Language         |
+| ------------- | ---------------- |
+| zh            | Mandarin Chinese |
+| hi            | Hindi            |
+| es            | Spanish          |
+| en            | English          |
+| ar            | Arabic           |
+| pt            | Portuguese       |
+| bn            | Bengali          |
+| ru            | Russian          |
+| ja            | Japanese         |
+| de            | German           |
+| pa            | Panjabi          |
+| jv            | Javanese         |
+| ko            | Korean           |
+| vi            | Vietnamese       |
+| fr            | French           |
+| ur            | Urdu             |
+| it            | Italian          |
+| tr            | Turkish          |
+| fa            | Persian          |
+| pl            | Polish           |
+| uk            | Ukrainian        |
+| my            | Burmese          |
+| th            | Thai             |
 
 </page>
 
-<page>
----
+## <page>
+
 title: Apply watermarks · Cloudflare Stream docs
 description: You can add watermarks to videos uploaded using the Stream API.
 lastUpdated: 2025-04-04T15:30:48.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/edit-videos/applying-watermarks/
-  md: https://developers.cloudflare.com/stream/edit-videos/applying-watermarks/index.md
+html: https://developers.cloudflare.com/stream/edit-videos/applying-watermarks/
+md: https://developers.cloudflare.com/stream/edit-videos/applying-watermarks/index.md
+
 ---
 
 You can add watermarks to videos uploaded using the Stream API.
@@ -2016,29 +2027,24 @@ To create, list, delete, or get information about the profile, you will need you
 
 ### Optional parameters
 
-* `name` string default: *empty string*
+- `name` string default: _empty string_
+  - A short description for the profile. For example, "marketing videos."
 
-  * A short description for the profile. For example, "marketing videos."
+- `opacity` float default: 1.0
+  - Translucency of the watermark. 0.0 means completely transparent, and 1.0 means completely opaque. Note that if the watermark is already semi-transparent, setting this to 1.0 will not make it completely opaque.
 
-* `opacity` float default: 1.0
+- `padding` float default: 0.05
+  - Blank space between the adjacent edges (determined by position) of the video and the watermark. 0.0 means no padding, and 1.0 means padded full video width or length.
 
-  * Translucency of the watermark. 0.0 means completely transparent, and 1.0 means completely opaque. Note that if the watermark is already semi-transparent, setting this to 1.0 will not make it completely opaque.
+  - Stream will make sure that the watermark will be at about the same position across videos with different dimensions.
 
-* `padding` float default: 0.05
+- `scale` float default: 0.15
+  - The size of the watermark relative to the overall size of the video. This parameter will adapt to horizontal and vertical videos automatically. 0.0 means no scaling (use the size of the watermark as-is), and 1.0 fills the entire video.
 
-  * Blank space between the adjacent edges (determined by position) of the video and the watermark. 0.0 means no padding, and 1.0 means padded full video width or length.
+  - The algorithm will make sure that the watermark will look about the same size across videos with different dimensions.
 
-  * Stream will make sure that the watermark will be at about the same position across videos with different dimensions.
-
-* `scale` float default: 0.15
-
-  * The size of the watermark relative to the overall size of the video. This parameter will adapt to horizontal and vertical videos automatically. 0.0 means no scaling (use the size of the watermark as-is), and 1.0 fills the entire video.
-
-  * The algorithm will make sure that the watermark will look about the same size across videos with different dimensions.
-
-* `position` string (enum) default: "upperRight"
-
-  * Location of the watermark. Valid positions are: `upperRight`, `upperLeft`, `lowerLeft`, `lowerRight`, and `center`.
+- `position` string (enum) default: "upperRight"
+  - Location of the watermark. Valid positions are: `upperRight`, `upperLeft`, `lowerLeft`, `lowerRight`, and `center`.
 
     Note
 
@@ -2312,24 +2318,25 @@ If the operation was successful, it will return a success response:
 
 ## Limitations
 
-* Once the watermark profile is created, you cannot change its parameters. If you need to edit your watermark profile, please delete it and create a new one.
-* Once the watermark is applied to a video, you cannot change the watermark without re-uploading the video to apply a different profile.
-* Once the watermark is applied to a video, deleting the watermark profile will not also remove the watermark from the video.
-* The maximum file size is 2MiB (2097152 bytes), and only PNG files are supported.
+- Once the watermark profile is created, you cannot change its parameters. If you need to edit your watermark profile, please delete it and create a new one.
+- Once the watermark is applied to a video, you cannot change the watermark without re-uploading the video to apply a different profile.
+- Once the watermark is applied to a video, deleting the watermark profile will not also remove the watermark from the video.
+- The maximum file size is 2MiB (2097152 bytes), and only PNG files are supported.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Add player enhancements · Cloudflare Stream docs
 description: With player enhancements, you can modify your video player to
-  incorporate elements of your branding such as your logo, and customize
-  additional options to present to your viewers.
+incorporate elements of your branding such as your logo, and customize
+additional options to present to your viewers.
 lastUpdated: 2025-09-04T14:40:32.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/edit-videos/player-enhancements/
-  md: https://developers.cloudflare.com/stream/edit-videos/player-enhancements/index.md
+html: https://developers.cloudflare.com/stream/edit-videos/player-enhancements/
+md: https://developers.cloudflare.com/stream/edit-videos/player-enhancements/index.md
+
 ---
 
 With player enhancements, you can modify your video player to incorporate elements of your branding such as your logo, and customize additional options to present to your viewers.
@@ -2338,10 +2345,10 @@ The player enhancements are automatically applied to videos using the Stream Pla
 
 ## Properties
 
-* `title`: The title that appears when viewers hover over the video. The title may differ from the file name of the video.
-* `share_link`: Provides the user with a click-to-copy option to easily share the video URL. This is commonly set to the URL of the page that the video is embedded on.
-* `channel_link`: The URL users will be directed to when selecting the logo from the video player.
-* `logo`: A valid HTTPS URL for the image of your logo.
+- `title`: The title that appears when viewers hover over the video. The title may differ from the file name of the video.
+- `share_link`: Provides the user with a click-to-copy option to easily share the video URL. This is commonly set to the URL of the page that the video is embedded on.
+- `channel_link`: The URL users will be directed to when selecting the logo from the video player.
+- `logo`: A valid HTTPS URL for the image of your logo.
 
 ## Customize your own player
 
@@ -2394,20 +2401,21 @@ You can also pull the JSON by using the endpoint below.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Clip videos · Cloudflare Stream docs
 description: With video clipping, also referred to as "trimming" or changing the
-  length of the video, you can change the start and end points of a video so
-  viewers only see a specific "clip" of the video. For example, if you have a 20
-  minute video but only want to share a five minute clip from the middle of the
-  video, you can clip the video to remove the content before and after the five
-  minute clip.
+length of the video, you can change the start and end points of a video so
+viewers only see a specific "clip" of the video. For example, if you have a 20
+minute video but only want to share a five minute clip from the middle of the
+video, you can clip the video to remove the content before and after the five
+minute clip.
 lastUpdated: 2025-11-17T14:08:01.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/edit-videos/video-clipping/
-  md: https://developers.cloudflare.com/stream/edit-videos/video-clipping/index.md
+html: https://developers.cloudflare.com/stream/edit-videos/video-clipping/
+md: https://developers.cloudflare.com/stream/edit-videos/video-clipping/index.md
+
 ---
 
 With video clipping, also referred to as "trimming" or changing the length of the video, you can change the start and end points of a video so viewers only see a specific "clip" of the video. For example, if you have a 20 minute video but only want to share a five minute clip from the middle of the video, you can clip the video to remove the content before and after the five minute clip.
@@ -2438,9 +2446,9 @@ Clipped videos will not inherit the `scheduledDeletion` date. To set the deletio
 }
 ```
 
-* **`clippedFromVideoUID`**: The unique identifier for the video used to create the new, clipped video.
-* **`startTimeSeconds`**: The timestamp from the existing video that indicates when the new video begins.
-* **`endTimeSeconds`**: The timestamp from the existing video that indicates when the new video ends.
+- **`clippedFromVideoUID`**: The unique identifier for the video used to create the new, clipped video.
+- **`startTimeSeconds`**: The timestamp from the existing video that indicates when the new video begins.
+- **`endTimeSeconds`**: The timestamp from the existing video that indicates when the new video ends.
 
 ```bash
 curl --location --request POST 'https://api.cloudflare.com/client/v4/accounts/<YOUR_ACCOUND_ID_HERE>/stream/clip' \
@@ -2532,16 +2540,17 @@ You can also specify a thumbnail image for your video using a percentage value. 
 
 </page>
 
-<page>
----
+## <page>
+
 title: Android (ExoPlayer) · Cloudflare Stream docs
 description: Example of video playback on Android using ExoPlayer
 lastUpdated: 2025-08-20T20:59:04.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/android/
-  md: https://developers.cloudflare.com/stream/examples/android/index.md
+html: https://developers.cloudflare.com/stream/examples/android/
+md: https://developers.cloudflare.com/stream/examples/android/index.md
+
 ---
 
 Note
@@ -2572,17 +2581,18 @@ For more, see [read the docs](https://developers.cloudflare.com/stream/viewing-v
 
 </page>
 
-<page>
----
+## <page>
+
 title: dash.js · Cloudflare Stream docs
 description: Example of video playback with Cloudflare Stream and the DASH
-  reference player (dash.js)
+reference player (dash.js)
 lastUpdated: 2025-08-18T14:27:42.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/dash-js/
-  md: https://developers.cloudflare.com/stream/examples/dash-js/index.md
+html: https://developers.cloudflare.com/stream/examples/dash-js/
+md: https://developers.cloudflare.com/stream/examples/dash-js/index.md
+
 ---
 
 ```html
@@ -2609,17 +2619,18 @@ Refer to the [dash.js documentation](https://github.com/Dash-Industry-Forum/dash
 
 </page>
 
-<page>
----
+## <page>
+
 title: hls.js · Cloudflare Stream docs
 description: Example of video playback with Cloudflare Stream and the HLS
-  reference player (hls.js)
+reference player (hls.js)
 lastUpdated: 2025-08-18T14:27:42.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/hls-js/
-  md: https://developers.cloudflare.com/stream/examples/hls-js/index.md
+html: https://developers.cloudflare.com/stream/examples/hls-js/
+md: https://developers.cloudflare.com/stream/examples/hls-js/index.md
+
 ---
 
 ```html
@@ -2631,18 +2642,17 @@ source_url:
     <video id="video"></video>
     <script>
       if (Hls.isSupported()) {
-        const video = document.getElementById('video');
-        const hls = new Hls();
-        hls.attachMedia(video);
+        const video = document.getElementById('video')
+        const hls = new Hls()
+        hls.attachMedia(video)
         hls.on(Hls.Events.MEDIA_ATTACHED, () => {
           hls.loadSource(
             'https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/manifest/video.m3u8'
-          );
-        });
+          )
+        })
       }
 
-
-      video.play();
+      video.play()
     </script>
   </body>
 </html>
@@ -2652,16 +2662,17 @@ Refer to the [hls.js documentation](https://github.com/video-dev/hls.js/blob/mas
 
 </page>
 
-<page>
----
+## <page>
+
 title: iOS (AVPlayer) · Cloudflare Stream docs
 description: Example of video playback on iOS using AVPlayer
 lastUpdated: 2025-08-20T20:59:04.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/ios/
-  md: https://developers.cloudflare.com/stream/examples/ios/index.md
+html: https://developers.cloudflare.com/stream/examples/ios/
+md: https://developers.cloudflare.com/stream/examples/ios/index.md
+
 ---
 
 Note
@@ -2709,16 +2720,17 @@ For more, see [read the docs](https://developers.cloudflare.com/stream/viewing-v
 
 </page>
 
-<page>
----
+## <page>
+
 title: First Live Stream with OBS · Cloudflare Stream docs
 description: Set up and start your first Live Stream using OBS (Open Broadcaster
-  Software) Studio
+Software) Studio
 lastUpdated: 2025-08-18T14:27:42.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/obs-from-scratch/
-  md: https://developers.cloudflare.com/stream/examples/obs-from-scratch/index.md
+html: https://developers.cloudflare.com/stream/examples/obs-from-scratch/
+md: https://developers.cloudflare.com/stream/examples/obs-from-scratch/index.md
+
 ---
 
 ## Overview
@@ -2729,9 +2741,9 @@ Stream empowers customers and their end-users to broadcast a live stream quickly
 
 To go live on Stream, you will need any of the following:
 
-* A paid Stream subscription
-* A Pro or Business zone plan — these include 100 minutes of video storage and 10,000 minutes of video delivery
-* An enterprise contract with Stream enabled
+- A paid Stream subscription
+- A Pro or Business zone plan — these include 100 minutes of video storage and 10,000 minutes of video delivery
+- An enterprise contract with Stream enabled
 
 Also, you will also need to be able to install the application on your computer.
 
@@ -2741,9 +2753,9 @@ If your computer and network connection are good enough for video calling, you s
 
 You need a Live Input on Stream. Follow the [Start a live stream](https://developers.cloudflare.com/stream/stream-live/start-stream-live/) guide. Make note of three things:
 
-* **RTMPS URL**, which will most likely be `rtmps://live.cloudflare.com:443/live/`
-* **RTMPS Key**, which is specific to the new live input
-* Whether you selected the beta "Low-Latency HLS Support" or not. For your first test, leave this *disabled.* ([What is that?](https://blog.cloudflare.com/cloudflare-stream-low-latency-hls-open-beta))
+- **RTMPS URL**, which will most likely be `rtmps://live.cloudflare.com:443/live/`
+- **RTMPS Key**, which is specific to the new live input
+- Whether you selected the beta "Low-Latency HLS Support" or not. For your first test, leave this _disabled._ ([What is that?](https://blog.cloudflare.com/cloudflare-stream-low-latency-hls-open-beta))
 
 ## 2. Install OBS
 
@@ -2753,20 +2765,18 @@ Download [OBS Studio](https://obsproject.com/) for Windows, macOS, or Linux. The
 
 When you first launch OBS, the Auto-Configuration Wizard will ask a few questions and offer recommended settings. See their [Quick Start Guide](https://obsproject.com/kb/quick-start-guide) for more details. For a quick start with Stream, use these settings:
 
-* **Step 1: "Usage Information"**
-  * Select "Optimize for streaming, recording is secondary."
+- **Step 1: "Usage Information"**
+  - Select "Optimize for streaming, recording is secondary."
 
-* **Step 2: "Video Settings"**
+- **Step 2: "Video Settings"**
+  - **Base (Canvas) Resolution:** 1920x1080
+  - **FPS:** "Either 60 or 30, but prefer 60 when possible"
 
-  * **Base (Canvas) Resolution:** 1920x1080
-  * **FPS:** "Either 60 or 30, but prefer 60 when possible"
-
-* **Step 3: "Stream Information"**
-
-  * **Service:** "Custom"
-  * For **Server**, enter the RTMPS URL from Stream
-  * For **Stream Key**, enter the RTMPS Key from Stream
-  * If available, select both **"Prefer hardware encoding"** and **"Estimate bitrate with a bandwidth test."**
+- **Step 3: "Stream Information"**
+  - **Service:** "Custom"
+  - For **Server**, enter the RTMPS URL from Stream
+  - For **Stream Key**, enter the RTMPS Key from Stream
+  - If available, select both **"Prefer hardware encoding"** and **"Estimate bitrate with a bandwidth test."**
 
 ## 4. Set up a Stage
 
@@ -2790,27 +2800,26 @@ Return to OBS, click "Stop Streaming." Then click "Settings" and open the "Outpu
 
 ![OBS Output Settings - Simple Mode](https://developers.cloudflare.com/_astro/obs-output-settings-1.Dd36CkGD_oeEY6.webp)
 
-* Change **Output Mode** to "Advanced"
+- Change **Output Mode** to "Advanced"
 
 ![OBS Output Settings - Advanced Mode](https://developers.cloudflare.com/_astro/obs-output-settings-2.B8WTTxox_Zu2X3j.webp)
 
-*Your available options in the "Video Encoder" menu, as well as the resulting "Encoder Settings," may look slightly different than these because the options vary by hardware.*
+_Your available options in the "Video Encoder" menu, as well as the resulting "Encoder Settings," may look slightly different than these because the options vary by hardware._
 
-* **Video Encoder:** may have several options. Start with the default selected, which was "x264" in this example. Other options to try, which will leverage improved hardware acceleration when possible, include "QuickSync H.264" or "NVIDIA NVENC." See OBS's guide to Hardware Encoding for more information. H.264 is the required output codec.
+- **Video Encoder:** may have several options. Start with the default selected, which was "x264" in this example. Other options to try, which will leverage improved hardware acceleration when possible, include "QuickSync H.264" or "NVIDIA NVENC." See OBS's guide to Hardware Encoding for more information. H.264 is the required output codec.
 
-* **Rate Control:** confirm "CBR" (constant bitrate) is selected.
+- **Rate Control:** confirm "CBR" (constant bitrate) is selected.
 
-* **Bitrate:** depending on the content of your stream, a bitrate between 3000 Kbps and 8000 Kbps should be sufficient. Lower bitrate is more tolerant to network congestion and is suitable for content with less detail or less motion (speaker, slides, etc.) where a higher bitrate requires a more stable network connection and is best for content with lots of motion or details (events, moving cameras, video games, screen share, higher framerates).
+- **Bitrate:** depending on the content of your stream, a bitrate between 3000 Kbps and 8000 Kbps should be sufficient. Lower bitrate is more tolerant to network congestion and is suitable for content with less detail or less motion (speaker, slides, etc.) where a higher bitrate requires a more stable network connection and is best for content with lots of motion or details (events, moving cameras, video games, screen share, higher framerates).
 
-* **Keyframe Interval**, sometimes referred to as *GOP Size*:
+- **Keyframe Interval**, sometimes referred to as _GOP Size_:
+  - If you did _not_ select Low-Latency HLS Beta, set this to 4 seconds. Raise it to 8 if your stream has stuttering or freezing.
+  - If you _did_ select the Low-Latency HLS Beta, set this to 2 seconds. Raise it to 4 if your stream has stuttering or freezing. Lower it to 1 if your stream has smooth playback.
+  - In general, higher keyframe intervals make more efficient use of bandwidth and CPU for encoding, at the expense of higher glass-to-glass latency. Lower keyframe intervals reduce latency, but are more resource intensive and less tolerant to network disruptions and congestion.
 
-  * If you did *not* select Low-Latency HLS Beta, set this to 4 seconds. Raise it to 8 if your stream has stuttering or freezing.
-  * If you *did* select the Low-Latency HLS Beta, set this to 2 seconds. Raise it to 4 if your stream has stuttering or freezing. Lower it to 1 if your stream has smooth playback.
-  * In general, higher keyframe intervals make more efficient use of bandwidth and CPU for encoding, at the expense of higher glass-to-glass latency. Lower keyframe intervals reduce latency, but are more resource intensive and less tolerant to network disruptions and congestion.
+- **Profile** and **Tuning** can be left at their default settings.
 
-* **Profile** and **Tuning** can be left at their default settings.
-
-* **B Frames** (available only for some encoders) should be set to 0 for LL-HLS Beta streams.
+- **B Frames** (available only for some encoders) should be set to 0 for LL-HLS Beta streams.
 
 Learn more about optimizing your live stream with [live stream recommendations](https://developers.cloudflare.com/stream/stream-live/start-stream-live/#recommendations-requirements-and-limitations) and [live stream troubleshooting](https://developers.cloudflare.com/stream/stream-live/troubleshooting/).
 
@@ -2818,34 +2827,35 @@ Learn more about optimizing your live stream with [live stream recommendations](
 
 With these steps, you have created a Live Input on Stream, broadcast a test from OBS, and you saw it played back in via the Stream built-in player in Dash. Up next, consider trying:
 
-* Embedding your live stream into a website
-* Find and replay the recording of your live stream
+- Embedding your live stream into a website
+- Find and replay the recording of your live stream
 
 </page>
 
-<page>
----
+## <page>
+
 title: RTMPS playback · Cloudflare Stream docs
 description: Example of sub 1s latency video playback using RTMPS and ffplay
 lastUpdated: 2025-09-09T16:21:39.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/rtmps_playback/
-  md: https://developers.cloudflare.com/stream/examples/rtmps_playback/index.md
+html: https://developers.cloudflare.com/stream/examples/rtmps_playback/
+md: https://developers.cloudflare.com/stream/examples/rtmps_playback/index.md
+
 ---
 
 Note
 
 Before you can play live video, you must first be [actively streaming to a live input](https://developers.cloudflare.com/stream/stream-live/start-stream-live).
 
-Copy the RTMPS *playback* key for your live input from either:
+Copy the RTMPS _playback_ key for your live input from either:
 
-* The **Live inputs** page of the Cloudflare dashboard.
+- The **Live inputs** page of the Cloudflare dashboard.
 
   [Go to **Live inputs**](https://dash.cloudflare.com/?to=/:account/stream/inputs)
 
-* The [Stream API](https://developers.cloudflare.com/stream/stream-live/start-stream-live/#use-the-api)
+- The [Stream API](https://developers.cloudflare.com/stream/stream-live/start-stream-live/#use-the-api)
 
 Paste it into the URL below, replacing `<RTMPS_PLAYBACK_KEY>`:
 
@@ -2857,16 +2867,17 @@ For more, refer to [Play live video in native apps with less than one second lat
 
 </page>
 
-<page>
----
+## <page>
+
 title: Shaka Player · Cloudflare Stream docs
 description: Example of video playback with Cloudflare Stream and Shaka Player
 lastUpdated: 2025-08-18T14:27:42.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/shaka-player/
-  md: https://developers.cloudflare.com/stream/examples/shaka-player/index.md
+html: https://developers.cloudflare.com/stream/examples/shaka-player/
+md: https://developers.cloudflare.com/stream/examples/shaka-player/index.md
+
 ---
 
 First, create a video element, using the poster attribute to set a preview thumbnail image. Refer to [Display thumbnails](https://developers.cloudflare.com/stream/viewing-videos/displaying-thumbnails/) for instructions on how to generate a thumbnail image using Cloudflare Stream.
@@ -2900,16 +2911,17 @@ Refer to the [Shaka Player documentation](https://github.com/shaka-project/shaka
 
 </page>
 
-<page>
----
+## <page>
+
 title: SRT playback · Cloudflare Stream docs
 description: Example of sub 1s latency video playback using SRT and ffplay
 lastUpdated: 2025-09-09T16:21:39.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/srt_playback/
-  md: https://developers.cloudflare.com/stream/examples/srt_playback/index.md
+html: https://developers.cloudflare.com/stream/examples/srt_playback/
+md: https://developers.cloudflare.com/stream/examples/srt_playback/index.md
+
 ---
 
 Note
@@ -2918,11 +2930,11 @@ Before you can play live video, you must first be [actively streaming to a live 
 
 Copy the SRT Playback URL for your live input from either:
 
-* The **Live inputs** page of the Cloudflare dashboard.
+- The **Live inputs** page of the Cloudflare dashboard.
 
   [Go to **Live inputs**](https://dash.cloudflare.com/?to=/:account/stream/inputs)
 
-* The [Stream API](https://developers.cloudflare.com/stream/stream-live/start-stream-live/#use-the-api)
+- The [Stream API](https://developers.cloudflare.com/stream/stream-live/start-stream-live/#use-the-api)
 
 Paste it into the URL below, replacing `<SRT_PLAYBACK_URL>`:
 
@@ -2934,16 +2946,17 @@ For more, refer to [Play live video in native apps with less than one second lat
 
 </page>
 
-<page>
----
+## <page>
+
 title: Stream Player · Cloudflare Stream docs
 description: Example of video playback with the Cloudflare Stream Player
 lastUpdated: 2025-08-18T14:27:42.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/stream-player/
-  md: https://developers.cloudflare.com/stream/examples/stream-player/index.md
+html: https://developers.cloudflare.com/stream/examples/stream-player/
+md: https://developers.cloudflare.com/stream/examples/stream-player/index.md
+
 ---
 
 ```html
@@ -2951,12 +2964,12 @@ source_url:
   <head> </head>
   <body>
     <div style="position: relative; padding-top: 56.25%;">
-    <iframe
-      src="https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/iframe?poster=https%3A%2F%2Fcustomer-f33zs165nr7gyfy4.cloudflarestream.com%2F6b9e68b07dfee8cc2d116e4c51d6a957%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
-      style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
-      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-      allowfullscreen="true"
-    ></iframe>
+      <iframe
+        src="https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/iframe?poster=https%3A%2F%2Fcustomer-f33zs165nr7gyfy4.cloudflarestream.com%2F6b9e68b07dfee8cc2d116e4c51d6a957%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+        style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+        allowfullscreen="true"
+      ></iframe>
     </div>
   </body>
 </html>
@@ -2966,16 +2979,17 @@ Refer to the [Using the Stream Player](https://developers.cloudflare.com/stream/
 
 </page>
 
-<page>
----
+## <page>
+
 title: Video.js · Cloudflare Stream docs
 description: Example of video playback with Cloudflare Stream and Video.js
 lastUpdated: 2025-08-18T14:27:42.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/video-js/
-  md: https://developers.cloudflare.com/stream/examples/video-js/index.md
+html: https://developers.cloudflare.com/stream/examples/video-js/
+md: https://developers.cloudflare.com/stream/examples/video-js/index.md
+
 ---
 
 ```html
@@ -2995,10 +3009,9 @@ source_url:
       />
     </video-js>
 
-
     <script>
-      const vid = document.getElementById('vid1');
-      const player = videojs(vid);
+      const vid = document.getElementById('vid1')
+      const player = videojs(vid)
     </script>
   </body>
 </html>
@@ -3008,29 +3021,30 @@ Refer to the [Video.js documentation](https://docs.videojs.com/) for more inform
 
 </page>
 
-<page>
----
+## <page>
+
 title: Vidstack · Cloudflare Stream docs
 description: Example of video playback with Cloudflare Stream and Vidstack
 lastUpdated: 2025-08-18T14:27:42.000Z
 chatbotDeprioritize: false
 tags: Playback
 source_url:
-  html: https://developers.cloudflare.com/stream/examples/vidstack/
-  md: https://developers.cloudflare.com/stream/examples/vidstack/index.md
+html: https://developers.cloudflare.com/stream/examples/vidstack/
+md: https://developers.cloudflare.com/stream/examples/vidstack/index.md
+
 ---
 
 ## Installation
 
 There's a few options to choose from when getting started with Vidstack, follow any of the links below to get setup. You can replace the player `src` with `https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/manifest/video.m3u8` to test Cloudflare Stream.
 
-* [Angular](https://www.vidstack.io/docs/player/getting-started/installation/angular?provider=video)
-* [React](https://www.vidstack.io/docs/player/getting-started/installation/react?provider=video)
-* [Svelte](https://www.vidstack.io/docs/player/getting-started/installation/svelte?provider=video)
-* [Vue](https://www.vidstack.io/docs/player/getting-started/installation/vue?provider=video)
-* [Solid](https://www.vidstack.io/docs/player/getting-started/installation/solid?provider=video)
-* [Web Components](https://www.vidstack.io/docs/player/getting-started/installation/web-components?provider=video)
-* [CDN](https://www.vidstack.io/docs/player/getting-started/installation/cdn?provider=video)
+- [Angular](https://www.vidstack.io/docs/player/getting-started/installation/angular?provider=video)
+- [React](https://www.vidstack.io/docs/player/getting-started/installation/react?provider=video)
+- [Svelte](https://www.vidstack.io/docs/player/getting-started/installation/svelte?provider=video)
+- [Vue](https://www.vidstack.io/docs/player/getting-started/installation/vue?provider=video)
+- [Solid](https://www.vidstack.io/docs/player/getting-started/installation/solid?provider=video)
+- [Web Components](https://www.vidstack.io/docs/player/getting-started/installation/web-components?provider=video)
+- [CDN](https://www.vidstack.io/docs/player/getting-started/installation/cdn?provider=video)
 
 ## Examples
 
@@ -3038,17 +3052,18 @@ Feel free to check out [Vidstack Examples](https://github.com/vidstack/examples)
 
 </page>
 
-<page>
----
+## <page>
+
 title: GraphQL Analytics API · Cloudflare Stream docs
 description: Stream provides analytics about both live video and video uploaded
-  to Stream, via the GraphQL API described below, as well as on the Stream
-  Analytics page of the Cloudflare dashboard.
+to Stream, via the GraphQL API described below, as well as on the Stream
+Analytics page of the Cloudflare dashboard.
 lastUpdated: 2025-09-09T16:21:39.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/getting-analytics/fetching-bulk-analytics/
-  md: https://developers.cloudflare.com/stream/getting-analytics/fetching-bulk-analytics/index.md
+html: https://developers.cloudflare.com/stream/getting-analytics/fetching-bulk-analytics/
+md: https://developers.cloudflare.com/stream/getting-analytics/fetching-bulk-analytics/index.md
+
 ---
 
 Stream provides analytics about both live video and video uploaded to Stream, via the GraphQL API described below, as well as on the Stream **Analytics** page of the Cloudflare dashboard.
@@ -3075,20 +3090,20 @@ Stream collects data about the number of minutes of video delivered to viewers f
 
 ### Filters and Dimensions
 
-| Field | Description |
-| - | - |
-| `date` | Date |
-| `datetime` | DateTime |
-| `uid` | UID of the video |
-| `clientCountryName` | ISO 3166 alpha2 country code from the client who viewed the video |
-| `creator` | The [Creator ID](https://developers.cloudflare.com/stream/manage-video-library/creator-id/) associated with individual videos, if present |
+| Field               | Description                                                                                                                               |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `date`              | Date                                                                                                                                      |
+| `datetime`          | DateTime                                                                                                                                  |
+| `uid`               | UID of the video                                                                                                                          |
+| `clientCountryName` | ISO 3166 alpha2 country code from the client who viewed the video                                                                         |
+| `creator`           | The [Creator ID](https://developers.cloudflare.com/stream/manage-video-library/creator-id/) associated with individual videos, if present |
 
 Some filters, like `date`, can be used with operators, such as `gt` (greater than) and `lt` (less than), as shown in the example query below. For more advanced filtering options, refer to [filtering](https://developers.cloudflare.com/analytics/graphql-api/features/filtering/).
 
 ### Metrics
 
-| Node | Field | Description |
-| - | - | - |
+| Node                                | Field           | Description                |
+| ----------------------------------- | --------------- | -------------------------- |
 | `streamMinutesViewedAdaptiveGroups` | `minutesViewed` | Minutes of video delivered |
 
 ### Example
@@ -3117,7 +3132,7 @@ query StreamGetMinutesExample($accountTag: string!, $start: Date, $end: Date) {
 }
 ```
 
-[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAygFwmAhgWwOJgQWQJYB2ICYAzgKIAe6ADgDZgAUAJCgMZsD2IBCAKigDmALhikkhQQEIANDGbiUEBKIAiKEnOZgCAEzUawAShgBvAFAwYANzxgA7pDOWrMdlx4JSjAGZ46JBCipm4c3LwCIvLu4fxCMAC+JhauruLI6PhEJKQAanaOugCCuig0CHjWYBgQ3DTeLqlWfgGQwTClJAD6gmDAogoISghynWBdAQM6uomNTZwQupAAQlCiANqkIGhdaITEZPkOYLpdquRwAMIAunOpdHh7KjAAjAAMb3cwyV9WW2jOJpNPbZQ4FE6-WZAqy6R46Uh4TgEUiA6FWEB4XSQqxsB46BCXWLQABy6DAkISX0pqWpswSQA\&variables=N4IghgxhD2CuB2AXAKmA5iAXCAggYTwHkBVAOWQH0BJAERABoQBnRMAJ0SxACYAGbgGwBaXgEYhogKwMQAU3gATLn0EjxogSAC+QA)
+[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAygFwmAhgWwOJgQWQJYB2ICYAzgKIAe6ADgDZgAUAJCgMZsD2IBCAKigDmALhikkhQQEIANDGbiUEBKIAiKEnOZgCAEzUawAShgBvAFAwYANzxgA7pDOWrMdlx4JSjAGZ46JBCipm4c3LwCIvLu4fxCMAC+JhauruLI6PhEJKQAanaOugCCuig0CHjWYBgQ3DTeLqlWfgGQwTClJAD6gmDAogoISghynWBdAQM6uomNTZwQupAAQlCiANqkIGhdaITEZPkOYLpdquRwAMIAunOpdHh7KjAAjAAMb3cwyV9WW2jOJpNPbZQ4FE6-WZAqy6R46Uh4TgEUiA6FWEB4XSQqxsB46BCXWLQABy6DAkISX0pqWpswSQA&variables=N4IghgxhD2CuB2AXAKmA5iAXCAggYTwHkBVAOWQH0BJAERABoQBnRMAJ0SxACYAGbgGwBaXgEYhogKwMQAU3gATLn0EjxogSAC+QA)
 
 ```json
 {
@@ -3169,12 +3184,7 @@ GraphQL API supports seek pagination: using filters, you can specify the last vi
 The query below will return data for 2 videos that follow video UID `5646153f8dea17f44d542a42e76cfd`:
 
 ```graphql
-query StreamPaginationExample(
-  $accountTag: string!
-  $start: Date
-  $end: Date
-  $uId: string
-) {
+query StreamPaginationExample($accountTag: string!, $start: Date, $end: Date, $uId: string) {
   viewer {
     accounts(filter: { accountTag: $accountTag }) {
       videoPlaybackEventsAdaptiveGroups(
@@ -3195,34 +3205,35 @@ query StreamPaginationExample(
 }
 ```
 
-[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAygFwmAhgWwAooOYEsB2KCuA9vgKIAe6ADgDZgAUAUDDACQoDGXJI+CACo4AXDADOSAtgCErDpJQQEYgCJEw89mHwATNRq0gAkvolT82ZgEoYAb3kA3XGADuke-Lbde-BOMYAM1w6BEgxOxgfPgFhbDFOHhihHBgAX1sHNmyYZ10wEgw6FCgAI24Aa3JHHX8AQV0UGmIagHEIPhoArxyYYNDw+xhGsIB9bDBgBMVlABphjVHQhJ1deZBcXXGVDhNddJ6ckgh8iAAhKDEAbQ2turgAYQBdQ+y6XDRcHYAmV8zXti+AQAiQgNCeXq9YhoMAANRc7l0AFkCCAwuIQWkQboPjpxKR8OIIZDsrdMa8sTlKQc0kA\&variables=N4IghgxhD2CuB2AXAKmA5iAXCAggYTwHkBVAOWQH0BJAERABoQBnRMAJ0SxACYAGbgGwBaXgEYhogKwMQAU3gATLn0EjxogTNhUl2SQIAsAqQGYAZgA4FssKIDsZgwYWSD3MG9l2BEM0oC+QA)
+[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAygFwmAhgWwAooOYEsB2KCuA9vgKIAe6ADgDZgAUAUDDACQoDGXJI+CACo4AXDADOSAtgCErDpJQQEYgCJEw89mHwATNRq0gAkvolT82ZgEoYAb3kA3XGADuke-Lbde-BOMYAM1w6BEgxOxgfPgFhbDFOHhihHBgAX1sHNmyYZ10wEgw6FCgAI24Aa3JHHX8AQV0UGmIagHEIPhoArxyYYNDw+xhGsIB9bDBgBMVlABphjVHQhJ1deZBcXXGVDhNddJ6ckgh8iAAhKDEAbQ2turgAYQBdQ+y6XDRcHYAmV8zXti+AQAiQgNCeXq9YhoMAANRc7l0AFkCCAwuIQWkQboPjpxKR8OIIZDsrdMa8sTlKQc0kA&variables=N4IghgxhD2CuB2AXAKmA5iAXCAggYTwHkBVAOWQH0BJAERABoQBnRMAJ0SxACYAGbgGwBaXgEYhogKwMQAU3gATLn0EjxogTNhUl2SQIAsAqQGYAZgA4FssKIDsZgwYWSD3MG9l2BEM0oC+QA)
 
 Here are the steps to implementing pagination:
 
-1. Call the first query without uid\_gt filter to get the first set of videos
+1. Call the first query without uid_gt filter to get the first set of videos
 2. Grab the last video UID from the response from the first query
-3. Call next query by specifying uid\_gt property and set it to the last video UID. This will return the next set of videos
+3. Call next query by specifying uid_gt property and set it to the last video UID. This will return the next set of videos
 
 For more on pagination, refer to the [Cloudflare GraphQL Analytics API docs](https://developers.cloudflare.com/analytics/graphql-api/features/pagination/).
 
 ## Limitations
 
-* The maximum query interval in a single query is 31 days
-* The maximum data retention period is 90 days
+- The maximum query interval in a single query is 31 days
+- The maximum data retention period is 90 days
 
 </page>
 
-<page>
----
+## <page>
+
 title: Get live viewer counts · Cloudflare Stream docs
 description: The Stream player has full support for live viewer counts by
-  default. To get the viewer count for live videos for use with third party
-  players, make a GET request to the /views endpoint.
+default. To get the viewer count for live videos for use with third party
+players, make a GET request to the /views endpoint.
 lastUpdated: 2024-08-13T19:56:56.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/getting-analytics/live-viewer-count/
-  md: https://developers.cloudflare.com/stream/getting-analytics/live-viewer-count/index.md
+html: https://developers.cloudflare.com/stream/getting-analytics/live-viewer-count/
+md: https://developers.cloudflare.com/stream/getting-analytics/live-viewer-count/index.md
+
 ---
 
 The Stream player has full support for live viewer counts by default. To get the viewer count for live videos for use with third party players, make a `GET` request to the `/views` endpoint.
@@ -3239,18 +3250,19 @@ Below is a response for a live video with several active viewers:
 
 </page>
 
-<page>
----
+## <page>
+
 title: Manage creators · Cloudflare Stream docs
 description: You can set the creator field with an internal user ID at the time
-  a tokenized upload URL is requested. When the video is uploaded, the creator
-  property is automatically set to the internal user ID which can be used for
-  analytics data or when searching for videos by a specific creator.
+a tokenized upload URL is requested. When the video is uploaded, the creator
+property is automatically set to the internal user ID which can be used for
+analytics data or when searching for videos by a specific creator.
 lastUpdated: 2024-09-24T15:46:36.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/manage-video-library/creator-id/
-  md: https://developers.cloudflare.com/stream/manage-video-library/creator-id/index.md
+html: https://developers.cloudflare.com/stream/manage-video-library/creator-id/
+md: https://developers.cloudflare.com/stream/manage-video-library/creator-id/index.md
+
 ---
 
 You can set the creator field with an internal user ID at the time a tokenized upload URL is requested. When the video is uploaded, the creator property is automatically set to the internal user ID which can be used for analytics data or when searching for videos by a specific creator.
@@ -3462,16 +3474,17 @@ After you set the creator property, you can use the [GraphQL API](https://develo
 
 </page>
 
-<page>
----
+## <page>
+
 title: Search for videos · Cloudflare Stream docs
 description: You can search for videos by name through the Stream API by adding
-  a search query parameter to the list media files endpoint.
+a search query parameter to the list media files endpoint.
 lastUpdated: 2024-12-16T22:33:26.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/manage-video-library/searching/
-  md: https://developers.cloudflare.com/stream/manage-video-library/searching/index.md
+html: https://developers.cloudflare.com/stream/manage-video-library/searching/
+md: https://developers.cloudflare.com/stream/manage-video-library/searching/index.md
+
 ---
 
 You can search for videos by name through the Stream API by adding a `search` query parameter to the [list media files](https://developers.cloudflare.com/api/resources/stream/methods/list/) endpoint.
@@ -3492,16 +3505,17 @@ curl -X GET "https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/stream?s
 
 </page>
 
-<page>
----
+## <page>
+
 title: Use webhooks · Cloudflare Stream docs
 description: Webhooks notify your service when videos successfully finish
-  processing and are ready to stream or if your video enters an error state.
+processing and are ready to stream or if your video enters an error state.
 lastUpdated: 2026-01-14T17:05:31.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
-  md: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/index.md
+html: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
+md: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/index.md
+
 ---
 
 Webhooks notify your service when videos successfully finish processing and are ready to stream or if your video enters an error state.
@@ -3567,12 +3581,12 @@ When at least one quality level is encoded and ready to be streamed, the `readyT
 
 If a video could not process successfully, the `state` field returns `error`, and the `errReasonCode` returns one of the values listed below.
 
-* `ERR_NON_VIDEO` – The upload is not a video.
-* `ERR_DURATION_EXCEED_CONSTRAINT` – The video duration exceeds the constraints defined in the direct creator upload.
-* `ERR_FETCH_ORIGIN_ERROR` – The video failed to download from the URL.
-* `ERR_MALFORMED_VIDEO` – The video is a valid file but contains corrupt data that cannot be recovered.
-* `ERR_DURATION_TOO_SHORT` – The video's duration is shorter than 0.1 seconds.
-* `ERR_UNKNOWN` – If Stream cannot automatically determine why the video returned an error, the `ERR_UNKNOWN` code will be used.
+- `ERR_NON_VIDEO` – The upload is not a video.
+- `ERR_DURATION_EXCEED_CONSTRAINT` – The video duration exceeds the constraints defined in the direct creator upload.
+- `ERR_FETCH_ORIGIN_ERROR` – The video failed to download from the URL.
+- `ERR_MALFORMED_VIDEO` – The video is a valid file but contains corrupt data that cannot be recovered.
+- `ERR_DURATION_TOO_SHORT` – The video's duration is shorter than 0.1 seconds.
+- `ERR_UNKNOWN` – If Stream cannot automatically determine why the video returned an error, the `ERR_UNKNOWN` code will be used.
 
 In addition to the `state` field, a video's `readyToStream` field must also be `true` for a video to play.
 
@@ -3593,44 +3607,44 @@ Example: POST body for successful video encoding
 
 ```json
 {
- "uid": "6b9e68b07dfee8cc2d116e4c51d6a957",
- "creator": null,
- "thumbnail": "https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.jpg",
- "thumbnailTimestampPct": 0,
- "readyToStream": true,
- "status": {
-   "state": "ready",
-   "pctComplete": "39.000000",
-   "errorReasonCode": "",
-   "errorReasonText": ""
- },
- "meta": {
-   "filename": "small.mp4",
-   "filetype": "video/mp4",
-   "name": "small.mp4",
-   "relativePath": "null",
-   "type": "video/mp4"
- },
- "created": "2022-06-30T17:53:12.512033Z",
- "modified": "2022-06-30T17:53:21.774299Z",
- "size": 383631,
- "preview": "https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/watch",
- "allowedOrigins": [],
- "requireSignedURLs": false,
- "uploaded": "2022-06-30T17:53:12.511981Z",
- "uploadExpiry": "2022-07-01T17:53:12.511973Z",
- "maxSizeBytes": null,
- "maxDurationSeconds": null,
- "duration": 5.5,
- "input": {
-   "width": 560,
-   "height": 320
- },
- "playback": {
-   "hls": "https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/manifest/video.m3u8",
-   "dash": "https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/manifest/video.mpd"
- },
- "watermark": null
+  "uid": "6b9e68b07dfee8cc2d116e4c51d6a957",
+  "creator": null,
+  "thumbnail": "https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.jpg",
+  "thumbnailTimestampPct": 0,
+  "readyToStream": true,
+  "status": {
+    "state": "ready",
+    "pctComplete": "39.000000",
+    "errorReasonCode": "",
+    "errorReasonText": ""
+  },
+  "meta": {
+    "filename": "small.mp4",
+    "filetype": "video/mp4",
+    "name": "small.mp4",
+    "relativePath": "null",
+    "type": "video/mp4"
+  },
+  "created": "2022-06-30T17:53:12.512033Z",
+  "modified": "2022-06-30T17:53:21.774299Z",
+  "size": 383631,
+  "preview": "https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/watch",
+  "allowedOrigins": [],
+  "requireSignedURLs": false,
+  "uploaded": "2022-06-30T17:53:12.511981Z",
+  "uploadExpiry": "2022-07-01T17:53:12.511973Z",
+  "maxSizeBytes": null,
+  "maxDurationSeconds": null,
+  "duration": 5.5,
+  "input": {
+    "width": 560,
+    "height": 320
+  },
+  "playback": {
+    "hls": "https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/manifest/video.m3u8",
+    "dash": "https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/manifest/video.mpd"
+  },
+  "watermark": null
 }
 ```
 
@@ -3658,9 +3672,9 @@ At this point, you should discard requests with timestamps that are too old for 
 
 Prepare the signature source string and concatenate the following strings:
 
-* Value of the `time` field for example `1230811200`
-* Character `.`
-* Webhook request body (complete with newline characters, if applicable)
+- Value of the `time` field for example `1230811200`
+- Character `.`
+- Webhook request body (complete with newline characters, if applicable)
 
 Every byte in the request body must remain unaltered for successful signature verification.
 
@@ -3678,8 +3692,8 @@ If the signatures match, you can trust that Cloudflare sent the webhook.
 
 ## Limitations
 
-* Webhooks will only be sent after video processing is complete, and the body will indicate whether the video processing succeeded or failed.
-* Only one webhook subscription is allowed per-account.
+- Webhooks will only be sent after video processing is complete, and the body will indicate whether the video processing succeeded or failed.
+- Only one webhook subscription is allowed per-account.
 
 ## Examples
 
@@ -3718,17 +3732,14 @@ func main() {
 **Node.js**
 
 ```js
-    var crypto = require('crypto');
+var crypto = require('crypto')
 
+var key = 'secret from the Cloudflare API'
+var message = 'string from step 2'
 
-    var key = 'secret from the Cloudflare API';
-    var message = 'string from step 2';
+var hash = crypto.createHmac('sha256', key).update(message)
 
-
-    var hash = crypto.createHmac('sha256', key).update(message);
-
-
-    hash.digest('hex');
+hash.digest('hex')
 ```
 
 **Ruby**
@@ -3747,42 +3758,40 @@ func main() {
 **In JavaScript (for example, to use in Cloudflare Workers)**
 
 ```javascript
-    const key = 'secret from the Cloudflare API';
-    const message = 'string from step 2';
+const key = 'secret from the Cloudflare API'
+const message = 'string from step 2'
 
+const getUtf8Bytes = str =>
+  new Uint8Array([...decodeURIComponent(encodeURIComponent(str))].map(c => c.charCodeAt(0)))
 
-    const getUtf8Bytes = str =>
-      new Uint8Array(
-        [...decodeURIComponent(encodeURIComponent(str))].map(c => c.charCodeAt(0))
-      );
+const keyBytes = getUtf8Bytes(key)
+const messageBytes = getUtf8Bytes(message)
 
+const cryptoKey = await crypto.subtle.importKey(
+  'raw',
+  keyBytes,
+  { name: 'HMAC', hash: 'SHA-256' },
+  true,
+  ['sign']
+)
+const sig = await crypto.subtle.sign('HMAC', cryptoKey, messageBytes)
 
-    const keyBytes = getUtf8Bytes(key);
-    const messageBytes = getUtf8Bytes(message);
-
-
-    const cryptoKey = await crypto.subtle.importKey(
-      'raw', keyBytes, { name: 'HMAC', hash: 'SHA-256' },
-      true, ['sign']
-    );
-    const sig = await crypto.subtle.sign('HMAC', cryptoKey, messageBytes);
-
-
-    [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
+;[...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('')
 ```
 
 </page>
 
-<page>
----
+## <page>
+
 title: Add custom ingest domains · Cloudflare Stream docs
 description: With custom ingest domains, you can configure your RTMPS feeds to
-  use an ingest URL that you specify instead of using live.cloudflare.com.
+use an ingest URL that you specify instead of using live.cloudflare.com.
 lastUpdated: 2026-01-14T17:05:31.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/custom-domains/
-  md: https://developers.cloudflare.com/stream/stream-live/custom-domains/index.md
+html: https://developers.cloudflare.com/stream/stream-live/custom-domains/
+md: https://developers.cloudflare.com/stream/stream-live/custom-domains/index.md
+
 ---
 
 With custom ingest domains, you can configure your RTMPS feeds to use an ingest URL that you specify instead of using `live.cloudflare.com.`
@@ -3810,16 +3819,17 @@ If you are using Cloudflare for DNS, ensure the [**Proxy status**](https://devel
 
 </page>
 
-<page>
----
+## <page>
+
 title: Download live stream videos · Cloudflare Stream docs
 description: You can enable downloads for live stream videos from the Cloudflare
-  dashboard. Videos are available for download after they enter the Ready state.
+dashboard. Videos are available for download after they enter the Ready state.
 lastUpdated: 2025-09-04T14:40:32.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/download-stream-live-videos/
-  md: https://developers.cloudflare.com/stream/stream-live/download-stream-live-videos/index.md
+html: https://developers.cloudflare.com/stream/stream-live/download-stream-live-videos/
+md: https://developers.cloudflare.com/stream/stream-live/download-stream-live-videos/index.md
+
 ---
 
 You can enable downloads for live stream videos from the Cloudflare dashboard. Videos are available for download after they enter the **Ready** state.
@@ -3844,19 +3854,20 @@ Downloadable MP4s are only available for live recordings under four hours. Live 
 
 </page>
 
-<page>
----
+## <page>
+
 title: DVR for Live · Cloudflare Stream docs
 description: |-
-  Stream Live supports "DVR mode" on an opt-in basis to allow viewers to rewind,
-  resume, and fast-forward a live broadcast. To enable DVR mode, add the
-  dvrEnabled=true query parameter to the Stream Player embed source or the HLS
-  manifest URL.
+Stream Live supports "DVR mode" on an opt-in basis to allow viewers to rewind,
+resume, and fast-forward a live broadcast. To enable DVR mode, add the
+dvrEnabled=true query parameter to the Stream Player embed source or the HLS
+manifest URL.
 lastUpdated: 2025-09-25T13:29:38.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/dvr-for-live/
-  md: https://developers.cloudflare.com/stream/stream-live/dvr-for-live/index.md
+html: https://developers.cloudflare.com/stream/stream-live/dvr-for-live/
+md: https://developers.cloudflare.com/stream/stream-live/dvr-for-live/index.md
+
 ---
 
 Stream Live supports "DVR mode" on an opt-in basis to allow viewers to rewind, resume, and fast-forward a live broadcast. To enable DVR mode, add the `dvrEnabled=true` query parameter to the Stream Player embed source or the HLS manifest URL.
@@ -3876,9 +3887,9 @@ Stream Live supports "DVR mode" on an opt-in basis to allow viewers to rewind, r
 
 When DVR mode is enabled the Stream Player will:
 
-* Show a timeline the viewer can scrub/seek, similar to watching an on-demand video. The timeline will automatically scale to show the growing duration of the broadcast while it is live.
-* The "LIVE" indicator will show grey if the viewer is behind the live edge or red if they are watching the latest content. Clicking that indicator will jump forward to the live edge.
-* If the viewer pauses the player, it will resume playback from that time instead of jumping forward to the live edge.
+- Show a timeline the viewer can scrub/seek, similar to watching an on-demand video. The timeline will automatically scale to show the growing duration of the broadcast while it is live.
+- The "LIVE" indicator will show grey if the viewer is behind the live edge or red if they are watching the latest content. Clicking that indicator will jump forward to the live edge.
+- If the viewer pauses the player, it will resume playback from that time instead of jumping forward to the live edge.
 
 ## HLS manifest for custom players
 
@@ -3894,34 +3905,35 @@ Stream Live allows loading the Player or HLS manifest by Video ID or Live Input 
 
 **Recommended:** Use DVR Mode on a Video ID URL:
 
-* When the player loads, it will start playing the active broadcast if it is still live or play the recording if the broadcast has concluded.
+- When the player loads, it will start playing the active broadcast if it is still live or play the recording if the broadcast has concluded.
 
 DVR Mode on a Live Input ID URL:
 
-* When the player loads, it will start playing the currently live broadcast if there is one (refer to [Live Input Status](https://developers.cloudflare.com/stream/stream-live/watch-live-stream/#live-input-status)).
-* If the viewer is still watching *after the broadcast ends,* they can continue to watch. However, if the player or manifest is then reloaded, it will show the latest broadcast or "Stream has not yet started" (`HTTP 204`). Past broadcasts are not available by Live Input ID.
+- When the player loads, it will start playing the currently live broadcast if there is one (refer to [Live Input Status](https://developers.cloudflare.com/stream/stream-live/watch-live-stream/#live-input-status)).
+- If the viewer is still watching _after the broadcast ends,_ they can continue to watch. However, if the player or manifest is then reloaded, it will show the latest broadcast or "Stream has not yet started" (`HTTP 204`). Past broadcasts are not available by Live Input ID.
 
 ## Known Limitations
 
-* When using DVR Mode and a player/manifest created using a Live Input ID, the player may stall when trying to switch quality levels if a viewer is still watching after a broadcast has concluded.
-* Performance may be degraded for DVR-enabled broadcasts longer than three hours. Manifests are limited to a maxiumum of 7,200 segments. Segment length is determined by the keyframe interval, also called GOP size.
-* DVR Mode relies on Version 8 of the HLS manifest specification. Stream uses HLS Version 6 in all other contexts. HLS v8 offers extremely broad compatibility but may not work with certain old player libraries or older devices.
-* DVR Mode is not available for DASH manifests.
+- When using DVR Mode and a player/manifest created using a Live Input ID, the player may stall when trying to switch quality levels if a viewer is still watching after a broadcast has concluded.
+- Performance may be degraded for DVR-enabled broadcasts longer than three hours. Manifests are limited to a maxiumum of 7,200 segments. Segment length is determined by the keyframe interval, also called GOP size.
+- DVR Mode relies on Version 8 of the HLS manifest specification. Stream uses HLS Version 6 in all other contexts. HLS v8 offers extremely broad compatibility but may not work with certain old player libraries or older devices.
+- DVR Mode is not available for DASH manifests.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Live Instant Clipping · Cloudflare Stream docs
 description: Stream supports generating clips of live streams and recordings so
-  creators and viewers alike can highlight short, engaging pieces of a longer
-  broadcast or recording. Live instant clips can be created by end users and do
-  not result in additional storage fees or new entries in the video library.
+creators and viewers alike can highlight short, engaging pieces of a longer
+broadcast or recording. Live instant clips can be created by end users and do
+not result in additional storage fees or new entries in the video library.
 lastUpdated: 2025-02-14T19:42:29.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/live-instant-clipping/
-  md: https://developers.cloudflare.com/stream/stream-live/live-instant-clipping/index.md
+html: https://developers.cloudflare.com/stream/stream-live/live-instant-clipping/
+md: https://developers.cloudflare.com/stream/stream-live/live-instant-clipping/index.md
+
 ---
 
 Stream supports generating clips of live streams and recordings so creators and viewers alike can highlight short, engaging pieces of a longer broadcast or recording. Live instant clips can be created by end users and do not result in additional storage fees or new entries in the video library.
@@ -3946,12 +3958,12 @@ To help users replay and seek recent content, request a preview manifest by addi
 https://customer-<CODE>.cloudflarestream.com/<VIDEO_ID||INPUT_ID>/manifest/video.m3u8?duration=5m
 ```
 
-* `duration` string duration of the preview, up to 5 minutes as either a number of seconds ("30s") or minutes ("3m")
+- `duration` string duration of the preview, up to 5 minutes as either a number of seconds ("30s") or minutes ("3m")
 
 When the preview manifest is delivered, inspect the headers for two properties:
 
-* `preview-start-seconds` float seconds into the start of the live stream or recording that the preview manifest starts. Useful in applications that allow a user to select a range from the preview because the clip will need to reference its offset from the *broadcast* start time, not the *preview* start time.
-* `stream-media-id` string the video ID of the live stream or recording. Useful in applications that render the player using an *input* ID because the clip URL should reference the *video* ID.
+- `preview-start-seconds` float seconds into the start of the live stream or recording that the preview manifest starts. Useful in applications that allow a user to select a range from the preview because the clip will need to reference its offset from the _broadcast_ start time, not the _preview_ start time.
+- `stream-media-id` string the video ID of the live stream or recording. Useful in applications that render the player using an _input_ ID because the clip URL should reference the _video_ ID.
 
 This manifest can be played and seeked using any HLS-compatible player.
 
@@ -3960,50 +3972,44 @@ This manifest can be played and seeked using any HLS-compatible player.
 Reading headers when loading a manifest requires adjusting how players handle the response. For example, if using [HLS.js](https://github.com/video-dev/hls.js) and the default loader, override the `pLoader` (playlist loader) class:
 
 ```js
-let currentPreviewStart;
-let currentPreviewVideoID;
-
+let currentPreviewStart
+let currentPreviewVideoID
 
 // Override the pLoader (playlist loader) to read the manifest headers:
 class pLoader extends Hls.DefaultConfig.loader {
   constructor(config) {
-    super(config);
-    var load = this.load.bind(this);
+    super(config)
+    var load = this.load.bind(this)
     this.load = function (context, config, callbacks) {
       if (context.type == 'manifest') {
-        var onSuccess = callbacks.onSuccess;
+        var onSuccess = callbacks.onSuccess
         // copy the existing onSuccess handler to fire it later.
-
 
         callbacks.onSuccess = function (response, stats, context, networkDetails) {
           // The fourth argument here is undocumented in HLS.js but contains
           // the response object for the manifest fetch, which gives us headers:
 
-
-          currentPreviewStart =
-            parseFloat(networkDetails.getResponseHeader('preview-start-seconds'));
+          currentPreviewStart = parseFloat(
+            networkDetails.getResponseHeader('preview-start-seconds')
+          )
           // Save the start time of the preview manifest
 
-
-          currentPreviewVideoID =
-            networkDetails.getResponseHeader('stream-media-id');
+          currentPreviewVideoID = networkDetails.getResponseHeader('stream-media-id')
           // Save the video ID in case the preview was loaded with an input ID
 
-
-          onSuccess(response, stats, context);
+          onSuccess(response, stats, context)
           // And fire the exisint success handler.
-        };
+        }
       }
-      load(context, config, callbacks);
-    };
+      load(context, config, callbacks)
+    }
   }
 }
-
 
 // Specify the new loader class when setting up HLS
 const hls = new Hls({
   pLoader: pLoader,
-});
+})
 ```
 
 ## Clip manifest
@@ -4014,8 +4020,8 @@ To play a clip of a live stream or recording, request a clip manifest with a dur
 https://customer-<CODE>.cloudflarestream.com/<VIDEO_ID>/manifest/clip.m3u8?time=600s&duration=30s
 ```
 
-* `time` string start time of the clip in seconds, from the start of the live stream or recording
-* `duration` string duration of the clip in seconds, up to 60 seconds max
+- `time` string start time of the clip in seconds, from the start of the live stream or recording
+- `duration` string duration of the clip in seconds, up to 60 seconds max
 
 This manifest can be played and seeked using any HLS-compatible player.
 
@@ -4027,24 +4033,25 @@ An MP4 of the clip can also be generated dynamically to be saved and shared on o
 https://customer-<CODE>.cloudflarestream.com/<VIDEO_ID>/clip.mp4?time=600s&duration=30s&filename=clip.mp4
 ```
 
-* `time` string start time of the clip in seconds, from the start of the live stream or recording (example: "500s")
-* `duration` string duration of the clip in seconds, up to 60 seconds max (example: "60s")
-* `filename` string *(optional)* a filename for the clip
+- `time` string start time of the clip in seconds, from the start of the live stream or recording (example: "500s")
+- `duration` string duration of the clip in seconds, up to 60 seconds max (example: "60s")
+- `filename` string _(optional)_ a filename for the clip
 
 </page>
 
-<page>
----
+## <page>
+
 title: Record and replay live streams · Cloudflare Stream docs
 description: "Live streams are automatically recorded, and available instantly
-  once a live stream ends. To get a list of recordings for a given input ID,
-  make a GET request to /live_inputs/<UID>/videos and filter for videos where
-  state is set to ready:"
+once a live stream ends. To get a list of recordings for a given input ID,
+make a GET request to /live_inputs/<UID>/videos and filter for videos where
+state is set to ready:"
 lastUpdated: 2024-12-16T22:33:26.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/replay-recordings/
-  md: https://developers.cloudflare.com/stream/stream-live/replay-recordings/index.md
+html: https://developers.cloudflare.com/stream/stream-live/replay-recordings/
+md: https://developers.cloudflare.com/stream/stream-live/replay-recordings/index.md
+
 ---
 
 Live streams are automatically recorded, and available instantly once a live stream ends. To get a list of recordings for a given input ID, make a [`GET` request to `/live_inputs/<UID>/videos`](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/methods/get/) and filter for videos where `state` is set to `ready`:
@@ -4104,18 +4111,19 @@ https://dash.cloudflare.com/api/v4/accounts/<ACCOUNT_ID>/stream/live_inputs/<LIV
 
 </page>
 
-<page>
----
+## <page>
+
 title: Simulcast (restream) videos · Cloudflare Stream docs
 description: Simulcasting lets you forward your live stream to third-party
-  platforms such as Twitch, YouTube, Facebook, Twitter, and more. You can
-  simulcast to up to 50 concurrent destinations from each live input. To begin
-  simulcasting, select an input and add one or more Outputs.
+platforms such as Twitch, YouTube, Facebook, Twitter, and more. You can
+simulcast to up to 50 concurrent destinations from each live input. To begin
+simulcasting, select an input and add one or more Outputs.
 lastUpdated: 2025-09-09T16:21:39.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/simulcasting/
-  md: https://developers.cloudflare.com/stream/stream-live/simulcasting/index.md
+html: https://developers.cloudflare.com/stream/stream-live/simulcasting/
+md: https://developers.cloudflare.com/stream/stream-live/simulcasting/index.md
+
 ---
 
 Simulcasting lets you forward your live stream to third-party platforms such as Twitch, YouTube, Facebook, Twitter, and more. You can simulcast to up to 50 concurrent destinations from each live input. To begin simulcasting, select an input and add one or more Outputs.
@@ -4148,17 +4156,17 @@ https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/stream/live_inputs/<I
 
 You can enable and disable individual live outputs with either:
 
-* The **Live inputs** page of the Cloudflare dashboard.
+- The **Live inputs** page of the Cloudflare dashboard.
 
   [Go to **Live inputs**](https://dash.cloudflare.com/?to=/:account/stream/inputs)
 
-* [The API](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/subresources/outputs/methods/update/)
+- [The API](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/subresources/outputs/methods/update/)
 
 This allows you to:
 
-* Start a live stream, but wait to start simulcasting to YouTube and Twitch until right before the content begins.
-* Stop simulcasting before the live stream ends, to encourage viewers to transition from a third-party service like YouTube or Twitch to a direct live stream.
-* Give your own users manual control over when they go live to specific simulcasting destinations.
+- Start a live stream, but wait to start simulcasting to YouTube and Twitch until right before the content begins.
+- Stop simulcasting before the live stream ends, to encourage viewers to transition from a third-party service like YouTube or Twitch to a direct live stream.
+- Give your own users manual control over when they go live to specific simulcasting destinations.
 
 When a live output is disabled, video is not simulcast to the live output, even when actively streaming to the corresponding live input.
 
@@ -4176,29 +4184,30 @@ By default, all live outputs are enabled.
 
 ## Manage outputs
 
-| Command | Method | Endpoint |
-| - | - | - |
-| [List outputs](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/methods/list/) | `GET` | `accounts/:account_identifier/stream/live_inputs` |
-| [Delete outputs](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/methods/delete/) | `DELETE` | `accounts/:account_identifier/stream/live_inputs/:live_input_identifier` |
-| [List All Outputs Associated With A Specified Live Input](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/subresources/outputs/methods/list/) | `GET` | `/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs` |
-| [Delete An Output](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/subresources/outputs/methods/delete/) | `DELETE` | `/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs/{output_identifier}` |
+| Command                                                                                                                                                                       | Method   | Endpoint                                                                                        |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------- |
+| [List outputs](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/methods/list/)                                                                 | `GET`    | `accounts/:account_identifier/stream/live_inputs`                                               |
+| [Delete outputs](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/methods/delete/)                                                             | `DELETE` | `accounts/:account_identifier/stream/live_inputs/:live_input_identifier`                        |
+| [List All Outputs Associated With A Specified Live Input](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/subresources/outputs/methods/list/) | `GET`    | `/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs`                     |
+| [Delete An Output](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/subresources/outputs/methods/delete/)                                      | `DELETE` | `/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs/{output_identifier}` |
 
 If the associated live input is already retransmitting to this output when you make the `DELETE` request, that output will be disconnected within 30 seconds.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Start a live stream · Cloudflare Stream docs
 description: After you subscribe to Stream, you can create Live Inputs in Dash
-  or via the API. Broadcast to your new Live Input using RTMPS or SRT. SRT
-  supports newer video codecs and makes using accessibility features, such as
-  captions and multiple audio tracks, easier.
+or via the API. Broadcast to your new Live Input using RTMPS or SRT. SRT
+supports newer video codecs and makes using accessibility features, such as
+captions and multiple audio tracks, easier.
 lastUpdated: 2025-09-09T16:21:39.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/start-stream-live/
-  md: https://developers.cloudflare.com/stream/stream-live/start-stream-live/index.md
+html: https://developers.cloudflare.com/stream/stream-live/start-stream-live/
+md: https://developers.cloudflare.com/stream/stream-live/start-stream-live/index.md
+
 ---
 
 After you subscribe to Stream, you can create Live Inputs in Dash or via the API. Broadcast to your new Live Input using RTMPS or SRT. SRT supports newer video codecs and makes using accessibility features, such as captions and multiple audio tracks, easier.
@@ -4262,39 +4271,32 @@ https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs
 
 [API Reference Docs for `/live_inputs`](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/methods/create/)
 
-* `preferLowLatency` boolean default: `false` Beta
+- `preferLowLatency` boolean default: `false` Beta
+  - When set to true, this live input will be enabled for the beta Low-Latency HLS pipeline. The Stream built-in player will automatically use LL-HLS when possible. (Recording `mode` property must also be set to `automatic`.)
 
-  * When set to true, this live input will be enabled for the beta Low-Latency HLS pipeline. The Stream built-in player will automatically use LL-HLS when possible. (Recording `mode` property must also be set to `automatic`.)
-
-* `deleteRecordingAfterDays` integer default: `null` (any)
-
-  * Specifies a date and time when the recording, not the input, will be deleted. This property applies from the time the recording is made available and ready to stream. After the recording is deleted, it is no longer viewable and no longer counts towards storage for billing. Minimum value is `30`, maximum value is `1096`.
+- `deleteRecordingAfterDays` integer default: `null` (any)
+  - Specifies a date and time when the recording, not the input, will be deleted. This property applies from the time the recording is made available and ready to stream. After the recording is deleted, it is no longer viewable and no longer counts towards storage for billing. Minimum value is `30`, maximum value is `1096`.
 
     When the stream ends, a `scheduledDeletion` timestamp is calculated using the `deleteRecordingAfterDays` value if present.
 
     Note that if the value is added to a live input while a stream is live, the property will only apply to future streams.
 
-* `timeoutSeconds` integer default: `0`
-
-  * The `timeoutSeconds` property specifies how long a live feed can be disconnected before it results in a new video being created.
+- `timeoutSeconds` integer default: `0`
+  - The `timeoutSeconds` property specifies how long a live feed can be disconnected before it results in a new video being created.
 
 The following four properties are nested under the `recording` object.
 
-* `mode` string default: `off`
+- `mode` string default: `off`
+  - When the mode property is set to `automatic`, the live stream will be automatically available for viewing using HLS/DASH. In addition, the live stream will be automatically recorded for later replays. By default, recording mode is set to `off`, and the input will not be recorded or available for playback.
 
-  * When the mode property is set to `automatic`, the live stream will be automatically available for viewing using HLS/DASH. In addition, the live stream will be automatically recorded for later replays. By default, recording mode is set to `off`, and the input will not be recorded or available for playback.
+- `requireSignedURLs` boolean default: `false`
+  - The `requireSignedURLs` property indicates if signed URLs are required to view the video. This setting is applied by default to all videos recorded from the input. In addition, if viewing a video via the live input ID, this field takes effect over any video-level settings.
 
-* `requireSignedURLs` boolean default: `false`
+- `allowedOrigins` integer default: `null` (any)
+  - The `allowedOrigins` property can optionally be invoked to provide a list of allowed origins. This setting is applied by default to all videos recorded from the input. In addition, if viewing a video via the live input ID, this field takes effect over any video-level settings.
 
-  * The `requireSignedURLs` property indicates if signed URLs are required to view the video. This setting is applied by default to all videos recorded from the input. In addition, if viewing a video via the live input ID, this field takes effect over any video-level settings.
-
-* `allowedOrigins` integer default: `null` (any)
-
-  * The `allowedOrigins` property can optionally be invoked to provide a list of allowed origins. This setting is applied by default to all videos recorded from the input. In addition, if viewing a video via the live input ID, this field takes effect over any video-level settings.
-
-* `hideLiveViewerCount` boolean default: `false`
-
-  * Restrict access to the live viewer count and remove the value from the player.
+- `hideLiveViewerCount` boolean default: `false`
+  - Restrict access to the live viewer count and remove the value from the player.
 
 ## Manage live inputs
 
@@ -4321,54 +4323,55 @@ If you are experiencing buffering, freezing, experiencing latency, or having oth
 
 ### Recommendations
 
-* Your creators should use an appropriate bitrate for their live streams, typically well under 12Mbps (12000Kbps). High motion, high frame rate content typically should use a higher bitrate, while low motion content like slide presentations should use a lower bitrate.
-* Your creators should use a [GOP duration](https://en.wikipedia.org/wiki/Group_of_pictures) (keyframe interval) of between 2 to 8 seconds. The default in most encoding software and hardware, including Open Broadcaster Software (OBS), is within this range. Setting a lower GOP duration will reduce latency for viewers, while also reducing encoding efficiency. Setting a higher GOP duration will improve encoding efficiency, while increasing latency for viewers. This is a tradeoff inherent to video encoding, and not a limitation of Cloudflare Stream.
-* When possible, select CBR (constant bitrate) instead of VBR (variable bitrate) as CBR helps to ensure a stable streaming experience while preventing buffering and interruptions.
+- Your creators should use an appropriate bitrate for their live streams, typically well under 12Mbps (12000Kbps). High motion, high frame rate content typically should use a higher bitrate, while low motion content like slide presentations should use a lower bitrate.
+- Your creators should use a [GOP duration](https://en.wikipedia.org/wiki/Group_of_pictures) (keyframe interval) of between 2 to 8 seconds. The default in most encoding software and hardware, including Open Broadcaster Software (OBS), is within this range. Setting a lower GOP duration will reduce latency for viewers, while also reducing encoding efficiency. Setting a higher GOP duration will improve encoding efficiency, while increasing latency for viewers. This is a tradeoff inherent to video encoding, and not a limitation of Cloudflare Stream.
+- When possible, select CBR (constant bitrate) instead of VBR (variable bitrate) as CBR helps to ensure a stable streaming experience while preventing buffering and interruptions.
 
 #### Low-Latency HLS broadcast recommendations Beta
 
-* For lowest latency, use a GOP size (keyframe interval) of 1 or 2 seconds.
-* Broadcast to the RTMP endpoint if possible.
-* If using OBS, select the "ultra low" latency profile.
+- For lowest latency, use a GOP size (keyframe interval) of 1 or 2 seconds.
+- Broadcast to the RTMP endpoint if possible.
+- If using OBS, select the "ultra low" latency profile.
 
 ### Requirements
 
-* Closed GOPs are required. This means that if there are any B frames in the video, they should always refer to frames within the same GOP. This setting is the default in most encoding software and hardware, including [OBS Studio](https://obsproject.com/).
-* Stream Live only supports H.264 video and AAC audio codecs as inputs. This requirement does not apply to inputs that are relayed to Stream Connect outputs. Stream Live supports ADTS but does not presently support LATM.
-* Clients must be configured to reconnect when a disconnection occurs. Stream Live is designed to handle reconnection gracefully by continuing the live stream.
+- Closed GOPs are required. This means that if there are any B frames in the video, they should always refer to frames within the same GOP. This setting is the default in most encoding software and hardware, including [OBS Studio](https://obsproject.com/).
+- Stream Live only supports H.264 video and AAC audio codecs as inputs. This requirement does not apply to inputs that are relayed to Stream Connect outputs. Stream Live supports ADTS but does not presently support LATM.
+- Clients must be configured to reconnect when a disconnection occurs. Stream Live is designed to handle reconnection gracefully by continuing the live stream.
 
 ### Limitations
 
-* Watermarks cannot yet be used with live videos.
-* If a live video exceeds seven days in length, the recording will be truncated to seven days. Only the first seven days of live video content will be recorded.
+- Watermarks cannot yet be used with live videos.
+- If a live video exceeds seven days in length, the recording will be truncated to seven days. Only the first seven days of live video content will be recorded.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Stream Live API docs · Cloudflare Stream docs
 lastUpdated: 2024-12-16T22:33:26.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/stream-live-api/
-  md: https://developers.cloudflare.com/stream/stream-live/stream-live-api/index.md
----
+html: https://developers.cloudflare.com/stream/stream-live/stream-live-api/
+md: https://developers.cloudflare.com/stream/stream-live/stream-live-api/index.md
 
+---
 
 </page>
 
-<page>
----
+## <page>
+
 title: Troubleshooting a live stream · Cloudflare Stream docs
 description: In addition to following the live stream troubleshooting steps in
-  this guide, make sure that your video settings align with Cloudflare live
-  stream recommendations. If you use OBS, you can also check these OBS-specific
-  recommendations.
+this guide, make sure that your video settings align with Cloudflare live
+stream recommendations. If you use OBS, you can also check these OBS-specific
+recommendations.
 lastUpdated: 2025-12-02T15:23:09.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/troubleshooting/
-  md: https://developers.cloudflare.com/stream/stream-live/troubleshooting/index.md
+html: https://developers.cloudflare.com/stream/stream-live/troubleshooting/
+md: https://developers.cloudflare.com/stream/stream-live/troubleshooting/index.md
+
 ---
 
 In addition to following the live stream troubleshooting steps in this guide, make sure that your video settings align with [Cloudflare live stream recommendations](https://developers.cloudflare.com/stream/stream-live/start-stream-live/#recommendations-requirements-and-limitations). If you use OBS, you can also check these [OBS-specific recommendations](https://developers.cloudflare.com/stream/examples/obs-from-scratch/#6-optional-optimize-settings).
@@ -4386,10 +4389,9 @@ If your live stream is buffering, freezing, experiencing latency issues, or havi
 3. Look at your **Keyframe Interval** chart.
 
    It should be a consistent flat line that stays between 2s and 8s. If you see an inconsistent or wavy line, or a line that is consistently below 2s or above 8s, adjust the keyframe interval (also called GOP size) in your software or service used to send the stream to Cloudflare. The exact steps for editing those settings will depend on your platform.
+   - Start by setting the keyframe interval to 4s. If playback is stable but latency is still too high, lower it to 2s. If you are experiencing buffering or freezing in playback, increase it to 8s.
 
-   * Start by setting the keyframe interval to 4s. If playback is stable but latency is still too high, lower it to 2s. If you are experiencing buffering or freezing in playback, increase it to 8s.
-
-   * If the keyframe interval is "variable" or "automatic", change it to a specific number instead, like 4s.
+   - If the keyframe interval is "variable" or "automatic", change it to a specific number instead, like 4s.
 
    What is a keyframe interval?
 
@@ -4398,15 +4400,13 @@ If your live stream is buffering, freezing, experiencing latency issues, or havi
 4. Look at your **Upload-to-Duration Ratio** chart.
 
    It should be a consistent flat line below 90%. If you see an inconsistent or wavy line, or a line that is consistently above 100%, try the following troubleshooting steps:
+   - [Check that your Internet upload speed](https://speed.cloudflare.com/) is at least 20 Mbps. If it is below 20 Mbps, use common troubleshooting steps such as restarting your router, using an Ethernet connection instead of Wi-Fi, or contacting your Internet service provider.
 
-   * [Check that your Internet upload speed](https://speed.cloudflare.com/) is at least 20 Mbps. If it is below 20 Mbps, use common troubleshooting steps such as restarting your router, using an Ethernet connection instead of Wi-Fi, or contacting your Internet service provider.
+   - Check the video bitrate setting in the software or service you use to send the stream to Cloudflare.
+     - If it is "variable", change it to "constant" with a specific number, like 8 Mbps.
+     - If it is above 15 Mbps, lower it to 8 Mbps or 70% of your Internet speed, whichever is lower.
 
-   * Check the video bitrate setting in the software or service you use to send the stream to Cloudflare.
-
-     * If it is "variable", change it to "constant" with a specific number, like 8 Mbps.
-     * If it is above 15 Mbps, lower it to 8 Mbps or 70% of your Internet speed, whichever is lower.
-
-   * Follow the steps above (the keyframe interval steps) to *increase* the keyframe interval in the software or service you use to send the stream to Cloudflare.
+   - Follow the steps above (the keyframe interval steps) to _increase_ the keyframe interval in the software or service you use to send the stream to Cloudflare.
 
    What is the upload-to-duration ratio?
 
@@ -4414,18 +4414,19 @@ If your live stream is buffering, freezing, experiencing latency issues, or havi
 
 </page>
 
-<page>
----
+## <page>
+
 title: Watch a live stream · Cloudflare Stream docs
 description: |-
-  When a Live Input begins receiving a
-  broadcast, a new video is automatically created if the input's mode property
-  is set to automatic.
+When a Live Input begins receiving a
+broadcast, a new video is automatically created if the input's mode property
+is set to automatic.
 lastUpdated: 2025-09-04T14:40:32.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/watch-live-stream/
-  md: https://developers.cloudflare.com/stream/stream-live/watch-live-stream/index.md
+html: https://developers.cloudflare.com/stream/stream-live/watch-live-stream/
+md: https://developers.cloudflare.com/stream/stream-live/watch-live-stream/index.md
+
 ---
 
 When a [Live Input](https://developers.cloudflare.com/stream/stream-live/start-stream-live/) begins receiving a broadcast, a new video is automatically created if the input's `mode` property is set to `automatic`.
@@ -4442,7 +4443,7 @@ Whether you use the Stream Player or a custom player with a manifest, you can re
 
 Use a Live Input ID in instances where a player should always show the active broadcast, if there is one, or a "Stream has not started" message if the input is idle. This option is best for cases where a page is dedicated to a creator, channel, or recurring program. The Live Input ID is provisioned for you when you create the input; it will not change.
 
-Use a Video ID in instances where a player should be used to display a single broadcast or its recording once the broadcast has concluded. This option is best for cases where a page is dedicated to a one-time event, specific episode/occurance, or date. There is a *new* Video ID generated for each broadcast *when it starts.*
+Use a Video ID in instances where a player should be used to display a single broadcast or its recording once the broadcast has concluded. This option is best for cases where a page is dedicated to a one-time event, specific episode/occurance, or date. There is a _new_ Video ID generated for each broadcast _when it starts._
 
 Using DVR mode, explained below, there are additional considerations.
 
@@ -4494,9 +4495,9 @@ A live input will have multiple videos associated with it, one for each broadcas
 
 Each video in the response, including the active broadcast if there is one, contains the HLS and DASH URLs and a link to the Stream player. Noteworthy properties include:
 
-* `preview` -- Link to the Stream player to watch
-* `playback`.`hls` -- HLS Manifest
-* `playback`.`dash` -- DASH Manifest
+- `preview` -- Link to the Stream player to watch
+- `playback`.`hls` -- HLS Manifest
+- `playback`.`dash` -- DASH Manifest
 
 In the example below, the state of the live video is `live-inprogress` and the state for previously recorded video is `ready`.
 
@@ -4593,8 +4594,8 @@ When viewing a live stream via the live input ID, the `requireSignedURLs` and `a
 
 After a live stream ends, a recording is automatically generated and available within 60 seconds. To ensure successful video viewing and playback, keep the following in mind:
 
-* If a live stream ends while a viewer is watching, viewers using the Stream player should wait 60 seconds and then reload the player to view the recording of the live stream.
-* After a live stream ends, you can check the status of the recording via the API. When the video state is `ready`, you can use one of the manifest URLs to stream the recording.
+- If a live stream ends while a viewer is watching, viewers using the Stream player should wait 60 seconds and then reload the player to view the recording of the live stream.
+- After a live stream ends, you can check the status of the recording via the API. When the video state is `ready`, you can use one of the manifest URLs to stream the recording.
 
 While the recording of the live stream is generating, the video may report as `not-found` or `not-started`.
 
@@ -4602,16 +4603,17 @@ If you are not using the Stream player for live stream recordings, refer to [Rec
 
 </page>
 
-<page>
----
+## <page>
+
 title: Receive Live Webhooks · Cloudflare Stream docs
 description: Stream Live offers webhooks to notify your service when an Input
-  connects, disconnects, or encounters an error with Stream Live.
+connects, disconnects, or encounters an error with Stream Live.
 lastUpdated: 2026-01-14T17:05:31.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/stream-live/webhooks/
-  md: https://developers.cloudflare.com/stream/stream-live/webhooks/index.md
+html: https://developers.cloudflare.com/stream/stream-live/webhooks/
+md: https://developers.cloudflare.com/stream/stream-live/webhooks/index.md
+
 ---
 
 Stream Live offers webhooks to notify your service when an Input connects, disconnects, or encounters an error with Stream Live.
@@ -4632,8 +4634,8 @@ You can input Stream Live IDs to receive notifications only about those inputs. 
 
 The following input states will fire notifications. You can toggle them on or off:
 
-* `live_input.connected`
-* `live_input.disconnected`
+- `live_input.connected`
+- `live_input.disconnected`
 
 **Included with**
 
@@ -4691,11 +4693,11 @@ If there are issues detected with the input, the `event_type` will be `live_inpu
 
 ## Error codes
 
-* `ERR_GOP_OUT_OF_RANGE` – The input GOP size or keyframe interval is out of range.
-* `ERR_UNSUPPORTED_VIDEO_CODEC` – The input video codec is unsupported for the protocol used.
-* `ERR_UNSUPPORTED_AUDIO_CODEC` – The input audio codec is unsupported for the protocol used.
-* `ERR_STORAGE_QUOTA_EXHAUSTED` – The account storage quota has been exceeded. Delete older content or purcahse additional storage.
-* `ERR_MISSING_SUBSCRIPTION` – Unauthorized to start a live stream. Check subscription or log into Dash for details.
+- `ERR_GOP_OUT_OF_RANGE` – The input GOP size or keyframe interval is out of range.
+- `ERR_UNSUPPORTED_VIDEO_CODEC` – The input video codec is unsupported for the protocol used.
+- `ERR_UNSUPPORTED_AUDIO_CODEC` – The input audio codec is unsupported for the protocol used.
+- `ERR_STORAGE_QUOTA_EXHAUSTED` – The account storage quota has been exceeded. Delete older content or purcahse additional storage.
+- `ERR_MISSING_SUBSCRIPTION` – Unauthorized to start a live stream. Check subscription or log into Dash for details.
 
 ```json
 {
@@ -4715,23 +4717,24 @@ If there are issues detected with the input, the `event_type` will be `live_inpu
       "audio_codec": ""
     }
   },
-  "ts": 1720548474,
+  "ts": 1720548474
 }
 ```
 
 </page>
 
-<page>
----
+## <page>
+
 title: Define source origin · Cloudflare Stream docs
 description: When optimizing remote videos, you can specify which origins can be
-  used as the source for transformed videos. By default, Cloudflare accepts only
-  source videos from the zone where your transformations are served.
+used as the source for transformed videos. By default, Cloudflare accepts only
+source videos from the zone where your transformations are served.
 lastUpdated: 2025-09-25T13:29:38.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/transform-videos/sources/
-  md: https://developers.cloudflare.com/stream/transform-videos/sources/index.md
+html: https://developers.cloudflare.com/stream/transform-videos/sources/
+md: https://developers.cloudflare.com/stream/transform-videos/sources/index.md
+
 ---
 
 Media Transformations is now GA:
@@ -4800,17 +4803,18 @@ When your accepted sources are set to **any origin**, any publicly available vid
 
 </page>
 
-<page>
----
+## <page>
+
 title: Troubleshooting · Cloudflare Stream docs
 description: "If you are using Media Transformations to transform your video and
-  you experience a failure, the response body contains an error message
-  explaining the reason, as well as the Cf-Resized header containing err=code:"
+you experience a failure, the response body contains an error message
+explaining the reason, as well as the Cf-Resized header containing err=code:"
 lastUpdated: 2025-09-25T13:29:38.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/transform-videos/troubleshooting/
-  md: https://developers.cloudflare.com/stream/transform-videos/troubleshooting/index.md
+html: https://developers.cloudflare.com/stream/transform-videos/troubleshooting/
+md: https://developers.cloudflare.com/stream/transform-videos/troubleshooting/index.md
+
 ---
 
 Media Transformations is now GA:
@@ -4819,38 +4823,39 @@ Billing for Media Transformations will begin on November 1st, 2025.
 
 If you are using Media Transformations to transform your video and you experience a failure, the response body contains an error message explaining the reason, as well as the `Cf-Resized` header containing `err=code`:
 
-* 9401 — The required options are missing or are invalid. Refer to [Options](https://developers.cloudflare.com/stream/transform-videos/#options) for supported arguments.
-* 9402 — The video was too large or the origin server did not respond as expected. Refer to [source video requirements](https://developers.cloudflare.com/stream/transform-videos/#source-video-requirements) for more information.
-* 9404 — The video does not exist on the origin server or the URL used to transform the video is wrong. Verify the video exists and check the URL.
-* 9406 & 9419 — The video URL is a non-HTTPS URL or the URL has spaces or unescaped Unicode. Check your URL and try again.
-* 9407 — A lookup error occurred with the origin server's domain name. Check your DNS settings and try again.
-* 9408 — The origin server returned an HTTP 4xx status code and may be denying access to the video. Confirm your video settings and try again.
-* 9412 — The origin server returned a non-video, for example, an HTML page. This usually happens when an invalid URL is specified or server-side software has printed an error or presented a login page.
-* 9504 — The origin server could not be contacted because the origin server may be down or overloaded. Try again later.
-* 9509 — The origin server returned an HTTP 5xx status code. This is most likely a problem with the origin server-side software, not the transformation.
-* 9517 & 9523 — Internal errors. Contact support if you encounter these errors.
+- 9401 — The required options are missing or are invalid. Refer to [Options](https://developers.cloudflare.com/stream/transform-videos/#options) for supported arguments.
+- 9402 — The video was too large or the origin server did not respond as expected. Refer to [source video requirements](https://developers.cloudflare.com/stream/transform-videos/#source-video-requirements) for more information.
+- 9404 — The video does not exist on the origin server or the URL used to transform the video is wrong. Verify the video exists and check the URL.
+- 9406 & 9419 — The video URL is a non-HTTPS URL or the URL has spaces or unescaped Unicode. Check your URL and try again.
+- 9407 — A lookup error occurred with the origin server's domain name. Check your DNS settings and try again.
+- 9408 — The origin server returned an HTTP 4xx status code and may be denying access to the video. Confirm your video settings and try again.
+- 9412 — The origin server returned a non-video, for example, an HTML page. This usually happens when an invalid URL is specified or server-side software has printed an error or presented a login page.
+- 9504 — The origin server could not be contacted because the origin server may be down or overloaded. Try again later.
+- 9509 — The origin server returned an HTTP 5xx status code. This is most likely a problem with the origin server-side software, not the transformation.
+- 9517 & 9523 — Internal errors. Contact support if you encounter these errors.
 
-***
+---
 
 </page>
 
-<page>
----
+## <page>
+
 title: Direct creator uploads · Cloudflare Stream docs
 description: Direct creator uploads let your end users upload videos directly to
-  Cloudflare Stream without exposing your API token to clients.
+Cloudflare Stream without exposing your API token to clients.
 lastUpdated: 2024-12-16T22:33:26.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/
-  md: https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/index.md
+html: https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/
+md: https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/index.md
+
 ---
 
 Direct creator uploads let your end users upload videos directly to Cloudflare Stream without exposing your API token to clients.
 
-* If your video is a [basic upload](https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/#basic-uploads) under 200 MB and users do not need resumable uploads, generate a URL that accepts an HTTP post request.
+- If your video is a [basic upload](https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/#basic-uploads) under 200 MB and users do not need resumable uploads, generate a URL that accepts an HTTP post request.
 
-* If your video is over 200 MB or if you need to allow users to [resume interrupted uploads](https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/#resumable-uploads), generate a URL using the tus protocol.
+- If your video is over 200 MB or if you need to allow users to [resume interrupted uploads](https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/#resumable-uploads), generate a URL using the tus protocol.
 
 In either case, you must specify a maximum duration to reserve for the user's upload to ensure it can be accommodated within your available storage.
 
@@ -4898,33 +4903,30 @@ The example below shows how to build a Worker to get a URL you can use to upload
 
 ```javascript
 export async function onRequest(context) {
-  const { request, env } = context;
-  const { CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_API_TOKEN } = env;
-  const endpoint = `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/stream?direct_user=true`;
-
+  const { request, env } = context
+  const { CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_API_TOKEN } = env
+  const endpoint = `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/stream?direct_user=true`
 
   const response = await fetch(endpoint, {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: `bearer ${CLOUDFLARE_API_TOKEN}`,
-      "Tus-Resumable": "1.0.0",
-      "Upload-Length": request.headers.get("Upload-Length"),
-      "Upload-Metadata": request.headers.get("Upload-Metadata"),
+      'Tus-Resumable': '1.0.0',
+      'Upload-Length': request.headers.get('Upload-Length'),
+      'Upload-Metadata': request.headers.get('Upload-Metadata'),
     },
-  });
+  })
 
-
-  const destination = response.headers.get("Location");
-
+  const destination = response.headers.get('Location')
 
   return new Response(null, {
     headers: {
-      "Access-Control-Expose-Headers": "Location",
-      "Access-Control-Allow-Headers": "*",
-      "Access-Control-Allow-Origin": "*",
+      'Access-Control-Expose-Headers': 'Location',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Origin': '*',
       Location: destination,
     },
-  });
+  })
 }
 ```
 
@@ -4933,17 +4935,12 @@ export async function onRequest(context) {
 ```html
 <html>
   <head>
-    <link
-      href="https://releases.transloadit.com/uppy/v3.0.1/uppy.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://releases.transloadit.com/uppy/v3.0.1/uppy.min.css" rel="stylesheet" />
   </head>
   <body>
     <div id="drag-drop-area" style="height: 300px"></div>
     <div class="for-ProgressBar"></div>
-    <button class="upload-button" style="font-size: 30px; margin: 20px">
-      Upload
-    </button>
+    <button class="upload-button" style="font-size: 30px; margin: 20px">Upload</button>
     <div class="uploaded-files" style="margin-top: 50px">
       <ol></ol>
     </div>
@@ -4953,40 +4950,35 @@ export async function onRequest(context) {
         Tus,
         DragDrop,
         ProgressBar,
-      } from "https://releases.transloadit.com/uppy/v3.0.1/uppy.min.mjs";
+      } from 'https://releases.transloadit.com/uppy/v3.0.1/uppy.min.mjs'
 
+      const uppy = new Uppy({ debug: true, autoProceed: true })
 
-      const uppy = new Uppy({ debug: true, autoProceed: true });
+      const onUploadSuccess = el => (file, response) => {
+        const li = document.createElement('li')
+        const a = document.createElement('a')
+        a.href = response.uploadURL
+        a.target = '_blank'
+        a.appendChild(document.createTextNode(file.name))
+        li.appendChild(a)
 
-
-      const onUploadSuccess = (el) => (file, response) => {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = response.uploadURL;
-        a.target = "_blank";
-        a.appendChild(document.createTextNode(file.name));
-        li.appendChild(a);
-
-
-        document.querySelector(el).appendChild(li);
-      };
-
+        document.querySelector(el).appendChild(li)
+      }
 
       uppy
-        .use(DragDrop, { target: "#drag-drop-area" })
+        .use(DragDrop, { target: '#drag-drop-area' })
         .use(Tus, {
-          endpoint: "/api/get-upload-url",
+          endpoint: '/api/get-upload-url',
           chunkSize: 150 * 1024 * 1024,
         })
         .use(ProgressBar, {
-          target: ".for-ProgressBar",
+          target: '.for-ProgressBar',
           hideAfterFinish: false,
         })
-        .on("upload-success", onUploadSuccess(".uploaded-files ol"));
+        .on('upload-success', onUploadSuccess('.uploaded-files ol'))
 
-
-      const uploadBtn = document.querySelector("button.upload-button");
-      uploadBtn.addEventListener("click", () => uppy.upload());
+      const uploadBtn = document.querySelector('button.upload-button')
+      uploadBtn.addEventListener('click', () => uppy.upload())
     </script>
   </body>
 </html>
@@ -4998,7 +4990,7 @@ For more details on using tus and example client code, refer to [Resumable and l
 
 You can apply the [same constraints](https://developers.cloudflare.com/api/resources/stream/subresources/direct_upload/methods/create/) as Direct Creator Upload via basic upload when using tus. To do so, you must pass the `expiry` and `maxDurationSeconds` as part of the `Upload-Metadata` request header as part of the first request (made by the Worker in the example above.) The `Upload-Metadata` values are ignored from subsequent requests that do the actual file upload.
 
-The `Upload-Metadata` header should contain key-value pairs. The keys are text and the values should be encoded in base64. Separate the key and values by a space, *not* an equal sign. To join multiple key-value pairs, include a comma with no additional spaces.
+The `Upload-Metadata` header should contain key-value pairs. The keys are text and the values should be encoded in base64. Separate the key and values by a space, _not_ an equal sign. To join multiple key-value pairs, include a comma with no additional spaces.
 
 In the example below, the `Upload-Metadata` header is instructing Stream to only accept uploads with max video duration of 10 minutes, uploaded prior to the expiry timestamp, and to make this video private:
 
@@ -5012,9 +5004,9 @@ After the creation of a unique one-time upload URL, you may wish to retain the u
 
 You can do that two ways:
 
-* [Search for a video](https://developers.cloudflare.com/stream/manage-video-library/searching/) with the UID to check the status.
+- [Search for a video](https://developers.cloudflare.com/stream/manage-video-library/searching/) with the UID to check the status.
 
-* [Create a webhook subscription](https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/) to receive notifications about the video status. These notifications include the video's UID.
+- [Create a webhook subscription](https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/) to receive notifications about the video status. These notifications include the video's UID.
 
 ## Billing considerations
 
@@ -5024,16 +5016,17 @@ For a detailed breakdown of pricing and example scenarios, refer to [Pricing](ht
 
 </page>
 
-<page>
----
+## <page>
+
 title: Player API · Cloudflare Stream docs
 description: "Attributes are added in the <stream> tag without quotes, as you
-  can see below:"
+can see below:"
 lastUpdated: 2025-05-08T19:52:23.000Z
 chatbotDeprioritize: true
 source_url:
-  html: https://developers.cloudflare.com/stream/uploading-videos/player-api/
-  md: https://developers.cloudflare.com/stream/uploading-videos/player-api/index.md
+html: https://developers.cloudflare.com/stream/uploading-videos/player-api/
+md: https://developers.cloudflare.com/stream/uploading-videos/player-api/index.md
+
 ---
 
 Attributes are added in the `<stream>` tag without quotes, as you can see below:
@@ -5050,9 +5043,8 @@ Multiple attributes can be used together, added one after each other like this:
 
 ## Supported attributes
 
-* `autoplay` boolean
-
-  * Tells the browser to immediately start downloading the video and play it as soon as it can. Note that mobile browsers generally do not support this attribute, the user must tap the screen to begin video playback. Please consider mobile users or users with Internet usage limits as some users do not have unlimited Internet access before using this attribute.
+- `autoplay` boolean
+  - Tells the browser to immediately start downloading the video and play it as soon as it can. Note that mobile browsers generally do not support this attribute, the user must tap the screen to begin video playback. Please consider mobile users or users with Internet usage limits as some users do not have unlimited Internet access before using this attribute.
 
   Note
 
@@ -5060,93 +5052,73 @@ Multiple attributes can be used together, added one after each other like this:
 
 In addition, some browsers now prevent videos with audio from playing automatically. You may add the `mute` attribute to allow your videos to autoplay. For more information, see [new video policies for iOS](https://webkit.org/blog/6784/new-video-policies-for-ios/). :::
 
-* `controls` boolean
+- `controls` boolean
+  - Shows the default video controls such as buttons for play/pause, volume controls. You may choose to build buttons and controls that work with the player. [See an example.](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/)
 
-  * Shows the default video controls such as buttons for play/pause, volume controls. You may choose to build buttons and controls that work with the player. [See an example.](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/)
+- `height` integer
+  - The height of the video's display area, in CSS pixels.
 
-* `height` integer
+- `loop` boolean
+  - A Boolean attribute; if included in the HTML tag, player will, automatically seek back to the start upon reaching the end of the video.
 
-  * The height of the video's display area, in CSS pixels.
+- `muted` boolean
+  - A Boolean attribute which indicates the default setting of the audio contained in the video. If set, the audio will be initially silenced.
 
-* `loop` boolean
-
-  * A Boolean attribute; if included in the HTML tag, player will, automatically seek back to the start upon reaching the end of the video.
-
-* `muted` boolean
-
-  * A Boolean attribute which indicates the default setting of the audio contained in the video. If set, the audio will be initially silenced.
-
-* `preload` string | null
-
-  * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience. You may choose to include this attribute as a boolean attribute without a value, or you may specify the value `preload="auto"` to preload the beginning of the video. Not including the attribute or using `preload="metadata"` will just load the metadata needed to start video playback when requested.
+- `preload` string | null
+  - This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience. You may choose to include this attribute as a boolean attribute without a value, or you may specify the value `preload="auto"` to preload the beginning of the video. Not including the attribute or using `preload="metadata"` will just load the metadata needed to start video playback when requested.
 
   Note
 
   The `<video>` element does not force the browser to follow the value of this attribute; it is a mere hint. Even though the `preload="none"` option is a valid HTML5 attribute, Stream player will always load some metadata to initialize the player. The amount of data loaded in this case is negligible.
 
-* `poster` string
+- `poster` string
+  - A URL for an image to be shown before the video is started or while the video is downloading. If this attribute is not specified, a thumbnail image of the video is shown.
 
-  * A URL for an image to be shown before the video is started or while the video is downloading. If this attribute is not specified, a thumbnail image of the video is shown.
+- `src` string
+  - The video id from the video you've uploaded to Cloudflare Stream should be included here.
 
-* `src` string
-
-  * The video id from the video you've uploaded to Cloudflare Stream should be included here.
-
-* `width` integer
-
-  * The width of the video's display area, in CSS pixels.
+- `width` integer
+  - The width of the video's display area, in CSS pixels.
 
 ## Methods
 
-* `play()` Promise
+- `play()` Promise
+  - Start video playback.
 
-  * Start video playback.
-
-* `pause()` null
-
-  * Pause video playback.
+- `pause()` null
+  - Pause video playback.
 
 ## Properties
 
-* `autoplay`
+- `autoplay`
+  - Sets or returns whether the autoplay attribute was set, allowing video playback to start upon load.
 
-  * Sets or returns whether the autoplay attribute was set, allowing video playback to start upon load.
+- `controls`
+  - Sets or returns whether the video should display controls (like play/pause etc.)
 
-* `controls`
+- `currentTime`
+  - Returns the current playback time in seconds. Setting this value seeks the video to a new time.
 
-  * Sets or returns whether the video should display controls (like play/pause etc.)
+- `duration` readonly
+  - Returns the duration of the video in seconds.
 
-* `currentTime`
+- `ended` readonly
+  - Returns whether the video has ended.
 
-  * Returns the current playback time in seconds. Setting this value seeks the video to a new time.
+- `loop`
+  - Sets or returns whether the video should start over when it reaches the end
 
-* `duration` readonly
+- `muted`
+  - Sets or returns whether the audio should be played with the video
 
-  * Returns the duration of the video in seconds.
+- `paused` readonly
+  - Returns whether the video is paused
 
-* `ended` readonly
+- `preload`
+  - Sets or returns whether the video should be preloaded upon element load.
 
-  * Returns whether the video has ended.
-
-* `loop`
-
-  * Sets or returns whether the video should start over when it reaches the end
-
-* `muted`
-
-  * Sets or returns whether the audio should be played with the video
-
-* `paused` readonly
-
-  * Returns whether the video is paused
-
-* `preload`
-
-  * Sets or returns whether the video should be preloaded upon element load.
-
-* `volume`
-
-  * Sets or returns volume from 0.0 (silent) to 1.0 (maximum value)
+- `volume`
+  - Sets or returns volume from 0.0 (silent) to 1.0 (maximum value)
 
 ## Events
 
@@ -5154,129 +5126,106 @@ In addition, some browsers now prevent videos with audio from playing automatica
 
 Stream supports most of the [standardized media element events](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events).
 
-* `abort`
+- `abort`
+  - Sent when playback is aborted; for example, if the media is playing and is restarted from the beginning, this event is sent.
 
-  * Sent when playback is aborted; for example, if the media is playing and is restarted from the beginning, this event is sent.
+- `canplay`
+  - Sent when enough data is available that the media can be played, at least for a couple of frames.
 
-* `canplay`
+- `canplaythrough`
+  - Sent when the entire media can be played without interruption, assuming the download rate remains at least at the current level. It will also be fired when playback is toggled between paused and playing. Note: Manually setting the currentTime will eventually fire a canplaythrough event in firefox. Other browsers might not fire this event.
 
-  * Sent when enough data is available that the media can be played, at least for a couple of frames.
+- `durationchange`
+  - The metadata has loaded or changed, indicating a change in duration of the media. This is sent, for example, when the media has loaded enough that the duration is known.
 
-* `canplaythrough`
+- `ended`
+  - Sent when playback completes.
 
-  * Sent when the entire media can be played without interruption, assuming the download rate remains at least at the current level. It will also be fired when playback is toggled between paused and playing. Note: Manually setting the currentTime will eventually fire a canplaythrough event in firefox. Other browsers might not fire this event.
+- `error`
+  - Sent when an error occurs. (for example, the video has not finished encoding yet, or the video fails to load due to an incorrect signed URL)
 
-* `durationchange`
+- `loadeddata`
+  - The first frame of the media has finished loading.
 
-  * The metadata has loaded or changed, indicating a change in duration of the media. This is sent, for example, when the media has loaded enough that the duration is known.
+- `loadedmetadata`
+  - The media's metadata has finished loading; all attributes now contain as much useful information as they are going to.
 
-* `ended`
+- `loadstart`
+  - Sent when loading of the media begins.
 
-  * Sent when playback completes.
+- `pause`
+  - Sent when the playback state is changed to paused (paused property is true).
 
-* `error`
+- `play`
+  - Sent when the playback state is no longer paused, as a result of the play method, or the autoplay attribute.
 
-  * Sent when an error occurs. (for example, the video has not finished encoding yet, or the video fails to load due to an incorrect signed URL)
+- `playing`
+  - Sent when the media has enough data to start playing, after the play event, but also when recovering from being stalled, when looping media restarts, and after seeked, if it was playing before seeking.
 
-* `loadeddata`
+- `progress`
+  - Sent periodically to inform interested parties of progress downloading the media. Information about the current amount of the media that has been downloaded is available in the media element's buffered attribute.
 
-  * The first frame of the media has finished loading.
+- `ratechange`
+  - Sent when the playback speed changes.
 
-* `loadedmetadata`
+- `seeked`
+  - Sent when a seek operation completes.
 
-  * The media's metadata has finished loading; all attributes now contain as much useful information as they are going to.
+- `seeking`
+  - Sent when a seek operation begins.
 
-* `loadstart`
+- `stalled`
+  - Sent when the user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
 
-  * Sent when loading of the media begins.
+- `suspend`
+  - Sent when loading of the media is suspended; this may happen either because the download has completed or because it has been paused for any other reason.
 
-* `pause`
+- `timeupdate`
+  - The time indicated by the element's currentTime attribute has changed.
 
-  * Sent when the playback state is changed to paused (paused property is true).
+- `volumechange`
+  - Sent when the audio volume changes (both when the volume is set and when the muted attribute is changed).
 
-* `play`
-
-  * Sent when the playback state is no longer paused, as a result of the play method, or the autoplay attribute.
-
-* `playing`
-
-  * Sent when the media has enough data to start playing, after the play event, but also when recovering from being stalled, when looping media restarts, and after seeked, if it was playing before seeking.
-
-* `progress`
-
-  * Sent periodically to inform interested parties of progress downloading the media. Information about the current amount of the media that has been downloaded is available in the media element's buffered attribute.
-
-* `ratechange`
-
-  * Sent when the playback speed changes.
-
-* `seeked`
-
-  * Sent when a seek operation completes.
-
-* `seeking`
-
-  * Sent when a seek operation begins.
-
-* `stalled`
-
-  * Sent when the user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
-
-* `suspend`
-
-  * Sent when loading of the media is suspended; this may happen either because the download has completed or because it has been paused for any other reason.
-
-* `timeupdate`
-
-  * The time indicated by the element's currentTime attribute has changed.
-
-* `volumechange`
-
-  * Sent when the audio volume changes (both when the volume is set and when the muted attribute is changed).
-
-* `waiting`
-
-  * Sent when the requested operation (such as playback) is delayed pending the completion of another operation (such as a seek).
+- `waiting`
+  - Sent when the requested operation (such as playback) is delayed pending the completion of another operation (such as a seek).
 
 ### Non-standard events
 
 Non-standard events are prefixed with `stream-` to distinguish them from standard events.
 
-* `stream-adstart`
+- `stream-adstart`
+  - Fires when `ad-url` attribute is present and the ad begins playback
 
-  * Fires when `ad-url` attribute is present and the ad begins playback
+- `stream-adend`
+  - Fires when `ad-url` attribute is present and the ad finishes playback
 
-* `stream-adend`
-
-  * Fires when `ad-url` attribute is present and the ad finishes playback
-
-* `stream-adtimeout`
-
-  * Fires when `ad-url` attribute is present and the ad took too long to load.
+- `stream-adtimeout`
+  - Fires when `ad-url` attribute is present and the ad took too long to load.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Resumable and large files (tus) · Cloudflare Stream docs
 description: If you have a video over 200 MB, we recommend using the tus
-  protocol for resumable file uploads. A resumable upload ensures that the
-  upload can be interrupted and resumed without uploading the previous data
-  again.
+protocol for resumable file uploads. A resumable upload ensures that the
+upload can be interrupted and resumed without uploading the previous data
+again.
 lastUpdated: 2025-05-16T16:37:37.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/uploading-videos/resumable-uploads/
-  md: https://developers.cloudflare.com/stream/uploading-videos/resumable-uploads/index.md
+html: https://developers.cloudflare.com/stream/uploading-videos/resumable-uploads/
+md: https://developers.cloudflare.com/stream/uploading-videos/resumable-uploads/index.md
+
 ---
 
 If you have a video over 200 MB, we recommend using the [tus protocol](https://tus.io/) for resumable file uploads. A resumable upload ensures that the upload can be interrupted and resumed without uploading the previous data again.
 
 ## Requirements
 
-* Resumable uploads require a minimum chunk size of 5,242,880 bytes unless the entire file is less than this amount. For better performance when the client connection is expected to be reliable, increase the chunk size to 52,428,800 bytes.
-* Maximum chunk size is 209,715,200 bytes.
-* Chunk size must be divisible by 256 KiB (256x1024 bytes). Round your chunk size to the nearest multiple of 256 KiB. Note that the final chunk of an upload that fits within a single chunk is exempt from this requirement.
+- Resumable uploads require a minimum chunk size of 5,242,880 bytes unless the entire file is less than this amount. For better performance when the client connection is expected to be reliable, increase the chunk size to 52,428,800 bytes.
+- Maximum chunk size is 209,715,200 bytes.
+- Chunk size must be divisible by 256 KiB (256x1024 bytes). Round your chunk size to the nearest multiple of 256 KiB. Note that the final chunk of an upload that fits within a single chunk is exempt from this requirement.
 
 ## Prerequisites
 
@@ -5380,19 +5329,19 @@ Refer to [go-tus](https://github.com/eventials/go-tus) for functionality such as
 
 Before you begin, install the tus-js-client.
 
-* npm
+- npm
 
   ```sh
   npm i tus-js-client
   ```
 
-* yarn
+- yarn
 
   ```sh
   yarn add tus-js-client
   ```
 
-* pnpm
+- pnpm
 
   ```sh
   pnpm add tus-js-client
@@ -5400,59 +5349,56 @@ Before you begin, install the tus-js-client.
 
 Create an `index.js` file and configure:
 
-* The API endpoint with your Cloudflare Account ID.
-* The request headers to include an API token.
+- The API endpoint with your Cloudflare Account ID.
+- The request headers to include an API token.
 
 ```js
-var fs = require("fs");
-var tus = require("tus-js-client");
-
+var fs = require('fs')
+var tus = require('tus-js-client')
 
 // Specify location of file you would like to upload below
-var path = __dirname + "/test.mp4";
-var file = fs.createReadStream(path);
-var size = fs.statSync(path).size;
-var mediaId = "";
-
+var path = __dirname + '/test.mp4'
+var file = fs.createReadStream(path)
+var size = fs.statSync(path).size
+var mediaId = ''
 
 var options = {
-  endpoint: "https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/stream",
+  endpoint: 'https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/stream',
   headers: {
-    Authorization: "Bearer <API_TOKEN>",
+    Authorization: 'Bearer <API_TOKEN>',
   },
   chunkSize: 50 * 1024 * 1024, // Required a minimum chunk size of 5 MB. Here we use 50 MB.
   retryDelays: [0, 3000, 5000, 10000, 20000], // Indicates to tus-js-client the delays after which it will retry if the upload fails.
   metadata: {
-    name: "test.mp4",
-    filetype: "video/mp4",
+    name: 'test.mp4',
+    filetype: 'video/mp4',
     // Optional if you want to include a watermark
     // watermark: '<WATERMARK_UID>',
   },
   uploadSize: size,
   onError: function (error) {
-    throw error;
+    throw error
   },
   onProgress: function (bytesUploaded, bytesTotal) {
-    var percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-    console.log(bytesUploaded, bytesTotal, percentage + "%");
+    var percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
+    console.log(bytesUploaded, bytesTotal, percentage + '%')
   },
   onSuccess: function () {
-    console.log("Upload finished");
+    console.log('Upload finished')
   },
   onAfterResponse: function (req, res) {
-    return new Promise((resolve) => {
-      var mediaIdHeader = res.getHeader("stream-media-id");
+    return new Promise(resolve => {
+      var mediaIdHeader = res.getHeader('stream-media-id')
       if (mediaIdHeader) {
-        mediaId = mediaIdHeader;
+        mediaId = mediaIdHeader
       }
-      resolve();
-    });
+      resolve()
+    })
   },
-};
+}
 
-
-var upload = new tus.Upload(file, options);
-upload.start();
+var upload = new tus.Upload(file, options)
+upload.start()
 ```
 
 ## Specify upload options
@@ -5463,29 +5409,23 @@ The tus protocol allows you to add optional parameters in the [`Upload-Metadata`
 
 Setting arbitrary metadata values in the `Upload-Metadata` header sets values in the [meta key in Stream API](https://developers.cloudflare.com/api/resources/stream/methods/list/).
 
-* `name`
+- `name`
+  - Setting this key will set `meta.name` in the API and display the value as the name of the video in the dashboard.
 
-  * Setting this key will set `meta.name` in the API and display the value as the name of the video in the dashboard.
+- `requiresignedurls`
+  - If this key is present, the video playback for this video will be required to use signed URLs after upload.
 
-* `requiresignedurls`
+- `scheduleddeletion`
+  - Specifies a date and time when a video will be deleted. After a video is deleted, it is no longer viewable and no longer counts towards storage for billing. The specified date and time cannot be earlier than 30 days or later than 1,096 days from the video's created timestamp.
 
-  * If this key is present, the video playback for this video will be required to use signed URLs after upload.
+- `allowedorigins`
+  - An array of strings listing origins allowed to display the video. This will set the [allowed origins setting](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/#security-considerations) for the video.
 
-* `scheduleddeletion`
+- `thumbnailtimestamppct`
+  - Specify the default thumbnail [timestamp percentage](https://developers.cloudflare.com/stream/viewing-videos/displaying-thumbnails/). Note that percentage is a floating point value between 0.0 and 1.0.
 
-  * Specifies a date and time when a video will be deleted. After a video is deleted, it is no longer viewable and no longer counts towards storage for billing. The specified date and time cannot be earlier than 30 days or later than 1,096 days from the video's created timestamp.
-
-* `allowedorigins`
-
-  * An array of strings listing origins allowed to display the video. This will set the [allowed origins setting](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/#security-considerations) for the video.
-
-* `thumbnailtimestamppct`
-
-  * Specify the default thumbnail [timestamp percentage](https://developers.cloudflare.com/stream/viewing-videos/displaying-thumbnails/). Note that percentage is a floating point value between 0.0 and 1.0.
-
-* `watermark`
-
-  * The watermark profile UID.
+- `watermark`
+  - The watermark profile UID.
 
 ## Set creator property
 
@@ -5507,16 +5447,17 @@ stream-media-id: cab807e0c477d01baq20f66c3d1dfc26cf
 
 </page>
 
-<page>
----
+## <page>
+
 title: Upload with a link · Cloudflare Stream docs
 description: If you have videos stored in a cloud storage bucket, you can pass a
-  HTTP link for the file, and Stream will fetch the file on your behalf.
+HTTP link for the file, and Stream will fetch the file on your behalf.
 lastUpdated: 2025-04-04T15:30:48.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/uploading-videos/upload-via-link/
-  md: https://developers.cloudflare.com/stream/uploading-videos/upload-via-link/index.md
+html: https://developers.cloudflare.com/stream/uploading-videos/upload-via-link/
+md: https://developers.cloudflare.com/stream/uploading-videos/upload-via-link/index.md
+
 ---
 
 If you have videos stored in a cloud storage bucket, you can pass a HTTP link for the file, and Stream will fetch the file on your behalf.
@@ -5587,15 +5528,16 @@ If you are using your own player or rendering the video in a mobile app, refer t
 
 </page>
 
-<page>
----
+## <page>
+
 title: Basic video uploads · Cloudflare Stream docs
 description: For files smaller than 200 MB, you can use simple form-based uploads.
 lastUpdated: 2025-11-17T14:08:01.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/uploading-videos/upload-video-file/
-  md: https://developers.cloudflare.com/stream/uploading-videos/upload-video-file/index.md
+html: https://developers.cloudflare.com/stream/uploading-videos/upload-video-file/
+md: https://developers.cloudflare.com/stream/uploading-videos/upload-video-file/index.md
+
 ---
 
 ## Basic Uploads
@@ -5629,17 +5571,18 @@ Note that cURL's `--form` flag automatically configures the `content-type` heade
 
 </page>
 
-<page>
----
+## <page>
+
 title: Display thumbnails · Cloudflare Stream docs
 description: A thumbnail from your video can be generated using a special link
-  where you specify the time from the video you'd like to get the thumbnail
-  from.
+where you specify the time from the video you'd like to get the thumbnail
+from.
 lastUpdated: 2025-05-08T19:52:23.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/displaying-thumbnails/
-  md: https://developers.cloudflare.com/stream/viewing-videos/displaying-thumbnails/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/displaying-thumbnails/
+md: https://developers.cloudflare.com/stream/viewing-videos/displaying-thumbnails/index.md
+
 ---
 
 Note
@@ -5652,7 +5595,7 @@ A thumbnail from your video can be generated using a special link where you spec
 
 `https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.jpg?time=1s&height=270`
 
-![Example of thumbnail image generated from example video](https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.jpg?time=1s\&height=270)
+![Example of thumbnail image generated from example video](https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.jpg?time=1s&height=270)
 
 Using the `poster` query parameter in the embed URL, you can set a thumbnail to any time in your video. If [signed URLs](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/) are required, you must use a signed URL instead of video UIDs.
 
@@ -5667,18 +5610,17 @@ Using the `poster` query parameter in the embed URL, you can set a thumbnail to 
 
 Supported URL attributes are:
 
-* **`time`** (default `0s`, configurable) time from the video for example `8m`, `5m2s`
+- **`time`** (default `0s`, configurable) time from the video for example `8m`, `5m2s`
 
-* **`height`** (default `640`)
+- **`height`** (default `640`)
 
-* **`width`** (default `640`)
+- **`width`** (default `640`)
 
-* **`fit`** (default `crop`) to clarify what to do when requested height and width does not match the original upload, which should be one of:
-
-  * **`crop`** cut parts of the video that doesn't fit in the given size
-  * **`clip`** preserve the entire frame and decrease the size of the image within given size
-  * **`scale`** distort the image to fit the given size
-  * **`fill`** preserve the entire frame and fill the rest of the requested size with black background
+- **`fit`** (default `crop`) to clarify what to do when requested height and width does not match the original upload, which should be one of:
+  - **`crop`** cut parts of the video that doesn't fit in the given size
+  - **`clip`** preserve the entire frame and decrease the size of the image within given size
+  - **`scale`** distort the image to fit the given size
+  - **`fill`** preserve the entire frame and fill the rest of the requested size with black background
 
 ## Use Case 2: Set the default thumbnail timestamp using the API
 
@@ -5701,44 +5643,44 @@ Stream supports animated GIFs as thumbnails. Viewing animated thumbnails does no
 
 `https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.gif?time=1s&height=200&duration=4s`
 
-![Animated gif example, generated on-demand from Cloudflare Stream](https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.gif?time=1s\&height=200\&duration=4s)
+![Animated gif example, generated on-demand from Cloudflare Stream](https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.gif?time=1s&height=200&duration=4s)
 
 Supported URL attributes for animated thumbnails are:
 
-* **`time`** (default `0s`) time from the video for example `8m`, `5m2s`
+- **`time`** (default `0s`) time from the video for example `8m`, `5m2s`
 
-* **`height`** (default `640`)
+- **`height`** (default `640`)
 
-* **`width`** (default `640`)
+- **`width`** (default `640`)
 
-* **`fit`** (default `crop`) to clarify what to do when requested height and width does not match the original upload, which should be one of:
+- **`fit`** (default `crop`) to clarify what to do when requested height and width does not match the original upload, which should be one of:
+  - **`crop`** cut parts of the video that doesn't fit in the given size
+  - **`clip`** preserve the entire frame and decrease the size of the image within given size
+  - **`scale`** distort the image to fit the given size
+  - **`fill`** preserve the entire frame and fill the rest of the requested size with black background
 
-  * **`crop`** cut parts of the video that doesn't fit in the given size
-  * **`clip`** preserve the entire frame and decrease the size of the image within given size
-  * **`scale`** distort the image to fit the given size
-  * **`fill`** preserve the entire frame and fill the rest of the requested size with black background
+- **`duration`** (default `5s`)
 
-* **`duration`** (default `5s`)
-
-* **`fps`** (default `8`)
+- **`fps`** (default `8`)
 
 </page>
 
-<page>
----
+## <page>
+
 title: Download video or audio · Cloudflare Stream docs
 description: >-
-  When you upload a video to Stream, it can be streamed using HLS/DASH. However,
-  for certain use-cases, you may want to download the MP4 or M4A file.
+When you upload a video to Stream, it can be streamed using HLS/DASH. However,
+for certain use-cases, you may want to download the MP4 or M4A file.
 
-  For cases such as offline viewing, you may want to download the MP4 file.
-  Whereas, for downstream tasks like AI summarization, if you want to extract
-  only the audio, downloading an M4A file may be more useful.
+For cases such as offline viewing, you may want to download the MP4 file.
+Whereas, for downstream tasks like AI summarization, if you want to extract
+only the audio, downloading an M4A file may be more useful.
 lastUpdated: 2025-08-28T20:47:10.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/download-videos/
-  md: https://developers.cloudflare.com/stream/viewing-videos/download-videos/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/download-videos/
+md: https://developers.cloudflare.com/stream/viewing-videos/download-videos/index.md
+
 ---
 
 When you upload a video to Stream, it can be streamed using HLS/DASH. However, for certain use-cases, you may want to download the MP4 or M4A file. For cases such as offline viewing, you may want to download the MP4 file. Whereas, for downstream tasks like AI summarization, if you want to extract only the audio, downloading an M4A file may be more useful.
@@ -5902,20 +5844,21 @@ You will not incur any additional cost for storage when you enable MP4s.
 
 </page>
 
-<page>
----
+## <page>
+
 title: Secure your Stream · Cloudflare Stream docs
 description: By default, videos on Stream can be viewed by anyone with just a
-  video id. If you want to make your video private by default and only give
-  access to certain users, you can use the signed URL feature. When you mark a
-  video to require signed URL, it can no longer be accessed publicly with only
-  the video id. Instead, the user will need a signed url token to watch or
-  download the video.
+video id. If you want to make your video private by default and only give
+access to certain users, you can use the signed URL feature. When you mark a
+video to require signed URL, it can no longer be accessed publicly with only
+the video id. Instead, the user will need a signed url token to watch or
+download the video.
 lastUpdated: 2026-01-14T09:04:42.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
-  md: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
+md: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/index.md
+
 ---
 
 ## Signed URLs / Tokens
@@ -5924,13 +5867,13 @@ By default, videos on Stream can be viewed by anyone with just a video id. If yo
 
 Here are some common use cases for using signed URLs:
 
-* Restricting access so only logged in members can watch a particular video
-* Let users watch your video for a limited time period (ie. 24 hours)
-* Restricting access based on geolocation
+- Restricting access so only logged in members can watch a particular video
+- Let users watch your video for a limited time period (ie. 24 hours)
+- Restricting access based on geolocation
 
 ### Making a video require signed URLs
 
-Turn on `requireSignedURLs` to protect a video using signed URLs. This option will prevent *any public links*, such as `customer-<CODE>.cloudflarestream.com/<VIDEO_ID>/watch` or the built-in player, from working.
+Turn on `requireSignedURLs` to protect a video using signed URLs. This option will prevent _any public links_, such as `customer-<CODE>.cloudflarestream.com/<VIDEO_ID>/watch` or the built-in player, from working.
 
 Restricting viewing can be done by updating the video's metadata.
 
@@ -5960,9 +5903,9 @@ Response:
 
 You can program your app to generate token in two ways:
 
-* **Low-volume or testing: Use the `/token` endpoint to generate a short-lived signed token.** This is recommended for testing purposes or if you are generating less than 1,000 tokens per day. It requires making an API call to Cloudflare for each token, *which is subject to [rate limiting](https://developers.cloudflare.com/fundamentals/api/reference/limits/).* The default result is valid for 1 hour.
+- **Low-volume or testing: Use the `/token` endpoint to generate a short-lived signed token.** This is recommended for testing purposes or if you are generating less than 1,000 tokens per day. It requires making an API call to Cloudflare for each token, _which is subject to [rate limiting](https://developers.cloudflare.com/fundamentals/api/reference/limits/)._ The default result is valid for 1 hour.
 
-* **Recommended: Use a signing key to create tokens.** If you have thousands of daily users or need to generate a high volume of tokens, you can create tokens yourself using a signing key. This way, you do not need to call a Stream API each time you need to generate a token, and is therefore *not* a rate-limited operation.
+- **Recommended: Use a signing key to create tokens.** If you have thousands of daily users or need to generate a high volume of tokens, you can create tokens yourself using a signing key. This way, you do not need to call a Stream API each time you need to generate a token, and is therefore _not_ a rate-limited operation.
 
 ## Option 1: Using the /token endpoint
 
@@ -6002,46 +5945,40 @@ To render the video or use assets like manifests or thumbnails, use the `token` 
 
 Similarly, if you are using your own player, retrieve the HLS or DASH manifest by replacing the video ID in the manifest URL with the `token` value:
 
-* `https://customer-<CODE>.cloudflarestream.com/<TOKEN>/manifest/video.m3u8`
-* `https://customer-<CODE>.cloudflarestream.com/<TOKEN>/manifest/video.mpd`
+- `https://customer-<CODE>.cloudflarestream.com/<TOKEN>/manifest/video.m3u8`
+- `https://customer-<CODE>.cloudflarestream.com/<TOKEN>/manifest/video.mpd`
 
 ### Customizing default restrictions
 
 If you call the `/token` endpoint without any body, it will return a token that expires in one hour without any other restrictions or access to [downloads](https://developers.cloudflare.com/stream/viewing-videos/download-videos/). This token can be customized by providing additional properties in the request:
 
 ```javascript
-  const signed_url_restrictions = {
-    // Extend the lifetime of the token to 12 hours:
-    exp: Math.floor(Date.now() / 1000) + 12 * 60 * 60,
-    // Allow access to MP4 or Audio Download URLs:
-    downloadable: true,
-    // Geo or IP access restrictions:
-    accessRules: {
-      // ... see examples below
-    }
-  };
+const signed_url_restrictions = {
+  // Extend the lifetime of the token to 12 hours:
+  exp: Math.floor(Date.now() / 1000) + 12 * 60 * 60,
+  // Allow access to MP4 or Audio Download URLs:
+  downloadable: true,
+  // Geo or IP access restrictions:
+  accessRules: {
+    // ... see examples below
+  },
+}
 
+const init = {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer <API_TOKEN>',
+    'content-type': 'application/json;charset=UTF-8',
+  },
+  body: JSON.stringify(signed_url_restrictions),
+}
 
-  const init = {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer <API_TOKEN>",
-      "content-type": "application/json;charset=UTF-8",
-    },
-    body: JSON.stringify(signed_url_restrictions),
-  };
+const signedurl_service_response = await fetch(
+  'https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{video_uid}/token',
+  init
+)
 
-
-  const signedurl_service_response = await fetch(
-    "https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{video_uid}/token",
-    init,
-  );
-
-
-  return new Response(
-    JSON.stringify(await signedurl_service_response.json()),
-    { status: 200 },
-  );
+return new Response(JSON.stringify(await signedurl_service_response.json()), { status: 200 })
 ```
 
 However, if you are generating tokens programmatically or adding customizations like these, it is faster and more scalable to use a signing key and generate the token within your application entirely.
@@ -6050,7 +5987,7 @@ However, if you are generating tokens programmatically or adding customizations 
 
 If you are generating a high-volume of tokens, using [Live WebRTC](https://developers.cloudflare.com/stream/webrtc-beta/), or need to customize the access rules, generate new tokens using a signing key so you do not need to call the Stream API each time.
 
-### Step 1: Call the `/stream/key` endpoint *once* to obtain a key
+### Step 1: Call the `/stream/key` endpoint _once_ to obtain a key
 
 ```bash
 curl --request POST \
@@ -6086,21 +6023,20 @@ Here's an example Cloudflare Worker script which generates tokens that expire in
 
 ```javascript
 // Global variables
-const jwkKey = "{PRIVATE-KEY-IN-JWK-FORMAT}";
-const keyID = "<KEY_ID>";
-const videoUID = "<VIDEO_UID>";
+const jwkKey = '{PRIVATE-KEY-IN-JWK-FORMAT}'
+const keyID = '<KEY_ID>'
+const videoUID = '<VIDEO_UID>'
 // expiresTimeInS is the expired time in second of the video
-const expiresTimeInS = 3600;
-
+const expiresTimeInS = 3600
 
 // Main function
 async function streamSignedUrl() {
-  const encoder = new TextEncoder();
-  const expiresIn = Math.floor(Date.now() / 1000) + expiresTimeInS;
+  const encoder = new TextEncoder()
+  const expiresIn = Math.floor(Date.now() / 1000) + expiresTimeInS
   const headers = {
-    alg: "RS256",
+    alg: 'RS256',
     kid: keyID,
-  };
+  }
   const data = {
     sub: videoUID,
     kid: keyID,
@@ -6109,63 +6045,53 @@ async function streamSignedUrl() {
     // downloadable: true,
     accessRules: [
       {
-        type: "ip.geoip.country",
-        action: "allow",
-        country: ["GB"],
+        type: 'ip.geoip.country',
+        action: 'allow',
+        country: ['GB'],
       },
       {
-        type: "any",
-        action: "block",
+        type: 'any',
+        action: 'block',
       },
     ],
-  };
+  }
 
+  const token = `${objectToBase64url(headers)}.${objectToBase64url(data)}`
 
-  const token = `${objectToBase64url(headers)}.${objectToBase64url(data)}`;
-
-
-  const jwk = JSON.parse(atob(jwkKey));
-
+  const jwk = JSON.parse(atob(jwkKey))
 
   const key = await crypto.subtle.importKey(
-    "jwk",
+    'jwk',
     jwk,
     {
-      name: "RSASSA-PKCS1-v1_5",
-      hash: "SHA-256",
+      name: 'RSASSA-PKCS1-v1_5',
+      hash: 'SHA-256',
     },
     false,
-    ["sign"],
-  );
-
+    ['sign']
+  )
 
   const signature = await crypto.subtle.sign(
-    { name: "RSASSA-PKCS1-v1_5" },
+    { name: 'RSASSA-PKCS1-v1_5' },
     key,
-    encoder.encode(token),
-  );
+    encoder.encode(token)
+  )
 
+  const signedToken = `${token}.${arrayBufferToBase64Url(signature)}`
 
-  const signedToken = `${token}.${arrayBufferToBase64Url(signature)}`;
-
-
-  return signedToken;
+  return signedToken
 }
-
 
 // Utilities functions
 function arrayBufferToBase64Url(buffer) {
   return btoa(String.fromCharCode(...new Uint8Array(buffer)))
-    .replace(/=/g, "")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_");
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
 }
 
-
 function objectToBase64url(payload) {
-  return arrayBufferToBase64Url(
-    new TextEncoder().encode(JSON.stringify(payload)),
-  );
+  return arrayBufferToBase64Url(new TextEncoder().encode(JSON.stringify(payload)))
 }
 ```
 
@@ -6190,7 +6116,7 @@ If you are using your own player, replace the video id in the manifest url with 
 
 To allow access to [MP4 or audio downloads](https://developers.cloudflare.com/stream/viewing-videos/download-videos/), make sure the video has the download type already enabled. Then add `downloadable: true` to the payload as shown in the comment above when generating the signed URL. Replace the video id in the download URL with the `token` value:
 
-* `https://customer-<CODE>.cloudflarestream.com/eyJhbGciOiJ.../downloads/default.mp4`
+- `https://customer-<CODE>.cloudflarestream.com/eyJhbGciOiJ.../downloads/default.mp4`
 
 ### Revoking keys
 
@@ -6213,26 +6139,26 @@ curl --request DELETE \
 
 ## Supported Restrictions
 
-| Property Name | Description | |
-| - | - | - |
-| exp | Expiration. A unix epoch timestamp after which the token will stop working. Cannot be greater than 24 hours in the future from when the token is signed | |
-| nbf | *Not Before* value. A unix epoch timestamp before which the token will not work | |
-| downloadable | if true, the token can be used to download the mp4 (assuming the video has downloads enabled) | |
-| accessRules | An array that specifies one or more ip and geo restrictions. accessRules are evaluated first-to-last. If a Rule matches, the associated action is applied and no further rules are evaluated. A token may have at most 5 members in the accessRules array. | |
+| Property Name | Description                                                                                                                                                                                                                                                |     |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| exp           | Expiration. A unix epoch timestamp after which the token will stop working. Cannot be greater than 24 hours in the future from when the token is signed                                                                                                    |     |
+| nbf           | _Not Before_ value. A unix epoch timestamp before which the token will not work                                                                                                                                                                            |     |
+| downloadable  | if true, the token can be used to download the mp4 (assuming the video has downloads enabled)                                                                                                                                                              |     |
+| accessRules   | An array that specifies one or more ip and geo restrictions. accessRules are evaluated first-to-last. If a Rule matches, the associated action is applied and no further rules are evaluated. A token may have at most 5 members in the accessRules array. |     |
 
 ### accessRules Schema
 
 Each accessRule must include 2 required properties:
 
-* `type`: supported values are `any`, `ip.src` and `ip.geoip.country`
-* `action`: support values are `allow` and `block`
+- `type`: supported values are `any`, `ip.src` and `ip.geoip.country`
+- `action`: support values are `allow` and `block`
 
 Depending on the rule type, accessRules support 2 additional properties:
 
-* `country`: an array of 2-letter country codes in [ISO 3166-1 Alpha 2](https://www.iso.org/obp/ui/#search) format.
-* `ip`: an array of ip ranges. It is recommended to include both IPv4 and IPv6 variants in a rule if possible. Having only a single variant in a rule means that rule will ignore the other variant. For example, an IPv4-based rule will never be applicable to a viewer connecting from an IPv6 address. CIDRs should be preferred over specific IP addresses. Some devices, such as mobile, may change their IP over the course of a view. Video Access Control are evaluated continuously while a video is being viewed. As a result, overly strict IP rules may disrupt playback.
+- `country`: an array of 2-letter country codes in [ISO 3166-1 Alpha 2](https://www.iso.org/obp/ui/#search) format.
+- `ip`: an array of ip ranges. It is recommended to include both IPv4 and IPv6 variants in a rule if possible. Having only a single variant in a rule means that rule will ignore the other variant. For example, an IPv4-based rule will never be applicable to a viewer connecting from an IPv6 address. CIDRs should be preferred over specific IP addresses. Some devices, such as mobile, may change their IP over the course of a view. Video Access Control are evaluated continuously while a video is being viewed. As a result, overly strict IP rules may disrupt playback.
 
-***Example 1: Block views from a specific country***
+**_Example 1: Block views from a specific country_**
 
 ```txt
 ...
@@ -6247,7 +6173,7 @@ Depending on the rule type, accessRules support 2 additional properties:
 
 The first rule matches on country, US, DE, and MX here. When that rule matches, the block action will have the token considered invalid. If the first rule doesn't match, there are no further rules to evaluate. The behavior in this situation is to consider the token valid.
 
-***Example 2: Allow only views from specific country or IPs***
+**_Example 2: Allow only views from specific country or IPs_**
 
 ```txt
 ...
@@ -6283,10 +6209,10 @@ By default, Stream embed codes can be used on any domain. If needed, you can lim
 
 In the dashboard, you will see a text box by each video labeled `Enter allowed origin domains separated by commas`. If you click on it, you can list the domains that the Stream embed code should be able to be used on. \`
 
-* `*.badtortilla.com` covers `a.badtortilla.com`, `a.b.badtortilla.com` and does not cover `badtortilla.com`
-* `example.com` does not cover [www.example.com](http://www.example.com) or any subdomain of example.com
-* `localhost` requires a port if it is not being served over HTTP on port 80 or over HTTPS on port 443
-* There is no path support - `example.com` covers `example.com/\*`
+- `*.badtortilla.com` covers `a.badtortilla.com`, `a.b.badtortilla.com` and does not cover `badtortilla.com`
+- `example.com` does not cover [www.example.com](http://www.example.com) or any subdomain of example.com
+- `localhost` requires a port if it is not being served over HTTP on port 80 or over HTTPS on port 443
+- There is no path support - `example.com` covers `example.com/\*`
 
 You can also control embed limitation programmatically using the Stream API. `uid` in the example below refers to the video id.
 
@@ -6306,27 +6232,28 @@ Combining signed URLs with embedding restrictions allows you to strongly control
 
 </page>
 
-<page>
----
+## <page>
+
 title: Use your own player · Cloudflare Stream docs
 description: Cloudflare Stream is compatible with all video players that support
-  HLS and DASH, which are standard formats for streaming media with broad
-  support across all web browsers, mobile operating systems and media streaming
-  devices.
+HLS and DASH, which are standard formats for streaming media with broad
+support across all web browsers, mobile operating systems and media streaming
+devices.
 lastUpdated: 2025-11-17T14:08:01.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/
-  md: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/
+md: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/index.md
+
 ---
 
 Cloudflare Stream is compatible with all video players that support HLS and DASH, which are standard formats for streaming media with broad support across all web browsers, mobile operating systems and media streaming devices.
 
 Platform-specific guides:
 
-* [Web](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/web/)
-* [iOS (AVPlayer)](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/ios/)
-* [Android (ExoPlayer)](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/android/)
+- [Web](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/web/)
+- [iOS (AVPlayer)](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/ios/)
+- [Android (ExoPlayer)](https://developers.cloudflare.com/stream/viewing-videos/using-own-player/android/)
 
 ## Fetch HLS and Dash manifests
 
@@ -6372,8 +6299,8 @@ Each HLS and DASH manifest provides multiple resolutions of your video or live s
 
 If your player lacks such configuration options or you need to override them, you can add the `clientBandwidthHint` query param to the request to fetch the manifest file. This should be used only as a last resort — we recommend first using customization options provided by your player. Remember that while you may be developing your website or app on a fast Internet connection, and be tempted to use this setting to force high quality playback, many of your viewers are likely connecting over slower mobile networks.
 
-* `clientBandwidthHint` float
-  * Return only the video representation closest to the provided bandwidth value (in Mbps). This can be used to enforce a specific quality level. If you specify a value that would cause an invalid or empty manifest to be served, the hint is ignored.
+- `clientBandwidthHint` float
+  - Return only the video representation closest to the provided bandwidth value (in Mbps). This can be used to enforce a specific quality level. If you specify a value that would cause an invalid or empty manifest to be served, the hint is ignored.
 
 Refer to the example below to display only the video representation with a bitrate closest to 1.8 Mbps.
 
@@ -6397,32 +6324,33 @@ We recommend using [ffmpeg-kit](https://github.com/arthenica/ffmpeg-kit) as a cr
 
 ### Examples
 
-* [RTMPS Playback with ffplay](https://developers.cloudflare.com/stream/examples/rtmps_playback/)
-* [SRT playback with ffplay](https://developers.cloudflare.com/stream/examples/srt_playback/)
+- [RTMPS Playback with ffplay](https://developers.cloudflare.com/stream/examples/rtmps_playback/)
+- [SRT playback with ffplay](https://developers.cloudflare.com/stream/examples/srt_playback/)
 
 </page>
 
-<page>
----
+## <page>
+
 title: Use the Stream Player · Cloudflare Stream docs
 description: Cloudflare provides a customizable web player that can play both
-  on-demand and live video, and requires zero additional engineering work.
+on-demand and live video, and requires zero additional engineering work.
 lastUpdated: 2025-11-17T14:08:01.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/
-  md: https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/
+md: https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/index.md
+
 ---
 
 Cloudflare provides a customizable web player that can play both on-demand and live video, and requires zero additional engineering work.
 
 To add the Stream Player to a web page, you can either:
 
-* Generate an embed code on the **Stream** page of the Cloudflare dashboard for a specific video or live input.
+- Generate an embed code on the **Stream** page of the Cloudflare dashboard for a specific video or live input.
 
   [Go to **Videos**](https://dash.cloudflare.com/?to=/:account/stream/videos)
 
-* Use the code example below, replacing `<VIDEO_UID>` with the video UID (or [signed token](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/)) and `<CODE>` with the your unique customer code, which can be found in the Stream Dashboard.
+- Use the code example below, replacing `<VIDEO_UID>` with the video UID (or [signed token](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/)) and `<CODE>` with the your unique customer code, which can be found in the Stream Dashboard.
 
 ```html
 <iframe
@@ -6476,77 +6404,65 @@ Player options are configured with querystring parameters in the iframe's `src` 
 
 `https://customer-<CODE>.cloudflarestream.com/<VIDEO_UID>/iframe?autoplay=true&muted=true`
 
-* `autoplay` default: `false`
-
-  * If the autoplay flag is included as a querystring parameter, the player will attempt to autoplay the video. If you don't want the video to autoplay, don't include the autoplay flag at all (instead of setting it to `autoplay=false`.) Note that mobile browsers generally do not support this attribute, the user must tap the screen to begin video playback. Please consider mobile users or users with Internet usage limits as some users don't have unlimited Internet access before using this attribute.
+- `autoplay` default: `false`
+  - If the autoplay flag is included as a querystring parameter, the player will attempt to autoplay the video. If you don't want the video to autoplay, don't include the autoplay flag at all (instead of setting it to `autoplay=false`.) Note that mobile browsers generally do not support this attribute, the user must tap the screen to begin video playback. Please consider mobile users or users with Internet usage limits as some users don't have unlimited Internet access before using this attribute.
 
     Warning
 
     Some browsers now prevent videos with audio from playing automatically. You may set `muted` to `true` to allow your videos to autoplay. For more information, refer to [New `<video>` Policies for iOS](https://webkit.org/blog/6784/new-video-policies-for-ios/).
 
-* `controls` default: `true`
+- `controls` default: `true`
+  - Shows video controls such as buttons for play/pause, volume controls.
 
-  * Shows video controls such as buttons for play/pause, volume controls.
-
-* `defaultTextTrack`
-
-  * Will initialize the player with the specified language code's text track enabled. The value should be the BCP-47 language code that was used to [upload the text track](https://developers.cloudflare.com/stream/edit-videos/adding-captions/). If the specified language code has no captions available, the player will behave as though no language code had been provided.
+- `defaultTextTrack`
+  - Will initialize the player with the specified language code's text track enabled. The value should be the BCP-47 language code that was used to [upload the text track](https://developers.cloudflare.com/stream/edit-videos/adding-captions/). If the specified language code has no captions available, the player will behave as though no language code had been provided.
 
     Warning
 
-    This will *only* work once during initialization. Beyond that point the user has full control over their text track settings.
+    This will _only_ work once during initialization. Beyond that point the user has full control over their text track settings.
 
-* `letterboxColor`
-
-  * Any valid [CSS color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) provided will be applied to the letterboxing/pillarboxing of the player's UI. This can be set to `transparent` to avoid letterboxing/pillarboxing when not in fullscreen mode.
+- `letterboxColor`
+  - Any valid [CSS color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) provided will be applied to the letterboxing/pillarboxing of the player's UI. This can be set to `transparent` to avoid letterboxing/pillarboxing when not in fullscreen mode.
 
     Note
 
-    **Note:** Like all query string parameters, this value *must* be URI encoded. For example, the color value `hsl(120 80% 95%)` can be encoded using JavaScript's `encodeURIComponent()` function to `hsl(120%2080%25%2095%25)`.
+    **Note:** Like all query string parameters, this value _must_ be URI encoded. For example, the color value `hsl(120 80% 95%)` can be encoded using JavaScript's `encodeURIComponent()` function to `hsl(120%2080%25%2095%25)`.
 
-* `loop` default: `false`
+- `loop` default: `false`
+  - If enabled the player will automatically seek back to the start upon reaching the end of the video.
 
-  * If enabled the player will automatically seek back to the start upon reaching the end of the video.
+- `muted` default: `false`
+  - If set, the audio will be initially silenced.
 
-* `muted` default: `false`
-
-  * If set, the audio will be initially silenced.
-
-* `preload` default: `none`
-
-  * This enumerated option is intended to provide a hint to the browser about what the author thinks will lead to the best user experience. You may specify the value `preload="auto"` to preload the beginning of the video. Not including the option or using `preload="metadata"` will just load the metadata needed to start video playback when requested.
+- `preload` default: `none`
+  - This enumerated option is intended to provide a hint to the browser about what the author thinks will lead to the best user experience. You may specify the value `preload="auto"` to preload the beginning of the video. Not including the option or using `preload="metadata"` will just load the metadata needed to start video playback when requested.
 
     Note
 
     The `<video>` element does not force the browser to follow the value of this option; it is a mere hint. Even though the `preload="none"` option is a valid HTML5 option, Stream player will always load some metadata to initialize the player. The amount of data loaded in this case is negligible.
 
-* `poster` defaults to the first frame of the video
-
-  * A URL for an image to be shown before the video is started or while the video is downloading. If this attribute isn't specified, a thumbnail image of the video is shown.
-
-    Note
-
-    **Note:** Like all query string parameters, this value *must* be URI encoded. For example, the thumbnail at `https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.jpg?time=1s&height=270` can be encoded using JavaScript's `encodeURIComponent()` function to `https%3A%2F%2Fcustomer-f33zs165nr7gyfy4.cloudflarestream.com%2F6b9e68b07dfee8cc2d116e4c51d6a957%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D1s%26height%3D600`.
-
-* `primaryColor`
-
-  * Any valid [CSS color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) provided will be applied to certain elements of the player's UI.
+- `poster` defaults to the first frame of the video
+  - A URL for an image to be shown before the video is started or while the video is downloading. If this attribute isn't specified, a thumbnail image of the video is shown.
 
     Note
 
-    **Note:** Like all query string parameters, this value *must* be URI encoded. For example, the color value `hsl(120 80% 95%)` can be encoded using JavaScript's `encodeURIComponent()` function to `hsl(120%2080%25%2095%25)`.
+    **Note:** Like all query string parameters, this value _must_ be URI encoded. For example, the thumbnail at `https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/thumbnails/thumbnail.jpg?time=1s&height=270` can be encoded using JavaScript's `encodeURIComponent()` function to `https%3A%2F%2Fcustomer-f33zs165nr7gyfy4.cloudflarestream.com%2F6b9e68b07dfee8cc2d116e4c51d6a957%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D1s%26height%3D600`.
 
-* `src`
+- `primaryColor`
+  - Any valid [CSS color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) provided will be applied to certain elements of the player's UI.
 
-  * The video id from the video you've uploaded to Cloudflare Stream should be included here.
+    Note
 
-* `startTime`
+    **Note:** Like all query string parameters, this value _must_ be URI encoded. For example, the color value `hsl(120 80% 95%)` can be encoded using JavaScript's `encodeURIComponent()` function to `hsl(120%2080%25%2095%25)`.
 
-  * A timestamp that specifies the time when playback begins. If a plain number is used such as `?startTime=123`, it will be interpreted as `123` seconds. More human readable timestamps can also be used, such as `?startTime=1h12m27s` for `1 hour, 12 minutes, and 27 seconds`.
+- `src`
+  - The video id from the video you've uploaded to Cloudflare Stream should be included here.
 
-* `ad-url`
+- `startTime`
+  - A timestamp that specifies the time when playback begins. If a plain number is used such as `?startTime=123`, it will be interpreted as `123` seconds. More human readable timestamps can also be used, such as `?startTime=1h12m27s` for `1 hour, 12 minutes, and 27 seconds`.
 
-  * The Stream Player supports VAST Tags to insert ads such as prerolls. If you have a VAST tag URI, you can pass it to the Stream Player by setting the `ad-url` parameter. The URI must be encoded using a function like JavaScript's `encodeURIComponent()`.
+- `ad-url`
+  - The Stream Player supports VAST Tags to insert ads such as prerolls. If you have a VAST tag URI, you can pass it to the Stream Player by setting the `ad-url` parameter. The URI must be encoded using a function like JavaScript's `encodeURIComponent()`.
 
 ## Debug Info
 
@@ -6556,8 +6472,8 @@ The Stream player Debug menu can be shown and hidden using the key combination `
 
 After a live stream ends, a recording is automatically generated and available within 60 seconds. To ensure successful video viewing and playback, keep the following in mind:
 
-* If a live stream ends while a viewer is watching, viewers should wait 60 seconds and then reload the player to view the recording of the live stream.
-* After a live stream ends, you can check the status of the recording via the API. When the video state is `ready`, you can use one of the manifest URLs to stream the recording.
+- If a live stream ends while a viewer is watching, viewers should wait 60 seconds and then reload the player to view the recording of the live stream.
+- After a live stream ends, you can check the status of the recording via the API. When the video state is `ready`, you can use one of the manifest URLs to stream the recording.
 
 While the recording of the live stream is generating, the video may report as `not-found` or `not-started`.
 
@@ -6567,16 +6483,17 @@ If a Live Inputs is enabled for the Low-Latency HLS beta, the Stream player will
 
 </page>
 
-<page>
----
+## <page>
+
 title: Android · Cloudflare Stream docs
 description: You can stream both on-demand and live video to native Android apps
-  using ExoPlayer.
+using ExoPlayer.
 lastUpdated: 2025-08-20T20:59:04.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/android/
-  md: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/android/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/android/
+md: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/android/index.md
+
 ---
 
 You can stream both on-demand and live video to native Android apps using [ExoPlayer](https://exoplayer.dev/).
@@ -6587,7 +6504,7 @@ Before you can play videos, you must first [upload a video to Cloudflare Stream]
 
 ## Example Apps
 
-* [Android](https://developers.cloudflare.com/stream/examples/android/)
+- [Android](https://developers.cloudflare.com/stream/examples/android/)
 
 ## Using ExoPlayer
 
@@ -6609,16 +6526,17 @@ player.prepare();
 
 </page>
 
-<page>
----
+## <page>
+
 title: iOS · Cloudflare Stream docs
 description: You can stream both on-demand and live video to native iOS, tvOS
-  and macOS apps using AVPlayer.
+and macOS apps using AVPlayer.
 lastUpdated: 2025-08-20T20:59:04.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/ios/
-  md: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/ios/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/ios/
+md: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/ios/index.md
+
 ---
 
 You can stream both on-demand and live video to native iOS, tvOS and macOS apps using [AVPlayer](https://developer.apple.com/documentation/avfoundation/avplayer).
@@ -6629,7 +6547,7 @@ Before you can play videos, you must first [upload a video to Cloudflare Stream]
 
 ## Example Apps
 
-* [iOS](https://developers.cloudflare.com/stream/examples/ios/)
+- [iOS](https://developers.cloudflare.com/stream/examples/ios/)
 
 ## Using AVPlayer
 
@@ -6663,15 +6581,16 @@ struct MyView_Previews: PreviewProvider {
 
 </page>
 
-<page>
----
+## <page>
+
 title: Web · Cloudflare Stream docs
 description: Cloudflare Stream works with all web video players that support HLS and DASH.
 lastUpdated: 2025-08-20T20:59:04.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/web/
-  md: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/web/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/web/
+md: https://developers.cloudflare.com/stream/viewing-videos/using-own-player/web/index.md
+
 ---
 
 Cloudflare Stream works with all web video players that support HLS and DASH.
@@ -6682,24 +6601,25 @@ Before you can play videos, you must first [upload a video to Cloudflare Stream]
 
 ## Examples
 
-* [Video.js](https://developers.cloudflare.com/stream/examples/video-js/)
-* [HLS reference player (hls.js)](https://developers.cloudflare.com/stream/examples/hls-js/)
-* [DASH reference player (dash.js)](https://developers.cloudflare.com/stream/examples/dash-js/)
-* [Vidstack](https://developers.cloudflare.com/stream/examples/vidstack/)
+- [Video.js](https://developers.cloudflare.com/stream/examples/video-js/)
+- [HLS reference player (hls.js)](https://developers.cloudflare.com/stream/examples/hls-js/)
+- [DASH reference player (dash.js)](https://developers.cloudflare.com/stream/examples/dash-js/)
+- [Vidstack](https://developers.cloudflare.com/stream/examples/vidstack/)
 
 </page>
 
-<page>
----
+## <page>
+
 title: Stream Player API · Cloudflare Stream docs
 description: For further control and customization, we provide an additional
-  JavaScript SDK that you can use to control video playback and listen for media
-  events.
+JavaScript SDK that you can use to control video playback and listen for media
+events.
 lastUpdated: 2024-09-25T18:55:39.000Z
 chatbotDeprioritize: false
 source_url:
-  html: https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/using-the-player-api/
-  md: https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/using-the-player-api/index.md
+html: https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/using-the-player-api/
+md: https://developers.cloudflare.com/stream/viewing-videos/using-the-stream-player/using-the-player-api/index.md
+
 ---
 
 For further control and customization, we provide an additional JavaScript SDK that you can use to control video playback and listen for media events.
@@ -6718,107 +6638,88 @@ To use this SDK, add an additional `<script>` tag to your website:
   id="stream-player"
 ></iframe>
 
-
 <script src="https://embed.cloudflarestream.com/embed/sdk.latest.js"></script>
-
 
 <!-- Your JavaScript code below-->
 <script>
-  const player = Stream(document.getElementById('stream-player'));
+  const player = Stream(document.getElementById('stream-player'))
   player.addEventListener('play', () => {
-    console.log('playing!');
-  });
+    console.log('playing!')
+  })
   player.play().catch(() => {
-    console.log('playback failed, muting to try again');
-    player.muted = true;
-    player.play();
-  });
+    console.log('playback failed, muting to try again')
+    player.muted = true
+    player.play()
+  })
 </script>
 ```
 
 ## Methods
 
-* `play()` Promise
+- `play()` Promise
+  - Start video playback.
 
-  * Start video playback.
-
-* `pause()` null
-
-  * Pause video playback.
+- `pause()` null
+  - Pause video playback.
 
 ## Properties
 
-* `autoplay` boolean
-
-  * Sets or returns whether the autoplay attribute was set, allowing video playback to start upon load.
+- `autoplay` boolean
+  - Sets or returns whether the autoplay attribute was set, allowing video playback to start upon load.
 
 Note
 
 Some browsers prevent videos with audio from playing automatically. You may add the `mute` attribute to allow your videos to autoplay. For more information, review the [iOS video policies](https://webkit.org/blog/6784/new-video-policies-for-ios/).
 
-* `buffered` TimeRanges readonly
+- `buffered` TimeRanges readonly
+  - An object conforming to the TimeRanges interface. This object is normalized, which means that ranges are ordered, don't overlap, aren't empty, and don't touch (adjacent ranges are folded into one bigger range).
 
-  * An object conforming to the TimeRanges interface. This object is normalized, which means that ranges are ordered, don't overlap, aren't empty, and don't touch (adjacent ranges are folded into one bigger range).
+- `controls` boolean
+  - Sets or returns whether the video should display controls (like play/pause etc.)
 
-* `controls` boolean
+- `currentTime` integer
+  - Returns the current playback time in seconds. Setting this value seeks the video to a new time.
 
-  * Sets or returns whether the video should display controls (like play/pause etc.)
-
-* `currentTime` integer
-
-  * Returns the current playback time in seconds. Setting this value seeks the video to a new time.
-
-* `defaultTextTrack`
-
-  * Will initialize the player with the specified language code's text track enabled. The value should be the BCP-47 language code that was used to [upload the text track](https://developers.cloudflare.com/stream/edit-videos/adding-captions/). If the specified language code has no captions available, the player will behave as though no language code had been provided.
+- `defaultTextTrack`
+  - Will initialize the player with the specified language code's text track enabled. The value should be the BCP-47 language code that was used to [upload the text track](https://developers.cloudflare.com/stream/edit-videos/adding-captions/). If the specified language code has no captions available, the player will behave as though no language code had been provided.
 
 Note
 
-This will *only* work once during initialization. Beyond that point the user has full control over their text track settings.
+This will _only_ work once during initialization. Beyond that point the user has full control over their text track settings.
 
-* `duration` integer readonly
+- `duration` integer readonly
+  - Returns the duration of the video in seconds.
 
-  * Returns the duration of the video in seconds.
+- `ended` boolean readonly
+  - Returns whether the video has ended.
 
-* `ended` boolean readonly
+- `letterboxColor` string
+  - Any valid [CSS color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) provided will be applied to the letterboxing/pillarboxing of the player's UI. This can be set to `transparent` to avoid letterboxing/pillarboxing when not in fullscreen mode.
 
-  * Returns whether the video has ended.
+- `loop` boolean
+  - Sets or returns whether the video should start over when it reaches the end
 
-* `letterboxColor` string
+- `muted` boolean
+  - Sets or returns whether the audio should be played with the video
 
-  * Any valid [CSS color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) provided will be applied to the letterboxing/pillarboxing of the player's UI. This can be set to `transparent` to avoid letterboxing/pillarboxing when not in fullscreen mode.
+- `paused` boolean readonly
+  - Returns whether the video is paused
 
-* `loop` boolean
+- `played` TimeRanges readonly
+  - An object conforming to the TimeRanges interface. This object is normalized, which means that ranges are ordered, don't overlap, aren't empty, and don't touch (adjacent ranges are folded into one bigger range).
 
-  * Sets or returns whether the video should start over when it reaches the end
-
-* `muted` boolean
-
-  * Sets or returns whether the audio should be played with the video
-
-* `paused` boolean readonly
-
-  * Returns whether the video is paused
-
-* `played` TimeRanges readonly
-
-  * An object conforming to the TimeRanges interface. This object is normalized, which means that ranges are ordered, don't overlap, aren't empty, and don't touch (adjacent ranges are folded into one bigger range).
-
-* `preload` boolean
-
-  * Sets or returns whether the video should be preloaded upon element load.
+- `preload` boolean
+  - Sets or returns whether the video should be preloaded upon element load.
 
 Note
 
 The `<video>` element does not force the browser to follow the value of this attribute; it is a mere hint. Even though the `preload="none"` option is a valid HTML5 attribute, Stream player will always load some metadata to initialize the player. The amount of data loaded in this case is negligible.
 
-* `primaryColor` string
+- `primaryColor` string
+  - Any valid [CSS color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) provided will be applied to certain elements of the player's UI.
 
-  * Any valid [CSS color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) provided will be applied to certain elements of the player's UI.
-
-* `volume` float
-
-  * Sets or returns volume from 0.0 (silent) to 1.0 (maximum value)
+- `volume` float
+  - Sets or returns volume from 0.0 (silent) to 1.0 (maximum value)
 
 ## Events
 
@@ -6826,105 +6727,80 @@ The `<video>` element does not force the browser to follow the value of this att
 
 We support most of the [standardized media element events](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events).
 
-* `abort`
+- `abort`
+  - Sent when playback is aborted; for example, if the media is playing and is restarted from the beginning, this event is sent.
 
-  * Sent when playback is aborted; for example, if the media is playing and is restarted from the beginning, this event is sent.
+- `canplay`
+  - Sent when enough data is available that the media can be played, at least for a couple of frames.
 
-* `canplay`
+- `canplaythrough`
+  - Sent when the entire media can be played without interruption, assuming the download rate remains at least at the current level. It will also be fired when playback is toggled between paused and playing. Note: Manually setting the currentTime will eventually fire a canplaythrough event in firefox. Other browsers might not fire this event.
 
-  * Sent when enough data is available that the media can be played, at least for a couple of frames.
+- `durationchange`
+  - The metadata has loaded or changed, indicating a change in duration of the media. This is sent, for example, when the media has loaded enough that the duration is known.
 
-* `canplaythrough`
+- `ended`
+  - Sent when playback completes.
 
-  * Sent when the entire media can be played without interruption, assuming the download rate remains at least at the current level. It will also be fired when playback is toggled between paused and playing. Note: Manually setting the currentTime will eventually fire a canplaythrough event in firefox. Other browsers might not fire this event.
+- `error`
+  - Sent when an error occurs. (e.g. the video has not finished encoding yet, or the video fails to load due to an incorrect signed URL)
 
-* `durationchange`
+- `loadeddata`
+  - The first frame of the media has finished loading.
 
-  * The metadata has loaded or changed, indicating a change in duration of the media. This is sent, for example, when the media has loaded enough that the duration is known.
+- `loadedmetadata`
+  - The media's metadata has finished loading; all attributes now contain as much useful information as they're going to.
 
-* `ended`
+- `loadstart`
+  - Sent when loading of the media begins.
 
-  * Sent when playback completes.
+- `pause`
+  - Sent when the playback state is changed to paused (paused property is true).
 
-* `error`
+- `play`
+  - Sent when the playback state is no longer paused, as a result of the play method, or the autoplay attribute.
 
-  * Sent when an error occurs. (e.g. the video has not finished encoding yet, or the video fails to load due to an incorrect signed URL)
+- `playing`
+  - Sent when the media has enough data to start playing, after the play event, but also when recovering from being stalled, when looping media restarts, and after seeked, if it was playing before seeking.
 
-* `loadeddata`
+- `progress`
+  - Sent periodically to inform interested parties of progress downloading the media. Information about the current amount of the media that has been downloaded is available in the media element's buffered attribute.
 
-  * The first frame of the media has finished loading.
+- `ratechange`
+  - Sent when the playback speed changes.
 
-* `loadedmetadata`
+- `seeked`
+  - Sent when a seek operation completes.
 
-  * The media's metadata has finished loading; all attributes now contain as much useful information as they're going to.
+- `seeking`
+  - Sent when a seek operation begins.
 
-* `loadstart`
+- `stalled`
+  - Sent when the user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
 
-  * Sent when loading of the media begins.
+- `suspend`
+  - Sent when loading of the media is suspended; this may happen either because the download has completed or because it has been paused for any other reason.
 
-* `pause`
+- `timeupdate`
+  - The time indicated by the element's currentTime attribute has changed.
 
-  * Sent when the playback state is changed to paused (paused property is true).
+- `volumechange`
+  - Sent when the audio volume changes (both when the volume is set and when the muted attribute is changed).
 
-* `play`
-
-  * Sent when the playback state is no longer paused, as a result of the play method, or the autoplay attribute.
-
-* `playing`
-
-  * Sent when the media has enough data to start playing, after the play event, but also when recovering from being stalled, when looping media restarts, and after seeked, if it was playing before seeking.
-
-* `progress`
-
-  * Sent periodically to inform interested parties of progress downloading the media. Information about the current amount of the media that has been downloaded is available in the media element's buffered attribute.
-
-* `ratechange`
-
-  * Sent when the playback speed changes.
-
-* `seeked`
-
-  * Sent when a seek operation completes.
-
-* `seeking`
-
-  * Sent when a seek operation begins.
-
-* `stalled`
-
-  * Sent when the user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
-
-* `suspend`
-
-  * Sent when loading of the media is suspended; this may happen either because the download has completed or because it has been paused for any other reason.
-
-* `timeupdate`
-
-  * The time indicated by the element's currentTime attribute has changed.
-
-* `volumechange`
-
-  * Sent when the audio volume changes (both when the volume is set and when the muted attribute is changed).
-
-* `waiting`
-
-  * Sent when the requested operation (such as playback) is delayed pending the completion of another operation (such as a seek).
+- `waiting`
+  - Sent when the requested operation (such as playback) is delayed pending the completion of another operation (such as a seek).
 
 ### Non-standard Events
 
 Non-standard events are prefixed with `stream-` to distinguish them from standard events.
 
-* `stream-adstart`
+- `stream-adstart`
+  - Fires when `ad-url` attribute is present and the ad begins playback
 
-  * Fires when `ad-url` attribute is present and the ad begins playback
+- `stream-adend`
+  - Fires when `ad-url` attribute is present and the ad finishes playback
 
-* `stream-adend`
-
-  * Fires when `ad-url` attribute is present and the ad finishes playback
-
-* `stream-adtimeout`
-
-  * Fires when `ad-url` attribute is present and the ad took too long to load.
+- `stream-adtimeout`
+  - Fires when `ad-url` attribute is present and the ad took too long to load.
 
 </page>
-

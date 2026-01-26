@@ -95,7 +95,7 @@ interface UseModelGenerationReturn {
 
 /**
  * 单个模型生成的 Hook
- * 
+ *
  * 封装了单个模型的所有状态和生成逻辑
  */
 export function useModelGeneration({
@@ -152,9 +152,9 @@ export function useModelGeneration({
   const flushBuffer = useCallback(() => {
     const contentDelta = contentBufferRef.current
     const reasoningDelta = reasoningBufferRef.current
-    
+
     if (contentDelta || reasoningDelta) {
-      setResponse((prev) => ({
+      setResponse(prev => ({
         ...prev,
         content: prev.content + contentDelta,
         reasoning: (prev.reasoning || '') + reasoningDelta,
@@ -173,13 +173,13 @@ export function useModelGeneration({
     }
     // 最后一次刷新确保所有内容都被渲染
     flushBuffer()
-    
+
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
       abortControllerRef.current = null
     }
 
-    setResponse((prev) => {
+    setResponse(prev => {
       if (prev.loading) {
         const duration = prev.startTime ? (Date.now() - prev.startTime) / 1000 : undefined
         const tokens = Math.floor(prev.content.length / 4)
@@ -195,162 +195,165 @@ export function useModelGeneration({
   }, [flushBuffer, selectedModel.id, slot])
 
   // 生成内容
-  const generate = useCallback(async (appId: string) => {
-    const startTime = Date.now()
+  const generate = useCallback(
+    async (appId: string) => {
+      const startTime = Date.now()
 
-    // 停止之前的生成
-    stop()
+      // 停止之前的生成
+      stop()
 
-    // 创建新的 AbortController
-    abortControllerRef.current = new AbortController()
-    const signal = abortControllerRef.current.signal
+      // 创建新的 AbortController
+      abortControllerRef.current = new AbortController()
+      const signal = abortControllerRef.current.signal
 
-    // 切换到代码视图并重置状态
-    setViewMode('code')
-    setResponse({ content: '', reasoning: '', loading: true, completed: false, startTime })
-    
-    // 重置缓冲区
-    contentBufferRef.current = ''
-    reasoningBufferRef.current = ''
-    
-    // 启动批量更新定时器（每 50ms 刷新一次，即每秒最多 20 次渲染）
-    if (flushIntervalRef.current) {
-      clearInterval(flushIntervalRef.current)
-    }
-    flushIntervalRef.current = setInterval(flushBuffer, 50)
+      // 切换到代码视图并重置状态
+      setViewMode('code')
+      setResponse({ content: '', reasoning: '', loading: true, completed: false, startTime })
 
-    try {
-      await fetchEventSource(`/api/apps/${appId}/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          slot,
-          model: selectedModel.id,
-          temperature: settings.temperature,
-        }),
-        openWhenHidden: true,
-        signal,
-        onopen: async (res) => {
-          if (!res.ok) {
-            const errorText = await res.text()
-            throw new Error(`HTTP error: ${res.status} ${errorText}`)
-          }
-        },
-        onmessage: (msg) => {
-          if (msg.data === '[DONE]') {
-            return
-          }
+      // 重置缓冲区
+      contentBufferRef.current = ''
+      reasoningBufferRef.current = ''
 
-          try {
-            const data = JSON.parse(msg.data)
-            const delta = data.choices?.[0]?.delta
-
-            if (delta) {
-              // 只更新缓冲区，不触发渲染（由定时器批量刷新）
-              contentBufferRef.current += delta.content || ''
-              reasoningBufferRef.current += delta.reasoning_content || ''
-            }
-          } catch {
-            // Ignore parsing errors
-          }
-        },
-        onerror: (error) => {
-          throw error
-        },
-        onclose: () => {
-          // 停止定时器并最后一次刷新
-          if (flushIntervalRef.current) {
-            clearInterval(flushIntervalRef.current)
-            flushIntervalRef.current = null
-          }
-          // 确保所有缓冲内容都被刷新
-          const finalContent = contentBufferRef.current
-          const finalReasoning = reasoningBufferRef.current
-          contentBufferRef.current = ''
-          reasoningBufferRef.current = ''
-          
-          setResponse((prev) => {
-            // 合并最后的缓冲内容
-            const mergedContent = prev.content + finalContent
-            const mergedReasoning = (prev.reasoning || '') + finalReasoning
-            const html = extractHTMLFromMarkdown(mergedContent)
-            const duration = (Date.now() - startTime) / 1000
-            const tokens = Math.floor(mergedContent.length / 4)
-
-            // 如果当前模型生成了 HTML，则切换到预览模式
-            if (html) {
-              setViewMode('preview')
-            }
-
-            // 保存 HTML 到数据库
-            if (html) {
-              const fieldName = slot === 'a' ? 'html_content_a' : 'html_content_b'
-              const durationField = slot === 'a' ? 'duration_a' : 'duration_b'
-              const tokensField = slot === 'a' ? 'tokens_a' : 'tokens_b'
-
-              fetch(`/api/apps/${appId}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                  [fieldName]: html,
-                  [durationField]: duration,
-                  [tokensField]: tokens
-                }),
-              }).catch((err) => {
-                console.error(`Failed to save HTML for model ${slot}:`, err)
-              })
-            }
-
-            // 通知生成完成
-            onGenerationComplete?.(html || undefined)
-
-            // Track generation completed
-            trackGenerationCompleted({
-              model_id: selectedModel.id,
-              slot,
-              duration_ms: Math.round(duration * 1000),
-              tokens,
-            })
-
-            return {
-              ...prev,
-              content: mergedContent,
-              reasoning: mergedReasoning,
-              loading: false,
-              completed: true,
-              html: html || undefined,
-              duration,
-              tokens,
-            }
-          })
-        },
-      })
-    } catch (error) {
-      if ((error as Error).name === 'AbortError') {
-        setResponse((prev) => {
-          const duration = prev.startTime ? (Date.now() - prev.startTime) / 1000 : undefined
-          const tokens = Math.floor(prev.content.length / 4)
-          return { ...prev, loading: false, completed: true, duration, tokens }
-        })
-        return
+      // 启动批量更新定时器（每 50ms 刷新一次，即每秒最多 20 次渲染）
+      if (flushIntervalRef.current) {
+        clearInterval(flushIntervalRef.current)
       }
-      console.error(`Model ${slot} error:`, error)
-      // Track generation error
-      trackGenerationError({
-        model_id: selectedModel.id,
-        slot,
-        error_code: (error as Error).message || 'unknown_error',
-      })
-      setResponse((prev) => ({
-        ...prev,
-        content: prev.content + '\n\nError: ' + (error as Error).message,
-        loading: false,
-        completed: true,
-      }))
-    }
-  }, [slot, stop, onGenerationComplete, selectedModel.id, settings.temperature])
+      flushIntervalRef.current = setInterval(flushBuffer, 50)
+
+      try {
+        await fetchEventSource(`/api/apps/${appId}/generate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            slot,
+            model: selectedModel.id,
+            temperature: settings.temperature,
+          }),
+          openWhenHidden: true,
+          signal,
+          onopen: async res => {
+            if (!res.ok) {
+              const errorText = await res.text()
+              throw new Error(`HTTP error: ${res.status} ${errorText}`)
+            }
+          },
+          onmessage: msg => {
+            if (msg.data === '[DONE]') {
+              return
+            }
+
+            try {
+              const data = JSON.parse(msg.data)
+              const delta = data.choices?.[0]?.delta
+
+              if (delta) {
+                // 只更新缓冲区，不触发渲染（由定时器批量刷新）
+                contentBufferRef.current += delta.content || ''
+                reasoningBufferRef.current += delta.reasoning_content || ''
+              }
+            } catch {
+              // Ignore parsing errors
+            }
+          },
+          onerror: error => {
+            throw error
+          },
+          onclose: () => {
+            // 停止定时器并最后一次刷新
+            if (flushIntervalRef.current) {
+              clearInterval(flushIntervalRef.current)
+              flushIntervalRef.current = null
+            }
+            // 确保所有缓冲内容都被刷新
+            const finalContent = contentBufferRef.current
+            const finalReasoning = reasoningBufferRef.current
+            contentBufferRef.current = ''
+            reasoningBufferRef.current = ''
+
+            setResponse(prev => {
+              // 合并最后的缓冲内容
+              const mergedContent = prev.content + finalContent
+              const mergedReasoning = (prev.reasoning || '') + finalReasoning
+              const html = extractHTMLFromMarkdown(mergedContent)
+              const duration = (Date.now() - startTime) / 1000
+              const tokens = Math.floor(mergedContent.length / 4)
+
+              // 如果当前模型生成了 HTML，则切换到预览模式
+              if (html) {
+                setViewMode('preview')
+              }
+
+              // 保存 HTML 到数据库
+              if (html) {
+                const fieldName = slot === 'a' ? 'html_content_a' : 'html_content_b'
+                const durationField = slot === 'a' ? 'duration_a' : 'duration_b'
+                const tokensField = slot === 'a' ? 'tokens_a' : 'tokens_b'
+
+                fetch(`/api/apps/${appId}`, {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    [fieldName]: html,
+                    [durationField]: duration,
+                    [tokensField]: tokens,
+                  }),
+                }).catch(err => {
+                  console.error(`Failed to save HTML for model ${slot}:`, err)
+                })
+              }
+
+              // 通知生成完成
+              onGenerationComplete?.(html || undefined)
+
+              // Track generation completed
+              trackGenerationCompleted({
+                model_id: selectedModel.id,
+                slot,
+                duration_ms: Math.round(duration * 1000),
+                tokens,
+              })
+
+              return {
+                ...prev,
+                content: mergedContent,
+                reasoning: mergedReasoning,
+                loading: false,
+                completed: true,
+                html: html || undefined,
+                duration,
+                tokens,
+              }
+            })
+          },
+        })
+      } catch (error) {
+        if ((error as Error).name === 'AbortError') {
+          setResponse(prev => {
+            const duration = prev.startTime ? (Date.now() - prev.startTime) / 1000 : undefined
+            const tokens = Math.floor(prev.content.length / 4)
+            return { ...prev, loading: false, completed: true, duration, tokens }
+          })
+          return
+        }
+        console.error(`Model ${slot} error:`, error)
+        // Track generation error
+        trackGenerationError({
+          model_id: selectedModel.id,
+          slot,
+          error_code: (error as Error).message || 'unknown_error',
+        })
+        setResponse(prev => ({
+          ...prev,
+          content: prev.content + '\n\nError: ' + (error as Error).message,
+          loading: false,
+          completed: true,
+        }))
+      }
+    },
+    [slot, stop, onGenerationComplete, selectedModel.id, settings.temperature]
+  )
 
   return {
     selectedModel,

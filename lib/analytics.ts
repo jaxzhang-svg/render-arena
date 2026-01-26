@@ -63,17 +63,11 @@ export function trackGenerationError(params: {
   trackEvent('generation_error', params)
 }
 
-export function trackGenerationStopped(params: {
-  model_id: string
-  slot: 'a' | 'b'
-}) {
+export function trackGenerationStopped(params: { model_id: string; slot: 'a' | 'b' }) {
   trackEvent('generation_stopped', params)
 }
 
-export function trackGenerationRegenerated(params: {
-  model_id: string
-  slot: 'a' | 'b'
-}) {
+export function trackGenerationRegenerated(params: { model_id: string; slot: 'a' | 'b' }) {
   trackEvent('generation_regenerated', params)
 }
 
@@ -100,10 +94,7 @@ export function trackGalleryViewed(category: string) {
   trackEvent('gallery_viewed', { category })
 }
 
-export function trackGalleryFiltered(params: {
-  category: string
-  previous_category: string
-}) {
+export function trackGalleryFiltered(params: { category: string; previous_category: string }) {
   trackEvent('gallery_filtered', params)
 }
 
@@ -127,17 +118,11 @@ export function trackShareModalOpened(appId: string) {
   trackEvent('share_modal_opened', { app_id: appId })
 }
 
-export function trackShareLinkCopied(params: {
-  app_id: string
-  share_mode: 'video' | 'poster'
-}) {
+export function trackShareLinkCopied(params: { app_id: string; share_mode: 'video' | 'poster' }) {
   trackEvent('share_link_copied', params)
 }
 
-export function trackPublishStarted(params: {
-  app_id: string
-  category: string
-}) {
+export function trackPublishStarted(params: { app_id: string; category: string }) {
   trackEvent('publish_started', params)
 }
 
@@ -147,17 +132,11 @@ export function trackVideoRecordingStarted(appId: string) {
   trackEvent('video_recording_started', { app_id: appId })
 }
 
-export function trackVideoRecordingStopped(params: {
-  app_id: string
-  duration_seconds: number
-}) {
+export function trackVideoRecordingStopped(params: { app_id: string; duration_seconds: number }) {
   trackEvent('video_recording_stopped', params)
 }
 
-export function trackVideoUploadStarted(params: {
-  app_id: string
-  file_size_mb: number
-}) {
+export function trackVideoUploadStarted(params: { app_id: string; file_size_mb: number }) {
   trackEvent('video_upload_started', params)
 }
 
@@ -168,10 +147,7 @@ export function trackVideoUploadCompleted(params: {
   trackEvent('video_upload_completed', params)
 }
 
-export function trackVideoUploadError(params: {
-  app_id: string
-  error_type: string
-}) {
+export function trackVideoUploadError(params: { app_id: string; error_type: string }) {
   trackEvent('video_upload_error', params)
 }
 

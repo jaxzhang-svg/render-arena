@@ -17,6 +17,7 @@ npm run aidev         # Vercel AI SDK devtools
 ## Environment Variables
 
 Required in `.env.local`:
+
 ```bash
 NOVITA_API_KEY=your-novita-api-key
 E2B_API_KEY=your-e2b-api-key
@@ -27,6 +28,7 @@ E2B_API_KEY=your-e2b-api-key
 ## Code Style Guidelines
 
 ### Import Order
+
 1. React/hooks imports
 2. Third-party packages
 3. Internal imports with `@/` path alias
@@ -42,6 +44,7 @@ import type { LLMModel } from '@/lib/models'
 ```
 
 ### Component Patterns
+
 - Client components: Add `'use client'` at top
 - Components use `forwardRef` pattern for Radix UI primitives
 - Use CVA (class-variance-authority) for variant styles
@@ -66,21 +69,25 @@ function Button({ className, variant, size, ...props }: React.ComponentProps<"bu
 ```
 
 ### Utility Functions
+
 - Use `cn()` from `@/lib/utils` for Tailwind class merging
 - Prefer functional patterns over class-based
 
 ### TypeScript
+
 - Strict mode enabled
 - Use `interface` for object shapes, `type` for unions/primitives
 - Prefer explicit return types for exported functions
 
 ### Naming Conventions
+
 - Components: PascalCase (`FragmentWeb.tsx`)
 - Utilities: camelCase (`cn.ts`)
 - Types/interfaces: PascalCase (`LLMModel`)
 - Files: kebab-case for folders, PascalCase for components
 
 ### API Routes
+
 - Use `export const maxDuration = 60` for Vercel timeouts
 - Type request/response interfaces locally
 - Try/catch with proper error responses:
@@ -92,12 +99,16 @@ export async function POST(req: Request) {
     return Response.json({ data })
   } catch (error) {
     console.error('Error:', error)
-    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
+    return Response.json(
+      { error: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    )
   }
 }
 ```
 
 ### Schema Validation
+
 Use Zod for runtime validation:
 
 ```typescript
@@ -111,10 +122,13 @@ export type FragmentSchema = z.infer<typeof fragmentSchema>
 ```
 
 ### Linting
+
 Run `npm run lint` before committing. ESLint config uses `eslint-config-next` with TypeScript and core-web-vitals presets.
 
 ### Path Aliases
+
 All internal imports use `@/` prefix:
+
 ```typescript
 import { something } from '@/lib/something'
 import { Button } from '@/components/ui/button'
@@ -137,15 +151,19 @@ import { Button } from '@/components/ui/button'
 ## Architecture Notes
 
 ### API Structure
+
 - `/api/chat` - LLM streaming with Vercel AI SDK `streamObject()`
 - `/api/sandbox/create` - Sandbox creation via `novita-sandbox`
 
 ### State Management
+
 - React hooks (`useState`, `useEffect`, custom hooks)
 - `@/hooks/` for shared logic (e.g., `useSandboxAgent`, `useScreenRecorder`)
 
 ### Streaming Pattern
+
 Server-side:
+
 ```typescript
 import { streamObject } from 'ai'
 const stream = await streamObject({ model, schema, messages })
@@ -153,6 +171,7 @@ return stream.toTextStreamResponse()
 ```
 
 Client-side:
+
 ```typescript
 import { experimental_useObject as useObject } from '@ai-sdk/react'
 const { object, submit, isLoading } = useObject({ api: '/api/chat' })

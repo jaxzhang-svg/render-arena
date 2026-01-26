@@ -124,13 +124,14 @@ Creates a model response for the given chat conversation.
     <ParamField body="name" type="string">
       The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters.
     </ParamField>
+
   </Expandable>
 </ParamField>
 
 <ParamField body="max_tokens" type="integer" required={true}>
   The maximum number of tokens to generate in the completion.
 
-  If the token count of your prompt (previous messages) plus max\_tokens exceed the model's context length, the behavior is depends on context\_length\_exceeded\_behavior. By default, max\_tokens will be lowered to fit in the context window instead of returning an error.
+If the token count of your prompt (previous messages) plus max_tokens exceed the model's context length, the behavior is depends on context_length_exceeded_behavior. By default, max_tokens will be lowered to fit in the context window instead of returning an error.
 </ParamField>
 
 <ParamField body="stream" type="boolean | null" default={false}>
@@ -150,9 +151,9 @@ Creates a model response for the given chat conversation.
 <ParamField body="n" type="integer | null" default={1}>
   How many completions to generate for each prompt.
 
-  Note: Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for max\_tokens and stop.
+Note: Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for max_tokens and stop.
 
-  Required range: `1 < x < 128`
+Required range: `1 < x < 128`
 </ParamField>
 
 <ParamField body="seed" type="integer | null">
@@ -162,27 +163,27 @@ Creates a model response for the given chat conversation.
 <ParamField body="frequency_penalty" type="number | null" default={0}>
   Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
 
-  Reasonable value is around 0.1 to 1 if the aim is to just reduce repetitive samples somewhat. If the aim is to strongly suppress repetition, then one can increase the coefficients up to 2, but this can noticeably degrade the quality of samples. Negative values can be used to increase the likelihood of repetition.
+Reasonable value is around 0.1 to 1 if the aim is to just reduce repetitive samples somewhat. If the aim is to strongly suppress repetition, then one can increase the coefficients up to 2, but this can noticeably degrade the quality of samples. Negative values can be used to increase the likelihood of repetition.
 
-  See also presence\_penalty for penalizing tokens that have at least one appearance at a fixed rate.
+See also presence_penalty for penalizing tokens that have at least one appearance at a fixed rate.
 
-  Required range: `-2 < x < 2`
+Required range: `-2 < x < 2`
 </ParamField>
 
 <ParamField body="presence_penalty" type="number | null" default={0}>
   Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
 
-  Reasonable value is around 0.1 to 1 if the aim is to just reduce repetitive samples somewhat. If the aim is to strongly suppress repetition, then one can increase the coefficients up to 2, but this can noticeably degrade the quality of samples. Negative values can be used to increase the likelihood of repetition.
+Reasonable value is around 0.1 to 1 if the aim is to just reduce repetitive samples somewhat. If the aim is to strongly suppress repetition, then one can increase the coefficients up to 2, but this can noticeably degrade the quality of samples. Negative values can be used to increase the likelihood of repetition.
 
-  See also `frequency_penalty` for penalizing tokens at an increasing rate depending on how often they appear.
+See also `frequency_penalty` for penalizing tokens at an increasing rate depending on how often they appear.
 
-  Required range: `-2 < x < 2`
+Required range: `-2 < x < 2`
 </ParamField>
 
 <ParamField body="repetition_penalty" type="number | null">
   Applies a penalty to repeated tokens to discourage or encourage repetition. A value of 1.0 means no penalty, allowing free repetition. Values above 1.0 penalize repetition, reducing the likelihood of repeating tokens. Values between 0.0 and 1.0 reward repetition, increasing the chance of repeated tokens. For a good balance, a value of 1.2 is often recommended. Note that the penalty is applied to both the generated output and the prompt in decoder-only models.
 
-  Required range: `0 < x < 2`
+Required range: `0 < x < 2`
 </ParamField>
 
 <ParamField body="stop" type="string | null">
@@ -192,37 +193,37 @@ Creates a model response for the given chat conversation.
 <ParamField body="temperature" type="number | null" default={1}>
   What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
 
-  We generally recommend altering this or `top_p` but not both.
+We generally recommend altering this or `top_p` but not both.
 
-  Required range: `0 < x < 2`
+Required range: `0 < x < 2`
 </ParamField>
 
 <ParamField body="top_p" type="number | null">
   An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top\_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both.
 
-  Required range: `0 < x <= 1`
+Required range: `0 < x <= 1`
 </ParamField>
 
 <ParamField body="top_k" type="integer | null">
   Top-k sampling is another sampling method where the k most probable next tokens are filtered and the probability mass is redistributed among only those k next tokens. The value of k controls the number of candidates for the next token at each step during text generation.
 
-  Required range: `1 < x < 128`
+Required range: `1 < x < 128`
 </ParamField>
 
 <ParamField body="min_p" type="number | null">
   float that represents the minimum probability for a token to be considered, relative to the probability of the most likely token.
 
-  Required range: `0 <= x <= 1`
+Required range: `0 <= x <= 1`
 </ParamField>
 
 <ParamField body="logit_bias" type="map[string, integer] | null" required={false}>
   Modify the likelihood of specified tokens appearing in the completion.
 
-  Accepts a JSON object that maps tokens to an associated bias value from -100 to 100.
-  Mathematically, the bias is added to the logits generated by the model prior to
-  sampling. The exact effect will vary per model.
+Accepts a JSON object that maps tokens to an associated bias value from -100 to 100.
+Mathematically, the bias is added to the logits generated by the model prior to
+sampling. The exact effect will vary per model.
 
-  For example, by setting `"logit_bias":{"1639": 6}` will increase the likelihood of the token with token ID 1639.
+For example, by setting `"logit_bias":{"1639": 6}` will increase the likelihood of the token with token ID 1639.
 </ParamField>
 
 <ParamField body="logprobs" type="boolean | null" default={false}>
@@ -232,13 +233,13 @@ Creates a model response for the given chat conversation.
 <ParamField body="top_logprobs" type="integer | null">
   An integer between 0 and 20 specifying the number of most likely tokens to return at each token position, each with an associated log probability.  `logprobs` must be set to true if this parameter is used.
 
-  Required range: `0 <= x <= 20`
+Required range: `0 <= x <= 20`
 </ParamField>
 
 <ParamField body="tools" type="object[] | null">
   A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide a list of functions the model may generate JSON inputs for.
 
-  Learn more about function calling in the [function calling guide](/guides/llm-function-calling).
+Learn more about function calling in the [function calling guide](/guides/llm-function-calling).
 
   <Expandable title="properties" defaultOpen={false}>
     <ParamField body="type" type="string" required={true}>
@@ -266,15 +267,16 @@ Creates a model response for the given chat conversation.
         </ParamField>
       </Expandable>
     </ParamField>
+
   </Expandable>
 </ParamField>
 
 <ParamField body="response_format" type="object | null">
   Allows to force the model to produce specific output format.
 
-  Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs which ensures the model will match your supplied JSON schema.
+Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs which ensures the model will match your supplied JSON schema.
 
-  Setting to `{ "type": "json_object" }` enables the older JSON mode, which ensures the message the model generates is valid JSON. Using `json_schema` is preferred for models that support it.
+Setting to `{ "type": "json_object" }` enables the older JSON mode, which ensures the message the model generates is valid JSON. Using `json_schema` is preferred for models that support it.
 
   <Expandable title="properties" defaultOpen={false}>
     <ParamField body="type" type="string" required={true} default="text">
@@ -310,27 +312,28 @@ Creates a model response for the given chat conversation.
         </ParamField>
       </Expandable>
     </ParamField>
+
   </Expandable>
 </ParamField>
 
 <ParamField body="separate_reasoning" type="boolean | null" default={false}>
   Whether to separate the reasoning from the "content" into "reasoning\_content" field.
 
-  Supported models:
+Supported models:
 
-  * `deepseek/deepseek-r1-turbo`
-</ParamField>
+- `deepseek/deepseek-r1-turbo`
+  </ParamField>
 
 <ParamField body="enable_thinking" type="boolean | null" default={true}>
   Controls the switches between thinking and non-thinking modes.
 
-  Supported models:
+Supported models:
 
-  * zai-org/glm-4.5
-  * deepseek/deepseek-v3.1
-  * deepseek/deepseek-v3.1-terminus
-  * deepseek/deepseek-v3.2-exp
-</ParamField>
+- zai-org/glm-4.5
+- deepseek/deepseek-v3.1
+- deepseek/deepseek-v3.1-terminus
+- deepseek/deepseek-v3.2-exp
+  </ParamField>
 
 ## Response
 
@@ -369,6 +372,7 @@ Creates a model response for the given chat conversation.
         </ResponseField>
       </Expandable>
     </ResponseField>
+
   </Expandable>
 </ResponseField>
 
@@ -391,7 +395,7 @@ Creates a model response for the given chat conversation.
 <ResponseField name="usage" type="object">
   Usage statistics.
 
-  For streaming responses, usage field is included in the very last response chunk returned.
+For streaming responses, usage field is included in the very last response chunk returned.
 
   <Expandable title="properties" defaultOpen={false}>
     <ResponseField name="completion_tokens" type="integer" required={true}>
@@ -405,9 +409,9 @@ Creates a model response for the given chat conversation.
     <ResponseField name="total_tokens" type="integer" required={true}>
       The total number of tokens used in the request (prompt + completion).
     </ResponseField>
+
   </Expandable>
 </ResponseField>
-
 
 ---
 

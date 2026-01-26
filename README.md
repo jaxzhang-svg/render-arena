@@ -34,6 +34,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 Detailed documentation and coding standards can be found in the [docs](./docs) directory.
 
 ### Important Coding Rules
+
 - **Base UI Triggers**: Do not nest `<button>` elements inside `Tooltip.Trigger`, `Popover.Trigger`, or any other Base UI trigger components. Use the `render` prop instead. See [Coding Standards](./docs/tech/04-coding-standards.md) for details.
 
 ## Deploy on Vercel

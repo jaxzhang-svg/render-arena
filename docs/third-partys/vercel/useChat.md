@@ -1,4 +1,3 @@
-
 # Chatbot
 
 The `useChat` hook makes it effortless to create a conversational user interface for your chatbot application. It enables the streaming of chat messages from your AI provider, manages the chat state, and updates the UI automatically as new messages arrive.
@@ -16,19 +15,19 @@ Let's start with the following example first.
 ## Example
 
 ```tsx filename='app/page.tsx'
-'use client';
+'use client'
 
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
-import { useState } from 'react';
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
+import { useState } from 'react'
 
 export default function Page() {
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/chat',
     }),
-  });
-  const [input, setInput] = useState('');
+  })
+  const [input, setInput] = useState('')
 
   return (
     <>
@@ -36,17 +35,17 @@ export default function Page() {
         <div key={message.id}>
           {message.role === 'user' ? 'User: ' : 'AI: '}
           {message.parts.map((part, index) =>
-            part.type === 'text' ? <span key={index}>{part.text}</span> : null,
+            part.type === 'text' ? <span key={index}>{part.text}</span> : null
           )}
         </div>
       ))}
 
       <form
         onSubmit={e => {
-          e.preventDefault();
+          e.preventDefault()
           if (input.trim()) {
-            sendMessage({ text: input });
-            setInput('');
+            sendMessage({ text: input })
+            setInput('')
           }
         }}
       >
@@ -61,27 +60,27 @@ export default function Page() {
         </button>
       </form>
     </>
-  );
+  )
 }
 ```
 
 ```ts filename='app/api/chat/route.ts'
-import { convertToModelMessages, streamText, UIMessage } from 'ai';
-__PROVIDER_IMPORT__;
+import { convertToModelMessages, streamText, UIMessage } from 'ai'
+__PROVIDER_IMPORT__
 
 // Allow streaming responses up to 30 seconds
-export const maxDuration = 30;
+export const maxDuration = 30
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  const { messages }: { messages: UIMessage[] } = await req.json()
 
   const result = streamText({
     model: __MODEL__,
     system: 'You are a helpful assistant.',
     messages: await convertToModelMessages(messages),
-  });
+  })
 
-  return result.toUIMessageStreamResponse();
+  return result.toUIMessageStreamResponse()
 }
 ```
 
@@ -119,19 +118,19 @@ You can use `status` for e.g. the following purposes:
 - To disable the submit button.
 
 ```tsx filename='app/page.tsx' highlight="6,22-29,36"
-'use client';
+'use client'
 
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
-import { useState } from 'react';
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
+import { useState } from 'react'
 
 export default function Page() {
   const { messages, sendMessage, status, stop } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/chat',
     }),
-  });
-  const [input, setInput] = useState('');
+  })
+  const [input, setInput] = useState('')
 
   return (
     <>
@@ -139,7 +138,7 @@ export default function Page() {
         <div key={message.id}>
           {message.role === 'user' ? 'User: ' : 'AI: '}
           {message.parts.map((part, index) =>
-            part.type === 'text' ? <span key={index}>{part.text}</span> : null,
+            part.type === 'text' ? <span key={index}>{part.text}</span> : null
           )}
         </div>
       ))}
@@ -155,10 +154,10 @@ export default function Page() {
 
       <form
         onSubmit={e => {
-          e.preventDefault();
+          e.preventDefault()
           if (input.trim()) {
-            sendMessage({ text: input });
-            setInput('');
+            sendMessage({ text: input })
+            setInput('')
           }
         }}
       >
@@ -173,7 +172,7 @@ export default function Page() {
         </button>
       </form>
     </>
-  );
+  )
 }
 ```
 
@@ -189,19 +188,19 @@ It can be used to display an error message, disable the submit button, or show a
 </Note>
 
 ```tsx file="app/page.tsx" highlight="6,20-27,33"
-'use client';
+'use client'
 
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
-import { useState } from 'react';
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
+import { useState } from 'react'
 
 export default function Chat() {
   const { messages, sendMessage, error, reload } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/chat',
     }),
-  });
-  const [input, setInput] = useState('');
+  })
+  const [input, setInput] = useState('')
 
   return (
     <div>
@@ -209,7 +208,7 @@ export default function Chat() {
         <div key={m.id}>
           {m.role}:{' '}
           {m.parts.map((part, index) =>
-            part.type === 'text' ? <span key={index}>{part.text}</span> : null,
+            part.type === 'text' ? <span key={index}>{part.text}</span> : null
           )}
         </div>
       ))}
@@ -225,21 +224,17 @@ export default function Chat() {
 
       <form
         onSubmit={e => {
-          e.preventDefault();
+          e.preventDefault()
           if (input.trim()) {
-            sendMessage({ text: input });
-            setInput('');
+            sendMessage({ text: input })
+            setInput('')
           }
         }}
       >
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          disabled={error != null}
-        />
+        <input value={input} onChange={e => setInput(e.target.value)} disabled={error != null} />
       </form>
     </div>
-  );
+  )
 }
 ```
 
@@ -292,19 +287,16 @@ When the user clicks the "Stop" button, the fetch request will be aborted. This 
 Similarly, you can also request the AI provider to reprocess the last message by calling the `regenerate` function returned by the `useChat` hook:
 
 ```tsx
-const { regenerate, status } = useChat();
+const { regenerate, status } = useChat()
 
 return (
   <>
-    <button
-      onClick={regenerate}
-      disabled={!(status === 'ready' || status === 'error')}
-    >
+    <button onClick={regenerate} disabled={!(status === 'ready' || status === 'error')}>
       Regenerate
     </button>
     ...
   </>
-);
+)
 ```
 
 When the user clicks the "Regenerate" button, the AI provider will regenerate the last message and replace the current one correspondingly.
@@ -334,7 +326,7 @@ const { messages, ... } = useChat({
 These callbacks can be used to trigger additional actions, such as logging, analytics, or custom UI updates.
 
 ```tsx
-import { UIMessage } from 'ai';
+import { UIMessage } from 'ai'
 
 const {
   /* ... */
@@ -343,12 +335,12 @@ const {
     // use information to e.g. update other UI states
   },
   onError: error => {
-    console.error('An error occurred:', error);
+    console.error('An error occurred:', error)
   },
   onData: data => {
-    console.log('Received data part from server:', data);
+    console.log('Received data part from server:', data)
   },
-});
+})
 ```
 
 It's worth noting that you can abort the processing by throwing an error in the `onData` callback. This will trigger the `onError` callback and stop the message from being appended to the chat UI. This can be useful for handling unexpected responses from the AI provider.
@@ -364,8 +356,8 @@ By default, the `useChat` hook sends a HTTP POST request to the `/api/chat` endp
 You can configure transport-level options that will be applied to all requests made by the hook:
 
 ```tsx
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
 
 const { messages, sendMessage } = useChat({
   transport: new DefaultChatTransport({
@@ -378,7 +370,7 @@ const { messages, sendMessage } = useChat({
     },
     credentials: 'same-origin',
   }),
-});
+})
 ```
 
 #### Dynamic Hook-Level Configuration
@@ -386,8 +378,8 @@ const { messages, sendMessage } = useChat({
 You can also provide functions that return configuration values. This is useful for authentication tokens that need to be refreshed, or for configuration that depends on runtime conditions:
 
 ```tsx
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
 
 const { messages, sendMessage } = useChat({
   transport: new DefaultChatTransport({
@@ -402,7 +394,7 @@ const { messages, sendMessage } = useChat({
     }),
     credentials: () => 'include',
   }),
-});
+})
 ```
 
 <Note>
@@ -437,8 +429,8 @@ sendMessage(
       userId: 'user123',
       sessionId: 'session456',
     },
-  },
-);
+  }
+)
 ```
 
 The request-level options are merged with hook-level options, with request-level options taking precedence. On your server side, you can handle the request with this additional information.
@@ -449,14 +441,14 @@ You can configure custom `body` fields on a per-request basis using the second p
 This is useful if you want to pass in additional information to your backend that is not part of the message list.
 
 ```tsx filename="app/page.tsx" highlight="20-25"
-'use client';
+'use client'
 
-import { useChat } from '@ai-sdk/react';
-import { useState } from 'react';
+import { useChat } from '@ai-sdk/react'
+import { useState } from 'react'
 
 export default function Chat() {
-  const { messages, sendMessage } = useChat();
-  const [input, setInput] = useState('');
+  const { messages, sendMessage } = useChat()
+  const [input, setInput] = useState('')
 
   return (
     <div>
@@ -464,14 +456,14 @@ export default function Chat() {
         <div key={m.id}>
           {m.role}:{' '}
           {m.parts.map((part, index) =>
-            part.type === 'text' ? <span key={index}>{part.text}</span> : null,
+            part.type === 'text' ? <span key={index}>{part.text}</span> : null
           )}
         </div>
       ))}
 
       <form
         onSubmit={event => {
-          event.preventDefault();
+          event.preventDefault()
           if (input.trim()) {
             sendMessage(
               { text: input },
@@ -479,16 +471,16 @@ export default function Chat() {
                 body: {
                   customKey: 'customValue',
                 },
-              },
-            );
-            setInput('');
+              }
+            )
+            setInput('')
           }
         }}
       >
         <input value={input} onChange={e => setInput(e.target.value)} />
       </form>
     </div>
-  );
+  )
 }
 ```
 
@@ -497,8 +489,7 @@ You can retrieve these custom fields on your server side by destructuring the re
 ```ts filename="app/api/chat/route.ts" highlight="3,4"
 export async function POST(req: Request) {
   // Extract additional information ("customKey") from the body of the request:
-  const { messages, customKey }: { messages: UIMessage[]; customKey: string } =
-    await req.json();
+  const { messages, customKey }: { messages: UIMessage[]; customKey: string } = await req.json()
   //...
 }
 ```
@@ -515,16 +506,16 @@ return result.toUIMessageStreamResponse({
       return {
         createdAt: Date.now(),
         model: 'gpt-5.1',
-      };
+      }
     }
 
     if (part.type === 'finish') {
       return {
         totalTokens: part.totalUsage.totalTokens,
-      };
+      }
     }
   },
-});
+})
 ```
 
 ```tsx
@@ -533,18 +524,15 @@ return result.toUIMessageStreamResponse({
   messages.map(message => (
     <div key={message.id}>
       {message.role}:{' '}
-      {message.metadata?.createdAt &&
-        new Date(message.metadata.createdAt).toLocaleTimeString()}
+      {message.metadata?.createdAt && new Date(message.metadata.createdAt).toLocaleTimeString()}
       {/* Render message content */}
       {message.parts.map((part, index) =>
-        part.type === 'text' ? <span key={index}>{part.text}</span> : null,
+        part.type === 'text' ? <span key={index}>{part.text}</span> : null
       )}
       {/* Show token count if available */}
-      {message.metadata?.totalTokens && (
-        <span>{message.metadata.totalTokens} tokens</span>
-      )}
+      {message.metadata?.totalTokens && <span>{message.metadata.totalTokens} tokens</span>}
     </div>
-  ));
+  ))
 }
 ```
 
@@ -555,8 +543,8 @@ For complete examples with type safety and advanced use cases, see the [Message 
 You can configure custom transport behavior using the `transport` option to customize how messages are sent to your API:
 
 ```tsx filename="app/page.tsx"
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
 
 export default function Chat() {
   const { messages, sendMessage } = useChat({
@@ -568,10 +556,10 @@ export default function Chat() {
             id,
             message: messages[messages.length - 1],
           },
-        };
+        }
       },
     }),
-  });
+  })
 
   // ... rest of your component
 }
@@ -581,18 +569,18 @@ The corresponding API route receives the custom request format:
 
 ```ts filename="app/api/chat/route.ts"
 export async function POST(req: Request) {
-  const { id, message } = await req.json();
+  const { id, message } = await req.json()
 
   // Load existing messages and add the new one
-  const messages = await loadMessages(id);
-  messages.push(message);
+  const messages = await loadMessages(id)
+  messages.push(message)
 
   const result = streamText({
     model: __MODEL__,
     messages: await convertToModelMessages(messages),
-  });
+  })
 
-  return result.toUIMessageStreamResponse();
+  return result.toUIMessageStreamResponse()
 }
 ```
 
@@ -601,8 +589,8 @@ export async function POST(req: Request) {
 For more complex scenarios like message regeneration, you can use trigger-based routing:
 
 ```tsx filename="app/page.tsx"
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
 
 export default function Chat() {
   const { messages, sendMessage, regenerate } = useChat({
@@ -617,7 +605,7 @@ export default function Chat() {
               message: messages[messages.length - 1],
               messageId,
             },
-          };
+          }
         } else if (trigger === 'regenerate-assistant-message') {
           return {
             body: {
@@ -625,12 +613,12 @@ export default function Chat() {
               id,
               messageId,
             },
-          };
+          }
         }
-        throw new Error(`Unsupported trigger: ${trigger}`);
+        throw new Error(`Unsupported trigger: ${trigger}`)
       },
     }),
-  });
+  })
 
   // ... rest of your component
 }
@@ -640,28 +628,28 @@ The corresponding API route would handle different triggers:
 
 ```ts filename="app/api/chat/route.ts"
 export async function POST(req: Request) {
-  const { trigger, id, message, messageId } = await req.json();
+  const { trigger, id, message, messageId } = await req.json()
 
-  const chat = await readChat(id);
-  let messages = chat.messages;
+  const chat = await readChat(id)
+  let messages = chat.messages
 
   if (trigger === 'submit-user-message') {
     // Handle new user message
-    messages = [...messages, message];
+    messages = [...messages, message]
   } else if (trigger === 'regenerate-assistant-message') {
     // Handle message regeneration - remove messages after messageId
-    const messageIndex = messages.findIndex(m => m.id === messageId);
+    const messageIndex = messages.findIndex(m => m.id === messageId)
     if (messageIndex !== -1) {
-      messages = messages.slice(0, messageIndex);
+      messages = messages.slice(0, messageIndex)
     }
   }
 
   const result = streamText({
     model: __MODEL__,
     messages: await convertToModelMessages(messages),
-  });
+  })
 
-  return result.toUIMessageStreamResponse();
+  return result.toUIMessageStreamResponse()
 }
 ```
 
@@ -676,19 +664,19 @@ For scenarios where you want to communicate directly with an Agent without going
 - Single-process applications
 
 ```tsx filename="app/page.tsx"
-import { useChat } from '@ai-sdk/react';
-import { DirectChatTransport, ToolLoopAgent } from 'ai';
-__PROVIDER_IMPORT__;
+import { useChat } from '@ai-sdk/react'
+import { DirectChatTransport, ToolLoopAgent } from 'ai'
+__PROVIDER_IMPORT__
 
 const agent = new ToolLoopAgent({
   model: __MODEL__,
   instructions: 'You are a helpful assistant.',
-});
+})
 
 export default function Chat() {
   const { messages, sendMessage, status } = useChat({
     transport: new DirectChatTransport({ agent }),
-  });
+  })
 
   return (
     <>
@@ -696,19 +684,16 @@ export default function Chat() {
         <div key={message.id}>
           {message.role === 'user' ? 'User: ' : 'AI: '}
           {message.parts.map((part, index) =>
-            part.type === 'text' ? <span key={index}>{part.text}</span> : null,
+            part.type === 'text' ? <span key={index}>{part.text}</span> : null
           )}
         </div>
       ))}
 
-      <button
-        onClick={() => sendMessage({ text: 'Hello!' })}
-        disabled={status !== 'ready'}
-      >
+      <button onClick={() => sendMessage({ text: 'Hello!' })} disabled={status !== 'ready'}>
         Send
       </button>
     </>
-  );
+  )
 }
 ```
 
@@ -727,34 +712,34 @@ The default error message is "An error occurred."
 You can forward error messages or send your own error message by providing a `getErrorMessage` function:
 
 ```ts filename="app/api/chat/route.ts" highlight="13-27"
-import { convertToModelMessages, streamText, UIMessage } from 'ai';
-__PROVIDER_IMPORT__;
+import { convertToModelMessages, streamText, UIMessage } from 'ai'
+__PROVIDER_IMPORT__
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  const { messages }: { messages: UIMessage[] } = await req.json()
 
   const result = streamText({
     model: __MODEL__,
     messages: await convertToModelMessages(messages),
-  });
+  })
 
   return result.toUIMessageStreamResponse({
     onError: error => {
       if (error == null) {
-        return 'unknown error';
+        return 'unknown error'
       }
 
       if (typeof error === 'string') {
-        return error;
+        return error
       }
 
       if (error instanceof Error) {
-        return error.message;
+        return error.message
       }
 
-      return JSON.stringify(error);
+      return JSON.stringify(error)
     },
-  });
+  })
 }
 ```
 
@@ -769,51 +754,46 @@ Track token consumption and resource usage with [message metadata](/docs/ai-sdk-
 Usage data is attached as metadata to messages and becomes available once the model completes its response generation.
 
 ```ts
-import { openai } from '@ai-sdk/openai';
-import {
-  convertToModelMessages,
-  streamText,
-  UIMessage,
-  type LanguageModelUsage,
-} from 'ai';
-__PROVIDER_IMPORT__;
+import { openai } from '@ai-sdk/openai'
+import { convertToModelMessages, streamText, UIMessage, type LanguageModelUsage } from 'ai'
+__PROVIDER_IMPORT__
 
 // Create a new metadata type (optional for type-safety)
 type MyMetadata = {
-  totalUsage: LanguageModelUsage;
-};
+  totalUsage: LanguageModelUsage
+}
 
 // Create a new custom message type with your own metadata
-export type MyUIMessage = UIMessage<MyMetadata>;
+export type MyUIMessage = UIMessage<MyMetadata>
 
 export async function POST(req: Request) {
-  const { messages }: { messages: MyUIMessage[] } = await req.json();
+  const { messages }: { messages: MyUIMessage[] } = await req.json()
 
   const result = streamText({
     model: __MODEL__,
     messages: await convertToModelMessages(messages),
-  });
+  })
 
   return result.toUIMessageStreamResponse({
     originalMessages: messages,
     messageMetadata: ({ part }) => {
       // Send total usage when generation is finished
       if (part.type === 'finish') {
-        return { totalUsage: part.totalUsage };
+        return { totalUsage: part.totalUsage }
       }
     },
-  });
+  })
 }
 ```
 
 Then, on the client, you can access the message-level metadata.
 
 ```tsx
-'use client';
+'use client'
 
-import { useChat } from '@ai-sdk/react';
-import type { MyUIMessage } from './api/chat/route';
-import { DefaultChatTransport } from 'ai';
+import { useChat } from '@ai-sdk/react'
+import type { MyUIMessage } from './api/chat/route'
+import { DefaultChatTransport } from 'ai'
 
 export default function Chat() {
   // Use custom message type defined on the server (optional for type-safety)
@@ -821,16 +801,16 @@ export default function Chat() {
     transport: new DefaultChatTransport({
       api: '/api/chat',
     }),
-  });
+  })
 
   return (
-    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
+    <div className="stretch mx-auto flex w-full max-w-md flex-col py-24">
       {messages.map(m => (
         <div key={m.id} className="whitespace-pre-wrap">
           {m.role === 'user' ? 'User: ' : 'AI: '}
           {m.parts.map(part => {
             if (part.type === 'text') {
-              return part.text;
+              return part.text
             }
           })}
           {/* Render usage via metadata */}
@@ -840,18 +820,18 @@ export default function Chat() {
         </div>
       ))}
     </div>
-  );
+  )
 }
 ```
 
 You can also access your metadata from the `onFinish` callback of `useChat`:
 
 ```tsx
-'use client';
+'use client'
 
-import { useChat } from '@ai-sdk/react';
-import type { MyUIMessage } from './api/chat/route';
-import { DefaultChatTransport } from 'ai';
+import { useChat } from '@ai-sdk/react'
+import type { MyUIMessage } from './api/chat/route'
+import { DefaultChatTransport } from 'ai'
 
 export default function Chat() {
   // Use custom message type defined on the server (optional for type-safety)
@@ -861,9 +841,9 @@ export default function Chat() {
     }),
     onFinish: ({ message }) => {
       // Access message metadata via onFinish callback
-      console.log(message.metadata?.totalUsage);
+      console.log(message.metadata?.totalUsage)
     },
-  });
+  })
 }
 ```
 
@@ -872,19 +852,19 @@ export default function Chat() {
 `useChat` can handle plain text streams by setting the `streamProtocol` option to `text`:
 
 ```tsx filename="app/page.tsx" highlight="7"
-'use client';
+'use client'
 
-import { useChat } from '@ai-sdk/react';
-import { TextStreamChatTransport } from 'ai';
+import { useChat } from '@ai-sdk/react'
+import { TextStreamChatTransport } from 'ai'
 
 export default function Chat() {
   const { messages } = useChat({
     transport: new TextStreamChatTransport({
       api: '/api/chat',
     }),
-  });
+  })
 
-  return <>...</>;
+  return <>...</>
 }
 ```
 
@@ -904,19 +884,19 @@ These tokens are typically sent before the message content.
 You can forward them to the client with the `sendReasoning` option:
 
 ```ts filename="app/api/chat/route.ts" highlight="13"
-import { convertToModelMessages, streamText, UIMessage } from 'ai';
+import { convertToModelMessages, streamText, UIMessage } from 'ai'
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  const { messages }: { messages: UIMessage[] } = await req.json()
 
   const result = streamText({
     model: 'deepseek/deepseek-r1',
     messages: await convertToModelMessages(messages),
-  });
+  })
 
   return result.toUIMessageStreamResponse({
     sendReasoning: true,
-  });
+  })
 }
 ```
 
@@ -931,16 +911,16 @@ messages.map(message => (
     {message.parts.map((part, index) => {
       // text parts:
       if (part.type === 'text') {
-        return <div key={index}>{part.text}</div>;
+        return <div key={index}>{part.text}</div>
       }
 
       // reasoning parts:
       if (part.type === 'reasoning') {
-        return <pre key={index}>{part.text}</pre>;
+        return <pre key={index}>{part.text}</pre>
       }
     })}
   </div>
-));
+))
 ```
 
 ## Sources
@@ -952,19 +932,19 @@ Currently sources are limited to web pages that ground the response.
 You can forward them to the client with the `sendSources` option:
 
 ```ts filename="app/api/chat/route.ts" highlight="13"
-import { convertToModelMessages, streamText, UIMessage } from 'ai';
+import { convertToModelMessages, streamText, UIMessage } from 'ai'
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  const { messages }: { messages: UIMessage[] } = await req.json()
 
   const result = streamText({
     model: 'perplexity/sonar-pro',
     messages: await convertToModelMessages(messages),
-  });
+  })
 
   return result.toUIMessageStreamResponse({
     sendSources: true,
-  });
+  })
 }
 ```
 
@@ -999,7 +979,7 @@ messages.map(message => (
         </span>
       ))}
   </div>
-));
+))
 ```
 
 ## Image Generation
@@ -1015,13 +995,13 @@ messages.map(message => (
     {message.role === 'user' ? 'User: ' : 'AI: '}
     {message.parts.map((part, index) => {
       if (part.type === 'text') {
-        return <div key={index}>{part.text}</div>;
+        return <div key={index}>{part.text}</div>
       } else if (part.type === 'file' && part.mediaType.startsWith('image/')) {
-        return <img key={index} src={part.url} alt="Generated image" />;
+        return <img key={index} src={part.url} alt="Generated image" />
       }
     })}
   </div>
-));
+))
 ```
 
 ## Attachments
@@ -1042,17 +1022,17 @@ By using `FileList`, you can send multiple files as attachments along with a mes
 </Note>
 
 ```tsx filename="app/page.tsx"
-'use client';
+'use client'
 
-import { useChat } from '@ai-sdk/react';
-import { useRef, useState } from 'react';
+import { useChat } from '@ai-sdk/react'
+import { useRef, useState } from 'react'
 
 export default function Page() {
-  const { messages, sendMessage, status } = useChat();
+  const { messages, sendMessage, status } = useChat()
 
-  const [input, setInput] = useState('');
-  const [files, setFiles] = useState<FileList | undefined>(undefined);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [input, setInput] = useState('')
+  const [files, setFiles] = useState<FileList | undefined>(undefined)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (
     <div>
@@ -1064,17 +1044,14 @@ export default function Page() {
             <div>
               {message.parts.map((part, index) => {
                 if (part.type === 'text') {
-                  return <span key={index}>{part.text}</span>;
+                  return <span key={index}>{part.text}</span>
                 }
 
-                if (
-                  part.type === 'file' &&
-                  part.mediaType?.startsWith('image/')
-                ) {
-                  return <img key={index} src={part.url} alt={part.filename} />;
+                if (part.type === 'file' && part.mediaType?.startsWith('image/')) {
+                  return <img key={index} src={part.url} alt={part.filename} />
                 }
 
-                return null;
+                return null
               })}
             </div>
           </div>
@@ -1083,17 +1060,17 @@ export default function Page() {
 
       <form
         onSubmit={event => {
-          event.preventDefault();
+          event.preventDefault()
           if (input.trim()) {
             sendMessage({
               text: input,
               files,
-            });
-            setInput('');
-            setFiles(undefined);
+            })
+            setInput('')
+            setFiles(undefined)
 
             if (fileInputRef.current) {
-              fileInputRef.current.value = '';
+              fileInputRef.current.value = ''
             }
           }
         }}
@@ -1102,7 +1079,7 @@ export default function Page() {
           type="file"
           onChange={event => {
             if (event.target.files) {
-              setFiles(event.target.files);
+              setFiles(event.target.files)
             }
           }}
           multiple
@@ -1116,7 +1093,7 @@ export default function Page() {
         />
       </form>
     </div>
-  );
+  )
 }
 ```
 
@@ -1125,16 +1102,16 @@ export default function Page() {
 You can also send files as objects along with a message. This can be useful for sending pre-uploaded files or data URLs.
 
 ```tsx filename="app/page.tsx"
-'use client';
+'use client'
 
-import { useChat } from '@ai-sdk/react';
-import { useState } from 'react';
-import { FileUIPart } from 'ai';
+import { useChat } from '@ai-sdk/react'
+import { useState } from 'react'
+import { FileUIPart } from 'ai'
 
 export default function Page() {
-  const { messages, sendMessage, status } = useChat();
+  const { messages, sendMessage, status } = useChat()
 
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState('')
   const [files] = useState<FileUIPart[]>([
     {
       type: 'file',
@@ -1148,7 +1125,7 @@ export default function Page() {
       mediaType: 'image/png',
       url: 'data:image/png;base64,iVBORw0KGgo...',
     },
-  ]);
+  ])
 
   return (
     <div>
@@ -1160,17 +1137,14 @@ export default function Page() {
             <div>
               {message.parts.map((part, index) => {
                 if (part.type === 'text') {
-                  return <span key={index}>{part.text}</span>;
+                  return <span key={index}>{part.text}</span>
                 }
 
-                if (
-                  part.type === 'file' &&
-                  part.mediaType?.startsWith('image/')
-                ) {
-                  return <img key={index} src={part.url} alt={part.filename} />;
+                if (part.type === 'file' && part.mediaType?.startsWith('image/')) {
+                  return <img key={index} src={part.url} alt={part.filename} />
                 }
 
-                return null;
+                return null
               })}
             </div>
           </div>
@@ -1179,13 +1153,13 @@ export default function Page() {
 
       <form
         onSubmit={event => {
-          event.preventDefault();
+          event.preventDefault()
           if (input.trim()) {
             sendMessage({
               text: input,
               files,
-            });
-            setInput('');
+            })
+            setInput('')
           }
         }}
       >
@@ -1197,7 +1171,7 @@ export default function Page() {
         />
       </form>
     </div>
-  );
+  )
 }
 ```
 
@@ -1210,8 +1184,8 @@ When working with tools in TypeScript, AI SDK UI provides type inference helpers
 The `InferUITool` type helper infers the input and output types of a single tool for use in UI messages:
 
 ```tsx
-import { InferUITool } from 'ai';
-import { z } from 'zod';
+import { InferUITool } from 'ai'
+import { z } from 'zod'
 
 const weatherTool = {
   description: 'Get the current weather',
@@ -1219,12 +1193,12 @@ const weatherTool = {
     location: z.string().describe('The city and state'),
   }),
   execute: async ({ location }) => {
-    return `The weather in ${location} is sunny.`;
+    return `The weather in ${location} is sunny.`
   },
-};
+}
 
 // Infer the types from the tool
-type WeatherUITool = InferUITool<typeof weatherTool>;
+type WeatherUITool = InferUITool<typeof weatherTool>
 // This creates a type with:
 // {
 //   input: { location: string };
@@ -1237,8 +1211,8 @@ type WeatherUITool = InferUITool<typeof weatherTool>;
 The `InferUITools` type helper infers the input and output types of a `ToolSet`:
 
 ```tsx
-import { InferUITools, ToolSet } from 'ai';
-import { z } from 'zod';
+import { InferUITools, ToolSet } from 'ai'
+import { z } from 'zod'
 
 const tools = {
   weather: {
@@ -1247,7 +1221,7 @@ const tools = {
       location: z.string().describe('The city and state'),
     }),
     execute: async ({ location }) => {
-      return `The weather in ${location} is sunny.`;
+      return `The weather in ${location} is sunny.`
     },
   },
   calculator: {
@@ -1260,20 +1234,20 @@ const tools = {
     execute: async ({ operation, a, b }) => {
       switch (operation) {
         case 'add':
-          return a + b;
+          return a + b
         case 'subtract':
-          return a - b;
+          return a - b
         case 'multiply':
-          return a * b;
+          return a * b
         case 'divide':
-          return a / b;
+          return a / b
       }
     },
   },
-} satisfies ToolSet;
+} satisfies ToolSet
 
 // Infer the types from the tool set
-type MyUITools = InferUITools<typeof tools>;
+type MyUITools = InferUITools<typeof tools>
 // This creates a type with:
 // {
 //   weather: { input: { location: string }; output: string };
@@ -1286,24 +1260,24 @@ type MyUITools = InferUITools<typeof tools>;
 You can use these inferred types to create a custom UIMessage type and pass it to various AI SDK UI functions:
 
 ```tsx
-import { InferUITools, UIMessage, UIDataTypes } from 'ai';
+import { InferUITools, UIMessage, UIDataTypes } from 'ai'
 
-type MyUITools = InferUITools<typeof tools>;
-type MyUIMessage = UIMessage<never, UIDataTypes, MyUITools>;
+type MyUITools = InferUITools<typeof tools>
+type MyUIMessage = UIMessage<never, UIDataTypes, MyUITools>
 ```
 
 Pass the custom type to `useChat` or `createUIMessageStream`:
 
 ```tsx
-import { useChat } from '@ai-sdk/react';
-import { createUIMessageStream } from 'ai';
-import type { MyUIMessage } from './types';
+import { useChat } from '@ai-sdk/react'
+import { createUIMessageStream } from 'ai'
+import type { MyUIMessage } from './types'
 
 // With useChat
-const { messages } = useChat<MyUIMessage>();
+const { messages } = useChat<MyUIMessage>()
 
 // With createUIMessageStream
-const stream = createUIMessageStream<MyUIMessage>(/* ... */);
+const stream = createUIMessageStream<MyUIMessage>(/* ... */)
 ```
 
 This provides full type safety for tool inputs and outputs on the client and server.

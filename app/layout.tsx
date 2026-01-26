@@ -1,83 +1,75 @@
-import NextTopLoader from 'nextjs-toploader';
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
-import { ToastProvider } from "@/components/providers/toast-provider";
-import { TrackingProvider } from "@/components/providers/tracking-provider";
+import NextTopLoader from 'nextjs-toploader'
+import type { Metadata } from 'next'
+import localFont from 'next/font/local'
+import './globals.css'
+import { ToastProvider } from '@/components/providers/toast-provider'
+import { TrackingProvider } from '@/components/providers/tracking-provider'
 import { GoogleAnalytics } from '@next/third-parties/google'
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const interphases = localFont({
   src: [
     {
-      path: "./fonts/TT_Interphases_Pro/TT_Interphases_Pro_Regular.ttf",
-      weight: "400",
-      style: "normal",
+      path: './fonts/TT_Interphases_Pro/TT_Interphases_Pro_Regular.ttf',
+      weight: '400',
+      style: 'normal',
     },
     {
-      path: "./fonts/TT_Interphases_Pro/TT_Interphases_Pro_Italic.ttf",
-      weight: "400",
-      style: "italic",
+      path: './fonts/TT_Interphases_Pro/TT_Interphases_Pro_Italic.ttf',
+      weight: '400',
+      style: 'italic',
     },
     {
-      path: "./fonts/TT_Interphases_Pro/TT_Interphases_Pro_Medium.ttf",
-      weight: "500",
-      style: "normal",
+      path: './fonts/TT_Interphases_Pro/TT_Interphases_Pro_Medium.ttf',
+      weight: '500',
+      style: 'normal',
     },
     {
-      path: "./fonts/TT_Interphases_Pro/TT_Interphases_Pro_DemiBold.ttf",
-      weight: "600",
-      style: "normal",
+      path: './fonts/TT_Interphases_Pro/TT_Interphases_Pro_DemiBold.ttf',
+      weight: '600',
+      style: 'normal',
     },
   ],
-  variable: "--font-sans",
-  display: "swap",
-});
+  variable: '--font-sans',
+  display: 'swap',
+})
 
 const interphasesMono = localFont({
   src: [
     {
-      path: "./fonts/TT_Interphases_Pro_Mono/TT_Interphases_Pro_Mono_Regular.ttf",
-      weight: "400",
-      style: "normal",
+      path: './fonts/TT_Interphases_Pro_Mono/TT_Interphases_Pro_Mono_Regular.ttf',
+      weight: '400',
+      style: 'normal',
     },
   ],
-  variable: "--font-mono",
-  display: "swap",
-});
+  variable: '--font-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: "Novita Areana",
-  description: "",
-};
+  title: 'Novita Areana',
+  description: '',
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body
-        className={`
-          ${interphases.variable}
-          ${interphasesMono.variable}
-          antialiased
-        `}
-      >
+      <body className={` ${interphases.variable} ${interphasesMono.variable} antialiased`}>
         <NextTopLoader
           color="#23d57c"
           showSpinner={false}
           shadow="0 0 10px #23d57c,0 0 5px #23d57c"
         />
         <TrackingProvider />
-        <div className="root">
-        {children}
-        </div>
+        <div className="root">{children}</div>
         <ToastProvider />
-        <SpeedInsights/>
+        <SpeedInsights />
         <GoogleAnalytics gaId="G-6E3YJT3N0F" />
       </body>
     </html>
-  );
+  )
 }

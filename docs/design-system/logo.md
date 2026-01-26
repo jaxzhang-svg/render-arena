@@ -3,25 +3,30 @@
 ## Logo Overview
 
 The Novita logo consists of two components:
+
 1. **Icon/Mark** - The graphical symbol
 2. **Logotype/Wordmark** - The brand name in text
 
 ## Logo Specifications
 
 ### Logo Icon
+
 - **Format**: SVG
 - **Dimensions**: Various sizes available
 - **Primary color**: Brand 0 (`#23D57C`)
 - **Style**: Clean, minimalist geometric design
 
 ### Logo Usage
+
 The logo appears in multiple sizes in the design system:
+
 - **Large**: ~116px height
 - **Medium**: ~58px height
 - **Small**: ~29px height
 - **XSmall**: ~14px height
 
 ### Logo File Locations
+
 Based on the Figma assets, logo files are referenced as image assets that should be downloaded to the project.
 
 ## Logo Clear Space
@@ -31,17 +36,20 @@ Maintain clear space around the logo equal to the height of the "O" in the logot
 ## Logo Placement
 
 ### Primary Navigation
+
 - **Position**: Left-aligned
 - **Size**: 24px height for icon
 - **Background**: White
 - **Padding**: 6px gap between icon and wordmark
 
 ### Page Header
+
 - **Position**: Left-aligned or center-aligned
 - **Size**: Medium or large
 - **Background**: White or light gray
 
 ### Footer
+
 - **Position**: Left-aligned
 - **Size**: Small
 - **Background**: Dark or light depending on theme
@@ -49,16 +57,19 @@ Maintain clear space around the logo equal to the height of the "O" in the logot
 ## Logo Color Variations
 
 ### Primary (Recommended)
+
 - **Icon**: Brand 0 (`#23D57C`)
 - **Text**: Black (`#292827`)
 - **Background**: White (`#FFFFFF`)
 
 ### Inverted
+
 - **Icon**: White (`#FFFFFF`)
 - **Text**: White (`#FFFFFF`)
 - **Background**: Brand 0 (`#23D57C`) or dark
 
 ### Monochrome
+
 - **Icon**: Black (`#292827`)
 - **Text**: Black (`#292827`)
 - **Background**: White (`#FFFFFF`)
@@ -78,24 +89,20 @@ Maintain clear space around the logo equal to the height of the "O" in the logot
 ### React Component
 
 ```tsx
-import Image from 'next/image';
+import Image from 'next/image'
 
 interface LogoProps {
-  variant?: 'full' | 'icon' | 'wordmark';
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
+  variant?: 'full' | 'icon' | 'wordmark'
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
 }
 
-export function Logo({
-  variant = 'full',
-  size = 'md',
-  className,
-}: LogoProps) {
+export function Logo({ variant = 'full', size = 'md', className }: LogoProps) {
   const sizeMap = {
     sm: { height: 32, width: 'auto' },
     md: { height: 48, width: 'auto' },
     lg: { height: 64, width: 'auto' },
-  };
+  }
 
   return (
     <div className={`flex items-center gap-1.5 ${className}`}>
@@ -108,15 +115,10 @@ export function Logo({
         />
       )}
       {variant !== 'icon' && (
-        <Image
-          src="/logo-wordmark.svg"
-          alt="Novita"
-          height={sizeMap[size].height}
-          width="auto"
-        />
+        <Image src="/logo-wordmark.svg" alt="Novita" height={sizeMap[size].height} width="auto" />
       )}
     </div>
-  );
+  )
 }
 ```
 
@@ -163,6 +165,7 @@ public/
 ## Favicon
 
 Create favicon variations from the logo icon:
+
 - `favicon.ico` - 32x32
 - `favicon-16x16.png` - 16x16
 - `favicon-32x32.png` - 32x32
@@ -173,6 +176,7 @@ Create favicon variations from the logo icon:
 See [Colors](./colors.md) for complete brand color specifications.
 
 ### Primary Brand Colors
+
 - **Brand 0 (Mint)**: `#23D57C` - Primary brand color
 - **Brand 1 (Dark Mint)**: `#16B063` - Hover/active states
 - **Brand 2 (Light Mint)**: `#CAF6E0` - Background accents
@@ -186,6 +190,7 @@ See [Typography](./typography.md) for complete specifications.
 ## Voice & Tone
 
 The Novita brand voice is:
+
 - **Clear**: Simple, direct communication
 - **Professional**: Expert but approachable
 - **Modern**: Contemporary and forward-thinking

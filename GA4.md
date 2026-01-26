@@ -13,74 +13,74 @@ This document outlines the Google Analytics 4 event tracking implementation for 
 
 ### 1. Authentication Events
 
-| Event Name | Trigger | Properties |
-|------------|---------|------------|
-| `auth_login_initiated` | Click login button | `source`: header / quota_prompt / publish_prompt |
-| `auth_login_success` | OAuth callback success | `is_new_user`: boolean |
-| `auth_login_failed` | OAuth callback error | `error_code`: auth_failed / sync_failed / session_failed |
-| `auth_logout` | Click logout | - |
+| Event Name             | Trigger                | Properties                                               |
+| ---------------------- | ---------------------- | -------------------------------------------------------- |
+| `auth_login_initiated` | Click login button     | `source`: header / quota_prompt / publish_prompt         |
+| `auth_login_success`   | OAuth callback success | `is_new_user`: boolean                                   |
+| `auth_login_failed`    | OAuth callback error   | `error_code`: auth_failed / sync_failed / session_failed |
+| `auth_logout`          | Click logout           | -                                                        |
 
 ### 2. Arena Generation Events
 
-| Event Name | Trigger | Properties |
-|------------|---------|------------|
-| `model_selected` | Change model dropdown | `model_id`, `model_name`, `slot`: a/b, `location`: homepage/playground |
-| `arena_generate_started` | Click "Run Arena" | `model_a`, `model_b`, `prompt_length`, `category`, `is_authenticated` |
-| `generation_completed` | Model finishes generating | `model_id`, `slot`: a/b, `duration_ms`, `tokens` |
-| `generation_error` | Generation fails | `model_id`, `slot`: a/b, `error_code` |
-| `generation_stopped` | User clicks stop | `model_id`, `slot`: a/b |
-| `generation_regenerated` | User clicks regenerate | `model_id`, `slot`: a/b |
+| Event Name               | Trigger                   | Properties                                                             |
+| ------------------------ | ------------------------- | ---------------------------------------------------------------------- |
+| `model_selected`         | Change model dropdown     | `model_id`, `model_name`, `slot`: a/b, `location`: homepage/playground |
+| `arena_generate_started` | Click "Run Arena"         | `model_a`, `model_b`, `prompt_length`, `category`, `is_authenticated`  |
+| `generation_completed`   | Model finishes generating | `model_id`, `slot`: a/b, `duration_ms`, `tokens`                       |
+| `generation_error`       | Generation fails          | `model_id`, `slot`: a/b, `error_code`                                  |
+| `generation_stopped`     | User clicks stop          | `model_id`, `slot`: a/b                                                |
+| `generation_regenerated` | User clicks regenerate    | `model_id`, `slot`: a/b                                                |
 
 ### 3. Homepage Events
 
-| Event Name | Trigger | Properties |
-|------------|---------|------------|
-| `featured_case_clicked` | Click featured case card | `mode`: physics/visual/game, `app_id` |
-| `gallery_case_clicked` | Click app card in gallery grid | `app_id`, `category`, `position` |
+| Event Name              | Trigger                        | Properties                            |
+| ----------------------- | ------------------------------ | ------------------------------------- |
+| `featured_case_clicked` | Click featured case card       | `mode`: physics/visual/game, `app_id` |
+| `gallery_case_clicked`  | Click app card in gallery grid | `app_id`, `category`, `position`      |
 
 ### 4. Gallery Events
 
-| Event Name | Trigger | Properties |
-|------------|---------|------------|
-| `gallery_viewed` | Scroll to gallery section | `category` |
-| `gallery_filtered` | Change category filter | `category`, `previous_category` |
+| Event Name         | Trigger                   | Properties                      |
+| ------------------ | ------------------------- | ------------------------------- |
+| `gallery_viewed`   | Scroll to gallery section | `category`                      |
+| `gallery_filtered` | Change category filter    | `category`, `previous_category` |
 
 ### 5. Gallery Detail Page Events (`/gallery/[id]`)
 
-| Event Name | Trigger | Properties |
-|------------|---------|------------|
-| `gallery_prompt_copied` | Click copy prompt button | `app_id` |
+| Event Name                   | Trigger                           | Properties                     |
+| ---------------------------- | --------------------------------- | ------------------------------ |
+| `gallery_prompt_copied`      | Click copy prompt button          | `app_id`                       |
 | `gallery_open_in_playground` | Click "Re-generate in Playground" | `app_id`, `model_a`, `model_b` |
 
 ### 6. Sharing Events
 
-| Event Name | Trigger | Properties |
-|------------|---------|------------|
-| `share_modal_opened` | Click Share button | `app_id` |
-| `share_link_copied` | Copy shareable URL | `app_id`, `share_mode`: video/poster |
-| `publish_started` | Click Publish button | `app_id`, `category` |
+| Event Name           | Trigger              | Properties                           |
+| -------------------- | -------------------- | ------------------------------------ |
+| `share_modal_opened` | Click Share button   | `app_id`                             |
+| `share_link_copied`  | Copy shareable URL   | `app_id`, `share_mode`: video/poster |
+| `publish_started`    | Click Publish button | `app_id`, `category`                 |
 
 ### 7. Video Recording Events
 
-| Event Name | Trigger | Properties |
-|------------|---------|------------|
-| `video_recording_started` | Click record button | `app_id` |
-| `video_recording_stopped` | Stop recording | `app_id`, `duration_seconds` |
-| `video_upload_started` | Begin upload to Cloudflare | `app_id`, `file_size_mb` |
-| `video_upload_completed` | Upload success | `app_id`, `upload_duration_seconds` |
-| `video_upload_error` | Upload fails | `app_id`, `error_type` |
+| Event Name                | Trigger                    | Properties                          |
+| ------------------------- | -------------------------- | ----------------------------------- |
+| `video_recording_started` | Click record button        | `app_id`                            |
+| `video_recording_stopped` | Stop recording             | `app_id`, `duration_seconds`        |
+| `video_upload_started`    | Begin upload to Cloudflare | `app_id`, `file_size_mb`            |
+| `video_upload_completed`  | Upload success             | `app_id`, `upload_duration_seconds` |
+| `video_upload_error`      | Upload fails               | `app_id`, `error_type`              |
 
 ### 8. Quota & Conversion Events
 
-| Event Name | Trigger | Properties |
-|------------|---------|------------|
-| `free_quota_exceeded` | Anonymous user hits 5-generation limit | `usage_count` |
-| `login_prompt_shown` | Login prompt displayed | `trigger`: quota/publish/like |
+| Event Name            | Trigger                                | Properties                    |
+| --------------------- | -------------------------------------- | ----------------------------- |
+| `free_quota_exceeded` | Anonymous user hits 5-generation limit | `usage_count`                 |
+| `login_prompt_shown`  | Login prompt displayed                 | `trigger`: quota/publish/like |
 
 ### 9. Hackathon Events
 
-| Event Name | Trigger | Properties |
-|------------|---------|------------|
+| Event Name               | Trigger                   | Properties                      |
+| ------------------------ | ------------------------- | ------------------------------- |
 | `hackathon_modal_opened` | Open hackathon info modal | `source`: join_button/user_menu |
 
 ---
@@ -91,9 +91,9 @@ This document outlines the Google Analytics 4 event tracking implementation for 
 
 ```typescript
 'use client'
- 
+
 import { sendGTMEvent } from '@next/third-parties/google'
- 
+
 export function EventButton() {
   return (
     <div>
@@ -106,6 +106,7 @@ export function EventButton() {
   )
 }
 ```
+
 ---
 
 ## GA4 Report Setup Guide
@@ -121,15 +122,15 @@ Navigate to **Admin > Data display > Custom definitions**
 
 Create these custom dimensions for event-scoped data:
 
-| Dimension Name | Event Parameter | Scope |
-|----------------|-----------------|-------|
-| Model ID | `model_id` | Event |
-| Model Slot | `slot` | Event |
-| App ID | `app_id` | Event |
-| Category | `category` | Event |
-| Error Code | `error_code` | Event |
+| Dimension Name   | Event Parameter    | Scope |
+| ---------------- | ------------------ | ----- |
+| Model ID         | `model_id`         | Event |
+| Model Slot       | `slot`             | Event |
+| App ID           | `app_id`           | Event |
+| Category         | `category`         | Event |
+| Error Code       | `error_code`       | Event |
 | Is Authenticated | `is_authenticated` | Event |
-| Location | `location` | Event |
+| Location         | `location`         | Event |
 
 ### Step 3: Create Key Reports
 
@@ -138,6 +139,7 @@ Create these custom dimensions for event-scoped data:
 **Explore > Funnel exploration**
 
 Steps:
+
 1. `arena_generate_started`
 2. `generation_completed`
 3. `publish_started`
@@ -161,6 +163,7 @@ Filter: Event name = `generation_completed`
 **Explore > Funnel exploration**
 
 Steps:
+
 1. `login_prompt_shown`
 2. `auth_login_initiated`
 3. `auth_login_success`
@@ -182,12 +185,15 @@ Breakdown by: `trigger` (quota/publish/like)
 Navigate to **Admin > Data display > Audiences**
 
 #### Audience 1: Active Generators
+
 - Condition: `arena_generate_started` count >= 3 in last 7 days
 
 #### Audience 2: Publishers
+
 - Condition: `publish_started` count >= 1
 
 #### Audience 3: Quota Limited Users
+
 - Condition: `free_quota_exceeded` triggered
 - AND NOT `auth_login_success`
 
@@ -196,6 +202,7 @@ Navigate to **Admin > Data display > Audiences**
 Navigate to **Admin > Data display > Events**
 
 Mark these as conversions (click the toggle):
+
 - `auth_login_success`
 - `publish_started`
 - `video_upload_completed`
@@ -205,6 +212,7 @@ Mark these as conversions (click the toggle):
 **Reports > Library > Create new report**
 
 Recommended cards:
+
 1. **Daily Active Users** - Users over time
 2. **Generation Success Rate** - `generation_completed` / `arena_generate_started`
 3. **Top Models** - Event count by `model_id`
@@ -223,6 +231,7 @@ For advanced analysis, enable BigQuery export:
 3. Enable streaming export for real-time data
 
 Query example:
+
 ```sql
 SELECT
   event_name,
@@ -254,13 +263,13 @@ Captures marketing/referral parameters on first visit and passes to Novita main 
 
 ### Tracked Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `referrer` | HTTP referrer header | (none) |
-| `utm_source` | Traffic source | `direct` |
-| `utm_campaign` | Campaign name | `none` |
-| `utm_medium` | Medium type | `none` |
-| `landingpage` | First landing page | (none) |
+| Parameter      | Description          | Default  |
+| -------------- | -------------------- | -------- |
+| `referrer`     | HTTP referrer header | (none)   |
+| `utm_source`   | Traffic source       | `direct` |
+| `utm_campaign` | Campaign name        | `none`   |
+| `utm_medium`   | Medium type          | `none`   |
+| `landingpage`  | First landing page   | (none)   |
 
 ### Storage Rules
 
