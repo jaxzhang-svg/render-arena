@@ -1,0 +1,18 @@
+{
+  "name": "sandbox-recording-service",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Novita sandbox template for app recording service",
+  "type": "module",
+  "scripts": {
+    "record": "tsx ./scripts/record-app.ts",
+    "start": "node ./scripts/server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "latest",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "playwright": "^1.58.0",
+    "tsx": "^4.21.0"
+  }
+}
