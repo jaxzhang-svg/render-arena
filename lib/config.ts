@@ -115,7 +115,7 @@ export type LLMModel = {
   group: string
 }
 
-interface ModelGroup {
+interface LegacyModelGroup {
   group: string
   icon: string
   color: string
@@ -125,7 +125,18 @@ interface ModelGroup {
   }>
 }
 
-export const modelGroups: ModelGroup[] = [
+interface ModelGroup {
+  group: string
+  items: Array<{
+    id: string
+    name: string
+    icon: string
+    color: string
+  }>
+}
+
+// Legacy model groups - kept for existing apps that reference these models
+export const legacyModelGroups: LegacyModelGroup[] = [
   {
     group: 'DeepSeek',
     icon: '/logo/models/deepseek-color.svg',
@@ -211,18 +222,56 @@ export const modelGroups: ModelGroup[] = [
   },
 ]
 
-export const models: LLMModel[] = modelGroups.flatMap(group =>
+// New simplified model groups for the UI selector
+export const modelGroups: ModelGroup[] = [
+  {
+    group: 'Open Source',
+    items: [
+      { id: 'deepseek/deepseek-v3.2', name: 'DeepSeek V3.2', icon: '/logo/models/deepseek-color.svg', color: '#4D6BFE' },
+      { id: 'zai-org/glm-4.7', name: 'GLM 4.7', icon: '/logo/models/zai.svg', color: '#000' },
+      { id: 'minimax/minimax-m2.1', name: 'Minimax M2.1', icon: '/logo/models/minimax-color.svg', color: '#F23F5D' },
+      { id: 'moonshotai/kimi-k2-thinking', name: 'Kimi K2 Thinking', icon: '/logo/models/kimi-color.svg', color: '#000' },
+    ],
+  },
+  {
+    group: 'Proprietary',
+    items: [
+      { id: 'pa/gpt-5.2', name: 'GPT 5.2', icon: '/logo/models/openai.svg', color: '#000' },
+      { id: 'pa/claude-sonnet-4-5-20250929', name: 'Claude Sonnet 4.5', icon: '/logo/models/claude-color.svg', color: '#D97757' },
+      { id: 'pa/gemini-3-pro-preview', name: 'Gemini 3 Pro', icon: '/logo/models/gemini-color.svg', color: '#FFF' },
+      { id: 'pa/grok-4-1-fast-reasoning', name: 'Grok 4.1 Fast Reasoning', icon: '/logo/models/grok.svg', color: '#000' },
+    ],
+  },
+]
+
+// Combine both for backward compatibility
+const allModelsFromGroups = legacyModelGroups.flatMap(group =>
   group.items.map(item => ({
     id: item.id,
     name: item.name,
     group: group.group,
-    color: group.color,
-    icon: group.icon,
+      color: group.color ?? group.color ?? '#000',
+    icon: group.icon ?? group.icon ?? '',
   }))
 )
 
-export const defaultModelAId = 'pa/grok-code-fast-1'
-export const defaultModelBId = 'pa/gemini-3-flash-preview'
+const legacyModels = legacyModelGroups.flatMap(group =>
+  group.items.map(item => ({
+    id: item.id,
+    name: item.name,
+    group: group.group,
+    color: group.color ?? '#000',
+    icon: group.icon ?? '',
+  }))
+)
+
+// Unique models by ID
+export const models: LLMModel[] = Array.from(
+  new Map([...allModelsFromGroups, ...legacyModels].map(m => [m.id, m])).values()
+)
+
+export const defaultModelAId = 'pa/claude-sonnet-4-5-20250929'
+export const defaultModelBId = 'deepseek/deepseek-v3.2'
 
 export function getModelById(modelId: string): LLMModel | undefined {
   return models.find(m => m.id === modelId)

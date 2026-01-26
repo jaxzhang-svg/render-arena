@@ -105,8 +105,8 @@ export function ModelSelector({
                             onModelChange({
                               ...model,
                               group: group.group,
-                              color: group.color,
-                              icon: group.icon,
+                              color: model.color,
+                              icon: model.icon,
                             })
                           }
                           className={cn(
@@ -119,7 +119,7 @@ export function ModelSelector({
                           )}
                         >
                           <Image
-                            src={group.icon}
+                            src={model.icon}
                             alt={model.name}
                             width={20}
                             height={20}
