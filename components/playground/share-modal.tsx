@@ -104,7 +104,7 @@ export function ShareModal({
 
   // Auto-upload when modal opens with a new video blob - REMOVED for new flow
   // We only upload when user clicks "Publish"
-  /* 
+  /*
   useEffect(() => {
     if (open && videoBlob && appId && uploadStatus === 'idle' && videoBlob !== uploadedBlobRef.current) {
       handleUploadVideo();
@@ -297,10 +297,11 @@ export function ShareModal({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
+    const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
+      return
     // Truncate prompt to 5 words
     const truncatedPrompt = prompt.split(/\s+/).slice(0, 5).join(' ') + (prompt.split(/\s+/).length > 5 ? ' …' : '');
-    
+
     // Determine link
     let finalLink = shareUrl;
     if (videoUid && CLOUDFLARE_CUSTOMER_CODE) {
@@ -308,10 +309,10 @@ export function ShareModal({
     }
 
     const shareText = `Novita Render Arena — Side-by-Side\nPrompt: “${truncatedPrompt}”\n👉 Which model wins?\n`;
-    
+
     const encodedUrl = encodeURIComponent(finalLink);
     const encodedText = encodeURIComponent(shareText);
-    
+
     let url = '';
 
     switch (platform) {
@@ -492,7 +493,7 @@ export function ShareModal({
                   </div>
                 </div>
 
-                {/* <div className="space-y-2">
+                 <div className="space-y-2 pointer-events-none opacity-50">
                   <label className="text-[12px] font-medium text-[#9E9C98] uppercase tracking-[0.6px] leading-4">
                     {videoBlob ? 'SHARE VIDEO' : "SHARE TO SOCIAL"}
                   </label>
@@ -533,7 +534,7 @@ export function ShareModal({
                       </span>
                     </button>
                   </div>
-                </div> */}
+                </div>
               </>
             )}
           </div>
