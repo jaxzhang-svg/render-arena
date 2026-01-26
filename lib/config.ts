@@ -1,4 +1,4 @@
-import { Box, Sparkles, Gamepad2 } from 'lucide-react';
+import { Box, Sparkles, Gamepad2, RefreshCcwDot } from 'lucide-react';
 
 export const galleryCategories = [
   { id: 'all', label: 'All' },
@@ -75,7 +75,7 @@ export const playgroundModes = [
     label: 'General',
     description: 'Universal category for all types of prompts',
     color: 'bg-gray-400/80',
-    icon: Sparkles,
+    icon: RefreshCcwDot,
     prompts: [
       "Create a beautiful interactive web experience",
       "Build a modern web application with smooth animations",
