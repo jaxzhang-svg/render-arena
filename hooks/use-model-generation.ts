@@ -64,6 +64,8 @@ interface UseModelGenerationOptions {
   initialTokens?: number
   /** 当生成完成时的回调，用于协调另一个模型 */
   onGenerationComplete?: (html: string | undefined) => void
+  /** 浏览器指纹，用于匿名用户权限验证 */
+  fingerprint?: string | null
 }
 
 interface UseModelGenerationReturn {
@@ -106,6 +108,7 @@ export function useModelGeneration({
   initialDuration,
   initialTokens,
   onGenerationComplete,
+  fingerprint,
 }: UseModelGenerationOptions): UseModelGenerationReturn {
   // 获取初始模型
   const getInitialModel = (): LLMModel => {
@@ -298,6 +301,7 @@ export function useModelGeneration({
                     [fieldName]: html,
                     [durationField]: duration,
                     [tokensField]: tokens,
+                    fingerprint: fingerprint || undefined,
                   }),
                 }).catch(err => {
                   console.error(`Failed to save HTML for model ${slot}:`, err)

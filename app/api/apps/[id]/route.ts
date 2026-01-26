@@ -25,6 +25,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       data: { user },
     } = await supabase.auth.getUser()
 
+    // 获取请求中的 fingerprint (从 query 参数)
+    const { searchParams } = new URL(request.url)
+    const fingerprint = searchParams.get('fingerprint')
+
     // 获取 App
     const { data: app, error } = await adminClient.from('apps').select('*').eq('id', id).single()
 
@@ -33,7 +37,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // 检查权限：私有 app 只有作者可以查看
-    if (!app.is_public && app.user_id !== user?.id) {
+    // 已登录用户：检查 user_id
+    // 未登录用户：检查 fingerprint_id
+    const isOwner = app.user_id === user?.id || (!user && app.fingerprint_id === fingerprint)
+
+    if (!app.is_public && !isOwner) {
       return NextResponse.json({ error: 'App not found' }, { status: 404 })
     }
 
@@ -52,7 +60,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const response: AppDetailResponse = {
       app: {
         ...app,
-        isOwner: app.user_id === user?.id,
+        isOwner,
         isLiked,
       },
     }
@@ -67,6 +75,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 /**
  * PATCH /api/apps/[id]
  * 更新 App 信息
+ *
+ * 权限检查：
+ * - 已登录用户：必须是 app 的 owner (user_id 匹配)
+ * - 未登录用户：必须提供匹配的 fingerprint_id
  */
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -85,10 +97,10 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       data: { user },
     } = await supabase.auth.getUser()
 
-    // 获取 App 并验证权限
+    // 获取 App 并验证权限 (需要 fingerprint_id 用于匿名用户检查)
     const { data: app, error: fetchError } = await adminClient
       .from('apps')
-      .select('user_id')
+      .select('user_id, fingerprint_id')
       .eq('id', id)
       .single()
 
@@ -96,9 +108,24 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       return NextResponse.json({ error: 'App not found' }, { status: 404 })
     }
 
-    // 只有作者可以更新
-    if (app.user_id !== user?.id) {
+    // 权限检查：已登录用户检查 user_id，未登录用户检查 fingerprint_id
+    const isAuthenticated = !!user
+    const isOwner = app.user_id === user?.id
+    const fingerprint = body.fingerprint
+
+    // 已登录用户：必须是 owner
+    if (isAuthenticated && !isOwner) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    }
+
+    // 未登录用户：必须提供匹配的 fingerprint_id
+    if (!isAuthenticated) {
+      if (!fingerprint) {
+        return NextResponse.json({ error: 'Fingerprint required for anonymous users' }, { status: 403 })
+      }
+      if (app.fingerprint_id !== fingerprint) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+      }
     }
 
     // 允许更新的字段

@@ -98,6 +98,7 @@ export function useArenaPlayground({
     initialHtml: initialApp?.html_content_a || undefined,
     initialDuration: initialApp?.duration_a || undefined,
     initialTokens: initialApp?.tokens_a || undefined,
+    fingerprint,
   })
 
   // Model B
@@ -108,6 +109,7 @@ export function useArenaPlayground({
     initialHtml: initialApp?.html_content_b || undefined,
     initialDuration: initialApp?.duration_b || undefined,
     initialTokens: initialApp?.tokens_b || undefined,
+    fingerprint,
   })
 
   // 停止所有生成
