@@ -86,7 +86,6 @@ export default function GalleryClient({ app }: GalleryClientProps) {
     if (app.category) {
       params.set('category', app.category)
     }
-    params.set('autoStart', 'true')
     router.push(`/playground/new?${params.toString()}`)
   }, [app.id, app.prompt, app.category, app.model_a, app.model_b, router])
 
@@ -187,11 +186,11 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                 border-[#e7e6e2] bg-white px-4
               ">
                 <div className="flex items-center gap-2">
-                  <Image 
-                    src={modelA.icon} 
-                    alt={modelA.name} 
-                    width={16} 
-                    height={16} 
+                  <Image
+                    src={modelA.icon}
+                    alt={modelA.name}
+                    width={16}
+                    height={16}
                     className="size-4 rounded-sm"
                   />
                   <span className="text-sm font-medium text-[#4f4e4a]">
@@ -244,11 +243,11 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                 border-[#e7e6e2] bg-white px-4
               ">
                 <div className="flex items-center gap-2">
-                  <Image 
-                    src={modelB.icon} 
-                    alt={modelB.name} 
-                    width={16} 
-                    height={16} 
+                  <Image
+                    src={modelB.icon}
+                    alt={modelB.name}
+                    width={16}
+                    height={16}
                     className="size-4 rounded-sm"
                   />
                   <span className="text-sm font-medium text-[#4f4e4a]">
