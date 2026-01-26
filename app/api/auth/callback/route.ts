@@ -146,29 +146,10 @@ export async function GET(request: NextRequest) {
 
   // 6. 迁移匿名用户的 apps（通过 fingerprint cookie）
   const fingerprint = request.cookies.get('browser_fingerprint')?.value || null
-  console.log('[OAuth Callback] Fingerprint from cookie:', fingerprint)
-  console.log('[OAuth Callback] User ID:', userId)
 
   if (fingerprint && userId) {
     try {
-      // First, check what apps would be migrated
-      const { data: appsToMigrate, error: fetchError } = await adminClient
-        .from('apps')
-        .select('id, user_id, fingerprint_id')
-        .eq('fingerprint_id', fingerprint)
-        .is('user_id', null)
-
-      if (fetchError) {
-        console.error('[OAuth Callback] Failed to fetch apps for migration:', fetchError)
-      } else {
-        console.log('[OAuth Callback] Found apps to migrate:', appsToMigrate?.length || 0)
-        if (appsToMigrate && appsToMigrate.length > 0) {
-          console.log('[OAuth Callback] App IDs:', appsToMigrate.map(app => app.id))
-        }
-      }
-
-      // Now perform the migration
-      const { data: updatedApps, error: migrateError } = await adminClient
+      const { error: migrateError } = await adminClient
         .from('apps')
         .update({
           user_id: userId,
@@ -177,25 +158,13 @@ export async function GET(request: NextRequest) {
         })
         .eq('fingerprint_id', fingerprint)
         .is('user_id', null)
-        .select()
 
       if (migrateError) {
-        console.error('[OAuth Callback] Failed to migrate anonymous apps:', migrateError)
-        // 不要因为迁移失败而阻止登录，用户仍然可以登录
-      } else {
-        console.log('[OAuth Callback] Migration completed. Updated rows:', updatedApps?.length || 0)
-        if (updatedApps && updatedApps.length > 0) {
-          console.log('[OAuth Callback] Successfully migrated app IDs:', updatedApps.map(app => app.id))
-        } else {
-          console.warn('[OAuth Callback] No apps were migrated. Either fingerprint mismatch or no anonymous apps found.')
-          console.log('[OAuth Callback] Expected fingerprint:', fingerprint)
-        }
+        console.error('Failed to migrate anonymous apps:', migrateError)
       }
     } catch (error) {
-      console.error('[OAuth Callback] Error migrating anonymous apps:', error)
+      console.error('Error migrating anonymous apps:', error)
     }
-  } else {
-    console.log('[OAuth Callback] Skipping migration - fingerprint:', !!fingerprint, 'userId:', !!userId)
   }
 
   // 7. 重定向到首页（会话 Cookie 会通过 @supabase/ssr 自动设置）
