@@ -4,6 +4,7 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { ToastProvider } from '@/components/providers/toast-provider'
 import { TrackingProvider } from '@/components/providers/tracking-provider'
+import { FingerprintProvider } from '@/components/providers/fingerprint-provider'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
@@ -64,6 +65,7 @@ export default function RootLayout({
           showSpinner={false}
           shadow="0 0 10px #23d57c,0 0 5px #23d57c"
         />
+        <FingerprintProvider />
         <TrackingProvider />
         <div className="root">{children}</div>
         <ToastProvider />
