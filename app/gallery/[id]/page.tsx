@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
+import { ForbiddenError } from '@/lib/errors'
 import GalleryClient from './gallery-client'
 import type { App } from '@/types'
 
@@ -28,7 +29,7 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
 
   // 检查权限：私有 app 只有作者可以查看
   if (!app.is_public && app.user_id !== user?.id) {
-    notFound()
+    throw new ForbiddenError("You don't have permission to view this private creation")
   }
 
   // 检查当前用户是否已点赞
