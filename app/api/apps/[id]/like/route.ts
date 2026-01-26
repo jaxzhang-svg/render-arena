@@ -132,6 +132,7 @@ export async function POST(
     return NextResponse.json({
       success: true,
       liked,
+      likeCount: newLikeCount,
     });
   } catch (error) {
     console.error('Error in POST /api/apps/[id]/like:', error);
