@@ -42,12 +42,30 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     data: { user },
   } = await supabase.auth.getUser()
 
-  // 只有作者或匿名创建者可以生成
-  if (app.user_id && app.user_id !== user?.id) {
+  // 获取 fingerprint cookie（用于匿名用户权限验证）
+  const fingerprint = request.cookies.get('browser_fingerprint')?.value || null
+
+  // 权限检查：
+  // - 已登录用户：必须是 owner (user_id 匹配)
+  // - 匿名用户：必须通过 fingerprint 验证 (fingerprint_id 匹配)
+  const isAuthenticated = !!user
+  const isOwner = app.user_id === user?.id
+
+  if (isAuthenticated && !isOwner) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json' },
     })
+  }
+
+  // 匿名用户：检查 fingerprint_id
+  if (!isAuthenticated) {
+    if (app.fingerprint_id !== fingerprint) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
   }
 
   let modelId = slot === 'a' ? app.model_a : app.model_b

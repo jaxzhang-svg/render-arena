@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { ForbiddenError } from '@/lib/errors'
+import { checkAppOwnerPermission } from '@/lib/permissions'
 import PlaygroundClient from './playground-client'
 import type { App } from '@/types'
 
@@ -38,7 +39,9 @@ export default async function PlaygroundPage({ params }: PlaygroundPageProps) {
   }
 
   // 检查权限：只有原作者可以访问 playground（无论公开还是私有）
-  if (app.user_id !== user?.id) {
+  const { canAccess } = await checkAppOwnerPermission(user, app)
+
+  if (!canAccess) {
     throw new ForbiddenError("You don't have permission to access this battle session")
   }
 

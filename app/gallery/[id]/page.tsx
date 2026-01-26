@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { ForbiddenError } from '@/lib/errors'
+import { checkAppOwnerPermission } from '@/lib/permissions'
 import GalleryClient from './gallery-client'
 import type { App } from '@/types'
 
@@ -27,9 +28,14 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
     notFound()
   }
 
-  // 检查权限：私有 app 只有作者可以查看
-  if (!app.is_public && app.user_id !== user?.id) {
-    throw new ForbiddenError("You don't have permission to view this private creation")
+  // 检查权限：
+  // - 公开 app：任何人都可以查看
+  // - 私有 app：只有 owner 可以查看
+  if (!app.is_public) {
+    const { canAccess } = await checkAppOwnerPermission(user, app)
+    if (!canAccess) {
+      throw new ForbiddenError("You don't have permission to view this private creation")
+    }
   }
 
   // 检查当前用户是否已点赞
@@ -50,9 +56,12 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
     .update({ view_count: app.view_count + 1 })
     .eq('id', id)
 
+  // 计算是否为 owner（用于显示编辑按钮等）
+  const { isOwner } = await checkAppOwnerPermission(user, app)
+
   const appWithMeta = {
     ...app,
-    isOwner: app.user_id === user?.id,
+    isOwner,
     isLiked,
   } as App & { isOwner: boolean; isLiked: boolean }
 
