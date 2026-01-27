@@ -169,15 +169,15 @@ export function getNovitaLoginUrl(next?: string): string {
   // Append tracking params to callback URL with defaults
   const trackingParams = getStoredTrackingParams()
   const paramsWithDefaults = applyTrackingDefaults(trackingParams)
-  const callbackUrlWithTracking = appendTrackingParamsToUrl(
-    callbackUrl.toString(),
+
+  const loginUrl = new URL('https://novita.ai/user/login')
+  loginUrl.searchParams.set('redirect', callbackUrl.toString())
+  const loginUrlWithTracking = appendTrackingParamsToUrl(
+    loginUrl.toString(),
     paramsWithDefaults
   )
 
-  const loginUrl = new URL('https://novita.ai/user/login')
-  loginUrl.searchParams.set('redirect', callbackUrlWithTracking)
-
-  return loginUrl.toString()
+  return loginUrlWithTracking
 }
 
 /**
