@@ -1,5 +1,6 @@
+'use client'
+
 import { useState, useRef, useEffect, useCallback, RefObject } from 'react'
-import RecordRTC from 'recordrtc'
 
 export type VideoFormat = 'webm'
 
@@ -37,7 +38,8 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
     navigator.mediaDevices &&
     navigator.mediaDevices.getDisplayMedia
   )
-  const recorderRef = useRef<RecordRTC | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recorderRef = useRef<any>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const previewContainerRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
@@ -46,8 +48,10 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
-      if (recorderRef.current && typeof recorderRef.current.destroy === 'function') {
-        recorderRef.current.destroy()
+      if (recorderRef.current) {
+        try {
+          recorderRef.current.destroy()
+        } catch {}
       }
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop())
@@ -104,6 +108,8 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
           await videoTrack.cropTo(cropTarget)
         } catch {}
       }
+      // Dynamically import RecordRTC only on the client
+      const RecordRTC = (await import('recordrtc')).default
       const recorder = new RecordRTC(stream, {
         type: 'video',
         mimeType: 'video/webm',

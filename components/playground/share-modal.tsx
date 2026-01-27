@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import Image from 'next/image'
+import clipboardy from 'clipboardy'
 import { showToast } from '@/lib/toast'
 import { getModeByCategory } from '@/lib/config'
 import {
@@ -293,8 +294,17 @@ export function ShareModal({
     return `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoUid}/watch`
   }, [videoUid])
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(videoBlob ? videoLink : shareUrl)
+  const handleCopy = async () => {
+    const textToCopy = videoBlob ? videoLink : shareUrl
+
+    try {
+      await clipboardy.write(textToCopy)
+    } catch (err) {
+      console.error('Failed to copy text: ', err)
+      showToast.error('Failed to copy to clipboard')
+      return
+    }
+
     if (appId) {
       trackShareLinkCopied({
         app_id: appId,
@@ -306,7 +316,9 @@ export function ShareModal({
   }
 
   const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
+    // Social sharing is disabled for now
     return
+
     // Truncate prompt to 5 words
     const truncatedPrompt =
       prompt.split(/\s+/).slice(0, 5).join(' ') + (prompt.split(/\s+/).length > 5 ? ' …' : '')
@@ -517,7 +529,7 @@ export function ShareModal({
                       className="flex h-[82px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-[#f3f4f6] p-1 transition-colors hover:bg-gray-50"
                     >
                       <div className="flex size-8 items-center justify-center overflow-hidden rounded-full">
-                        <Image src={imgTwitter} alt="Twitter" className="size-full object-cover" />
+                        <Image src={imgTwitter} alt="Twitter" width={32} height={32} className="size-full object-cover" />
                       </div>
                       <span className="text-[12px] leading-4 font-medium text-[#4a5565]">X</span>
                     </button>
@@ -531,6 +543,8 @@ export function ShareModal({
                           alt="LinkedIn"
                           className="block size-full max-w-none"
                           src={imgLinkedin}
+                          width={32}
+                          height={32}
                         />
                       </div>
                       <span className="text-[12px] leading-4 font-medium text-[#4a5565]">
@@ -546,6 +560,8 @@ export function ShareModal({
                         <Image
                           src={imgFacebook}
                           alt="Facebook"
+                          width={32}
+                          height={32}
                           className="size-full object-cover"
                         />
                       </div>

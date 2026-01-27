@@ -210,6 +210,18 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     abortController.abort()
   })
 
+  // Kimi K2.5 only supports temperature 0.6
+  const isKimiK25 = modelId === 'moonshotai/kimi-k2.5'
+  const finalTemperature = isKimiK25 ? 0.6 : (
+    Number.isNaN(Number(temperature))
+      ? 0.7
+      : Number(temperature) < 0
+        ? 0
+        : Number(temperature) > 2
+          ? 2
+          : Number(temperature)
+  )
+
   // 调用 Novita API
   const response = await fetch(NOVITA_API_URL, {
     method: 'POST',
@@ -226,13 +238,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         },
         { role: 'user', content: app.prompt },
       ],
-      temperature: Number.isNaN(Number(temperature))
-        ? 0.7
-        : Number(temperature) < 0
-          ? 0
-          : Number(temperature) > 2
-            ? 2
-            : Number(temperature),
+      temperature: finalTemperature,
       max_tokens: 32000,
       stream: true,
       // separate_reasoning: true,
