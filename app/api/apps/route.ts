@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import type { GalleryResponse, GalleryApp, CreateAppRequest, CreateAppResponse } from '@/types'
+import type { GalleryResponse, GalleryApp, CreateAppRequest, CreateAppResponse, App } from '@/types'
 import DOMPurify from 'isomorphic-dompurify'
 
 /**
@@ -16,13 +16,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20', 10)
     const offset = (page - 1) * limit
 
-    const supabase = await createClient()
     const adminClient = await createAdminClient()
-
-    // 获取当前用户
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
 
     // 构建查询 - 直接查询 apps 表（user_email 已冗余存储）
     let query = adminClient.from('apps').select('*', { count: 'exact' }).eq('is_public', true)
@@ -48,7 +42,7 @@ export async function GET(request: NextRequest) {
     }
 
     // apps 表已包含 user_email，直接返回
-    const appsWithLikeStatus: GalleryApp[] = (apps || []).map((app: any) => ({
+    const appsWithLikeStatus: GalleryApp[] = (apps || []).map((app: App) => ({
       ...app,
       isLiked: false, // TODO: 需要单独查询用户点赞状态
     }))

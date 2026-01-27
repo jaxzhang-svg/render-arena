@@ -53,7 +53,7 @@ export function storeTrackingParams(params: TrackingParams): void {
     // If no existing data, store everything (only defined values)
     if (!existing) {
       const cleanParams = Object.fromEntries(
-        Object.entries(params).filter(([_, v]) => v !== undefined)
+        Object.entries(params).filter(([, v]) => v !== undefined)
       )
       if (Object.keys(cleanParams).length > 0) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanParams))
@@ -91,7 +91,7 @@ export function storeTrackingParams(params: TrackingParams): void {
 
     // Only store defined values
     const cleanMerged = Object.fromEntries(
-      Object.entries(merged).filter(([_, v]) => v !== undefined)
+      Object.entries(merged).filter(([, v]) => v !== undefined)
     )
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanMerged))
   } catch (error) {
@@ -137,7 +137,7 @@ export function clearTrackingParams(): void {
  */
 export function trackingParamsToQueryString(params: TrackingParams): string {
   const cleanParams = Object.fromEntries(
-    Object.entries(params).filter(([_, v]) => v !== undefined && v !== '')
+    Object.entries(params).filter(([, v]) => v !== undefined && v !== '')
   )
   return new URLSearchParams(cleanParams as Record<string, string>).toString()
 }

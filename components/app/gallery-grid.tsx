@@ -1,10 +1,9 @@
 'use client'
 
 import { useRef, useState, useCallback, useEffect } from 'react'
-import { Heart, Copy, Box, ChevronDown, Download, Combine } from 'lucide-react'
+import { Heart, Box, ChevronDown, Combine } from 'lucide-react'
 import Image from 'next/image'
 import {
-  galleryCategories,
   getModelById,
   playgroundModes,
   type GalleryCategoryId,

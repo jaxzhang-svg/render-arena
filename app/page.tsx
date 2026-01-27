@@ -1,21 +1,12 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Header } from '@/components/app/header'
 import { Footer } from '@/components/app/footer'
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal'
 import { GalleryGrid } from '@/components/app/gallery-grid'
-import {
-  Clock,
-  Box,
-  ArrowRight,
-  ChevronUp,
-  Sparkles,
-  Trophy,
-  Users,
-  Zap,
-  ZapIcon,
-} from 'lucide-react'
+import { Clock, ArrowRight, ChevronUp, Users, Zap } from 'lucide-react'
 import { Accordion } from '@base-ui/react/accordion'
 
 import { useState, useEffect, useId, useRef } from 'react'
@@ -26,8 +17,6 @@ import {
   playgroundModes,
   galleryCategories,
   type GalleryCategoryId,
-  HACKATHON_END_TIME,
-  HACKATHON_PARTICIPANTS,
   models,
   type LLMModel,
   defaultModelAId,
@@ -51,7 +40,6 @@ export default function HomePage() {
   const [typingSpeed, setTypingSpeed] = useState(50)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [galleryCategory, setGalleryCategory] = useState<GalleryCategoryId>('all')
-  const [timeLeft, setTimeLeft] = useState('')
   const hasUserInteractedRef = useRef(false)
   const gallerySectionRef = useRef<HTMLElement>(null)
   const hasTrackedGalleryViewRef = useRef(false)
@@ -66,27 +54,6 @@ export default function HomePage() {
   const [selectedModelB, setSelectedModelB] = useState<LLMModel>(
     getModelById(defaultModelBId) || models[1]
   )
-
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const difference = new Date(HACKATHON_END_TIME).getTime() - new Date().getTime()
-      if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24))
-        if (days > 0) {
-          setTimeLeft(`${days} days left`)
-        } else {
-          const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
-          setTimeLeft(`${hours} hours left`)
-        }
-      } else {
-        setTimeLeft('Ended')
-      }
-    }
-
-    calculateTimeLeft()
-    const timer = setInterval(calculateTimeLeft, 60000)
-    return () => clearInterval(timer)
-  }, [])
 
   // Track gallery section visibility
   useEffect(() => {
@@ -141,7 +108,7 @@ export default function HomePage() {
 
     const timer = setTimeout(handleTyping, typingSpeed)
     return () => clearTimeout(timer)
-  }, [placeholderText, isDeleting, userPrompt])
+  }, [placeholderText, isDeleting, userPrompt, typingSpeed])
 
   const handleGenerate = () => {
     const promptToUse = userPrompt.trim()
@@ -174,6 +141,10 @@ export default function HomePage() {
   const handleModeClick = (mode: (typeof playgroundModes)[number]) => {
     // Fill textarea with a random prompt from this mode
     if (mode.prompts && mode.prompts.length > 0) {
+      /* eslint-disable-next-line react-hooks/purity */
+      /* Math.random is NOT called during render - it's in an event handler */
+      /* React 19 purity rules prevent impure functions during render, */
+      /* but this function only executes on user click interaction. */
       const randomIndex = Math.floor(Math.random() * mode.prompts.length)
       setUserPrompt(mode.prompts[randomIndex])
       hasUserInteractedRef.current = true
@@ -308,20 +279,26 @@ export default function HomePage() {
             <div className="relative h-[380px] overflow-hidden rounded-[32px] border border-white/10 bg-black shadow-2xl">
               {/* Background container image (grid/line pattern) */}
               <div className="absolute top-0 left-0 h-[368px] w-[1253px] opacity-40">
-                <img
+                <Image
                   alt=""
                   className="pointer-events-none absolute inset-0 size-full max-w-none object-cover opacity-70"
                   src="/images/hackathon-bg-container.png"
+                  width={1253}
+                  height={368}
+                  priority
                 />
               </div>
 
               {/* Main artistic background image */}
               <div className="absolute top-1/2 left-1/2 h-[380px] w-[1248px] -translate-x-1/2 -translate-y-1/2 rounded-md">
                 <div className="absolute inset-0 rounded-md bg-black" />
-                <img
+                <Image
                   alt=""
                   className="absolute size-full max-w-none rounded-md object-cover opacity-60"
                   src="/images/hackathon-bg-main.png"
+                  width={1248}
+                  height={380}
+                  priority
                 />
                 {/* Green Blur Effect */}
                 <div className="pointer-events-none absolute inset-0 bg-[rgba(0,188,125,0.05)] blur-[120px]" />
@@ -331,10 +308,13 @@ export default function HomePage() {
               <div className="relative flex h-full flex-col p-12">
                 {/* Prize Pool Badge */}
                 <div className="relative mb-6 ml-4 inline-flex h-[42px] w-fit items-center rounded-full border border-[#05df72]/30 bg-[#05df72]/10 py-2 pr-6 backdrop-blur-sm">
-                  <img
+                  <Image
                     src="/logo/prize-pool.png"
                     alt="Prize Pool"
-                    className="absolute bottom-2 left-2 w-10 max-w-none drop-shadow-md"
+                    width={40}
+                    height={40}
+                    className="absolute bottom-2 left-2 max-w-none drop-shadow-md"
+                    priority
                   />
                   <div className="flex items-center gap-1 pl-12 font-sans text-sm font-medium">
                     <span className="text-[#05df72]">Prize Pool:</span>
@@ -370,7 +350,6 @@ export default function HomePage() {
                       <Clock className="text-primary size-4" />
                       <span className="font-sans text-[16px] font-medium text-[#f5f5f5]">
                         Coming soon
-                        {/* {timeLeft || '...'} */}
                       </span>
                     </div>
 

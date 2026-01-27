@@ -352,7 +352,7 @@ export function useModelGeneration({
         }))
       }
     },
-    [slot, stop, onGenerationComplete, selectedModel.id, settings.temperature]
+    [stop, flushBuffer, slot, selectedModel.id, settings.temperature, onGenerationComplete]
   )
 
   return {

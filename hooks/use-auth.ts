@@ -94,6 +94,7 @@ export function useAuth(): UseAuthReturn {
     }
   }, [supabase])
 
+  /* eslint-disable react-hooks/exhaustive-deps -- state.user is intentionally NOT in deps to prevent re-subscription. Subscribing on every auth state change would create memory leaks and race conditions. The callback correctly captures initial state, and auth updates are handled by the subscription's own state change handler, not by re-running this effect. */
   useEffect(() => {
     // 初始化时获取用户
     fetchUser()

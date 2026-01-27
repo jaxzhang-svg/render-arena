@@ -1,9 +1,9 @@
-import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import FingerprintJS, { type Agent } from '@fingerprintjs/fingerprintjs'
 import Cookies from 'js-cookie'
 
 const FP_COOKIE_KEY = 'browser_fingerprint'
 const FP_COOKIE_MAX_AGE = 365 // 1 year in days
-let fpPromise: Promise<any> | null = null
+let fpPromise: Promise<Agent> | null = null
 
 /**
  * Initialize FingerprintJS and get the visitor identifier
@@ -77,7 +77,7 @@ export async function getFingerprint(): Promise<string> {
     let fingerprint: string
     try {
       fingerprint = await getFingerprintFromJS()
-    } catch (error) {
+    } catch {
       console.warn('FingerprintJS failed, using fallback')
       fingerprint = getFallbackFingerprint()
     }

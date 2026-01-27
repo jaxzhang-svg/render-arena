@@ -18,7 +18,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
         <Dialog.Popup
           className={cn(
             'fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2',
-            'flex h-[90vh] max-w-[600px] flex-col overflow-hidden rounded-[10px]',
+            'flex h-[90vh] max-w-150 flex-col overflow-hidden rounded-[10px]',
             'bg-black p-0'
           )}
         >
@@ -42,7 +42,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
             <div className="space-y-4 px-6 pt-6 pb-4">
               <div className="flex items-center gap-3">
                 <Trophy className="size-6 text-[#fdc700]" />
-                <h2 className="font-sans text-[32px] leading-[40px] font-semibold tracking-[-0.64px] text-white">
+                <h2 className="font-sans text-[32px] leading-10 font-semibold tracking-[-0.64px] text-white">
                   Novita Arena Battle
                 </h2>
               </div>
@@ -63,12 +63,11 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
 
               {/* Main Content Grid */}
               <div className="grid grid-cols-2 gap-8">
-                {/* What You'll Build */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
                     <Zap className="size-5 text-[#fdc700]" />
-                    <h3 className="font-sans text-2xl leading-[38px] font-semibold text-white">
-                      What You'll Build
+                    <h3 className="font-sans text-2xl leading-9.5 font-semibold text-white">
+                      What You&apos;ll Build
                     </h3>
                   </div>
 
@@ -106,7 +105,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
                     <Gift className="size-5 text-[#fdc700]" />
-                    <h3 className="font-sans text-2xl leading-[38px] font-semibold text-white">
+                    <h3 className="font-sans text-2xl leading-9.5 font-semibold text-white">
                       Prize Pool
                     </h3>
                   </div>
@@ -200,7 +199,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                 <div className="grid grid-cols-4 gap-4">
                   {/* Step 1 */}
                   <div className="relative overflow-hidden rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4">
-                    <div className="absolute top-[-8px] right-2 text-[60px] leading-[60px] font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]">
+                    <div className="absolute -top-2 right-2 text-[60px] leading-15 font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]">
                       1
                     </div>
                     <div className="relative z-10 space-y-2">
@@ -215,7 +214,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
 
                   {/* Step 2 */}
                   <div className="relative overflow-hidden rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4">
-                    <div className="absolute top-[-8px] right-2 text-[60px] leading-[60px] font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]">
+                    <div className="absolute -top-2 right-2 text-[60px] leading-15 font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]">
                       2
                     </div>
                     <div className="relative z-10 space-y-2">
@@ -230,7 +229,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
 
                   {/* Step 3 */}
                   <div className="relative overflow-hidden rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4">
-                    <div className="absolute top-[-8px] right-2 text-[60px] leading-[60px] font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]">
+                    <div className="absolute -top-2 right-2 text-[60px] leading-15 font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]">
                       3
                     </div>
                     <div className="relative z-10 space-y-2">
@@ -245,7 +244,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
 
                   {/* Step 4 */}
                   <div className="relative overflow-hidden rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4">
-                    <div className="absolute top-[-8px] right-2 text-[60px] leading-[60px] font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]">
+                    <div className="absolute -top-2 right-2 text-[60px] leading-15 font-bold tracking-[0.26px] text-[rgba(255,255,255,0.05)]">
                       4
                     </div>
                     <div className="relative z-10 space-y-2">
@@ -260,12 +259,12 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                 </div>
               </div>
 
-              {/* Bottom Grid: How You're Judged & Why Join */}
+              {/* Bottom Grid: How You&apos;re Judged & Why Join */}
               <div className="grid grid-cols-2 gap-8">
-                {/* How You're Judged */}
+                {/* How You&apos;re Judged */}
                 <div className="space-y-3 rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-5">
                   <h4 className="text-base font-bold tracking-[-0.31px] text-white">
-                    How You're Judged
+                    How You&apos;re Judged
                   </h4>
 
                   <div className="space-y-3">

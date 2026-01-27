@@ -275,7 +275,7 @@ export function ShareModal({
     } finally {
       setPublishLoading(false)
     }
-  }, [appId, isPublished, videoBlob, uploadStatus, handleUploadVideo])
+  }, [appId, isPublished, videoBlob, uploadStatus, handleUploadVideo, category, onPublishSuccess])
 
   const handleDownload = () => {
     if (videoBlob && videoUrl) {
@@ -420,7 +420,6 @@ export function ShareModal({
                 (() => {
                   const mode = getModeByCategory(category)
                   if (!mode) return null
-                  const Icon = mode.icon
                   return (
                     <div
                       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 ${mode.theme.badge}`}
@@ -518,7 +517,7 @@ export function ShareModal({
                       className="flex h-[82px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-[#f3f4f6] p-1 transition-colors hover:bg-gray-50"
                     >
                       <div className="flex size-8 items-center justify-center overflow-hidden rounded-full">
-                        <img src={imgTwitter} alt="Twitter" className="size-full object-cover" />
+                        <Image src={imgTwitter} alt="Twitter" className="size-full object-cover" />
                       </div>
                       <span className="text-[12px] leading-4 font-medium text-[#4a5565]">X</span>
                     </button>
@@ -528,7 +527,7 @@ export function ShareModal({
                       className="flex h-[82px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-[#f3f4f6] p-1 transition-colors hover:bg-gray-50"
                     >
                       <div className="relative size-8">
-                        <img
+                        <Image
                           alt="LinkedIn"
                           className="block size-full max-w-none"
                           src={imgLinkedin}
@@ -544,7 +543,11 @@ export function ShareModal({
                       className="flex h-[82px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-[#f3f4f6] p-1 transition-colors hover:bg-gray-50"
                     >
                       <div className="flex size-8 items-center justify-center overflow-hidden rounded-full">
-                        <img src={imgFacebook} alt="Facebook" className="size-full object-cover" />
+                        <Image
+                          src={imgFacebook}
+                          alt="Facebook"
+                          className="size-full object-cover"
+                        />
                       </div>
                       <span className="text-[12px] leading-4 font-medium text-[#4a5565]">
                         Facebook

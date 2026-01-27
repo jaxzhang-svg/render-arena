@@ -5,17 +5,7 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/base/button'
 import { Textarea } from '@/components/base/textarea'
-import {
-  Video,
-  Share,
-  ArrowUp,
-  ArrowLeft,
-  Eye,
-  EyeOff,
-  Square,
-  RotateCcw,
-  Share2,
-} from 'lucide-react'
+import { Video, ArrowUp, ArrowLeft, Eye, EyeOff, Square, RotateCcw, Share2 } from 'lucide-react'
 import { showToast } from '@/lib/toast'
 import { ShareModal } from '@/components/playground/share-modal'
 import { UserAvatar } from '@/components/app/user-avatar'
@@ -25,7 +15,6 @@ import { useScreenRecorder } from '@/hooks/use-screen-recorder'
 import { useAuth } from '@/hooks/use-auth'
 import { Tooltip } from '@base-ui/react/tooltip'
 import { cn } from '@/lib/utils'
-import { playgroundModes } from '@/lib/config'
 import type { App } from '@/types'
 import { trackVideoRecordingStarted, trackVideoRecordingStopped } from '@/lib/analytics'
 
@@ -82,6 +71,10 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   }, [handleGenerate])
 
   // Reset published state when a new app is generated (currentAppId changes and is not initialApp)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // setState calls are intentional to reset published state when new app is generated.
+  // This is a valid pattern for initialization/reset effects where state needs
+  // to respond to prop changes (currentAppId vs initialApp).
   useEffect(() => {
     if (currentAppId && currentAppId !== initialApp?.id) {
       setIsAppPublished(false)

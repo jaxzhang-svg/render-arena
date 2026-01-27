@@ -46,7 +46,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           desiredLikedState = body.liked
         }
       }
-    } catch (e) {
+    } catch {
       // Ignore JSON parse error, treat as no body
     }
 

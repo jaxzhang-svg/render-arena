@@ -107,7 +107,8 @@ Return JSON: { "category": "xxx", "title": "xxx" }`,
     }
 
     // 更新 app
-    const updateData: any = {
+    type AppUpdateData = { is_public: boolean; name: string; category?: string }
+    const updateData: AppUpdateData = {
       is_public: true,
       name: shortName,
     }

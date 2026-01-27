@@ -1,13 +1,10 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { ForbiddenPage } from '@/components/app/forbidden-page'
 
-export default function GalleryError({
-  error,
-}: {
-  error: Error & { digest?: string }
-}) {
+export default function GalleryError({ error }: { error: Error & { digest?: string } }) {
   const isForbidden = error.digest === 'FORBIDDEN'
 
   useEffect(() => {
@@ -30,18 +27,16 @@ export default function GalleryError({
   // Fallback for other errors - show minimal error UI
   return (
     <div className="flex h-screen flex-col items-center justify-center p-6 text-center">
-      <h2 className="mb-4 font-sans text-2xl font-semibold text-[#292827]">
-        Something went wrong
-      </h2>
+      <h2 className="mb-4 font-sans text-2xl font-semibold text-[#292827]">Something went wrong</h2>
       <p className="mb-8 max-w-[400px] text-lg text-[#4f4e4a]">
         An unexpected error occurred. Please try again later.
       </p>
-      <a
+      <Link
         href="/#gallery"
         className="inline-flex items-center gap-2 rounded-full bg-[#1a1a1a] px-6 py-3 text-white transition-all hover:scale-105 hover:bg-black hover:shadow-lg active:scale-95"
       >
         <span className="font-medium">Back to Gallery</span>
-      </a>
+      </Link>
     </div>
   )
 }

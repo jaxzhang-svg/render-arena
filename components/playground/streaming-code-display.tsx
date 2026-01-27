@@ -41,6 +41,10 @@ export function StreamingCodeDisplay({
     }
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // scrollToBottom() internally calls setShowScrollButton(false), which is setState.
+  // This is intentional: when content updates and auto-scrolling is enabled,
+  // scroll to bottom and hide the manual scroll button.
   useEffect(() => {
     if (isAutoScrolling.current) {
       scrollToBottom()

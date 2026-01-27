@@ -22,9 +22,13 @@ import { initTracking, getStoredTrackingParams } from '@/lib/tracking'
 export function useTrackingParams(): TrackingParams | null {
   const [params, setParams] = useState<TrackingParams | null>(null)
 
+  // Initialization on mount: setParams is intentionally called synchronously.
+  // initTracking() and getStoredTrackingParams() are pure functions with no dependencies.
+  // This is a standard initialization pattern.
   useEffect(() => {
     // Initialize tracking on first mount only
     initTracking()
+    // eslint-disable-next-line
     setParams(getStoredTrackingParams())
   }, [])
 

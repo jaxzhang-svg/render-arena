@@ -7,12 +7,14 @@ import { Slider } from '@base-ui/react/slider'
 import { Info, SlidersHorizontal } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+interface ModelSettings {
+  temperature: number
+}
+
 interface ModelSettingsPopoverProps {
   className?: string
-  settings: {
-    temperature: number
-  }
-  onSettingsChange: (settings: any) => void
+  settings: ModelSettings
+  onSettingsChange: (settings: ModelSettings) => void
 }
 
 export function ModelSettingsPopover({

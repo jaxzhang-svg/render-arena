@@ -41,7 +41,7 @@ export default function PlaygroundNotFound() {
         </h2>
 
         <p className="mb-8 max-w-[400px] text-lg text-[#4f4e4a]">
-          The playground session you are looking for doesn't exist or has expired. Start a new
+          The playground session you are looking for doesn&apos;t exist or has expired. Start a new
           battle to continue.
         </p>
 

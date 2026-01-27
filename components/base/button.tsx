@@ -38,11 +38,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const computedClassName = cn(baseStyles, variantStyles[variant], sizeStyles[size], className)
 
     if (asChild && isValidElement(children)) {
+      const childProps = children.props as Record<string, unknown>
+      const childClassName = (childProps.className as string) || ''
       return cloneElement(children, {
         ...props,
-        ...(children.props as Record<string, any>),
-        className: cn(computedClassName, (children.props as any).className),
-      } as any)
+        ...childProps,
+        className: cn(computedClassName, childClassName),
+      } as React.HTMLAttributes<HTMLElement>)
     }
 
     return (
