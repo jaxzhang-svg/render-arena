@@ -245,8 +245,8 @@ export const modelGroups: ModelGroup[] = [
         color: '#F23F5D',
       },
       {
-        id: 'moonshotai/kimi-k2-thinking',
-        name: 'Kimi K2 Thinking',
+        id: 'moonshotai/kimi-k2.5',
+        name: 'Kimi K2.5 Thinking',
         icon: '/logo/models/kimi-color.svg',
         color: '#000',
       },
