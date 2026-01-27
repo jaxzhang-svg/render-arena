@@ -168,8 +168,8 @@ export function applyTrackingDefaults(params: TrackingParams | null): TrackingPa
   return {
     referrer: params?.referrer,
     utm_source: params?.utm_source || 'renderarena',
-    utm_campaign: params?.utm_campaign || 'direct',
-    utm_medium: params?.utm_medium || 'web',
+    utm_campaign: params?.utm_campaign || 'referral',
+    utm_medium: params?.utm_medium || 'renderarena',
     landingpage: params?.landingpage,
   }
 }
