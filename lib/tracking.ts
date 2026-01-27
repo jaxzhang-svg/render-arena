@@ -167,9 +167,9 @@ export function appendTrackingParamsToUrl(url: string, params: TrackingParams): 
 export function applyTrackingDefaults(params: TrackingParams | null): TrackingParams {
   return {
     referrer: params?.referrer,
-    utm_source: params?.utm_source || 'direct',
-    utm_campaign: params?.utm_campaign || 'none',
-    utm_medium: params?.utm_medium || 'none',
+    utm_source: params?.utm_source || 'renderarena',
+    utm_campaign: params?.utm_campaign || 'direct',
+    utm_medium: params?.utm_medium || 'web',
     landingpage: params?.landingpage,
   }
 }
