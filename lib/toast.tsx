@@ -1,6 +1,9 @@
 import { toast, ToastOptions, ToastPosition } from 'react-toastify'
 import { ReactNode } from 'react'
 import { LoginToast } from '@/components/ui/login-toast'
+import { ActionToast } from '@/components/ui/action-toast'
+import { LogIn } from 'lucide-react'
+import { loginWithNovita } from '@/hooks/use-auth'
 
 // Default configuration
 const defaultOptions: ToastOptions = {
@@ -28,10 +31,37 @@ export const showToast = {
     toast.warn(message, { ...defaultOptions, ...options })
   },
   // Custom login toast
-  login: (message: string = 'Please login to continue', options?: ToastOptions) => {
-    toast(<LoginToast message={message} />, {
+  login: (message: string = 'Please login to continue', trigger?: 'quota' | 'publish' | 'like', options?: ToastOptions) => {
+    toast(<LoginToast message={message} trigger={trigger} />, {
       ...defaultOptions,
       autoClose: false, // Don't auto-close login prompt usually
+      closeOnClick: false,
+      ...options,
+    })
+  },
+  // Quota exceeded toast with configurable action
+  quotaExceeded: (message: string, quotaType: 'T0' | 'T1' | 'T2', options?: ToastOptions) => {
+    let buttonText: string
+    let buttonHref: string | undefined
+    let buttonOnClick: (() => void) | undefined
+
+    if (quotaType === 'T0') {
+      // Anonymous user - show login button
+      buttonText = 'Login'
+      buttonOnClick = () => loginWithNovita(window.location.pathname)
+    } else if (quotaType === 'T1') {
+      // Authenticated user with low balance - show upgrade button
+      buttonText = 'Upgrade'
+      buttonHref = 'https://novita.ai/console'
+    } else {
+      // T2: Paid user with exceeded quota - show Discord button
+      buttonText = 'Join Discord'
+      buttonHref = 'https://discord.gg/novita'
+    }
+
+    toast(<ActionToast message={message} buttonText={buttonText} buttonHref={buttonHref} buttonOnClick={buttonOnClick} icon={quotaType === 'T0' ? <LogIn size={14} /> : undefined} />, {
+      ...defaultOptions,
+      autoClose: false,
       closeOnClick: false,
       ...options,
     })

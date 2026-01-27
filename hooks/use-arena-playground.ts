@@ -127,12 +127,6 @@ export function useArenaPlayground({
         const data = await response.json()
 
         if (!data.success) {
-          if (data.error === 'FREE_QUOTA_EXCEEDED') {
-            // Track free quota exceeded
-            trackFreeQuotaExceeded(data.usageCount || 5)
-            showToast.login(data.message || '免费额度已用完，请登录后继续使用')
-            return null
-          }
           throw new Error(data.message || 'Failed to create app')
         }
 

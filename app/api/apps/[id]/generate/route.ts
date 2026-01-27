@@ -129,11 +129,22 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const usedCount = quotaData?.used_count || 0
 
   if (usedCount >= quotaLimit) {
+    let error, message;
+    if (!user) {
+      error = 'QUOTA_EXCEEDED_T0';
+      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Please login to continue.`;
+    } else if (novitaBalance == null || novitaBalance < PAID_USER_BALANCE_THRESHOLD) {
+      error = 'QUOTA_EXCEEDED_T1';
+      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Please upgrade your account tier to continue.`;
+    } else if (novitaBalance > PAID_USER_BALANCE_THRESHOLD) {
+      error = 'QUOTA_EXCEEDED_T2';
+      message = `You have reached your paid generation limit (${usedCount}/${quotaLimit}). Please contact support to increase your limit.`;
+    } else {
+      error = 'QUOTA_EXCEEDED';
+      message = `You have reached your generation limit (${usedCount}/${quotaLimit}).`;
+    }
     return new Response(
-      JSON.stringify({
-        error: 'QUOTA_EXCEEDED',
-        message: `You have reached your generation limit (${usedCount}/${quotaLimit}). Please ${user ? 'upgrade' : 'login'} to continue.`,
-      }),
+      JSON.stringify({ error, message }),
       { status: 403, headers: { 'Content-Type': 'application/json' } }
     )
   }

@@ -6,7 +6,9 @@ import {
   trackGenerationCompleted,
   trackGenerationError,
   trackGenerationStopped,
+  trackFreeQuotaExceeded,
 } from '@/lib/analytics'
+import { showToast } from '@/lib/toast'
 
 /**
  * 模型响应状态
@@ -236,6 +238,15 @@ export function useModelGeneration({
           onopen: async res => {
             if (!res.ok) {
               const errorText = await res.text()
+              // Try to parse error response for quota errors
+              try {
+                const errorData = JSON.parse(errorText)
+                if (errorData.error) {
+                  throw new Error(JSON.stringify(errorData))
+                }
+              } catch {
+                // If parsing fails, throw generic error
+              }
               throw new Error(`HTTP error: ${res.status} ${errorText}`)
             }
           },
@@ -337,16 +348,43 @@ export function useModelGeneration({
           })
           return
         }
+
         console.error(`Model ${slot} error:`, error)
+
+        // Try to parse structured error response
+        let errorCode = 'unknown_error'
+        let errorMessage = (error as Error).message || 'Unknown error occurred'
+
+        try {
+          const errorData = JSON.parse(errorMessage)
+          if (errorData.error) {
+            errorCode = errorData.error
+            errorMessage = errorData.message || errorMessage
+
+            // Handle quota exceeded errors
+            if (errorCode === 'QUOTA_EXCEEDED_T0') {
+              trackFreeQuotaExceeded(0) // usageCount not available in error response
+              showToast.quotaExceeded(errorMessage, 'T0')
+            } else if (errorCode === 'QUOTA_EXCEEDED_T1') {
+              showToast.quotaExceeded(errorMessage, 'T1')
+            } else if (errorCode === 'QUOTA_EXCEEDED_T2') {
+              showToast.quotaExceeded(errorMessage, 'T2')
+            }
+          }
+        } catch {
+          // Not a JSON error, use original error message
+        }
+
         // Track generation error
         trackGenerationError({
           model_id: selectedModel.id,
           slot,
-          error_code: (error as Error).message || 'unknown_error',
+          error_code: errorCode,
         })
+
         setResponse(prev => ({
           ...prev,
-          content: prev.content + '\n\nError: ' + (error as Error).message,
+          content: prev.content + '\n\nError: ' + errorMessage,
           loading: false,
           completed: true,
         }))

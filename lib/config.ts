@@ -314,3 +314,7 @@ export function getModelById(modelId: string): LLMModel | undefined {
 // Hackathon Configuration
 export const HACKATHON_END_TIME = '2026-02-14T23:59:59Z' // Hardcoded date for now
 export const HACKATHON_PARTICIPANTS = 1234
+
+// External Links
+export const NOVITA_CONSOLE_URL = 'https://novita.ai/console'
+export const DISCORD_INVITE_URL = 'https://discord.gg/novita'
