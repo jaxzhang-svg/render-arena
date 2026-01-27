@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { Sandbox } from 'novita-sandbox/code-interpreter'
 
-const TEMPLATE_ID = process.env.NOVITA_TEMPLATE_ID
+const TEMPLATE_ID = process.env.NOVITA_TEMPLATE_ID!
 
 if (!TEMPLATE_ID) {
   console.error('❌ NOVITA_TEMPLATE_ID environment variable is required')

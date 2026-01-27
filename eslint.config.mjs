@@ -12,6 +12,7 @@ const eslintConfig = defineConfig([
     '.next/**',
     'out/**',
     'build/**',
+    'sandbox-template/**',
     'next-env.d.ts',
   ]),
   eslintConfigPrettier,
