@@ -48,12 +48,9 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   const shareTooltipId = useId()
   const isGuest = !authLoading && !user
 
-  // App Published State (derive from currentAppId and initialApp)
-  const isAppPublished = currentAppId === initialApp?.id ? (initialApp?.is_public ?? false) : false
-  // Derive appCategory from currentAppId and initialApp
-  const appCategory = currentAppId === initialApp?.id ? (initialApp?.category ?? null) : null
-
   // 分享相关状态
+  const [isAppPublished, setIsAppPublished] = useState(initialApp?.is_public ?? false)
+  const [appCategory, setAppCategory] = useState<string | null>(initialApp?.category ?? null)
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareMode, setShareMode] = useState<'video' | 'poster'>('poster')
   const [recordedFormat, setRecordedFormat] = useState<'webm' | 'mp4' | null>(null)
@@ -71,7 +68,13 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     handleGenerateRef.current = handleGenerate
   }, [handleGenerate])
 
-  // Removed setAppCategory(null) from effect to avoid cascading renders
+  useEffect(() => {
+    if (currentAppId && currentAppId !== initialApp?.id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsAppPublished(false)
+      setAppCategory(null)
+    }
+  }, [currentAppId, initialApp])
 
   // 执行自动生成
   useEffect(() => {
@@ -383,8 +386,10 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
         videoFormat={recordedFormat}
         showVideoSection={shareMode === 'video'}
         isPublished={isAppPublished}
-        // onPublishSuccess no longer updates appCategory since it's derived
-        onPublishSuccess={() => {}}
+        onPublishSuccess={category => {
+          setIsAppPublished(true)
+          if (category) setAppCategory(category)
+        }}
         prompt={prompt}
         category={appCategory}
       />
