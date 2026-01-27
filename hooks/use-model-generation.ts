@@ -363,16 +363,20 @@ export function useModelGeneration({
 
             // Handle quota exceeded errors
             if (errorCode === 'QUOTA_EXCEEDED_T0') {
-              trackFreeQuotaExceeded(0) // usageCount not available in error response
+              trackFreeQuotaExceeded('T0', 0)
               showToast.quotaExceeded(errorMessage, 'T0')
             } else if (errorCode === 'QUOTA_EXCEEDED_T1') {
+              trackFreeQuotaExceeded('T1', 0)
               showToast.quotaExceeded(errorMessage, 'T1')
             } else if (errorCode === 'QUOTA_EXCEEDED_T2') {
+              trackFreeQuotaExceeded('T2', 0)
               showToast.quotaExceeded(errorMessage, 'T2')
             } else if (errorCode === 'FREE_TIER_DISABLED') {
+              trackFreeQuotaExceeded('FREE_TIER_DISABLED', 0)
               const isAuthenticated = errorMessage.includes('free tier access')
               showToast.freeTierDisabled(errorMessage, isAuthenticated)
             } else if (errorCode === 'ALL_GENERATION_DISABLED') {
+              trackFreeQuotaExceeded('ALL_GENERATION_DISABLED', 0)
               showToast.allGenerationDisabled(errorMessage)
             }
           }

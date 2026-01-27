@@ -17,6 +17,7 @@ import Image from 'next/image'
 import clipboardy from 'clipboardy'
 import { showToast } from '@/lib/toast'
 import { getModeByCategory } from '@/lib/config'
+import { appendTrackingParamsToUrl } from '@/lib/tracking'
 import {
   trackShareModalOpened,
   trackShareLinkCopied,
@@ -316,9 +317,6 @@ export function ShareModal({
   }
 
   const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
-    // Social sharing is disabled for now
-    return
-
     // Truncate prompt to 5 words
     const truncatedPrompt =
       prompt.split(/\s+/).slice(0, 5).join(' ') + (prompt.split(/\s+/).length > 5 ? ' …' : '')
@@ -329,9 +327,16 @@ export function ShareModal({
       finalLink = `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoUid}/watch`
     }
 
-    const shareText = `Novita Render Arena — Side-by-Side\nPrompt: “${truncatedPrompt}”\n👉 Which model wins?\n`
+    // Append UTM tracking parameters
+    const linkWithUtm = appendTrackingParamsToUrl(finalLink, {
+      utm_source: 'renderarena',
+      utm_medium: platform,
+      utm_campaign: 'app_share',
+    })
 
-    const encodedUrl = encodeURIComponent(finalLink)
+    const shareText = `Novita Render Arena — Side-by-Side\nPrompt: "${truncatedPrompt}"\n👉 Which model wins?\n`
+
+    const encodedUrl = encodeURIComponent(linkWithUtm)
     const encodedText = encodeURIComponent(shareText)
 
     let url = ''
@@ -519,7 +524,7 @@ export function ShareModal({
                   </div>
                 </div>
 
-                <div className="pointer-events-none space-y-2 opacity-50">
+                <div className="space-y-2">
                   <label className="text-[12px] leading-4 font-medium tracking-[0.6px] text-[#9E9C98] uppercase">
                     {videoBlob ? 'SHARE VIDEO' : 'SHARE TO SOCIAL'}
                   </label>

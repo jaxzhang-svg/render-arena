@@ -153,8 +153,8 @@ export function trackVideoUploadError(params: { app_id: string; error_type: stri
 
 // ==================== Quota & Conversion Events ====================
 
-export function trackFreeQuotaExceeded(usageCount: number) {
-  trackEvent('free_quota_exceeded', { usage_count: usageCount })
+export function trackFreeQuotaExceeded(tier: string, usageCount: number) {
+  trackEvent('quota_exceeded', { tier, usage_count: usageCount })
 }
 
 export function trackLoginPromptShown(trigger: 'quota' | 'publish' | 'like') {
