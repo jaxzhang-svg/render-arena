@@ -220,7 +220,7 @@ export default function HomePage() {
                       }}
                       variant="minimal"
                       size="small"
-                      className="w-[185px]"
+                      className="w-[196px]"
                     />
                     <div className="h-[16px] w-px bg-[rgba(0,0,0,0.06)]" />
                     <ModelSelector
@@ -236,7 +236,7 @@ export default function HomePage() {
                       }}
                       variant="default"
                       size="small"
-                      className="w-[185px]"
+                      className="w-[196px]"
                     />
                   </div>
 
