@@ -18,11 +18,9 @@ export const playgroundModes = [
     color: 'bg-violet-400/80',
     icon: Box,
     prompts: [
-      'Create an interactive simulation of multiple balls colliding elastically inside a bounded area, with realistic motion, clear collision responses, and smooth visual feedback.',
-      'Create a physics playground where users can stack blocks of different sizes and knock them down to observe realistic gravity and collisions.',
+      'Create an interactive 2D simulation of three identical balls inside a continuously rotating regular hexagon. The balls are affected by Earth-like gravity, damping, and wall friction, and must collide realistically with the moving/rotating walls and with each other (proper momentum transfer, no overlap, no tunneling, no sticking, stable over long runs). The hexagon rotation must be smooth and adjustable (speed + direction). Provide minimal controls: reset, pause, gravity toggle, restitution slider, rotation speed slider, and a slow-motion slider that scales simulation time smoothly. Add a small HUD showing FPS, total kinetic energy, and impacts per second.',
       'Create a 3D simulation of a formula 1 car performing a continuous drifting donut in the street',
-      `3D scientific data visualization animation.  A massive rotating white wireframe sphere centered in the frame.  Inside the sphere, hundreds of multi-colored circular nodes of varying sizes are interconnected by thin, glowing plexus lines, forming a dense and complex network structure.  Solid black background with subtle floating particles for depth. High-tech, futuristic interface style. Clean, precise, non-organic geometry.  Smooth cinematic camera orbit around the sphere. Slow rotation, nodes softly pulsating with light. Ultra-sharp details, high contrast lighting. 4K resolution, seamless looping animation.  No text, no labels, no humans, no organic shapes.`,
-      `Flat illustration of a Great White Pelican riding a red bicycle. The pelican is drawn in a cartoonish style with a goofy expression and holds a large yellow sphere in its beak, representing the sun.  The pelican appears to be actively pedaling, with its feet in motion on the bicycle pedals. Motion lines and pink dots emphasize speed and movement. The background is a simplified blue sky with flat white clouds and small flying birds, creating a lively and playful atmosphere.`,
+      'Create a simple physics playground with hundreds of particles. Particles float, drift, and gently collide inside the canvas. Include gravity toggle, mouse interaction, and soft boundary constraints. Smooth motion, visually pleasing trails, dark background.',
     ],
     theme: {
       badge: 'bg-violet-100 text-violet-700',
@@ -39,10 +37,11 @@ export const playgroundModes = [
     color: 'bg-pink-400/80',
     icon: Sparkles,
     prompts: [
-      `create a high-end visual experience in a single HTML file. Build a "Sacred Geometry Morphing" animation using Three.js. Start with a wireframe Platonic solid (like a Dodecahedron) that smoothly morphs into a complex Menger Sponge or a Mandelbulb-inspired fractal. The lines should glow with a gradient of gold and electric blue. Add a "cinematic camera" script that slowly orbits and zooms according to a mathematical sine wave.`,
-      `create a flow field. Use 2D Perlin noise to determine the angle of movement for 5,000 particles. Particles should leave a persistent, semi-transparent trail to create a silk-like texture, and the noise offset should evolve over time`,
+      `Build a "Sacred Geometry Morphing" animation using Three.js. Start with a wireframe Platonic solid (like a Dodecahedron) that smoothly morphs into a complex Menger Sponge or a Mandelbulb-inspired fractal. The lines should glow with a gradient of gold and electric blue. Add a "cinematic camera" script that slowly orbits and zooms according to a mathematical sine wave.`,
+      `Create a flow field. Use 2D Perlin noise to determine the angle of movement for 5,000 particles. Particles should leave a persistent, semi-transparent trail to create a silk-like texture, and the noise offset should evolve over time`,
+      `Create a flat illustration of a Great White Pelican riding a red bicycle. The pelican is drawn in a cartoonish style with a goofy expression and holds a large yellow sphere in its beak, representing the sun.  The pelican appears to be actively pedaling, with its feet in motion on the bicycle pedals. Motion lines and pink dots emphasize speed and movement. The background is a simplified blue sky with flat white clouds and small flying birds, creating a lively and playful atmosphere.`,
       `Create A futuristic 3D scientific visualization featuring a massive rotating white wireframe sphere filled with glowing, multicolored nodes connected by fine luminous lines, floating in a pitch-black space, with smooth cinematic motion, pulsing light, crisp geometry, high contrast, and a seamless looping feel—purely abstract, precise, and non-organic.`,
-      `Create a spectacular fireworks scene in a pitch-black night sky, with continuous overlapping launches that burst into massive, glowing spheres of particles, realistically rising, exploding, slowing down, drifting under gravity, fading with subtle trails, viewed from a static camera looking slightly upward, and adapting smoothly to any screen size.`,
+      `Create a spectacular fireworks scene in a pitch-black night sky, with continuous overlapping launches that burst into massive, glowing spheres of particles, realistically rising, exploding, slowing down, drifting under gravity, fading with subtle trails, viewed from a static camera looking slightly upward, and adapting smoothly to any screen size.`
     ],
     theme: {
       badge: 'bg-pink-100 text-pink-700',
@@ -59,8 +58,8 @@ export const playgroundModes = [
     color: 'bg-cyan-400/80',
     icon: Gamepad2,
     prompts: [
-      'Create a Breakout-style game with paddle control and ball physics',
       'Create a playable Snake game with increasing difficulty.',
+      'Create a Breakout-style game with paddle control and ball physics.',
     ],
     theme: {
       badge: 'bg-cyan-100 text-cyan-700',
@@ -77,8 +76,6 @@ export const playgroundModes = [
     color: 'bg-gray-400/80',
     icon: RefreshCcwDot,
     prompts: [
-      'Create a beautiful interactive web experience',
-      'Build a modern web application with smooth animations',
       'Design an elegant data visualization dashboard',
       'Create a responsive landing page with modern design',
     ],
