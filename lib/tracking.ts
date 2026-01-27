@@ -32,7 +32,7 @@ export function extractTrackingParams(): TrackingParams {
     utm_source: urlParams.get('utm_source') || undefined,
     utm_campaign: urlParams.get('utm_campaign') || undefined,
     utm_medium: urlParams.get('utm_medium') || undefined,
-    landingpage: window.location.pathname + window.location.search,
+    landingpage: window.location.href || undefined,
   }
 }
 
