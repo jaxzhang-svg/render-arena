@@ -6,6 +6,7 @@ import { Header } from '@/components/app/header'
 import { Footer } from '@/components/app/footer'
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal'
 import { GalleryGrid } from '@/components/app/gallery-grid'
+import { FreeTierBanner } from '@/components/app/free-tier-banner'
 import { Clock, ArrowRight, ChevronUp, Users, Zap } from 'lucide-react'
 import { Accordion } from '@base-ui/react/accordion'
 
@@ -151,6 +152,7 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
+      <FreeTierBanner />
 
       <main className="flex-1">
         {/* Hero Section */}

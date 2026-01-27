@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { DISCORD_INVITE_URL } from '@/lib/config'
 
 export function Footer() {
   return (
@@ -80,7 +81,7 @@ export function Footer() {
                 </svg>
               </Link>
               <Link
-                href="https://discord.gg/YyPRAzwp7P"
+                href={DISCORD_INVITE_URL}
                 target="_blank"
                 className="text-[#292827] transition-colors hover:text-[#23d57c]"
               >

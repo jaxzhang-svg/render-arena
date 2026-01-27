@@ -369,6 +369,11 @@ export function useModelGeneration({
               showToast.quotaExceeded(errorMessage, 'T1')
             } else if (errorCode === 'QUOTA_EXCEEDED_T2') {
               showToast.quotaExceeded(errorMessage, 'T2')
+            } else if (errorCode === 'FREE_TIER_DISABLED') {
+              const isAuthenticated = errorMessage.includes('free tier access')
+              showToast.freeTierDisabled(errorMessage, isAuthenticated)
+            } else if (errorCode === 'ALL_GENERATION_DISABLED') {
+              showToast.allGenerationDisabled(errorMessage)
             }
           }
         } catch {

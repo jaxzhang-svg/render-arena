@@ -6,7 +6,6 @@ import { defaultModelAId, defaultModelBId } from '@/lib/config'
 import { showToast } from '@/lib/toast'
 import {
   trackArenaGenerateStarted,
-  trackFreeQuotaExceeded,
   trackGenerationRegenerated,
 } from '@/lib/analytics'
 

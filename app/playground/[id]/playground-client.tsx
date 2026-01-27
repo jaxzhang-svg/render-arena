@@ -9,6 +9,7 @@ import { Video, ArrowUp, ArrowLeft, Eye, EyeOff, Square, RotateCcw, Share2 } fro
 import { showToast } from '@/lib/toast'
 import { ShareModal } from '@/components/playground/share-modal'
 import { UserAvatar } from '@/components/app/user-avatar'
+import { FreeTierBanner } from '@/components/app/free-tier-banner'
 import { ModelPanel } from '@/components/playground/model-panel'
 import { useArenaPlayground } from '@/hooks/use-arena-playground'
 import { useScreenRecorder } from '@/hooks/use-screen-recorder'
@@ -150,6 +151,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">
+      <FreeTierBanner />
       <header className="z-30 flex h-16 shrink-0 items-center justify-between border-b border-[#f3f4f6] bg-white px-4">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">

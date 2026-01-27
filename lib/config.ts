@@ -4,6 +4,12 @@ export const ANONYMOUS_QUOTA = 6
 export const AUTHENTICATED_QUOTA = 20
 export const PAID_QUOTA = 60
 
+// Free tier disable configuration - set to true to disable anonymous and authenticated non-paid users
+export const FREE_TIER_DISABLED = false
+
+// Complete disable configuration - set to true to disable ALL users (including paid users)
+export const ALL_GENERATION_DISABLED = false
+
 const NOVITA_BALANCE_UNIT = 0.0001
 export const PAID_USER_BALANCE_THRESHOLD = 10 / NOVITA_BALANCE_UNIT
 
@@ -316,5 +322,5 @@ export const HACKATHON_END_TIME = '2026-02-14T23:59:59Z' // Hardcoded date for n
 export const HACKATHON_PARTICIPANTS = 1234
 
 // External Links
-export const NOVITA_CONSOLE_URL = 'https://novita.ai/console'
-export const DISCORD_INVITE_URL = 'https://discord.gg/novita'
+export const NOVITA_BILLING_URL = 'https://novita.ai/billing'
+export const DISCORD_INVITE_URL = 'https://discord.gg/YyPRAzwp7P'

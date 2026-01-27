@@ -4,6 +4,7 @@ import { LoginToast } from '@/components/ui/login-toast'
 import { ActionToast } from '@/components/ui/action-toast'
 import { LogIn } from 'lucide-react'
 import { loginWithNovita } from '@/hooks/use-auth'
+import { DISCORD_INVITE_URL, NOVITA_BILLING_URL } from './config'
 
 // Default configuration
 const defaultOptions: ToastOptions = {
@@ -52,14 +53,36 @@ export const showToast = {
     } else if (quotaType === 'T1') {
       // Authenticated user with low balance - show upgrade button
       buttonText = 'Upgrade'
-      buttonHref = 'https://novita.ai/console'
+      buttonHref = NOVITA_BILLING_URL
     } else {
       // T2: Paid user with exceeded quota - show Discord button
       buttonText = 'Join Discord'
-      buttonHref = 'https://discord.gg/novita'
+      buttonHref = DISCORD_INVITE_URL
     }
 
     toast(<ActionToast message={message} buttonText={buttonText} buttonHref={buttonHref} buttonOnClick={buttonOnClick} icon={quotaType === 'T0' ? <LogIn size={14} /> : undefined} />, {
+      ...defaultOptions,
+      autoClose: false,
+      closeOnClick: false,
+      ...options,
+    })
+  },
+  // Free tier disabled toast
+  freeTierDisabled: (message: string, isAuthenticated: boolean, options?: ToastOptions) => {
+    const buttonText = isAuthenticated ? 'Upgrade' : 'Login'
+    const buttonHref = isAuthenticated ? NOVITA_BILLING_URL : undefined
+    const buttonOnClick = isAuthenticated ? undefined : () => loginWithNovita(window.location.pathname)
+
+    toast(<ActionToast message={message} buttonText={buttonText} buttonHref={buttonHref} buttonOnClick={buttonOnClick} icon={!isAuthenticated ? <LogIn size={14} /> : undefined} />, {
+      ...defaultOptions,
+      autoClose: false,
+      closeOnClick: false,
+      ...options,
+    })
+  },
+  // All generation disabled toast
+  allGenerationDisabled: (message: string, options?: ToastOptions) => {
+    toast(<ActionToast message={message} buttonText="Join Discord" buttonHref={DISCORD_INVITE_URL} />, {
       ...defaultOptions,
       autoClose: false,
       closeOnClick: false,

@@ -7,6 +7,8 @@ import {
   AUTHENTICATED_QUOTA,
   PAID_QUOTA,
   PAID_USER_BALANCE_THRESHOLD,
+  FREE_TIER_DISABLED,
+  ALL_GENERATION_DISABLED,
 } from '@/lib/config'
 import { checkAppOwnerPermission } from '@/lib/permissions'
 import { getNovitaBalance } from '@/lib/novita'
@@ -120,6 +122,33 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     identifier = clientIP
   }
 
+  // Check if all generation is disabled
+  if (ALL_GENERATION_DISABLED) {
+    return new Response(
+      JSON.stringify({
+        error: 'ALL_GENERATION_DISABLED',
+        message: 'Due to overwhelming demand, our service is temporarily paused. We&apos;ll be back online soon!'
+      }),
+      { status: 403, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
+
+  // Check if free tier is disabled
+  if (FREE_TIER_DISABLED) {
+    const isPaidUser = novitaBalance !== null && novitaBalance > PAID_USER_BALANCE_THRESHOLD
+
+    if (!isPaidUser) {
+      const message = user
+        ? 'Due to overwhelming demand, free tier access is temporarily paused. Please upgrade your account to continue generating.'
+        : 'Due to overwhelming demand, anonymous access is temporarily paused. Please login to continue.'
+
+      return new Response(
+        JSON.stringify({ error: 'FREE_TIER_DISABLED', message }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+  }
+
   const { data: quotaData } = await adminClient
     .from('generation_quotas')
     .select('*')
@@ -206,7 +235,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
             : Number(temperature),
       max_tokens: 32000,
       stream: true,
-      separate_reasoning: true,
+      // separate_reasoning: true,
     }),
     signal: abortController.signal,
   })
