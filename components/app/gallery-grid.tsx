@@ -3,11 +3,7 @@
 import { useRef, useState, useCallback, useEffect } from 'react'
 import { Heart, Box, ChevronDown, Combine } from 'lucide-react'
 import Image from 'next/image'
-import {
-  getModelById,
-  playgroundModes,
-  type GalleryCategoryId,
-} from '@/lib/config'
+import { getModelById, playgroundModes, type GalleryCategoryId } from '@/lib/config'
 import { useRouter } from 'next/navigation'
 import type { GalleryApp } from '@/types'
 import DOMPurify from 'isomorphic-dompurify'

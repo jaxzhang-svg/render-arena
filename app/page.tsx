@@ -141,10 +141,7 @@ export default function HomePage() {
   const handleModeClick = (mode: (typeof playgroundModes)[number]) => {
     // Fill textarea with a random prompt from this mode
     if (mode.prompts && mode.prompts.length > 0) {
-      /* eslint-disable-next-line react-hooks/purity */
-      /* Math.random is NOT called during render - it's in an event handler */
-      /* React 19 purity rules prevent impure functions during render, */
-      /* but this function only executes on user click interaction. */
+      /* eslint-disable-next-line */
       const randomIndex = Math.floor(Math.random() * mode.prompts.length)
       setUserPrompt(mode.prompts[randomIndex])
       hasUserInteractedRef.current = true

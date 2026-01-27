@@ -1,23 +1,24 @@
 > ## Documentation Index
+>
 > Fetch the complete documentation index at: https://novita.ai/docs/llms.txt
 > Use this file to discover all available pages before exploring further.
 
 # Sandbox Templates
 
 export const SandboxConfigHint = () => {
-  if (typeof document === "undefined") {
-    return null;
-  } else {
-    return <Note>Before running the example code in this document, please ensure you have properly configured environment variables. For details, please refer to <a href="/guides/sandbox-your-first-agent-sandbox#configure-environment-variables">Configure Environment Variables</a>.</Note>;
-  }
+if (typeof document === "undefined") {
+return null;
+} else {
+return <Note>Before running the example code in this document, please ensure you have properly configured environment variables. For details, please refer to <a href="/guides/sandbox-your-first-agent-sandbox#configure-environment-variables">Configure Environment Variables</a>.</Note>;
+}
 };
 
 export const SandboxCliConfigHint = () => {
-  if (typeof document === "undefined") {
-    return null;
-  } else {
-    return <Note>Before running the command-line related example code in this document, please refer to the <Link href="/guides/sandbox-cli">tutorial</Link> to install the CLI and complete <Link href="/guides/sandbox-cli-auth">authentication</Link>.</Note>;
-  }
+if (typeof document === "undefined") {
+return null;
+} else {
+return <Note>Before running the command-line related example code in this document, please refer to the <Link href="/guides/sandbox-cli">tutorial</Link> to install the CLI and complete <Link href="/guides/sandbox-cli-auth">authentication</Link>.</Note>;
+}
 };
 
 Sandbox templates allow you to customize the sandbox environment to your needs.
@@ -65,9 +66,11 @@ Now you can customize your sandbox template by editing the `novita.Dockerfile` f
   # Make sure to use this base image
   FROM novitalabs/code-interpreter:latest
 
-  # Install some Python packages
-  RUN pip install cowsay
-  ```
+# Install some Python packages
+
+RUN pip install cowsay
+
+````
 </CodeGroup>
 
 ### 4. Build your sandbox template
@@ -77,9 +80,10 @@ What is going to happen is that CLI will call Docker to build the image and then
 Then we convert the Docker image to a micro VM that can be then launched as a sandbox with our SDK.
 
 <CodeGroup isTerminalCommand>
-  ```bash Bash icon="terminal" theme={"system"}
-  novita-sandbox-cli template build -c "/root/.jupyter/start-up.sh"
-  ```
+```bash Bash icon="terminal" theme={"system"}
+novita-sandbox-cli template build -c "/root/.jupyter/start-up.sh"
+````
+
 </CodeGroup>
 
 This process will take a moment. In the end, you'll see your template ID that you'll need to use to create a sandbox with the SDK.
@@ -94,40 +98,42 @@ Now you can use the template ID to create a sandbox with the SDK.
   ```js JavaScript & TypeScript icon="js" theme={"system"}
   import { Sandbox } from 'novita-sandbox/code-interpreter'
 
-  // Your template ID from the previous step
-  const templateID = 'id-of-your-template'
+// Your template ID from the previous step
+const templateID = 'id-of-your-template'
 
-  // Pass the template ID to the `Sandbox.create` method
-  const sandbox = await Sandbox.create(templateID)
+// Pass the template ID to the `Sandbox.create` method
+const sandbox = await Sandbox.create(templateID)
 
-  // The template installed cowsay, so we can use it
-  const result = await sandbox.runCode(`
+// The template installed cowsay, so we can use it
+const result = await sandbox.runCode(`
   import cowsay
   cowsay.say('Hello!')`)
 
-  console.log(result)
+console.log(result)
 
-  await sandbox.kill()
-  ```
+await sandbox.kill()
 
-  ```python Python icon="python" theme={"system"}
-  from novita_sandbox.code_interpreter import Sandbox
+````
 
-  # Your template ID from the previous step
-  template_id = 'id-of-your-template'
+```python Python icon="python" theme={"system"}
+from novita_sandbox.code_interpreter import Sandbox
 
-  # Pass the template ID to the `Sandbox.create` method
-  sandbox = Sandbox.create(template_id)
+# Your template ID from the previous step
+template_id = 'id-of-your-template'
 
-  # The template installed cowsay, so we can use it
-  result = sandbox.run_code("""
-  import cowsay
-  cowsay.say('Hello!')""")
+# Pass the template ID to the `Sandbox.create` method
+sandbox = Sandbox.create(template_id)
 
-  print(result)
+# The template installed cowsay, so we can use it
+result = sandbox.run_code("""
+import cowsay
+cowsay.say('Hello!')""")
 
-  sandbox.kill()
-  ```
+print(result)
+
+sandbox.kill()
+````
+
 </CodeGroup>
 
 ## How it works
@@ -142,35 +148,35 @@ Then, these steps happen:
 3. Wait for readiness (by default 20 seconds if start command is specified, otherwise immediately ready). Readiness check can be configured using [ready command](/guides/sandbox-template-ready-cmd).
 4. Snapshot the sandbox and make it ready for you to spawn it with the SDK.
 
-We call this sandbox snapshot a *sandbox template*.
+We call this sandbox snapshot a _sandbox template_.
 
 <Note title="Sandbox Snapshot">
   Snapshots are saved running sandboxes. We serialize and save the whole sandbox's filesystem together with all the running processes in a way that can be loaded later.
 
-  This allows us to load the sandbox in a few hundred milliseconds any time later with all the processes already running and the filesystem exactly as it was.
+This allows us to load the sandbox in a few hundred milliseconds any time later with all the processes already running and the filesystem exactly as it was.
 </Note>
 
-
 > ## Documentation Index
+>
 > Fetch the complete documentation index at: https://novita.ai/docs/llms.txt
 > Use this file to discover all available pages before exploring further.
 
 # Start Command
 
 export const SandboxConfigHint = () => {
-  if (typeof document === "undefined") {
-    return null;
-  } else {
-    return <Note>Before running the example code in this document, please ensure you have properly configured environment variables. For details, please refer to <a href="/guides/sandbox-your-first-agent-sandbox#configure-environment-variables">Configure Environment Variables</a>.</Note>;
-  }
+if (typeof document === "undefined") {
+return null;
+} else {
+return <Note>Before running the example code in this document, please ensure you have properly configured environment variables. For details, please refer to <a href="/guides/sandbox-your-first-agent-sandbox#configure-environment-variables">Configure Environment Variables</a>.</Note>;
+}
 };
 
 export const SandboxCliConfigHint = () => {
-  if (typeof document === "undefined") {
-    return null;
-  } else {
-    return <Note>Before running the command-line related example code in this document, please refer to the <Link href="/guides/sandbox-cli">tutorial</Link> to install the CLI and complete <Link href="/guides/sandbox-cli-auth">authentication</Link>.</Note>;
-  }
+if (typeof document === "undefined") {
+return null;
+} else {
+return <Note>Before running the command-line related example code in this document, please refer to the <Link href="/guides/sandbox-cli">tutorial</Link> to install the CLI and complete <Link href="/guides/sandbox-cli-auth">authentication</Link>.</Note>;
+}
 };
 
 The start command allows you to specify a command that will be **already running** when you spawn your custom sandbox.
@@ -218,17 +224,18 @@ novita-sandbox-cli sandbox logs <sandbox-id>
 ```
 
 > ## Documentation Index
+>
 > Fetch the complete documentation index at: https://novita.ai/docs/llms.txt
 > Use this file to discover all available pages before exploring further.
 
 # Customize sandbox CPU & RAM
 
 export const SandboxCliConfigHint = () => {
-  if (typeof document === "undefined") {
-    return null;
-  } else {
-    return <Note>Before running the command-line related example code in this document, please refer to the <Link href="/guides/sandbox-cli">tutorial</Link> to install the CLI and complete <Link href="/guides/sandbox-cli-auth">authentication</Link>.</Note>;
-  }
+if (typeof document === "undefined") {
+return null;
+} else {
+return <Note>Before running the command-line related example code in this document, please refer to the <Link href="/guides/sandbox-cli">tutorial</Link> to install the CLI and complete <Link href="/guides/sandbox-cli-auth">authentication</Link>.</Note>;
+}
 };
 
 You can customize the CPU and RAM of your sandbox template via CLI.
@@ -260,17 +267,18 @@ memory_mb = 2_048
 ```
 
 > ## Documentation Index
+>
 > Fetch the complete documentation index at: https://novita.ai/docs/llms.txt
 > Use this file to discover all available pages before exploring further.
 
 # Version Management
 
 export const SandboxBetaVersionWarning = () => {
-  if (typeof document === "undefined") {
-    return null;
-  } else {
-    return <Warning>The following features require <Link href="/guides/sandbox-sdk-and-cli#install-beta-sdk" target="self">installing the Beta SDK & CLI</Link>. Please note that beta features are subject to change and may be less stable than production releases. If you encounter any issues while using these features, please <Link href="https://meetings-na2.hubspot.com/junyu" target="_blank">contact us</Link>.</Warning>;
-  }
+if (typeof document === "undefined") {
+return null;
+} else {
+return <Warning>The following features require <Link href="/guides/sandbox-sdk-and-cli#install-beta-sdk" target="self">installing the Beta SDK & CLI</Link>. Please note that beta features are subject to change and may be less stable than production releases. If you encounter any issues while using these features, please <Link href="https://meetings-na2.hubspot.com/junyu" target="_blank">contact us</Link>.</Warning>;
+}
 };
 
 <SandboxBetaVersionWarning />

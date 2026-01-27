@@ -48,9 +48,10 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   const shareTooltipId = useId()
   const isGuest = !authLoading && !user
 
-  // App Published State
-  const [isAppPublished, setIsAppPublished] = useState(initialApp?.is_public ?? false)
-  const [appCategory, setAppCategory] = useState<string | null>(initialApp?.category ?? null)
+  // App Published State (derive from currentAppId and initialApp)
+  const isAppPublished = currentAppId === initialApp?.id ? (initialApp?.is_public ?? false) : false
+  // Derive appCategory from currentAppId and initialApp
+  const appCategory = currentAppId === initialApp?.id ? (initialApp?.category ?? null) : null
 
   // 分享相关状态
   const [showShareModal, setShowShareModal] = useState(false)
@@ -70,17 +71,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     handleGenerateRef.current = handleGenerate
   }, [handleGenerate])
 
-  // Reset published state when a new app is generated (currentAppId changes and is not initialApp)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // setState calls are intentional to reset published state when new app is generated.
-  // This is a valid pattern for initialization/reset effects where state needs
-  // to respond to prop changes (currentAppId vs initialApp).
-  useEffect(() => {
-    if (currentAppId && currentAppId !== initialApp?.id) {
-      setIsAppPublished(false)
-      setAppCategory(null)
-    }
-  }, [currentAppId, initialApp])
+  // Removed setAppCategory(null) from effect to avoid cascading renders
 
   // 执行自动生成
   useEffect(() => {
@@ -392,10 +383,8 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
         videoFormat={recordedFormat}
         showVideoSection={shareMode === 'video'}
         isPublished={isAppPublished}
-        onPublishSuccess={category => {
-          setIsAppPublished(true)
-          if (category) setAppCategory(category)
-        }}
+        // onPublishSuccess no longer updates appCategory since it's derived
+        onPublishSuccess={() => {}}
         prompt={prompt}
         category={appCategory}
       />

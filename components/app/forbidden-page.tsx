@@ -36,9 +36,7 @@ export function ForbiddenPage({
               <ArrowLeft className="size-5" />
             </Button>
           </Link>
-          <h1 className="font-sans text-[20px] font-semibold tracking-tight text-black">
-            {title}
-          </h1>
+          <h1 className="font-sans text-[20px] font-semibold tracking-tight text-black">{title}</h1>
         </div>
 
         <div className="flex items-center gap-3">
@@ -54,9 +52,7 @@ export function ForbiddenPage({
           </div>
         </div>
 
-        <h2 className="mb-4 font-sans text-2xl font-semibold text-[#292827]">
-          Access Denied
-        </h2>
+        <h2 className="mb-4 font-sans text-2xl font-semibold text-[#292827]">Access Denied</h2>
 
         <p className="mb-8 max-w-[400px] text-lg text-[#4f4e4a]">{message}</p>
 

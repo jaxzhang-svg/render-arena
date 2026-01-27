@@ -1,4 +1,5 @@
 > ## Documentation Index
+>
 > Fetch the complete documentation index at: https://novita.ai/docs/llms.txt
 > Use this file to discover all available pages before exploring further.
 
@@ -21,9 +22,10 @@ You can install the SDK by executing the following commands.
   npm i novita-sandbox
   ```
 
-  ```bash Python SDK icon="terminal" theme={"system"}
-  pip install novita-sandbox
-  ```
+```bash Python SDK icon="terminal" theme={"system"}
+pip install novita-sandbox
+```
+
 </CodeGroup>
 
 ## Configure Environment Variables
@@ -55,47 +57,49 @@ Below is a simple example showing how to create a sandbox through the SDK and ru
   import 'dotenv/config'
   import { Sandbox } from 'novita-sandbox/code-interpreter'
 
-  // The .env file should be located in the project root directory
-  // dotenv/config will automatically look for .env in the current working directory
-  // Or 
-  // You can set the environment variable in the command line
-  // export NOVITA_API_KEY=sk_***
+// The .env file should be located in the project root directory
+// dotenv/config will automatically look for .env in the current working directory
+// Or
+// You can set the environment variable in the command line
+// export NOVITA*API_KEY=sk*\*\*\*
 
-  const sandbox = await Sandbox.create()
-  const execution = await sandbox.runCode('print("hello world")')
-  console.log(execution.logs)
+const sandbox = await Sandbox.create()
+const execution = await sandbox.runCode('print("hello world")')
+console.log(execution.logs)
 
-  const files = await sandbox.files.list('/tmp')
-  console.log(files)
+const files = await sandbox.files.list('/tmp')
+console.log(files)
 
-  // Close sandbox when no longer needed
-  await sandbox.kill()
-  ```
+// Close sandbox when no longer needed
+await sandbox.kill()
 
-  ```python Python icon="python" theme={"system"}
-  # main.py
-  from dotenv import load_dotenv
-  from novita_sandbox.code_interpreter import Sandbox
+````
+
+```python Python icon="python" theme={"system"}
+# main.py
+from dotenv import load_dotenv
+from novita_sandbox.code_interpreter import Sandbox
 
 
-  # The .env file should be located in the project root directory
-  # dotenv will automatically look for .env in the current working directory
-  load_dotenv()
+# The .env file should be located in the project root directory
+# dotenv will automatically look for .env in the current working directory
+load_dotenv()
 
-  # Or 
-  # You can set the environment variable in the command line
-  # export NOVITA_API_KEY=sk_***
+# Or
+# You can set the environment variable in the command line
+# export NOVITA_API_KEY=sk_***
 
-  sandbox = Sandbox.create()
-  execution = sandbox.run_code("print('hello world')")
-  print(execution.logs)
+sandbox = Sandbox.create()
+execution = sandbox.run_code("print('hello world')")
+print(execution.logs)
 
-  files = sandbox.files.list("/")
-  print(files)
+files = sandbox.files.list("/")
+print(files)
 
-  # Close sandbox when no longer needed
-  sandbox.kill()
-  ```
+# Close sandbox when no longer needed
+sandbox.kill()
+````
+
 </CodeGroup>
 
 Execute the following commands to run the above code.
@@ -105,12 +109,14 @@ Execute the following commands to run the above code.
   npx tsx ./index.ts
   ```
 
-  ```bash main.py icon="terminal" theme={"system"}
-  python main.py
-  ```
+```bash main.py icon="terminal" theme={"system"}
+python main.py
+```
+
 </CodeGroup>
 
 > ## Documentation Index
+>
 > Fetch the complete documentation index at: https://novita.ai/docs/llms.txt
 > Use this file to discover all available pages before exploring further.
 
@@ -127,9 +133,10 @@ Novita Agent Sandbox provides a compatibility API that allows you to use the E2B
   npm i @e2b/code-interpreter@beta
   ```
 
-  ```bash Python icon="terminal" theme={"system"}
-  pip install e2b-code-interpreter==1.2.0b5
-  ```
+```bash Python icon="terminal" theme={"system"}
+pip install e2b-code-interpreter==1.2.0b5
+```
+
 </CodeGroup>
 
 ### Core SDK
@@ -139,9 +146,10 @@ Novita Agent Sandbox provides a compatibility API that allows you to use the E2B
   npm i e2b@beta
   ```
 
-  ```bash Python icon="terminal" theme={"system"}
-  pip install e2b==1.2.0b6
-  ```
+```bash Python icon="terminal" theme={"system"}
+pip install e2b==1.2.0b6
+```
+
 </CodeGroup>
 
 ### Desktop SDK
@@ -151,9 +159,10 @@ Novita Agent Sandbox provides a compatibility API that allows you to use the E2B
   npm i @e2b/desktop@beta
   ```
 
-  ```bash Python icon="terminal" theme={"system"}
-  pip install e2b-desktop==1.7.1b1
-  ```
+```bash Python icon="terminal" theme={"system"}
+pip install e2b-desktop==1.7.1b1
+```
+
 </CodeGroup>
 
 ### CLI
@@ -183,24 +192,26 @@ Below is an example showing how to create a sandbox through the SDK and run spec
   // or import { Sandbox } from 'e2b'
   // or import { Sandbox } from '@e2b/desktop'
 
-  const sbx = await Sandbox.create()
-  const execution = await sbx.commands.run('ls -l')
-  console.log(execution)
+const sbx = await Sandbox.create()
+const execution = await sbx.commands.run('ls -l')
+console.log(execution)
 
-  await sbx.kill()
-  ```
+await sbx.kill()
 
-  ```python Python icon="python" theme={"system"}
-  from e2b_code_interpreter import Sandbox
-  # or from e2b import Sandbox
-  # or from e2b_desktop import Sandbox
+````
 
-  sbx = Sandbox.create()
-  execution = sbx.commands.run('ls -l')
-  print(execution)
+```python Python icon="python" theme={"system"}
+from e2b_code_interpreter import Sandbox
+# or from e2b import Sandbox
+# or from e2b_desktop import Sandbox
 
-  sbx.kill()
-  ```
+sbx = Sandbox.create()
+execution = sbx.commands.run('ls -l')
+print(execution)
+
+sbx.kill()
+````
+
 </CodeGroup>
 
 Below is an example showing how to use the E2B CLI with Novita Agent Sandbox.
@@ -211,13 +222,18 @@ Below is an example showing how to use the E2B CLI with Novita Agent Sandbox.
   # Authentication in CLI
   e2b auth login
 
-  # Start sandbox and connect to terminal
-  e2b sandbox spawn <template-id>
+# Start sandbox and connect to terminal
 
-  # List sandboxes
-  e2b sandbox list
+e2b sandbox spawn <template-id>
 
-  # Shutdown running sandboxes
-  e2b sandbox kill <sandbox-id>
-  ```
+# List sandboxes
+
+e2b sandbox list
+
+# Shutdown running sandboxes
+
+e2b sandbox kill <sandbox-id>
+
+```
 </CodeGroup>
+```

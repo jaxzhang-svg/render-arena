@@ -41,7 +41,7 @@ export const playgroundModes = [
       `Create a flow field. Use 2D Perlin noise to determine the angle of movement for 5,000 particles. Particles should leave a persistent, semi-transparent trail to create a silk-like texture, and the noise offset should evolve over time`,
       `Create a flat illustration of a Great White Pelican riding a red bicycle. The pelican is drawn in a cartoonish style with a goofy expression and holds a large yellow sphere in its beak, representing the sun.  The pelican appears to be actively pedaling, with its feet in motion on the bicycle pedals. Motion lines and pink dots emphasize speed and movement. The background is a simplified blue sky with flat white clouds and small flying birds, creating a lively and playful atmosphere.`,
       `Create A futuristic 3D scientific visualization featuring a massive rotating white wireframe sphere filled with glowing, multicolored nodes connected by fine luminous lines, floating in a pitch-black space, with smooth cinematic motion, pulsing light, crisp geometry, high contrast, and a seamless looping feel—purely abstract, precise, and non-organic.`,
-      `Create a spectacular fireworks scene in a pitch-black night sky, with continuous overlapping launches that burst into massive, glowing spheres of particles, realistically rising, exploding, slowing down, drifting under gravity, fading with subtle trails, viewed from a static camera looking slightly upward, and adapting smoothly to any screen size.`
+      `Create a spectacular fireworks scene in a pitch-black night sky, with continuous overlapping launches that burst into massive, glowing spheres of particles, realistically rising, exploding, slowing down, drifting under gravity, fading with subtle trails, viewed from a static camera looking slightly upward, and adapting smoothly to any screen size.`,
     ],
     theme: {
       badge: 'bg-pink-100 text-pink-700',
@@ -224,19 +224,49 @@ export const modelGroups: ModelGroup[] = [
   {
     group: 'Open Source',
     items: [
-      { id: 'deepseek/deepseek-v3.2', name: 'DeepSeek V3.2', icon: '/logo/models/deepseek-color.svg', color: '#4D6BFE' },
+      {
+        id: 'deepseek/deepseek-v3.2',
+        name: 'DeepSeek V3.2',
+        icon: '/logo/models/deepseek-color.svg',
+        color: '#4D6BFE',
+      },
       { id: 'zai-org/glm-4.7', name: 'GLM 4.7', icon: '/logo/models/zai.svg', color: '#000' },
-      { id: 'minimax/minimax-m2.1', name: 'Minimax M2.1', icon: '/logo/models/minimax-color.svg', color: '#F23F5D' },
-      { id: 'moonshotai/kimi-k2-thinking', name: 'Kimi K2 Thinking', icon: '/logo/models/kimi-color.svg', color: '#000' },
+      {
+        id: 'minimax/minimax-m2.1',
+        name: 'Minimax M2.1',
+        icon: '/logo/models/minimax-color.svg',
+        color: '#F23F5D',
+      },
+      {
+        id: 'moonshotai/kimi-k2-thinking',
+        name: 'Kimi K2 Thinking',
+        icon: '/logo/models/kimi-color.svg',
+        color: '#000',
+      },
     ],
   },
   {
     group: 'Proprietary',
     items: [
       { id: 'pa/gpt-5.2', name: 'GPT 5.2', icon: '/logo/models/openai.svg', color: '#000' },
-      { id: 'pa/claude-sonnet-4-5-20250929', name: 'Claude Sonnet 4.5', icon: '/logo/models/claude-color.svg', color: '#D97757' },
-      { id: 'pa/gemini-3-pro-preview', name: 'Gemini 3 Pro', icon: '/logo/models/gemini-color.svg', color: '#FFF' },
-      { id: 'pa/grok-4-1-fast-reasoning', name: 'Grok 4.1 Fast Reasoning', icon: '/logo/models/grok.svg', color: '#000' },
+      {
+        id: 'pa/claude-sonnet-4-5-20250929',
+        name: 'Claude Sonnet 4.5',
+        icon: '/logo/models/claude-color.svg',
+        color: '#D97757',
+      },
+      {
+        id: 'pa/gemini-3-pro-preview',
+        name: 'Gemini 3 Pro',
+        icon: '/logo/models/gemini-color.svg',
+        color: '#FFF',
+      },
+      {
+        id: 'pa/grok-4-1-fast-reasoning',
+        name: 'Grok 4.1 Fast Reasoning',
+        icon: '/logo/models/grok.svg',
+        color: '#000',
+      },
     ],
   },
 ]
@@ -247,7 +277,7 @@ const allModelsFromGroups = legacyModelGroups.flatMap(group =>
     id: item.id,
     name: item.name,
     group: group.group,
-      color: group.color ?? group.color ?? '#000',
+    color: group.color ?? group.color ?? '#000',
     icon: group.icon ?? group.icon ?? '',
   }))
 )
