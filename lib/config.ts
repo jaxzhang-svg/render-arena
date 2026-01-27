@@ -173,8 +173,8 @@ export const legacyModelGroups: LegacyModelGroup[] = [
     icon: '/logo/models/kimi-color.svg',
     color: '#000',
     items: [
+      { id: 'moonshotai/kimi-k2.5', name: 'Kimi K2.5 Thinking' },
       { id: 'moonshotai/kimi-k2-thinking', name: 'Kimi K2 Thinking' },
-      { id: 'moonshotai/kimi-k2-0905', name: 'Kimi K2 0905' },
     ],
   },
   {
@@ -305,7 +305,7 @@ export const models: LLMModel[] = Array.from(
 )
 
 export const defaultModelAId = 'pa/claude-sonnet-4-5-20250929'
-export const defaultModelBId = 'deepseek/deepseek-v3.2'
+export const defaultModelBId = 'moonshotai/kimi-k2.5'
 
 export function getModelById(modelId: string): LLMModel | undefined {
   return models.find(m => m.id === modelId)
