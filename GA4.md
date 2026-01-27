@@ -1,307 +1,120 @@
-# GA4 Event Tracking Plan
+# GA4 Strategic Tracking & Reporting Plan
 
-This document outlines the Google Analytics 4 event tracking implementation for Novita Arena.
+This document outlines the Google Analytics 4 (GA4) strategy for **Render Arena**. It serves as a guide for both technical implementation and business analysis, ensuring that data collection is directly tied to key business objectives.
 
-## Current Setup
+## 1. Business Objectives & Key Metrics
+
+Our primary goals are to understand user engagement, measure model performance, and drive user growth.
+
+| Business Objective         | Key Metrics                                                                 | GA4 Events / Metrics                                                                                               |
+| -------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **Measure Core Funnel**    | Generation Start Rate, Generation Completion Rate, Publish Completion Rate  | `arena_generate_started`, `generation_completed`, `publish_completed`                                              |
+| **Evaluate Model Quality** | Model Error Rate, Generation Speed, User Preference (Regeneration/Stopping) | `generation_error` (count), `generation_duration_ms` (avg), `generation_regenerated` (count), `model_selected` (count) |
+| **Drive User Growth**      | Viral Coefficient (Shares per User), New User Conversion Rate               | `share_link_copied` (count), `auth_login_success` (where `is_new_user` is true)                                    |
+| **Increase User Retention**| % of Logged-in Users, Rate of Return Visits                                 | `user_engagement` (GA4 default), `auth_login_success` (count)                                                      |
+
+## 2. GA4 Configuration
 
 - **GA4 ID:** `G-6E3YJT3N0F`
-- **Integration:** `@next/third-parties/google` in `app/layout.tsx:75`
+- **Integration:** `@next/third-parties/google` in `app/layout.tsx`
 
----
+### Custom Dimensions & User Properties
 
-## Event Tracking Specification
+The following parameters should be registered in GA4 as custom definitions to enable detailed reporting.
 
-### 1. Authentication Events
+| Scope  | Name                  | Description                                            | Example Value     |
+| ------ | --------------------- | ------------------------------------------------------ | ----------------- |
+| Event  | `model_id`            | The unique identifier for a model.                     | `claude-3-opus`   |
+| Event  | `model_name`          | The display name of the model.                         | `Opus`            |
+| Event  | `slot`                | The arena slot (A or B) the model occupies.            | `a`               |
+| Event  | `category`            | The content category for generation or gallery.        | `game`            |
+| Event  | `app_id`              | The unique ID of a generated/published piece of content. | `abc-123`         |
+| Event  | `error_code`          | A specific code identifying a generation or auth error.| `quota_exceeded`  |
+| Event  | `source`              | The UI element or page that triggered an event.        | `header`          |
+| Event  | `share_mode`          | The format chosen for sharing (video or image).        | `video`           |
+| User   | `user_role`           | The status of the user (e.g., anonymous, logged in).   | `anonymous_user`  |
+| User   | `is_new_user`         | Identifies if a login event is for a new user.         | `true`            |
 
-| Event Name             | Trigger                | Properties                                               |
-| ---------------------- | ---------------------- | -------------------------------------------------------- |
-| `auth_login_initiated` | Click login button     | `source`: header / quota_prompt / publish_prompt         |
-| `auth_login_success`   | OAuth callback success | `is_new_user`: boolean                                   |
-| `auth_login_failed`    | OAuth callback error   | `error_code`: auth_failed / sync_failed / session_failed |
-| `auth_logout`          | Click logout           | -                                                        |
+### Conversion Events
 
-### 2. Arena Generation Events
+The following events represent key user actions and should be marked as conversions in GA4:
 
-| Event Name               | Trigger                   | Properties                                                             |
-| ------------------------ | ------------------------- | ---------------------------------------------------------------------- |
-| `model_selected`         | Change model dropdown     | `model_id`, `model_name`, `slot`: a/b, `location`: homepage/playground |
-| `arena_generate_started` | Click "Run Arena"         | `model_a`, `model_b`, `prompt_length`, `category`, `is_authenticated`  |
-| `generation_completed`   | Model finishes generating | `model_id`, `slot`: a/b, `duration_ms`, `tokens`                       |
-| `generation_error`       | Generation fails          | `model_id`, `slot`: a/b, `error_code`                                  |
-| `generation_stopped`     | User clicks stop          | `model_id`, `slot`: a/b                                                |
-| `generation_regenerated` | User clicks regenerate    | `model_id`, `slot`: a/b                                                |
-
-### 3. Homepage Events
-
-| Event Name              | Trigger                        | Properties                            |
-| ----------------------- | ------------------------------ | ------------------------------------- |
-| `featured_case_clicked` | Click featured case card       | `mode`: physics/visual/game, `app_id` |
-| `gallery_case_clicked`  | Click app card in gallery grid | `app_id`, `category`, `position`      |
-
-### 4. Gallery Events
-
-| Event Name         | Trigger                   | Properties                      |
-| ------------------ | ------------------------- | ------------------------------- |
-| `gallery_viewed`   | Scroll to gallery section | `category`                      |
-| `gallery_filtered` | Change category filter    | `category`, `previous_category` |
-
-### 5. Gallery Detail Page Events (`/gallery/[id]`)
-
-| Event Name                   | Trigger                           | Properties                     |
-| ---------------------------- | --------------------------------- | ------------------------------ |
-| `gallery_prompt_copied`      | Click copy prompt button          | `app_id`                       |
-| `gallery_open_in_playground` | Click "Re-generate in Playground" | `app_id`, `model_a`, `model_b` |
-
-### 6. Sharing Events
-
-| Event Name           | Trigger              | Properties                           |
-| -------------------- | -------------------- | ------------------------------------ |
-| `share_modal_opened` | Click Share button   | `app_id`                             |
-| `share_link_copied`  | Copy shareable URL   | `app_id`, `share_mode`: video/poster |
-| `publish_started`    | Click Publish button | `app_id`, `category`                 |
-
-### 7. Video Recording Events
-
-| Event Name                | Trigger                    | Properties                          |
-| ------------------------- | -------------------------- | ----------------------------------- |
-| `video_recording_started` | Click record button        | `app_id`                            |
-| `video_recording_stopped` | Stop recording             | `app_id`, `duration_seconds`        |
-| `video_upload_started`    | Begin upload to Cloudflare | `app_id`, `file_size_mb`            |
-| `video_upload_completed`  | Upload success             | `app_id`, `upload_duration_seconds` |
-| `video_upload_error`      | Upload fails               | `app_id`, `error_type`              |
-
-### 8. Quota & Conversion Events
-
-| Event Name            | Trigger                                | Properties                    |
-| --------------------- | -------------------------------------- | ----------------------------- |
-| `free_quota_exceeded` | Anonymous user hits 5-generation limit | `usage_count`                 |
-| `login_prompt_shown`  | Login prompt displayed                 | `trigger`: quota/publish/like |
-
-### 9. Hackathon Events
-
-| Event Name               | Trigger                   | Properties                      |
-| ------------------------ | ------------------------- | ------------------------------- |
-| `hackathon_modal_opened` | Open hackathon info modal | `source`: join_button/user_menu |
-
----
-
-## Implementation Code
-
-### Usage Example
-
-```typescript
-'use client'
-
-import { sendGTMEvent } from '@next/third-parties/google'
-
-export function EventButton() {
-  return (
-    <div>
-      <button
-        onClick={() => sendGTMEvent({ event: 'buttonClicked', value: 'xyz' })}
-      >
-        Send Event
-      </button>
-    </div>
-  )
-}
-```
-
----
-
-## GA4 Report Setup Guide
-
-### Step 1: Access GA4 Property
-
-1. Go to [Google Analytics](https://analytics.google.com)
-2. Select your property (Novita Arena)
-
-### Step 2: Configure Custom Dimensions
-
-Navigate to **Admin > Data display > Custom definitions**
-
-Create these custom dimensions for event-scoped data:
-
-| Dimension Name   | Event Parameter    | Scope |
-| ---------------- | ------------------ | ----- |
-| Model ID         | `model_id`         | Event |
-| Model Slot       | `slot`             | Event |
-| App ID           | `app_id`           | Event |
-| Category         | `category`         | Event |
-| Error Code       | `error_code`       | Event |
-| Is Authenticated | `is_authenticated` | Event |
-| Location         | `location`         | Event |
-
-### Step 3: Create Key Reports
-
-#### Report 1: Generation Funnel
-
-**Explore > Funnel exploration**
-
-Steps:
-
-1. `arena_generate_started`
-2. `generation_completed`
-3. `publish_started`
-
-Breakdown by: `is_authenticated`
-
-#### Report 2: Model Performance
-
-**Explore > Free form**
-
-- Rows: `model_id` (custom dimension)
-- Values:
-  - Event count (for `generation_completed`)
-  - Average `duration_ms`
-  - Average `tokens`
-
-Filter: Event name = `generation_completed`
-
-#### Report 3: Authentication Conversion
-
-**Explore > Funnel exploration**
-
-Steps:
-
-1. `login_prompt_shown`
-2. `auth_login_initiated`
-3. `auth_login_success`
-
-Breakdown by: `trigger` (quota/publish/like)
-
-#### Report 4: Content Engagement
-
-**Explore > Free form**
-
-- Rows: `category`
-- Values:
-  - Event count for `featured_case_clicked`
-  - Event count for `gallery_case_clicked`
-  - Event count for `app_liked`
-
-### Step 4: Create Audiences
-
-Navigate to **Admin > Data display > Audiences**
-
-#### Audience 1: Active Generators
-
-- Condition: `arena_generate_started` count >= 3 in last 7 days
-
-#### Audience 2: Publishers
-
-- Condition: `publish_started` count >= 1
-
-#### Audience 3: Quota Limited Users
-
-- Condition: `free_quota_exceeded` triggered
-- AND NOT `auth_login_success`
-
-### Step 5: Set Up Conversions
-
-Navigate to **Admin > Data display > Events**
-
-Mark these as conversions (click the toggle):
-
+- `publish_completed`
 - `auth_login_success`
-- `publish_started`
-- `video_upload_completed`
-
-### Step 6: Create Dashboard
-
-**Reports > Library > Create new report**
-
-Recommended cards:
-
-1. **Daily Active Users** - Users over time
-2. **Generation Success Rate** - `generation_completed` / `arena_generate_started`
-3. **Top Models** - Event count by `model_id`
-4. **Category Distribution** - Events by `category`
-5. **Auth Conversion** - `auth_login_success` / `login_prompt_shown`
-6. **Publish Rate** - `publish_started` / `generation_completed`
+- `share_link_copied`
 
 ---
 
-## BigQuery Export (Optional)
+## 3. Event Tracking Specification
 
-For advanced analysis, enable BigQuery export:
+Events are grouped by user journey for clarity.
 
-1. **Admin > Product links > BigQuery links**
-2. Link to your GCP project
-3. Enable streaming export for real-time data
+### Core Funnel: Generation to Publish
 
-Query example:
+| Event Name               | Trigger                                      | Key Properties                                                                  | Business Question Answered                                                                 |
+| ------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `arena_generate_started` | Click "Run Arena" or "Re-generate"           | `model_a`, `model_b`, `prompt_length`, `category`, `is_authenticated`, `user_id`  | How many generation battles are started? What are the most popular model matchups?         |
+| `generation_completed`   | A model successfully finishes generating     | `model_id`, `slot`, `duration_ms`, `tokens`                                     | Which models are fastest? How much does a typical generation cost in tokens?               |
+| `generation_error`       | A model fails during generation              | `model_id`, `slot`, `error_code`                                                | Which models have the highest failure rate? What are the common reasons for failure?       |
+| `generation_stopped`     | User clicks the "Stop" button                | `model_id`, `slot`                                                              | Which models are most frequently stopped by users, indicating poor output?                 |
+| `publish_started`        | User clicks "Publish to Gallery" in Share modal | `app_id`, `category`                                                            | How many users intend to publish their creations?                                          |
+| **`publish_completed`**  | **Successfully get a shareable URL back**    | `app_id`, `category`, `final_model_a`, `final_model_b`                          | **(Conversion)** How many creations are successfully published to the gallery? (Our core conversion) |
+| **`publish_error`**      | **Publishing fails for any reason**          | `app_id`, `error_code`                                                          | What are the technical blockers preventing users from publishing?                          |
 
-```sql
-SELECT
-  event_name,
-  (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'model_id') as model_id,
-  COUNT(*) as event_count
-FROM `your_project.analytics_XXXXXX.events_*`
-WHERE event_name = 'generation_completed'
-  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20241231'
-GROUP BY event_name, model_id
-ORDER BY event_count DESC
-```
+### User Growth & Sharing
+
+| Event Name            | Trigger                        | Key Properties                                   | Business Question Answered                                               |
+| --------------------- | ------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------ |
+| `share_modal_opened`  | Click "Share" button           | `app_id`                                         | How often do users open the share dialog?                                |
+| `share_link_copied`   | User copies the shareable URL  | `app_id`, `share_mode`, `utm_source`, `utm_medium` | **(Conversion)** How many shares happen? Which share format is preferred? |
+| `gallery_viewed`      | User views a gallery page      | `app_id`, `author_id`                            | How many views do published creations get?                               |
+| `gallery_remixed`     | User clicks "Re-generate" on a gallery item | `app_id`, `original_author_id`             | Which gallery items inspire the most new creations (virality)?           |
+
+### User Authentication
+
+| Event Name           | Trigger                | Key Properties                                   | Business Question Answered                                                         |
+| -------------------- | ---------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `login_prompt_shown` | A login modal appears  | `trigger`: `quota_exceeded` / `publish_prompt`   | What are the primary drivers for users to consider logging in?                     |
+| `auth_login_success` | Successful OAuth login | `is_new_user`                                    | **(Conversion)** How many new users are we acquiring? What is the login success rate? |
+| `auth_login_failed`  | OAuth callback error   | `error_code`                                     | Where are the friction points in the login process?                                |
+| `auth_logout`        | User clicks "Logout"   | -                                                | How often do users log out?                                                        |
 
 ---
 
-## Testing Events
+## 4. Recommended Reports (GA4 Explore)
 
-### Using GA4 DebugView
+These reports should be created in the "Explore" section of GA4 to provide actionable insights.
 
-1. Install [Google Analytics Debugger](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna) Chrome extension
-2. Enable debug mode
-3. Go to **Admin > Data display > DebugView**
-4. Trigger events and verify they appear with correct parameters
+### 1. **Generation-to-Publish Funnel Report**
 
----
+- **Type:** Funnel exploration
+- **Stages:**
+  1. `arena_generate_started`
+  2. `generation_completed` (At least one model)
+  3. `share_modal_opened`
+  4. `publish_started`
+  5. `publish_completed`
+- **Breakdown Dimension:** `Device category`, `Category`
+- **Insights:** Identify the biggest drop-off points in the core user journey. Do users fail to complete generation? Or do they generate but not share? This funnel is critical for understanding product adoption.
 
-## Attribution Tracking
+### 2. **Model Performance Dashboard**
 
-Captures marketing/referral parameters on first visit and passes to Novita main site for backend attribution.
+- **Type:** Free-form report
+- **Metrics (Columns):**
+  - `Count` of `generation_error`
+  - `Average` of `generation_duration_ms`
+  - `Count` of `generation_stopped`
+  - `Count` of `generation_regenerated`
+- **Rows:** `model_name`
+- **Filters:** `event_name` is one of (`generation_error`, `generation_completed`, `generation_stopped`)
+- **Insights:** Directly compare model performance on speed, reliability, and user satisfaction. This data is crucial for product decisions, vendor negotiations, and marketing content ("Our fastest models are...").
 
-### Tracked Parameters
+### 3. **User Acquisition & Virality Report**
 
-| Parameter      | Description          | Default  |
-| -------------- | -------------------- | -------- |
-| `referrer`     | HTTP referrer header | (none)   |
-| `utm_source`   | Traffic source       | `direct` |
-| `utm_campaign` | Campaign name        | `none`   |
-| `utm_medium`   | Medium type          | `none`   |
-| `landingpage`  | First landing page   | (none)   |
-
-### Storage Rules
-
-- **localStorage key**: `arena_tracking_params`
-- **First capture only**: Parameters captured on first visit, never overwritten
-- **No defaults stored**: Only actual values stored
-- **Referrer logic**: Updates for external referrers only (non-Novita sites)
-
-### Data Flow
-
-```
-User visits Arena
-    ↓
-Extract params from URL → Store to localStorage (first visit only)
-    ↓
-User clicks Login
-    ↓
-Read localStorage + apply defaults → Append to OAuth redirect URL
-    ↓
-Novita main site receives params → Backend attribution
-```
-
-### Example
-
-```
-Visit: https://arena.novita.ai/?utm_source=google&utm_campaign=launch
-localStorage: {"utm_source":"google","utm_campaign":"launch","landingpage":"/"}
-Sent to main site: utm_source=google&utm_campaign=launch&utm_medium=none
-```
-
-### Files
-
-- `/lib/tracking.ts` - Core utilities
-- `/hooks/use-tracking-params.ts` - React hook
-- `/components/providers/tracking-provider.tsx` - Root layout initializer
+- **Type:** Path exploration (starting with `session_start`) or Free-form report
+- **Dimensions:** `Session source / medium`
+- **Metrics:**
+  - `New users`
+  - `Conversions` (filtered to `publish_completed`)
+  - `Count` of `share_link_copied`
+- **Insights:** Analyze which traffic sources (e.g., `twitter.com`, `direct`, `google`) bring in the most valuable users—those who not only sign up but also complete the core action of publishing. Track the effectiveness of social sharing campaigns.
