@@ -85,7 +85,7 @@ export function ModelSettingsPopover({
               <div className="relative pt-2 pb-0">
                 <Slider.Root
                   value={[settings.temperature]}
-                  onValueChange={value => onSettingsChange({ ...settings, temperature: value })}
+                  onValueChange={value => onSettingsChange({ ...settings, temperature: value[0] })}
                   min={0}
                   max={2}
                   step={0.1}
