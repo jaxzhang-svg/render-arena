@@ -42,6 +42,8 @@ next-env.d.ts
 
 .claude
 .devtools
+.opencode
+.sisyphus
 
 sandbox/test-app
 
