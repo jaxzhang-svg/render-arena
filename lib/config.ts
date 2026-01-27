@@ -1,5 +1,12 @@
 import { Box, Sparkles, Gamepad2, RefreshCcwDot } from 'lucide-react'
 
+export const ANONYMOUS_QUOTA = 6
+export const AUTHENTICATED_QUOTA = 20
+export const PAID_QUOTA = 60
+
+const NOVITA_BALANCE_UNIT = 0.0001
+export const PAID_USER_BALANCE_THRESHOLD = 10 / NOVITA_BALANCE_UNIT
+
 export const galleryCategories = [
   { id: 'all', label: 'All' },
   { id: 'physics', label: 'Physics' },

@@ -8,12 +8,9 @@ export interface NovitaUserInfo {
   firstName?: string
   lastName?: string
   tier?: string
+  balance?: number
 }
 
-/**
- * 从 Novita API 获取当前登录用户信息
- * 注意：Cookie名称为 'token'（由 Novita 设置）
- */
 export async function getNovitaUserInfo(): Promise<NovitaUserInfo | null> {
   const cookieStore = await cookies()
   const tokenCookie = cookieStore.get('token')
@@ -31,6 +28,10 @@ export async function getNovitaUserInfo(): Promise<NovitaUserInfo | null> {
     })
 
     if (!response.ok) {
+      if (response.status === 401) {
+        console.warn('Novita token expired or invalid - user needs to relogin')
+        return null
+      }
       console.error('Failed to fetch Novita user info:', response.status, response.statusText)
       return null
     }
@@ -41,4 +42,9 @@ export async function getNovitaUserInfo(): Promise<NovitaUserInfo | null> {
     console.error('Failed to fetch Novita user info:', error)
     return null
   }
+}
+
+export async function getNovitaBalance(): Promise<number | null> {
+  const userInfo = await getNovitaUserInfo()
+  return userInfo?.balance ?? null
 }

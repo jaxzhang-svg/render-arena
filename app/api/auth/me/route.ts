@@ -1,56 +1,119 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import {
+  ANONYMOUS_QUOTA,
+  AUTHENTICATED_QUOTA,
+  PAID_QUOTA,
+  PAID_USER_BALANCE_THRESHOLD,
+} from '@/lib/config'
+import { getNovitaBalance } from '@/lib/novita'
+import type { UserInfoResponse } from '@/types'
 
-/**
- * 获取当前登录用户信息
- *
- * 返回 Supabase Auth 用户和 public.users 表中的额外信息
- */
-export async function GET() {
+function getClientIP(request: NextRequest): string {
+  const headersList = request.headers
+
+  const forwardedFor = headersList.get('x-forwarded-for')
+  if (forwardedFor) {
+    return forwardedFor.split(',')[0].trim()
+  }
+
+  const realIP = headersList.get('x-real-ip')
+  if (realIP) {
+    return realIP
+  }
+
+  return '127.0.0.1'
+}
+
+export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
+    const adminClient = await createAdminClient()
 
-    // 从 Supabase Auth 获取当前用户
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser()
 
+    let userId: string | null = null
+    let userEmail: string | null = null
+    let novitaBalance: number | null = null
+    let novitaTokenExpired = false
+
     if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+      const clientIP = getClientIP(request)
 
-    // 从 public.users 表获取完整用户资料
-    const { data: profile, error: dbError } = await supabase
-      .from('users')
-      .select('id, email, username, first_name, last_name, tier, created_at, updated_at')
-      .eq('id', user.id)
-      .single()
+      const { data: quotaData } = await adminClient
+        .from('generation_quotas')
+        .select('*')
+        .eq('identifier', clientIP)
+        .single()
 
-    if (dbError) {
-      // 用户在 auth.users 中存在但在 public.users 中不存在
-      // 返回基本信息
-      return NextResponse.json({
-        user: {
-          id: user.id,
-          email: user.email,
-          username: user.user_metadata?.username,
-          created_at: user.created_at,
+      const usedCount = quotaData?.used_count || 0
+
+      return NextResponse.json<UserInfoResponse>({
+        user: { id: null, email: null },
+        quota: {
+          used: usedCount,
+          limit: ANONYMOUS_QUOTA,
+          remaining: Math.max(0, ANONYMOUS_QUOTA - usedCount),
+          type: 'anonymous',
         },
-        profile: null,
+        novitaBalance: null,
+        novitaTokenExpired: false,
       })
     }
 
-    return NextResponse.json({
+    userId = user.id
+    userEmail = user.email ?? null
+
+    novitaBalance = await getNovitaBalance()
+
+    if (novitaBalance === null) {
+      novitaTokenExpired = true
+    }
+
+    const quotaLimit = getQuotaLimit(true, novitaBalance)
+    const quotaType =
+      novitaBalance !== null && novitaBalance > PAID_USER_BALANCE_THRESHOLD
+        ? 'paid'
+        : 'authenticated'
+
+    const { data: quotaData } = await adminClient
+      .from('generation_quotas')
+      .select('*')
+      .eq('identifier', userId)
+      .single()
+
+    const usedCount = quotaData?.used_count || 0
+
+    return NextResponse.json<UserInfoResponse>({
       user: {
-        id: user.id,
-        email: user.email,
-        ...user.user_metadata,
+        id: userId,
+        email: userEmail,
       },
-      profile,
+      quota: {
+        used: usedCount,
+        limit: quotaLimit,
+        remaining: Math.max(0, quotaLimit - usedCount),
+        type: quotaType,
+      },
+      novitaBalance,
+      novitaTokenExpired,
     })
   } catch (error) {
     console.error('Error fetching user:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
+}
+
+function getQuotaLimit(isAuthenticated: boolean, novitaBalance: number | null): number {
+  if (!isAuthenticated) {
+    return ANONYMOUS_QUOTA
+  }
+  if (novitaBalance !== null && novitaBalance > PAID_USER_BALANCE_THRESHOLD) {
+    return PAID_QUOTA
+  }
+  return AUTHENTICATED_QUOTA
 }

@@ -1,13 +1,68 @@
 import { NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { models } from '@/lib/config'
+import {
+  models,
+  ANONYMOUS_QUOTA,
+  AUTHENTICATED_QUOTA,
+  PAID_QUOTA,
+  PAID_USER_BALANCE_THRESHOLD,
+} from '@/lib/config'
 import { checkAppOwnerPermission } from '@/lib/permissions'
+import { getNovitaBalance } from '@/lib/novita'
 
 const NOVITA_API_KEY = process.env.NEXT_NOVITA_API_KEY!
 const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions'
 
-// HTML 生成系统提示词
+function getClientIP(request: NextRequest): string {
+  const headersList = request.headers
+
+  const forwardedFor = headersList.get('x-forwarded-for')
+  if (forwardedFor) {
+    return forwardedFor.split(',')[0].trim()
+  }
+
+  const realIP = headersList.get('x-real-ip')
+  if (realIP) {
+    return realIP
+  }
+
+  return '127.0.0.1'
+}
+
+function getQuotaLimit(isAuthenticated: boolean, novitaBalance: number | null): number {
+  if (!isAuthenticated) {
+    return ANONYMOUS_QUOTA
+  }
+  if (novitaBalance !== null && novitaBalance > PAID_USER_BALANCE_THRESHOLD) {
+    return PAID_QUOTA
+  }
+  return AUTHENTICATED_QUOTA
+}
+
+async function incrementQuota(
+  adminClient: Awaited<ReturnType<typeof createAdminClient>>,
+  identifier: string
+) {
+  try {
+    const { error } = await adminClient
+      .from('generation_quotas')
+      .update({
+        used_count: adminClient.rpc('increment', { value: 1 }),
+        last_used_at: new Date().toISOString(),
+      })
+      .eq('identifier', identifier)
+
+    if (error?.code === 'PGRST116') {
+      await adminClient.from('generation_quotas').insert({
+        identifier: identifier,
+        used_count: 1,
+      })
+    }
+  } catch (error) {
+    console.error('Failed to increment quota:', error)
+  }
+}
 
 /**
  * POST /api/apps/[id]/generate
@@ -27,6 +82,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   const supabase = await createClient()
   const adminClient = await createAdminClient()
+
+  const clientIP = getClientIP(request)
 
   // 获取 App
   const { data: app, error } = await adminClient.from('apps').select('*').eq('id', id).single()
@@ -51,6 +108,37 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       status: 403,
       headers: { 'Content-Type': 'application/json' },
     })
+  }
+
+  let quotaLimit: number
+  let novitaBalance: number | null = null
+  let identifier: string
+
+  if (user) {
+    novitaBalance = await getNovitaBalance()
+    quotaLimit = getQuotaLimit(true, novitaBalance)
+    identifier = user.id
+  } else {
+    quotaLimit = getQuotaLimit(false, null)
+    identifier = clientIP
+  }
+
+  const { data: quotaData } = await adminClient
+    .from('generation_quotas')
+    .select('*')
+    .eq('identifier', identifier)
+    .single()
+
+  const usedCount = quotaData?.used_count || 0
+
+  if (usedCount >= quotaLimit) {
+    return new Response(
+      JSON.stringify({
+        error: 'QUOTA_EXCEEDED',
+        message: `You have reached your generation limit (${usedCount}/${quotaLimit}). Please ${user ? 'upgrade' : 'login'} to continue.`,
+      }),
+      { status: 403, headers: { 'Content-Type': 'application/json' } }
+    )
   }
 
   let modelId = slot === 'a' ? app.model_a : app.model_b
@@ -122,6 +210,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       headers: { 'Content-Type': 'application/json' },
     })
   }
+
+  incrementQuota(adminClient, identifier)
 
   // 直接透传原始 SSE 流，当前端断开时会自动中断
   return new Response(response.body, {

@@ -44,6 +44,14 @@ export interface IpUsage {
   last_used_at: string
 }
 
+export interface GenerationQuota {
+  id: string
+  identifier: string
+  used_count: number
+  last_used_at: string
+  created_at: string
+}
+
 export interface Like {
   id: string
   app_id: string
@@ -83,4 +91,19 @@ export interface GalleryResponse {
   total: number
   page: number
   limit: number
+}
+
+export interface UserInfoResponse {
+  user: {
+    id: string | null
+    email: string | null
+  }
+  quota: {
+    used: number
+    limit: number
+    remaining: number
+    type: 'anonymous' | 'authenticated' | 'paid'
+  }
+  novitaBalance: number | null
+  novitaTokenExpired: boolean
 }
