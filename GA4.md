@@ -48,15 +48,42 @@
 | 2    | `upgrade_prompt_displayed`                                |
 | 3    | `upgrade_button_clicked`                                  |
 
-**漏斗 3: 病毒循环增长漏斗**
+**漏斗 3: 社交增长漏斗**
 
-> **目的:** 诊断“分享-浏览-注册”这一病毒循环的拉新效率。
+> **目的:** 诊断“生成-分享”这一社交增长的转化效率。
 
 | 步骤 | 事件名称             |
 | :--- | :------------------- |
-| 1    | `result_shared`      |
-| 2    | `shared_item_viewed` |
-| 3    | `signup_completed`   |
+| 1    | `generation_started`      |
+| 2    | `result_shared` |
+
+### 1.3. 路径探索分析 (Path Exploration Analysis)
+
+在GA4“探索(Explore)”中创建，用于发现非线性的、预设漏斗之外的用户真实行为路径。
+
+**报告 1: 新用户注册转化路径**
+
+> **业务问题:** 游客从哪个具体场景触发了登录/注册？最有效的转化路径是什么？
+> **配置方法:**
+> 1.  选择 **“反向路径 (Backward path)”**。
+> 2.  **结束点 (Ending point):** 事件 `signup_completed`。
+> 3.  **细分维度:** 在 `login_started` 步骤中，按自定义维度 **`Location`** 细分，分析各引导点 (`quota`, `publish`, `like`) 的转化效率。
+
+**报告 2: 分享增长效果分析 (Viral Loop)**
+
+> **业务问题:** 用户通过分享链接访问后，会做什么？他们是会离开，还是会进行“Remix”或再次创作？
+> **配置方法:**
+> 1.  选择 **“正向路径 (Forward path)”**。
+> 2.  **起点 (Starting point):** 事件 `shared_item_viewed`。
+> 3.  **分析:** 观察后续事件是否为 `remix_started` 或 `generation_started`，以评估分享带来的用户活跃度。如果流失率高，说明分享着陆页需要优化。
+
+**报告 3: 核心功能用户旅程**
+
+> **业务问题:** 用户在使用核心功能“生成”后，最常见的后续行为是什么？不同等级的用户 (Guest vs. Registered) 行为有何差异？
+> **配置方法:**
+> 1.  选择 **“正向路径 (Forward path)”**。
+> 2.  **起点 (Starting point):** 事件 `generation_started`。
+> 3.  **分析:** 使用 **`User Tier`** 作为过滤器，对比不同用户群体的行为路径，例如，`guest` 常见路径是耗尽额度 (`... -> login_started`)，而 `registered` 用户是否更倾向于分享 (`... -> result_shared`)。
 
 ---
 
