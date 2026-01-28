@@ -2,12 +2,6 @@ import { useState, useRef, useCallback } from 'react'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { extractHTMLFromMarkdown } from '@/lib/html-extractor'
 import { LLMModel, getModelById, models } from '@/lib/models'
-import {
-  trackGenerationCompleted,
-  trackGenerationError,
-  trackGenerationStopped,
-  trackFreeQuotaExceeded,
-} from '@/lib/analytics'
 import { showToast } from '@/lib/toast'
 
 /**
@@ -185,16 +179,11 @@ export function useModelGeneration({
       if (prev.loading) {
         const duration = prev.startTime ? (Date.now() - prev.startTime) / 1000 : undefined
         const tokens = Math.floor(prev.content.length / 4)
-        // Track generation stopped
-        trackGenerationStopped({
-          model_id: selectedModel.id,
-          slot,
-        })
         return { ...prev, loading: false, completed: true, duration, tokens }
       }
       return prev
     })
-  }, [flushBuffer, selectedModel.id, slot])
+  }, [flushBuffer])
 
   // 生成内容
   const generate = useCallback(
@@ -318,14 +307,6 @@ export function useModelGeneration({
               // 通知生成完成
               onGenerationComplete?.(html || undefined)
 
-              // Track generation completed
-              trackGenerationCompleted({
-                model_id: selectedModel.id,
-                slot,
-                duration_ms: Math.round(duration * 1000),
-                tokens,
-              })
-
               return {
                 ...prev,
                 content: mergedContent,
@@ -363,33 +344,21 @@ export function useModelGeneration({
 
             // Handle quota exceeded errors
             if (errorCode === 'QUOTA_EXCEEDED_T0') {
-              trackFreeQuotaExceeded('T0', 0)
               showToast.quotaExceeded(errorMessage, 'T0')
             } else if (errorCode === 'QUOTA_EXCEEDED_T1') {
-              trackFreeQuotaExceeded('T1', 0)
               showToast.quotaExceeded(errorMessage, 'T1')
             } else if (errorCode === 'QUOTA_EXCEEDED_T2') {
-              trackFreeQuotaExceeded('T2', 0)
               showToast.quotaExceeded(errorMessage, 'T2')
             } else if (errorCode === 'FREE_TIER_DISABLED') {
-              trackFreeQuotaExceeded('FREE_TIER_DISABLED', 0)
               const isAuthenticated = errorMessage.includes('free tier access')
               showToast.freeTierDisabled(errorMessage, isAuthenticated)
             } else if (errorCode === 'ALL_GENERATION_DISABLED') {
-              trackFreeQuotaExceeded('ALL_GENERATION_DISABLED', 0)
               showToast.allGenerationDisabled(errorMessage)
             }
           }
         } catch {
           // Not a JSON error, use original error message
         }
-
-        // Track generation error
-        trackGenerationError({
-          model_id: selectedModel.id,
-          slot,
-          error_code: errorCode,
-        })
 
         setResponse(prev => ({
           ...prev,

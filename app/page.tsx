@@ -6,7 +6,7 @@ import { Header } from '@/components/app/header'
 import { Footer } from '@/components/app/footer'
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal'
 import { GalleryGrid } from '@/components/app/gallery-grid'
-import { FreeTierBanner } from '@/components/app/free-tier-banner'
+import { FreeTierBanner } from '@/components/app/overwhelming-banner'
 import { Clock, ArrowRight, ChevronUp, Users, Zap } from 'lucide-react'
 import { Accordion } from '@base-ui/react/accordion'
 
@@ -25,13 +25,7 @@ import {
   getModelById,
 } from '@/lib/config'
 import { ModelSelector } from '@/components/base/model-selector'
-import {
-  trackModelSelected,
-  trackArenaGenerateStarted,
-  trackGalleryFiltered,
-  trackGalleryViewed,
-  trackHackathonModalOpened,
-} from '@/lib/analytics'
+import { trackHackathonJoinClicked } from '@/lib/analytics'
 
 export default function HomePage() {
   const router = useRouter()
@@ -43,7 +37,6 @@ export default function HomePage() {
   const [galleryCategory, setGalleryCategory] = useState<GalleryCategoryId>('all')
   const hasUserInteractedRef = useRef(false)
   const gallerySectionRef = useRef<HTMLElement>(null)
-  const hasTrackedGalleryViewRef = useRef(false)
 
   // Static placeholder text for typewriter effect
   const STATIC_PLACEHOLDER = 'Enter a prompt to start the Arena battle.'
@@ -55,27 +48,6 @@ export default function HomePage() {
   const [selectedModelB, setSelectedModelB] = useState<LLMModel>(
     getModelById(defaultModelBId) || models[1]
   )
-
-  // Track gallery section visibility
-  useEffect(() => {
-    const gallerySection = gallerySectionRef.current
-    if (!gallerySection) return
-
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !hasTrackedGalleryViewRef.current) {
-            hasTrackedGalleryViewRef.current = true
-            trackGalleryViewed(galleryCategory)
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-
-    observer.observe(gallerySection)
-    return () => observer.disconnect()
-  }, [galleryCategory])
 
   // Generate stable IDs for accordion triggers
   const accordionId0 = useId()
@@ -118,15 +90,6 @@ export default function HomePage() {
       // TODO: Show error toast
       return
     }
-
-    // Track arena generate started
-    trackArenaGenerateStarted({
-      model_a: selectedModelA.id,
-      model_b: selectedModelB.id,
-      prompt_length: promptToUse.length,
-      category: 'general',
-      is_authenticated: false, // Homepage doesn't have auth context
-    })
 
     // Navigate with all params
     const params = new URLSearchParams({
@@ -210,12 +173,6 @@ export default function HomePage() {
                     <ModelSelector
                       selectedModel={selectedModelA}
                       onModelChange={model => {
-                        trackModelSelected({
-                          model_id: model.id,
-                          model_name: model.name,
-                          slot: 'a',
-                          location: 'homepage',
-                        })
                         setSelectedModelA(model)
                       }}
                       variant="minimal"
@@ -226,12 +183,6 @@ export default function HomePage() {
                     <ModelSelector
                       selectedModel={selectedModelB}
                       onModelChange={model => {
-                        trackModelSelected({
-                          model_id: model.id,
-                          model_name: model.name,
-                          slot: 'b',
-                          location: 'homepage',
-                        })
                         setSelectedModelB(model)
                       }}
                       variant="default"
@@ -366,7 +317,7 @@ export default function HomePage() {
                 <div className="absolute right-12 bottom-12">
                   <button
                     onClick={() => {
-                      trackHackathonModalOpened('join_button')
+                      trackHackathonJoinClicked()
                       setIsModalOpen(true)
                     }}
                     className="flex cursor-pointer items-center justify-center gap-2 rounded-[14px] border border-white/20 px-8 py-3.5 text-base leading-6 font-normal text-black transition-all hover:brightness-110"
@@ -398,12 +349,6 @@ export default function HomePage() {
                   <button
                     key={cat.id}
                     onClick={() => {
-                      if (cat.id !== galleryCategory) {
-                        trackGalleryFiltered({
-                          category: cat.id,
-                          previous_category: galleryCategory,
-                        })
-                      }
                       setGalleryCategory(cat.id)
                     }}
                     className={`flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 font-sans text-sm font-medium transition-all ${

@@ -127,7 +127,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     return new Response(
       JSON.stringify({
         error: 'ALL_GENERATION_DISABLED',
-        message: 'Due to overwhelming demand, our service is temporarily paused. We&apos;ll be back online soon!'
+        message:
+          'Due to overwhelming demand, our service is temporarily paused. We&apos;ll be back online soon!',
       }),
       { status: 403, headers: { 'Content-Type': 'application/json' } }
     )
@@ -142,10 +143,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         ? 'Due to overwhelming demand, free tier access is temporarily paused. Please upgrade your account to continue generating.'
         : 'Due to overwhelming demand, anonymous access is temporarily paused. Please login to continue.'
 
-      return new Response(
-        JSON.stringify({ error: 'FREE_TIER_DISABLED', message }),
-        { status: 403, headers: { 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'FREE_TIER_DISABLED', message }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      })
     }
   }
 
@@ -158,24 +159,24 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const usedCount = quotaData?.used_count || 0
 
   if (usedCount >= quotaLimit) {
-    let error, message;
+    let error, message
     if (!user) {
-      error = 'QUOTA_EXCEEDED_T0';
-      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Please login to continue.`;
+      error = 'QUOTA_EXCEEDED_T0'
+      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Please login to continue.`
     } else if (novitaBalance == null || novitaBalance < PAID_USER_BALANCE_THRESHOLD) {
-      error = 'QUOTA_EXCEEDED_T1';
-      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Please upgrade your account tier to continue.`;
+      error = 'QUOTA_EXCEEDED_T1'
+      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Please upgrade your account tier to continue.`
     } else if (novitaBalance > PAID_USER_BALANCE_THRESHOLD) {
-      error = 'QUOTA_EXCEEDED_T2';
-      message = `You have reached your paid generation limit (${usedCount}/${quotaLimit}). Please contact support to increase your limit.`;
+      error = 'QUOTA_EXCEEDED_T2'
+      message = `You have reached your paid generation limit (${usedCount}/${quotaLimit}). Please contact support to increase your limit.`
     } else {
-      error = 'QUOTA_EXCEEDED';
-      message = `You have reached your generation limit (${usedCount}/${quotaLimit}).`;
+      error = 'QUOTA_EXCEEDED'
+      message = `You have reached your generation limit (${usedCount}/${quotaLimit}).`
     }
-    return new Response(
-      JSON.stringify({ error, message }),
-      { status: 403, headers: { 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error, message }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
 
   let modelId = slot === 'a' ? app.model_a : app.model_b
@@ -212,15 +213,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   // Kimi K2.5 only supports temperature 0.6
   const isKimiK25 = modelId === 'moonshotai/kimi-k2.5'
-  const finalTemperature = isKimiK25 ? 0.6 : (
-    Number.isNaN(Number(temperature))
+  const finalTemperature = isKimiK25
+    ? 0.6
+    : Number.isNaN(Number(temperature))
       ? 0.7
       : Number(temperature) < 0
         ? 0
         : Number(temperature) > 2
           ? 2
           : Number(temperature)
-  )
 
   // 调用 Novita API
   const response = await fetch(NOVITA_API_URL, {

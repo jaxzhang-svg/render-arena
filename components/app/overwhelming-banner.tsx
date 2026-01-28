@@ -1,5 +1,6 @@
 'use client'
 
+import { trackUpgradeButtonClicked } from '@/lib/analytics'
 import { FREE_TIER_DISABLED, ALL_GENERATION_DISABLED, NOVITA_BILLING_URL } from '@/lib/config'
 import { X } from 'lucide-react'
 import { useState } from 'react'
@@ -27,7 +28,7 @@ export function FreeTierBanner() {
   const isFullDisabled = ALL_GENERATION_DISABLED
 
   return (
-    <div className="relative w-full bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50 border-b border-amber-200">
+    <div className="relative w-full border-b border-amber-200 bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2.5">
         <div className="flex items-center gap-3">
           <div className="flex size-2 items-center justify-center">
@@ -35,7 +36,10 @@ export function FreeTierBanner() {
           </div>
           <p className="font-sans text-sm font-medium text-amber-900">
             {isFullDisabled ? (
-              <>Due to overwhelming demand, our service is temporarily paused. We&apos;ll be back online soon!</>
+              <>
+                Due to overwhelming demand, our service is temporarily paused. We&apos;ll be back
+                online soon!
+              </>
             ) : (
               <>
                 Due to overwhelming demand, free tier access is temporarily paused.{' '}
@@ -44,17 +48,20 @@ export function FreeTierBanner() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold underline underline-offset-2 hover:text-amber-700"
+                  onClick={() => {
+                    trackUpgradeButtonClicked('overwhelming_banner')
+                  }}
                 >
                   Upgrade
-                </a>
-                {' '}to continue generating.
+                </a>{' '}
+                to continue generating.
               </>
             )}
           </p>
         </div>
         <button
           onClick={handleDismiss}
-          className="flex size-6 items-center justify-center rounded-full hover:bg-amber-200/50 transition-colors cursor-pointer"
+          className="flex size-6 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-amber-200/50"
           aria-label="Dismiss"
         >
           <X className="size-4 text-amber-700" />

@@ -4,10 +4,7 @@ import { useModelGeneration } from './use-model-generation'
 import type { App } from '@/types'
 import { defaultModelAId, defaultModelBId } from '@/lib/config'
 import { showToast } from '@/lib/toast'
-import {
-  trackArenaGenerateStarted,
-  trackGenerationRegenerated,
-} from '@/lib/analytics'
+import { trackGenerationStarted } from '@/lib/analytics'
 
 export type ArenaViewMode = 'a' | 'b' | 'split'
 
@@ -108,84 +105,65 @@ export function useArenaPlayground({
   }, [modelA, modelB])
 
   // 创建 App
-  const createApp = useCallback(
-    async (isAuthenticated: boolean): Promise<string | null> => {
-      try {
-        const response = await fetch('/api/apps', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prompt: prompt.trim(),
-            modelA: modelA.selectedModel.id,
-            modelB: modelB.selectedModel.id,
-            category: category,
-            name: urlTitle || undefined,
-          }),
-        })
-
-        const data = await response.json()
-
-        if (!data.success) {
-          throw new Error(data.message || 'Failed to create app')
-        }
-
-        // Track arena generate started
-        trackArenaGenerateStarted({
-          model_a: modelA.selectedModel.id,
-          model_b: modelB.selectedModel.id,
-          prompt_length: prompt.trim().length,
+  const createApp = useCallback(async (): Promise<string | null> => {
+    try {
+      const response = await fetch('/api/apps', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: prompt.trim(),
+          modelA: modelA.selectedModel.id,
+          modelB: modelB.selectedModel.id,
           category: category,
-          is_authenticated: isAuthenticated,
-        })
+          name: urlTitle || undefined,
+        }),
+      })
 
-        return data.appId
-      } catch (error) {
-        console.error('Error creating app:', error)
-        showToast.error('创建失败，请稍后重试')
-        return null
+      const data = await response.json()
+
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to create app')
       }
-    },
-    [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id, urlTitle]
-  )
+
+      trackGenerationStarted()
+
+      return data.appId
+    } catch (error) {
+      console.error('Error creating app:', error)
+      showToast.error('创建失败，请稍后重试')
+      return null
+    }
+  }, [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id, urlTitle])
 
   // 同时生成两个模型
-  const handleGenerate = useCallback(
-    async (isAuthenticated = false) => {
-      if (!prompt.trim()) return
+  const handleGenerate = useCallback(async () => {
+    if (!prompt.trim()) return
 
-      // 隐藏输入框
-      setShowInputBar(false)
+    // 隐藏输入框
+    setShowInputBar(false)
 
-      // 先停止之前的生成
-      stopAllGeneration()
+    // 先停止之前的生成
+    stopAllGeneration()
 
-      // 创建新的 App
-      const newAppId = await createApp(isAuthenticated)
-      if (!newAppId) return
+    // 创建新的 App
+    const newAppId = await createApp()
+    if (!newAppId) return
 
-      // 更新状态
-      setCurrentAppId(newAppId)
+    // 更新状态
+    setCurrentAppId(newAppId)
 
-      // 使用 history.replaceState 更新 URL，不触发 Next.js 路由导航
-      window.history.replaceState(null, '', `/playground/${newAppId}`)
+    // 使用 history.replaceState 更新 URL，不触发 Next.js 路由导航
+    window.history.replaceState(null, '', `/playground/${newAppId}`)
 
-      // 并行生成两个模型
-      await Promise.allSettled([modelA.generate(newAppId), modelB.generate(newAppId)])
-    },
-    [prompt, createApp, stopAllGeneration, modelA, modelB]
-  )
+    // 并行生成两个模型
+    await Promise.allSettled([modelA.generate(newAppId), modelB.generate(newAppId)])
+  }, [prompt, createApp, stopAllGeneration, modelA, modelB])
 
   // 单独重新生成 Model A
   const handleGenerateModelA = useCallback(async () => {
     if (!currentAppId) {
       return
     }
-
-    // Track regeneration
-    trackGenerationRegenerated({
-      model_id: modelA.selectedModel.id,
-      slot: 'a',
-    })
 
     await modelA.generate(currentAppId)
   }, [currentAppId, modelA])
@@ -195,12 +173,6 @@ export function useArenaPlayground({
     if (!currentAppId) {
       return
     }
-
-    // Track regeneration
-    trackGenerationRegenerated({
-      model_id: modelB.selectedModel.id,
-      slot: 'b',
-    })
 
     await modelB.generate(currentAppId)
   }, [currentAppId, modelB])

@@ -9,7 +9,7 @@ import { Video, ArrowUp, ArrowLeft, Eye, EyeOff, Square, RotateCcw, Share2 } fro
 import { showToast } from '@/lib/toast'
 import { ShareModal } from '@/components/playground/share-modal'
 import { UserAvatar } from '@/components/app/user-avatar'
-import { FreeTierBanner } from '@/components/app/free-tier-banner'
+import { FreeTierBanner } from '@/components/app/overwhelming-banner'
 import { ModelPanel } from '@/components/playground/model-panel'
 import { useArenaPlayground } from '@/hooks/use-arena-playground'
 import { useScreenRecorder } from '@/hooks/use-screen-recorder'
@@ -17,7 +17,6 @@ import { useAuth } from '@/hooks/use-auth'
 import { Tooltip } from '@base-ui/react/tooltip'
 import { cn } from '@/lib/utils'
 import type { App } from '@/types'
-import { trackVideoRecordingStarted, trackVideoRecordingStopped } from '@/lib/analytics'
 
 interface PlaygroundClientProps {
   initialApp?: App | null
@@ -56,7 +55,6 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
   const [shareMode, setShareMode] = useState<'video' | 'poster'>('poster')
   const [recordedFormat, setRecordedFormat] = useState<'webm' | 'mp4' | null>(null)
 
-  // 自动开始生成逻辑
   const searchParams = useSearchParams()
   const autoStart = searchParams.get('autoStart') === 'true'
 
@@ -97,7 +95,6 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     isRecording,
     isRecordingSupported,
     recordedBlob,
-    recordingTime,
     previewContainerRef,
     startRecording,
     stopRecording,
@@ -114,16 +111,6 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     },
   })
 
-  // Track recording stopped when blob is created
-  useEffect(() => {
-    if (recordedBlob && currentAppId && recordingTime > 0) {
-      trackVideoRecordingStopped({
-        app_id: currentAppId,
-        duration_seconds: recordingTime,
-      })
-    }
-  }, [recordedBlob, currentAppId, recordingTime])
-
   const handleRecordToggle = async () => {
     if (!isRecordingSupported || isGuest || authLoading || !isAllCompleted) {
       return
@@ -131,7 +118,6 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     if (isRecording) {
       stopRecording()
       setShowInputBar(true)
-      // Note: recording stopped tracking is done in onRecordingComplete callback
     } else {
       if (
         recordedBlob &&
@@ -142,9 +128,6 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
         return
       }
       setShowInputBar(false)
-      if (currentAppId) {
-        trackVideoRecordingStarted(currentAppId)
-      }
       await startRecording()
     }
   }
@@ -229,7 +212,11 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                   )}
                   title={isGuest || !isAllCompleted ? undefined : 'Share'}
                   onClick={() => {
-                    if (isGuest || !isAllCompleted) {
+                    if (!isAllCompleted) {
+                      return
+                    }
+                    if (isGuest) {
+                      showToast.login('Please login to share your creation', 'publish')
                       return
                     }
                     if (recordedBlob) {

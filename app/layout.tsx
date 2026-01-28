@@ -1,3 +1,4 @@
+import { Suspense } from 'react' // Import Suspense
 import NextTopLoader from 'nextjs-toploader'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
@@ -7,6 +8,7 @@ import { TrackingProvider } from '@/components/providers/tracking-provider'
 import { FingerprintProvider } from '@/components/providers/fingerprint-provider'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { AnalyticsEventTracker } from '@/components/app/analytics-event-tracker'
 
 const interphases = localFont({
   src: [
@@ -65,6 +67,9 @@ export default function RootLayout({
           showSpinner={false}
           shadow="0 0 10px #23d57c,0 0 5px #23d57c"
         />
+        <Suspense fallback={null}>
+          <AnalyticsEventTracker />
+        </Suspense>
         <FingerprintProvider />
         <TrackingProvider />
         <div className="root">{children}</div>

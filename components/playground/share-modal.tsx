@@ -18,14 +18,7 @@ import clipboardy from 'clipboardy'
 import { showToast } from '@/lib/toast'
 import { getModeByCategory } from '@/lib/config'
 import { appendTrackingParamsToUrl } from '@/lib/tracking'
-import {
-  trackShareModalOpened,
-  trackShareLinkCopied,
-  trackPublishStarted,
-  trackVideoUploadStarted,
-  trackVideoUploadCompleted,
-  trackVideoUploadError,
-} from '@/lib/analytics'
+import { trackResultShared } from '@/lib/analytics'
 
 // Local Assets
 const imgLinkedin = '/logo/square-linkedin-brands-solid-full.svg'
@@ -97,13 +90,6 @@ export function ShareModal({
   // Reset state when modal opens
   useEffect(() => {
     if (open) {
-      // Track modal opened
-      if (appId) {
-        trackShareModalOpened(appId)
-      }
-
-      // We rely on parent to reset or maintain isPublished state
-
       // Only reset upload state if it's a new blob
       if (videoBlob && videoBlob !== uploadedBlobRef.current) {
         setUploadStatus('idle')
@@ -114,34 +100,15 @@ export function ShareModal({
     }
   }, [open, videoBlob, appId])
 
-  // Auto-upload when modal opens with a new video blob - REMOVED for new flow
-  // We only upload when user clicks "Publish"
-  /*
-  useEffect(() => {
-    if (open && videoBlob && appId && uploadStatus === 'idle' && videoBlob !== uploadedBlobRef.current) {
-      handleUploadVideo();
-    }
-  }, [open, videoBlob, appId, uploadStatus]);
-  */
-
   // Upload video to Cloudflare Stream
   const handleUploadVideo = useCallback(async () => {
     if (!videoBlob || !appId) return
-
-    const uploadStartTime = Date.now()
-    const fileSizeMb = videoBlob.size / (1024 * 1024)
 
     try {
       setUploadStatus('uploading')
       setUploadProgress(0)
       setUploadError(null)
       uploadedBlobRef.current = videoBlob
-
-      // Track upload started
-      trackVideoUploadStarted({
-        app_id: appId,
-        file_size_mb: parseFloat(fileSizeMb.toFixed(2)),
-      })
 
       // Step 1: Get upload URL from our backend
       const uploadUrlResponse = await fetch('/api/media/upload-url', {
@@ -208,11 +175,6 @@ export function ShareModal({
       setTimeout(() => {
         setUploadStatus('ready')
         // Track upload completed
-        const uploadDuration = (Date.now() - uploadStartTime) / 1000
-        trackVideoUploadCompleted({
-          app_id: appId,
-          upload_duration_seconds: parseFloat(uploadDuration.toFixed(2)),
-        })
       }, 1000)
     } catch (error) {
       console.error('Upload error:', error)
@@ -221,11 +183,6 @@ export function ShareModal({
       setUploadStatus('error')
       setUploadError(errorMessage)
       uploadedBlobRef.current = null // Allow retry
-      // Track upload error
-      trackVideoUploadError({
-        app_id: appId,
-        error_type: errorMessage,
-      })
     }
   }, [videoBlob, appId, videoFormat])
 
@@ -236,12 +193,6 @@ export function ShareModal({
    */
   const handlePublishToGallery = useCallback(async () => {
     if (!appId || isPublished) return
-
-    // Track publish started
-    trackPublishStarted({
-      app_id: appId,
-      category: category || 'general',
-    })
 
     try {
       setPublishLoading(true)
@@ -277,7 +228,7 @@ export function ShareModal({
     } finally {
       setPublishLoading(false)
     }
-  }, [appId, isPublished, videoBlob, uploadStatus, handleUploadVideo, category, onPublishSuccess])
+  }, [appId, isPublished, videoBlob, uploadStatus, handleUploadVideo, onPublishSuccess])
 
   const handleDownload = () => {
     if (videoBlob && videoUrl) {
@@ -307,9 +258,10 @@ export function ShareModal({
     }
 
     if (appId) {
-      trackShareLinkCopied({
-        app_id: appId,
-        share_mode: videoBlob ? 'video' : 'poster',
+      trackResultShared({
+        content_id: appId,
+        share_type: videoBlob ? 'video' : 'link',
+        share_method: 'copy_link',
       })
     }
     setCopied(true)
@@ -341,16 +293,20 @@ export function ShareModal({
 
     let url = ''
 
+    trackResultShared({
+      content_id: appId || '',
+      share_type: videoBlob ? 'video' : 'link',
+      share_method: platform === 'twitter' ? 'x' : platform,
+    })
+
     switch (platform) {
       case 'twitter':
         url = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`
         break
       case 'linkedin':
-        // LinkedIn doesn't support pre-filling text as easily as Twitter, mostly just the URL
         url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
         break
       case 'facebook':
-        // Facebook primarily shares the URL
         url = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`
         break
     }
@@ -534,7 +490,13 @@ export function ShareModal({
                       className="flex h-[82px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-[#f3f4f6] p-1 transition-colors hover:bg-gray-50"
                     >
                       <div className="flex size-8 items-center justify-center overflow-hidden rounded-full">
-                        <Image src={imgTwitter} alt="Twitter" width={32} height={32} className="size-full object-cover" />
+                        <Image
+                          src={imgTwitter}
+                          alt="Twitter"
+                          width={32}
+                          height={32}
+                          className="size-full object-cover"
+                        />
                       </div>
                       <span className="text-[12px] leading-4 font-medium text-[#4a5565]">X</span>
                     </button>

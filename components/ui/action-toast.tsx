@@ -11,7 +11,13 @@ export interface ActionToastProps {
   icon?: ReactNode
 }
 
-export function ActionToast({ message, buttonText, buttonHref, buttonOnClick, icon }: ActionToastProps) {
+export function ActionToast({
+  message,
+  buttonText,
+  buttonHref,
+  buttonOnClick,
+  icon,
+}: ActionToastProps) {
   const handleClick = () => {
     if (buttonOnClick) {
       buttonOnClick()

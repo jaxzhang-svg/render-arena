@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/base/button'
 import { ArrowLeft, Heart, Copy, ExternalLink, Maximize, Check, Loader2 } from 'lucide-react'
@@ -13,7 +13,7 @@ import type { App } from '@/types'
 import DOMPurify from 'isomorphic-dompurify'
 import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
 import { showToast } from '@/lib/toast'
-import { trackGalleryPromptCopied, trackGalleryOpenInPlayground } from '@/lib/analytics'
+import { trackRemixStarted, trackSharedItemViewed } from '@/lib/analytics'
 
 interface GalleryClientProps {
   app: App & { isOwner: boolean; isLiked: boolean }
@@ -29,6 +29,10 @@ export default function GalleryClient({ app }: GalleryClientProps) {
 
   const modelA = getModelById(app.model_a) || models[0]
   const modelB = getModelById(app.model_b) || models[1]
+
+  useEffect(() => {
+    trackSharedItemViewed(app.id)
+  }, [app.id])
 
   const handleLike = useCallback(async () => {
     if (isLiking) return
@@ -57,28 +61,23 @@ export default function GalleryClient({ app }: GalleryClientProps) {
   const handleCopyPrompt = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(app.prompt)
-      trackGalleryPromptCopied(app.id)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (error) {
       console.error('Copy error:', error)
       showToast.error('Failed to copy')
     }
-  }, [app.prompt, app.id])
+  }, [app.prompt])
 
   const handleOpenPlayground = useCallback(() => {
-    trackGalleryOpenInPlayground({
-      app_id: app.id,
-      model_a: app.model_a,
-      model_b: app.model_b,
-    })
+    trackRemixStarted(app.id)
     const params = new URLSearchParams()
     params.set('prompt', app.prompt)
     if (app.category) {
       params.set('category', app.category)
     }
     router.push(`/playground/new?${params.toString()}`)
-  }, [app.id, app.prompt, app.category, app.model_a, app.model_b, router])
+  }, [app.id, app.prompt, app.category, router])
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">
@@ -139,7 +138,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
             )}
           </Button>
 
-          {/* 在 Playground 中打开 */}
+          {/* Remix */}
           <Button
             variant="outline"
             size="sm"
@@ -147,7 +146,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
             onClick={handleOpenPlayground}
           >
             <ExternalLink className="size-4" />
-            <span>Open in Playground</span>
+            <span>Remix</span>
           </Button>
 
           <UserAvatar />

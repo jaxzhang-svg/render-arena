@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { User, Session } from '@supabase/supabase-js'
 import { showToast } from '@/lib/toast'
-import { trackAuthLoginSuccess, trackAuthLoginFailed } from '@/lib/analytics'
+import { updateUserTier } from '@/lib/analytics'
 import {
   getStoredTrackingParams,
   appendTrackingParamsToUrl,
@@ -38,9 +38,21 @@ export function useAuth(): UseAuthReturn {
     session: null,
     loading: true,
   })
-  const hasTrackedLoginRef = useRef(false)
 
   const supabase = createClient()
+
+  const fetchAndUpdateUserTier = async () => {
+    try {
+      const response = await fetch('/api/auth/me')
+      const data = await response.json()
+      const tierType = data.quota?.type
+      const userTier =
+        tierType === 'anonymous' ? 'guest' : tierType === 'paid' ? 'upgraded' : 'registered'
+      updateUserTier(userTier)
+    } catch (err) {
+      console.error('Failed to fetch user tier:', err)
+    }
+  }
 
   // 获取当前用户
   const fetchUser = useCallback(async () => {
@@ -99,22 +111,6 @@ export function useAuth(): UseAuthReturn {
     // 初始化时获取用户
     fetchUser()
 
-    // Check for auth error in URL params
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search)
-      const authError = urlParams.get('error')
-      if (authError && !hasTrackedLoginRef.current) {
-        hasTrackedLoginRef.current = true
-        trackAuthLoginFailed(authError as 'auth_failed' | 'sync_failed' | 'session_failed')
-        // Clean up URL param
-        urlParams.delete('error')
-        const newUrl = urlParams.toString()
-          ? `${window.location.pathname}?${urlParams.toString()}`
-          : window.location.pathname
-        window.history.replaceState({}, '', newUrl)
-      }
-    }
-
     // 监听认证状态变化
     const {
       data: { subscription },
@@ -129,15 +125,10 @@ export function useAuth(): UseAuthReturn {
       })
 
       // 处理特定事件
-      if (event === 'SIGNED_IN' && wasLoggedOut && isNowLoggedIn && !hasTrackedLoginRef.current) {
-        // Track login success - check if this is a new user by looking at created_at
-        const isNewUser = session?.user?.created_at
-          ? Date.now() - new Date(session.user.created_at).getTime() < 60000 // Created within last minute
-          : false
-        hasTrackedLoginRef.current = true
-        trackAuthLoginSuccess(isNewUser)
+      if (event === 'SIGNED_IN' && wasLoggedOut && isNowLoggedIn) {
+        fetchAndUpdateUserTier()
       } else if (event === 'SIGNED_OUT') {
-        hasTrackedLoginRef.current = false
+        updateUserTier('guest')
       } else if (event === 'TOKEN_REFRESHED') {
         // Token 刷新成功
       }
@@ -166,16 +157,12 @@ export function getNovitaLoginUrl(next?: string): string {
     callbackUrl.searchParams.set('next', next)
   }
 
-  // Append tracking params to callback URL with defaults
-  const trackingParams = getStoredTrackingParams()
-  const paramsWithDefaults = applyTrackingDefaults(trackingParams)
-
   const loginUrl = new URL('https://novita.ai/user/login')
   loginUrl.searchParams.set('redirect', callbackUrl.toString())
-  const loginUrlWithTracking = appendTrackingParamsToUrl(
-    loginUrl.toString(),
-    paramsWithDefaults
-  )
+
+  const trackingParams = getStoredTrackingParams()
+  const paramsWithDefaults = applyTrackingDefaults(trackingParams)
+  const loginUrlWithTracking = appendTrackingParamsToUrl(loginUrl.toString(), paramsWithDefaults)
 
   return loginUrlWithTracking
 }
@@ -186,18 +173,6 @@ export function getNovitaLoginUrl(next?: string): string {
  */
 export function loginWithNovita(next?: string): void {
   const loginUrl = getNovitaLoginUrl(next)
-
-  // Set redirect cookie for novita.ai main site
-  // Parse the login URL to get the callback URL
-  try {
-    const urlObj = new URL(loginUrl)
-    const redirectUrl = urlObj.searchParams.get('redirect_url')
-    if (redirectUrl) {
-      document.cookie = `redirect=${redirectUrl}; domain=.novita.ai; path=/`
-    }
-  } catch (e) {
-    console.error('Error setting redirect cookie:', e)
-  }
 
   window.location.href = loginUrl
 }

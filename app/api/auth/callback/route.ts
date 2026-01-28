@@ -169,5 +169,7 @@ export async function GET(request: NextRequest) {
 
   // 7. 重定向到首页（会话 Cookie 会通过 @supabase/ssr 自动设置）
   const redirectTo = request.nextUrl.searchParams.get('next') || '/'
-  return NextResponse.redirect(new URL(redirectTo, request.url))
+  const redirectUrl = new URL(redirectTo, request.url)
+  redirectUrl.searchParams.set('event', 'signup_completed')
+  return NextResponse.redirect(redirectUrl)
 }

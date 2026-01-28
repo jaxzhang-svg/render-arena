@@ -10,7 +10,7 @@ import DOMPurify from 'isomorphic-dompurify'
 import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
 import { showToast } from '@/lib/toast'
 import { Skeleton } from '@/components/ui/skeleton'
-import { trackGalleryCaseClicked } from '@/lib/analytics'
+import { trackRemixStarted } from '@/lib/analytics'
 
 // Cloudflare Stream customer code
 const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || ''
@@ -26,7 +26,7 @@ interface GalleryAppCardProps {
   position: number
 }
 
-function GalleryAppCard({ app, currentCategory, position }: GalleryAppCardProps) {
+function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   const router = useRouter()
   const [likeCount, setLikeCount] = useState(app.like_count)
   const [isLiked, setIsLiked] = useState(app.isLiked || false)
@@ -141,6 +141,7 @@ function GalleryAppCard({ app, currentCategory, position }: GalleryAppCardProps)
 
   const handleCopy = async () => {
     try {
+      trackRemixStarted(app.id)
       await navigator.clipboard.writeText(app.prompt)
       router.push(
         `/playground/new?prompt=${encodeURIComponent(app.prompt)}&category=${encodeURIComponent(currentCategory)}`
@@ -155,11 +156,6 @@ function GalleryAppCard({ app, currentCategory, position }: GalleryAppCardProps)
     <div className="group relative flex flex-col overflow-hidden">
       <div
         onClick={() => {
-          trackGalleryCaseClicked({
-            app_id: app.id,
-            category: currentCategory,
-            position,
-          })
           router.push(`/gallery/${app.id}`)
         }}
         onMouseEnter={() => {

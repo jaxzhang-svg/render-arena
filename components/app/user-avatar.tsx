@@ -8,11 +8,7 @@ import { Button } from '@/components/base/button'
 import { useAuth, loginWithNovita } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
 import { ArenaBattleModal } from './arena-battle-modal'
-import {
-  trackAuthLoginInitiated,
-  trackAuthLogout,
-  trackHackathonModalOpened,
-} from '@/lib/analytics'
+import { trackHackathonJoinClicked, trackLoginStarted } from '@/lib/analytics'
 
 interface UserAvatarProps {
   className?: string
@@ -41,7 +37,7 @@ export function UserAvatar({ className }: UserAvatarProps) {
     return (
       <Button
         onClick={() => {
-          trackAuthLoginInitiated('header')
+          trackLoginStarted('header')
           loginWithNovita(pathname)
         }}
         variant="outline"
@@ -64,7 +60,6 @@ export function UserAvatar({ className }: UserAvatarProps) {
   }
 
   const handleLogout = async () => {
-    trackAuthLogout()
     await logout()
   }
 
@@ -137,7 +132,7 @@ export function UserAvatar({ className }: UserAvatarProps) {
                 </a>
                 <button
                   onClick={() => {
-                    trackHackathonModalOpened('user_menu')
+                    trackHackathonJoinClicked()
                     setIsHackathonModalOpen(true)
                   }}
                   className="w-full cursor-pointer rounded px-3 py-2 text-left text-[14px] leading-[20px] text-[#0F172A] hover:bg-[#F4F4F5]"
