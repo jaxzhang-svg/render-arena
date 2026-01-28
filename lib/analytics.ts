@@ -1,10 +1,11 @@
-import { sendGTMEvent } from '@next/third-parties/google'
+import { sendGAEvent } from '@next/third-parties/google'
 
 // Type-safe event tracking for GA4
 type EventParams = Record<string, string | number | boolean | undefined>
 
 export function trackEvent(eventName: string, params?: EventParams) {
-  sendGTMEvent({ event: eventName, ...params })
+  console.log(`Tracking event: ${eventName}`, params)
+  sendGAEvent('event', eventName, params ?? {})
 }
 
 // ==================== Authentication Events ====================
