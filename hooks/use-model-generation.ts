@@ -5,6 +5,40 @@ import { LLMModel, getModelById, models } from '@/lib/models'
 import { showToast } from '@/lib/toast'
 
 /**
+ * API 错误接口
+ */
+interface ApiErrorData {
+  error: string
+  message: string
+}
+
+/**
+ * 自定义 API 错误类
+ * 用于携带结构化的错误信息
+ */
+class ApiError extends Error {
+  public readonly code: string
+  public readonly isApiError = true as const
+
+  constructor(data: ApiErrorData) {
+    super(data.message)
+    this.name = 'ApiError'
+    this.code = data.error
+  }
+
+  // 判断是否为配额/层级相关错误
+  isQuotaOrTierError(): boolean {
+    return [
+      'QUOTA_EXCEEDED_T0',
+      'QUOTA_EXCEEDED_T1',
+      'QUOTA_EXCEEDED_T2',
+      'FREE_TIER_DISABLED',
+      'ALL_GENERATION_DISABLED',
+    ].includes(this.code)
+  }
+}
+
+/**
  * 模型响应状态
  */
 export interface ModelResponse {
@@ -227,16 +261,17 @@ export function useModelGeneration({
           onopen: async res => {
             if (!res.ok) {
               const errorText = await res.text()
-              // Try to parse error response for quota errors
               try {
-                const errorData = JSON.parse(errorText)
+                const errorData: ApiErrorData = JSON.parse(errorText)
                 if (errorData.error) {
-                  throw new Error(JSON.stringify(errorData))
+                  throw new ApiError(errorData)
                 }
-              } catch {
-                // If parsing fails, throw generic error
+              } catch (err) {
+                if (err instanceof ApiError) {
+                  throw err
+                }
+                throw new Error(`HTTP error: ${res.status} ${errorText}`)
               }
-              throw new Error(`HTTP error: ${res.status} ${errorText}`)
             }
           },
           onmessage: msg => {
@@ -332,37 +367,31 @@ export function useModelGeneration({
 
         console.error(`Model ${slot} error:`, error)
 
-        // Try to parse structured error response
-        let errorCode = 'unknown_error'
-        let errorMessage = (error as Error).message || 'Unknown error occurred'
+        const err = error as Error & { isApiError?: true; code?: string }
+        const isApiError = err.isApiError === true && err.code !== undefined
 
-        try {
-          const errorData = JSON.parse(errorMessage)
-          if (errorData.error) {
-            errorCode = errorData.error
-            errorMessage = errorData.message || errorMessage
+        if (isApiError) {
+          const apiError = err as ApiError
+          const errorCode = apiError.code
+          const errorMessage = apiError.message
 
-            // Handle quota exceeded errors
-            if (errorCode === 'QUOTA_EXCEEDED_T0') {
-              showToast.quotaExceeded(errorMessage, 'T0')
-            } else if (errorCode === 'QUOTA_EXCEEDED_T1') {
-              showToast.quotaExceeded(errorMessage, 'T1')
-            } else if (errorCode === 'QUOTA_EXCEEDED_T2') {
-              showToast.quotaExceeded(errorMessage, 'T2')
-            } else if (errorCode === 'FREE_TIER_DISABLED') {
-              const isAuthenticated = errorMessage.includes('free tier access')
-              showToast.freeTierDisabled(errorMessage, isAuthenticated)
-            } else if (errorCode === 'ALL_GENERATION_DISABLED') {
-              showToast.allGenerationDisabled(errorMessage)
-            }
+          if (errorCode === 'QUOTA_EXCEEDED_T0') {
+            showToast.quotaExceeded(errorMessage, 'T0')
+          } else if (errorCode === 'QUOTA_EXCEEDED_T1') {
+            showToast.quotaExceeded(errorMessage, 'T1')
+          } else if (errorCode === 'QUOTA_EXCEEDED_T2') {
+            showToast.quotaExceeded(errorMessage, 'T2')
+          } else if (errorCode === 'FREE_TIER_DISABLED') {
+            const isAuthenticated = errorMessage.includes('free tier access')
+            showToast.freeTierDisabled(errorMessage, isAuthenticated)
+          } else if (errorCode === 'ALL_GENERATION_DISABLED') {
+            showToast.allGenerationDisabled(errorMessage)
           }
-        } catch {
-          // Not a JSON error, use original error message
         }
 
         setResponse(prev => ({
           ...prev,
-          content: prev.content + '\n\nError: ' + errorMessage,
+          content: prev.content + '\n\nError: ' + err.message,
           loading: false,
           completed: true,
         }))

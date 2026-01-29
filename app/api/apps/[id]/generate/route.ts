@@ -44,22 +44,16 @@ function getQuotaLimit(isAuthenticated: boolean, novitaBalance: number | null): 
 
 async function incrementQuota(
   adminClient: Awaited<ReturnType<typeof createAdminClient>>,
-  quotaData: { used_count: number } | null,
   identifier: string
 ) {
-  if (quotaData) {
-    await adminClient
-      .from('generation_quotas')
-      .update({
-        used_count: quotaData.used_count + 1,
-        last_used_at: new Date().toISOString(),
-      })
-      .eq('identifier', identifier)
-  } else {
-    await adminClient.from('generation_quotas').insert({
-      identifier: identifier,
-      used_count: 1,
-    })
+  // Use atomic SQL function to prevent race conditions
+  const { error } = await adminClient.rpc('increment_quota', {
+    iden: identifier,
+  })
+
+  if (error) {
+    console.error('Failed to increment quota:', error)
+    throw new Error(`Failed to increment quota: ${error.message}`)
   }
 }
 
@@ -255,7 +249,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     })
   }
 
-  incrementQuota(adminClient, quotaData, identifier)
+  incrementQuota(adminClient, identifier)
 
   // 直接透传原始 SSE 流，当前端断开时会自动中断
   return new Response(response.body, {

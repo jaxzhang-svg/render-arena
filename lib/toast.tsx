@@ -22,6 +22,30 @@ const defaultOptions: ToastOptions = {
   theme: 'light',
 }
 
+// Toast 节流管理
+type ToastKey = 'quotaExceeded' | 'freeTierDisabled' | 'allGenerationDisabled'
+const toastThrottleMap = new Map<ToastKey, boolean>()
+const THROTTLE_DELAY = 5000 // 节流延迟，单位 ms
+
+/**
+ * 节流显示 toast（第一次立即执行，后续调用在延迟内忽略）
+ * @param key toast 类型键
+ * @param fn 实际显示 toast 的函数
+ */
+function throttleToast(key: ToastKey, fn: () => void) {
+  if (toastThrottleMap.get(key)) {
+    return
+  }
+
+  fn()
+
+  toastThrottleMap.set(key, true)
+
+  setTimeout(() => {
+    toastThrottleMap.delete(key)
+  }, THROTTLE_DELAY)
+}
+
 // Custom toast wrapper
 export const showToast = {
   success: (message: string, options?: ToastOptions) => {
@@ -52,81 +76,87 @@ export const showToast = {
   },
   // Quota exceeded toast with configurable action
   quotaExceeded: (message: string, quotaType: 'T0' | 'T1' | 'T2', options?: ToastOptions) => {
-    let buttonText: string
-    let buttonHref: string | undefined
-    let buttonOnClick: (() => void) | undefined
+    throttleToast('quotaExceeded', () => {
+      let buttonText: string
+      let buttonHref: string | undefined
+      let buttonOnClick: (() => void) | undefined
 
-    if (quotaType === 'T0') {
-      trackLoginStarted('quota')
-      // Anonymous user - show login button
-      buttonText = 'Login'
-      buttonOnClick = () => loginWithNovita(window.location.pathname)
-    } else if (quotaType === 'T1') {
-      trackUpgradePromptDisplayed()
-      // Authenticated user with low balance - show upgrade button
-      buttonText = 'Upgrade'
-      buttonOnClick = () => {
-        trackUpgradeButtonClicked('quota_modal')
-        window.open(NOVITA_BILLING_URL, '_blank')
+      if (quotaType === 'T0') {
+        trackLoginStarted('quota')
+        // Anonymous user - show login button
+        buttonText = 'Login'
+        buttonOnClick = () => loginWithNovita(window.location.pathname)
+      } else if (quotaType === 'T1') {
+        trackUpgradePromptDisplayed()
+        // Authenticated user with low balance - show upgrade button
+        buttonText = 'Upgrade'
+        buttonOnClick = () => {
+          trackUpgradeButtonClicked('quota_modal')
+          window.open(NOVITA_BILLING_URL, '_blank')
+        }
+      } else {
+        // T2: Paid user with exceeded quota - show Discord button
+        buttonText = 'Join Discord'
+        buttonHref = DISCORD_INVITE_URL
       }
-    } else {
-      // T2: Paid user with exceeded quota - show Discord button
-      buttonText = 'Join Discord'
-      buttonHref = DISCORD_INVITE_URL
-    }
 
-    toast(
-      <ActionToast
-        message={message}
-        buttonText={buttonText}
-        buttonHref={buttonHref}
-        buttonOnClick={buttonOnClick}
-        icon={quotaType === 'T0' ? <LogIn size={14} /> : undefined}
-      />,
-      {
-        ...defaultOptions,
-        autoClose: false,
-        closeOnClick: false,
-        ...options,
-      }
-    )
+      toast(
+        <ActionToast
+          message={message}
+          buttonText={buttonText}
+          buttonHref={buttonHref}
+          buttonOnClick={buttonOnClick}
+          icon={quotaType === 'T0' ? <LogIn size={14} /> : undefined}
+        />,
+        {
+          ...defaultOptions,
+          autoClose: false,
+          closeOnClick: false,
+          ...options,
+        }
+      )
+    })
   },
   // Free tier disabled toast
   freeTierDisabled: (message: string, isAuthenticated: boolean, options?: ToastOptions) => {
-    const buttonText = isAuthenticated ? 'Upgrade' : 'Login'
-    const buttonOnClick = isAuthenticated
-      ? () => {
-          trackUpgradeButtonClicked('overwhelming_banner')
-          window.open(NOVITA_BILLING_URL, '_blank')
-        }
-      : () => loginWithNovita(window.location.pathname)
+    throttleToast('freeTierDisabled', () => {
+      const buttonText = isAuthenticated ? 'Upgrade' : 'Login'
+      const buttonOnClick = isAuthenticated
+        ? () => {
+            trackUpgradeButtonClicked('overwhelming_banner')
+            window.open(NOVITA_BILLING_URL, '_blank')
+          }
+        : () => loginWithNovita(window.location.pathname)
 
-    toast(
-      <ActionToast
-        message={message}
-        buttonText={buttonText}
-        buttonOnClick={buttonOnClick}
-        icon={!isAuthenticated ? <LogIn size={14} /> : undefined}
-      />,
-      {
-        ...defaultOptions,
-        autoClose: false,
-        closeOnClick: false,
-        ...options,
-      }
-    )
+      toast(
+        <ActionToast
+          message={message}
+          buttonText={buttonText}
+          buttonOnClick={buttonOnClick}
+          icon={!isAuthenticated ? <LogIn size={14} /> : undefined}
+        />,
+        {
+          ...defaultOptions,
+          autoClose: false,
+          closeOnClick: false,
+          ...options,
+        }
+      )
+    })
   },
   // All generation disabled toast
   allGenerationDisabled: (message: string, options?: ToastOptions) => {
-    toast(
-      <ActionToast message={message} buttonText="Join Discord" buttonHref={DISCORD_INVITE_URL} />,
-      {
-        ...defaultOptions,
-        autoClose: false,
-        closeOnClick: false,
-        ...options,
-      }
-    )
+    throttleToast('allGenerationDisabled', () => {
+      toast(
+        <ActionToast message={message} buttonText="Join Discord" buttonHref={DISCORD_INVITE_URL} />,
+        {
+          ...defaultOptions,
+          autoClose: false,
+          closeOnClick: false,
+          ...options,
+        }
+      )
+    })
   },
   // Dynamic positioning helper (can be expanded based on page logic)
   show: (
