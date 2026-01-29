@@ -60,8 +60,8 @@ export const playgroundModes = [
       badge: 'bg-pink-100 text-pink-700',
       dot: 'bg-pink-500',
     },
-    featuredAppId: '40bf7a51-d616-462c-8ab6-5c6d6c7ef7e0',
-    videoUrl: '0f20294d577fcb399a49a7c9de707556',
+    featuredAppId: 'd53d17e0-52ab-4e46-a775-4c2c81f12758',
+    videoUrl: '43cf4dc1567e0c73d66fcfde5729ec7a',
     coverImage: '/images/visual-cover.png',
   },
   {
