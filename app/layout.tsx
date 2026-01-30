@@ -9,6 +9,7 @@ import { FingerprintProvider } from '@/components/providers/fingerprint-provider
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { AnalyticsEventTracker } from '@/components/app/analytics-event-tracker'
+import Script from 'next/script'
 
 const interphases = localFont({
   src: [
@@ -76,6 +77,15 @@ export default function RootLayout({
         <ToastProvider />
         <SpeedInsights />
         <GoogleAnalytics gaId="G-6E3YJT3N0F" />
+        <Script id="microsoft-clarity-analytics">
+          {`
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "v9cf5z2id0");
+          `}
+        </Script>
       </body>
     </html>
   )
