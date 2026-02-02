@@ -323,4 +323,4 @@ export const HACKATHON_PARTICIPANTS = 1234
 
 // External Links
 export const NOVITA_BILLING_URL = 'https://novita.ai/billing'
-export const DISCORD_INVITE_URL = 'https://discord.gg/YyPRAzwp7P'
+export const DISCORD_INVITE_URL = 'https://discord.gg/x9YbHHCptj'
