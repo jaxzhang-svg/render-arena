@@ -50,9 +50,67 @@ const interphasesMono = localFont({
   display: 'swap',
 })
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://renderarena.novita.ai'
+const siteName = 'Novita Render Areana'
+const siteTitle = 'Novita Render Areana - Visual AI Battle | Open Source vs Proprietary Models'
+const siteDescription = 'Watch AI models compete in real-time visual generation. Compare open-source (DeepSeek, GLM, Minimax) vs proprietary (GPT, Claude, Gemini) models side-by-side. Create stunning interactive visuals from prompts.'
+const ogImage = '/images/visual-cover.png'
+
 export const metadata: Metadata = {
-  title: 'Novita Render Areana - Visual AI Battle | Open Source vs Proprietary Models',
-  description: 'Watch AI models compete in real-time visual generation. Compare open-source (DeepSeek, GLM, Minimax) vs proprietary (GPT, Claude, Gemini) models side-by-side. Create stunning interactive visuals from prompts.',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteTitle,
+    template: `%s | ${siteName}`,
+  },
+  description: siteDescription,
+  keywords: ['AI model comparison', 'visual generation', 'open source vs proprietary', 'DeepSeek', 'GLM', 'Minimax', 'GPT', 'Claude', 'Gemini', 'AI battle', 'model arena'],
+  authors: [{ name: 'Novita AI', url: 'https://novita.ai' }],
+  creator: 'Novita AI',
+  publisher: 'Novita AI',
+  
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: siteUrl,
+    siteName: siteName,
+    title: siteTitle,
+    description: siteDescription,
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: 'Novita Render Areana - Visual AI Model Battle Platform',
+      },
+    ],
+  },
+  
+  twitter: {
+    card: 'summary_large_image',
+    site: '@novita_labs',
+    creator: '@novita_labs',
+    title: siteTitle,
+    description: siteDescription,
+    images: [ogImage],
+  },
+  
+  // Facebook-specific metadata
+  // If you have a Facebook App ID, uncomment and add it here:
+  // facebook: {
+  //   appId: 'YOUR_FACEBOOK_APP_ID',
+  // },
+  
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
 export default function RootLayout({
