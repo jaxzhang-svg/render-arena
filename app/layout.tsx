@@ -51,8 +51,8 @@ const interphasesMono = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Novita Areana',
-  description: '',
+  title: 'Novita Render Areana - Visual AI Battle | Open Source vs Proprietary Models',
+  description: 'Watch AI models compete in real-time visual generation. Compare open-source (DeepSeek, GLM, Minimax) vs proprietary (GPT, Claude, Gemini) models side-by-side. Create stunning interactive visuals from prompts.',
 }
 
 export default function RootLayout({
