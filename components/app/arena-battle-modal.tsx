@@ -4,6 +4,7 @@ import { Dialog } from '@base-ui/react/dialog'
 import { X, Trophy, Gift, Calendar, Users, Zap, Check } from 'lucide-react'
 import { Button } from '@/components/base/button'
 import { cn } from '@/lib/utils'
+import { DISCORD_INVITE_URL } from '@/lib/config'
 
 interface ArenaBattleModalProps {
   open: boolean
@@ -341,7 +342,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
           <div className="absolute right-0 bottom-0 left-0 z-40 flex flex-col items-center gap-4 border-t border-[rgba(255,255,255,0.1)] bg-black/80 p-6 backdrop-blur-md">
             <Button
               className="h-12 w-full max-w-[420px] rounded-[14px] bg-[#23d57c] font-mono text-base font-normal text-black shadow-[0px_0px_20px_0px_rgba(34,197,94,0.3)] hover:bg-[#1fc76f]"
-              onClick={() => window.open('https://discord.gg/novita', '_blank')}
+              onClick={() => window.open(DISCORD_INVITE_URL, '_blank')}
             >
               👉 Join via Discord
             </Button>
