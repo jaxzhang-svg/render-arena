@@ -99,8 +99,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
     startRecording,
     stopRecording,
   } = useScreenRecorder({
-    onRecordingComplete: (blob, format) => {
-      console.log('Recording complete:', { blob, format })
+    onRecordingComplete: (_, format) => {
       setRecordedFormat(format)
       setShareMode('video')
       setTimeout(() => setShowShareModal(true), 300)

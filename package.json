@@ -16,6 +16,7 @@
     "@fingerprintjs/fingerprintjs": "^5.0.1",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@next/third-parties": "^16.1.4",
+    "@sentry/nextjs": "^10.38.0",
     "@streamdown/cjk": "^1.0.1",
     "@streamdown/code": "^1.0.1",
     "@streamdown/math": "^1.0.1",

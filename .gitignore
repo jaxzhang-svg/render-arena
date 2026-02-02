@@ -49,3 +49,5 @@ next-env.d.ts
 sandbox/test-app
 
 __pycache__
+# Sentry Config File
+.env.sentry-build-plugin
