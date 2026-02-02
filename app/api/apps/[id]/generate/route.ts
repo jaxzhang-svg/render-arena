@@ -9,14 +9,11 @@ import {
   PAID_USER_BALANCE_THRESHOLD,
   FREE_TIER_DISABLED,
   ALL_GENERATION_DISABLED,
+  getAPIConfig,
 } from '@/lib/config'
 import { checkAppOwnerPermission } from '@/lib/permissions'
 import { getNovitaBalance } from '@/lib/novita'
 import * as Sentry from '@sentry/nextjs'
-import { SpanStatus } from 'next/dist/trace'
-
-const NOVITA_API_KEY = process.env.NEXT_NOVITA_API_KEY!
-const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions'
 
 function getClientIP(request: NextRequest): string {
   const headersList = request.headers
@@ -207,6 +204,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     abortController.abort()
   })
 
+  // Get API configuration based on model
+  const apiConfig = getAPIConfig(modelId)
+
   // Kimi K2.5 only supports temperature 0.6
   const isKimiK25 = modelId === 'moonshotai/kimi-k2.5'
   const finalTemperature = isKimiK25
@@ -236,21 +236,21 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       'gen_ai.request.max_tokens': 32000,
       'gen_ai.request.stream': true,
       'gen_ai.system': 'novita',
+      'gen_ai.api.endpoint': apiConfig.url,
       'gen_ai.request.messages': JSON.stringify(
         messages.map(m => ({ role: m.role, content: m.content?.substring(0, 100) }))
       ),
     },
   })
 
-  // 调用 Novita API
-  const response = await fetch(NOVITA_API_URL, {
+  const response = await fetch(apiConfig.url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${NOVITA_API_KEY}`,
+      Authorization: `Bearer ${apiConfig.apiKey}`,
     },
     body: JSON.stringify({
-      model: modelId,
+      model: apiConfig.modelId,
       messages,
       temperature: finalTemperature,
       max_tokens: 32000,
@@ -264,10 +264,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const errorText = await response.text()
     span?.setStatus({
       code: 2,
-      message: `Novita API error: ${response.status} ${errorText}`,
+      message: `API error: ${response.status} ${errorText}`,
     })
     span?.end()
-    return new Response(JSON.stringify({ error: 'Novita API error', message: errorText }), {
+    return new Response(JSON.stringify({ error: 'API error', message: errorText }), {
       status: response.status,
       headers: { 'Content-Type': 'application/json' },
     })

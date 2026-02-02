@@ -324,3 +324,66 @@ export const HACKATHON_PARTICIPANTS = 1234
 // External Links
 export const NOVITA_BILLING_URL = 'https://novita.ai/billing'
 export const DISCORD_INVITE_URL = 'https://discord.gg/x9YbHHCptj'
+
+
+// External API
+export const KIMI_API_URL = 'https://api.moonshot.cn/v1/chat/completions'
+export const KIMI_EXTERNAL_ID = 'kimi-k2.5'
+export const ZAI_API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
+export const ZAI_EXTERNAL_ID = 'glm-4.7'
+export const MINIMAX_API_URL='https://api.minimax.io/v1/chat/completions'
+export const MINIMAX_EXTERNAL_ID='MiniMax-M2.1'
+
+// External API Configuration
+// Set to true to use vendor's direct API instead of Novita for specific models
+export const USE_DIRECT_KIMI_API = false
+export const USE_DIRECT_ZAI_API = false
+export const USE_DIRECT_MINIMAX_API = false
+
+// API Configuration Type
+export type APIConfig = {
+  url: string
+  apiKey: string
+  modelId: string
+}
+
+/**
+ * Get API configuration based on model ID
+ * Returns the appropriate API endpoint, key, and model identifier
+ */
+export function getAPIConfig(modelId: string): APIConfig {
+  const NOVITA_API_KEY = process.env.NEXT_NOVITA_API_KEY || ''
+  const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions'
+
+  // Check if model should use direct vendor API
+  if (modelId.startsWith('moonshotai/') && USE_DIRECT_KIMI_API) {
+    return {
+      url: KIMI_API_URL,
+      apiKey: process.env.KIMI_API_KEY || '',
+      modelId: KIMI_EXTERNAL_ID,
+    }
+  }
+
+  if (modelId.startsWith('zai-org/') && USE_DIRECT_ZAI_API) {
+    return {
+      url: ZAI_API_URL,
+      apiKey: process.env.ZAI_API_KEY || '',
+      modelId: ZAI_EXTERNAL_ID,
+    }
+  }
+
+  if (modelId.startsWith('minimax/') && USE_DIRECT_MINIMAX_API) {
+    return {
+      url: MINIMAX_API_URL,
+      apiKey: process.env.MINIMAX_API_KEY || '',
+      modelId: MINIMAX_EXTERNAL_ID,
+    }
+  }
+
+  // Default: use Novita API
+  return {
+    url: NOVITA_API_URL,
+    apiKey: NOVITA_API_KEY,
+    modelId: modelId,
+  }
+}
