@@ -12,6 +12,8 @@ import {
 } from '@/lib/config'
 import { checkAppOwnerPermission } from '@/lib/permissions'
 import { getNovitaBalance } from '@/lib/novita'
+import * as Sentry from '@sentry/nextjs'
+import { SpanStatus } from 'next/dist/trace'
 
 const NOVITA_API_KEY = process.env.NEXT_NOVITA_API_KEY!
 const NOVITA_API_URL = 'https://api.novita.ai/openai/v1/chat/completions'
@@ -217,6 +219,29 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           ? 2
           : Number(temperature)
 
+  const messages = [
+    {
+      role: 'system',
+      content: `You are an expert web developer. Your goal is to generate a single, self-contained HTML file for user's prompt.`,
+    },
+    { role: 'user', content: app.prompt },
+  ]
+
+  const span = Sentry.startInactiveSpan({
+    op: 'gen_ai.request',
+    name: `chat ${modelId}`,
+    attributes: {
+      'gen_ai.request.model': modelId,
+      'gen_ai.request.temperature': finalTemperature,
+      'gen_ai.request.max_tokens': 32000,
+      'gen_ai.request.stream': true,
+      'gen_ai.system': 'novita',
+      'gen_ai.request.messages': JSON.stringify(
+        messages.map(m => ({ role: m.role, content: m.content?.substring(0, 100) }))
+      ),
+    },
+  })
+
   // 调用 Novita API
   const response = await fetch(NOVITA_API_URL, {
     method: 'POST',
@@ -226,13 +251,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     },
     body: JSON.stringify({
       model: modelId,
-      messages: [
-        {
-          role: 'system',
-          content: `You are an expert web developer. Your goal is to generate a single, self-contained HTML file for user's prompt.`,
-        },
-        { role: 'user', content: app.prompt },
-      ],
+      messages,
       temperature: finalTemperature,
       max_tokens: 32000,
       stream: true,
@@ -243,6 +262,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   if (!response.ok) {
     const errorText = await response.text()
+    span?.setStatus({
+      code: 2,
+      message: `Novita API error: ${response.status} ${errorText}`,
+    })
+    span?.end()
     return new Response(JSON.stringify({ error: 'Novita API error', message: errorText }), {
       status: response.status,
       headers: { 'Content-Type': 'application/json' },
@@ -251,8 +275,78 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   incrementQuota(adminClient, identifier)
 
-  // 直接透传原始 SSE 流，当前端断开时会自动中断
-  return new Response(response.body, {
+  // Create a TransformStream to intercept and parse SSE data for Sentry
+  const responseTexts: string[] = []
+  let inputTokens = 0
+  let outputTokens = 0
+  const decoder = new TextDecoder()
+  let buffer = ''
+
+  const { readable, writable } = new TransformStream({
+    transform(chunk, controller) {
+      controller.enqueue(chunk)
+
+      try {
+        const text = decoder.decode(chunk, { stream: true })
+        buffer += text
+
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || ''
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6)
+            if (data === '[DONE]') continue
+
+            try {
+              const parsed = JSON.parse(data)
+
+              if (parsed.choices?.[0]?.delta?.content) {
+                responseTexts.push(parsed.choices[0].delta.content)
+              }
+
+              if (parsed.usage) {
+                inputTokens = parsed.usage.prompt_tokens || 0
+                outputTokens = parsed.usage.completion_tokens || 0
+              }
+            } catch {
+              // Silently ignore JSON parse errors - monitoring should never fail the request
+            }
+          }
+        }
+      } catch {
+        // Silently ignore all monitoring errors - user experience is paramount
+      }
+    },
+    flush() {
+      try {
+        const fullResponse = responseTexts.join('')
+        if (fullResponse) {
+          span?.setAttribute('gen_ai.response.text', JSON.stringify([fullResponse]))
+        }
+        if (inputTokens > 0) {
+          span?.setAttribute('gen_ai.usage.input_tokens', inputTokens)
+        }
+        if (outputTokens > 0) {
+          span?.setAttribute('gen_ai.usage.output_tokens', outputTokens)
+        }
+        span?.setStatus({ code: 1 })
+        span?.end()
+      } catch {
+        span?.end()
+      }
+    },
+  })
+
+  response.body?.pipeTo(writable).catch(() => {
+    try {
+      span?.end()
+    } catch {
+      // Ignore span cleanup errors
+    }
+  })
+
+  return new Response(readable, {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
