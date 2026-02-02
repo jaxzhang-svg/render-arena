@@ -33,16 +33,23 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   const [recordingTime, setRecordingTime] = useState(0)
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null)
   const [recordedFormat, setRecordedFormat] = useState<VideoFormat | null>(null)
-  const isRecordingSupported = !!(
-    typeof navigator !== 'undefined' &&
-    navigator.mediaDevices &&
-    navigator.mediaDevices.getDisplayMedia
-  )
+  const [isRecordingSupported, setIsRecordingSupported] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recorderRef = useRef<any>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const previewContainerRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Check recording support on client-side only
+  useEffect(() => {
+    setIsRecordingSupported(
+      !!(
+        typeof navigator !== 'undefined' &&
+        navigator.mediaDevices &&
+        navigator.mediaDevices.getDisplayMedia
+      )
+    )
+  }, [])
 
   // Cleanup on unmount
   useEffect(() => {
