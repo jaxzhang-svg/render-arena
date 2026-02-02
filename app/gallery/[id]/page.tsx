@@ -7,6 +7,8 @@ import GalleryClient from './gallery-client'
 import type { App } from '@/types'
 import type { Metadata } from 'next'
 import { cache } from 'react'
+import { creativeWorkSchema, breadcrumbSchema } from '@/lib/structured-data'
+import Script from 'next/script'
 
 interface GalleryPageProps {
   params: Promise<{ id: string }>
@@ -38,7 +40,7 @@ export async function generateMetadata({ params }: GalleryPageProps): Promise<Me
     }
   }
   
-  const title = app.name || 'Visual Creation'
+  const title = app.name || 'Gallery'
   const description = app.description || app.prompt || 'AI-generated visual creation comparing different models'
   const ogImage = app.preview_video_url 
     ? `${app.preview_video_url}/thumbnails/thumbnail.jpg?time=1s&height=630` 
@@ -131,5 +133,28 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
     isLiked,
   } as App & { isOwner: boolean; isLiked: boolean }
 
-  return <GalleryClient app={appWithMeta} />
+  // Generate structured data for SEO
+  const structuredData = creativeWorkSchema(app)
+  const breadcrumbs = breadcrumbSchema([
+    { name: 'Home', url: siteUrl },
+    { name: 'Gallery', url: `${siteUrl}/#gallery` },
+    { name: app.name || 'Visual Creation', url: `${siteUrl}/gallery/${id}` },
+  ])
+
+  return (
+    <>
+      {/* JSON-LD Structured Data for SEO */}
+      <Script
+        id="structured-data-creative"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <Script
+        id="structured-data-breadcrumb"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <GalleryClient app={appWithMeta} />
+    </>
+  )
 }

@@ -6,9 +6,20 @@ import { ForbiddenError } from '@/lib/errors'
 import { checkAppOwnerPermission } from '@/lib/permissions'
 import PlaygroundClient from './playground-client'
 import type { App } from '@/types'
+import type { Metadata } from 'next'
 
 interface PlaygroundPageProps {
   params: Promise<{ id: string }>
+}
+
+// Static metadata - no dynamic queries for performance
+export const metadata: Metadata = {
+  title: 'Playground',
+  description: 'Compare AI models side-by-side in real-time visual generation.',
+  robots: {
+    index: false, // Don't index playground pages
+    follow: false,
+  },
 }
 
 export default async function PlaygroundPage({ params }: PlaygroundPageProps) {

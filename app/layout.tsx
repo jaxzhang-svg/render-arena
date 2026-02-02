@@ -111,6 +111,32 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  
+  // Canonical URL - prevents duplicate content issues
+  alternates: {
+    canonical: siteUrl,
+  },
+  
+  // Verification tokens for search engines (add when available)
+  // verification: {
+  //   google: 'your-google-verification-token',
+  //   yandex: 'your-yandex-verification-token',
+  //   bing: 'your-bing-verification-token',
+  // },
+  
+  // Category for app stores/platforms
+  category: 'Technology',
+}
+
+// Viewport configuration (separate export in App Router)
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+  ],
 }
 
 export default function RootLayout({
