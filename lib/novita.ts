@@ -58,9 +58,9 @@ export interface NovitaBalanceInfo {
   availableBalance: string // unit is 0.0001 USD
   cashBalance: string // unit is 0.0001 USD
   creditLimit: string // unit is 0.0001 USD
+  pendingCharges: string // unit is 0.0001 USD
   outstandingInvoices: string // unit is 0.0001 USD
 }
-
 export async function getNovitaAccountBalance(
   apiKey?: string
 ): Promise<NovitaBalanceInfo | null> {
@@ -72,7 +72,7 @@ export async function getNovitaAccountBalance(
   }
 
   try {
-    const response = await fetch('https://api.novita.ai/v3/user/balance', {
+    const response = await fetch('https://api.novita.ai/openapi/v1/billing/balance/detail', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${key}`,
