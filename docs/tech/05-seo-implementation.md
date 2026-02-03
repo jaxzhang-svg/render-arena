@@ -1,6 +1,6 @@
 # SEO 实施总结
 
-本文档概述了为 Novita Render Areana 实施的 SEO 优化措施。
+本文档概述了为 Novita Render Arena 实施的 SEO 优化措施。
 
 ## ✅ 已实施的 SEO 要素
 
@@ -8,9 +8,9 @@
 
 #### Title 配置
 
-- ✅ **Title Template**: `%s | Novita Render Areana`
+- ✅ **Title Template**: `%s | Novita Render Arena`
   - 允许每个页面自定义标题，同时保持品牌一致性
-  - 首页使用完整标题：`Novita Render Areana - Visual AI Battle | Open Source vs Proprietary Models`
+  - 首页使用完整标题：`Novita Render Arena - Visual AI Battle | Open Source vs Proprietary Models`
 
 #### Meta Tags
 

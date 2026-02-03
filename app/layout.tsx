@@ -51,8 +51,8 @@ const interphasesMono = localFont({
 })
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://renderarena.novita.ai'
-const siteName = 'Novita Render Areana'
-const siteTitle = 'Novita Render Areana - Visual AI Battle | Open Source vs Proprietary Models'
+const siteName = 'Novita Render Arena'
+const siteTitle = 'Novita Render Arena - Visual AI Battle | Open Source vs Proprietary Models'
 const siteDescription =
   'Watch AI models compete in real-time visual generation. Compare open-source (DeepSeek, GLM, Minimax) vs proprietary (GPT, Claude, Gemini) models side-by-side. Create stunning interactive visuals from prompts.'
 const ogImage = '/images/visual-cover.png'
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
         url: ogImage,
         width: 1200,
         height: 630,
-        alt: 'Novita Render Areana - Visual AI Model Battle Platform',
+        alt: 'Novita Render Arena - Visual AI Model Battle Platform',
       },
     ],
   },

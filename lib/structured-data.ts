@@ -19,7 +19,7 @@ export const organizationSchema = {
 export const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Novita Render Areana',
+  name: 'Novita Render Arena',
   url: siteUrl,
   description:
     'Watch AI models compete in real-time visual generation. Compare open-source vs proprietary models side-by-side.',

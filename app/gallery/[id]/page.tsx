@@ -21,7 +21,7 @@ interface GalleryPageProps {
 }
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://renderarena.novita.ai'
-const siteName = 'Novita Render Areana'
+const siteName = 'Novita Render Arena'
 const defaultOgImage = '/images/visual-cover.png'
 
 const getApp = cache(async (id: string) => {
