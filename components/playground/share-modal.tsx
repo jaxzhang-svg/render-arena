@@ -183,7 +183,7 @@ export function ShareModal({
       const errorMessage = error instanceof Error ? error.message : 'Upload failed'
       showToast.error(errorMessage)
       setUploadStatus('error')
-      setUploadError("Upload failed. Please try again.")
+      setUploadError('Upload failed. Please try again.')
       uploadedBlobRef.current = null // Allow retry
     }
   }, [videoBlob, appId, videoFormat, skipSaveToDatabase])

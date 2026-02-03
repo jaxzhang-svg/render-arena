@@ -68,7 +68,8 @@ export function FreeTierBanner() {
           <p className="font-sans text-sm font-medium text-amber-900">
             {isFullDisabled ? (
               <>
-                Due to high demand, our service is temporarily paused. We&apos;ll be back online soon!
+                Due to high demand, our service is temporarily paused. We&apos;ll be back online
+                soon!
               </>
             ) : (
               <>

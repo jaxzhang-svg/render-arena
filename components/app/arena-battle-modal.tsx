@@ -57,7 +57,8 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
               {/* Promo Banner */}
               <div className="rounded-r-[10px] border-l-4 border-[rgba(0,201,80,0.5)] bg-[rgba(13,84,43,0.1)] p-4">
                 <p className="font-sans text-base/6 text-[#e7e6e2]">
-                  Render Arena focuses on visual comparison, vibes, and shareability — not benchmarks, but creative expression.
+                  Render Arena focuses on visual comparison, vibes, and shareability — not
+                  benchmarks, but creative expression.
                 </p>
               </div>
 

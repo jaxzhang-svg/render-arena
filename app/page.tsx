@@ -288,7 +288,8 @@ export default function HomePage() {
                   {/* Description */}
                   <div className="mb-8 border-l-2 border-[#00c950]/30 pl-4">
                     <p className="max-w-[570px] font-sans text-[18px] leading-6 font-normal text-[#cbc9c4]">
-                      Render Arena  focused on visual comparison, vibes, and shareability — not machines but artistic vibes.
+                      Render Arena focused on visual comparison, vibes, and shareability — not
+                      machines but artistic vibes.
                     </p>
                   </div>
 
