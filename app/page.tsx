@@ -268,14 +268,14 @@ export default function HomePage() {
                   />
                   <div className="flex items-center gap-1 pl-12 font-sans text-sm font-medium">
                     <span className="text-[#05df72]">Prize Pool:</span>
-                    <span className="text-white">$1,650 Credits</span>
+                    <span className="text-white">$2,000 Credits</span>
                   </div>
                 </div>
 
                 <div className="max-w-[700px]">
                   {/* Heading */}
                   <h2 className="mb-2 font-sans text-[56px] leading-[56px] font-semibold tracking-[-1.12px] text-white">
-                    Novita Arena Battle
+                    Novita Render Arena
                   </h2>
 
                   {/* Subheading */}
@@ -288,8 +288,7 @@ export default function HomePage() {
                   {/* Description */}
                   <div className="mb-8 border-l-2 border-[#00c950]/30 pl-4">
                     <p className="max-w-[570px] font-sans text-[18px] leading-6 font-normal text-[#cbc9c4]">
-                      A 14-day fully remote battle. Arena battle focused on visual comparison,
-                      vibes, and shareability — not machines but artistic vibes.
+                      Render Arena  focused on visual comparison, vibes, and shareability — not machines but artistic vibes.
                     </p>
                   </div>
 

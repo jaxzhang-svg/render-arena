@@ -44,7 +44,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
               <div className="flex items-center gap-3">
                 <Trophy className="size-6 text-[#fdc700]" />
                 <h2 className="font-sans text-[32px] leading-10 font-semibold tracking-[-0.64px] text-white">
-                  Novita Arena Battle
+                  Novita Render Arena
                 </h2>
               </div>
               <h3 className="font-sans text-[18px]/6 font-semibold text-[#05df72]">
@@ -57,8 +57,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
               {/* Promo Banner */}
               <div className="rounded-r-[10px] border-l-4 border-[rgba(0,201,80,0.5)] bg-[rgba(13,84,43,0.1)] p-4">
                 <p className="font-sans text-base/6 text-[#e7e6e2]">
-                  A 14-day, fully remote Model Arena battle focused on visual comparison, vibes, and
-                  shareability — not traditional hackathon code volume.
+                  Render Arena focuses on visual comparison, vibes, and shareability — not benchmarks, but creative expression.
                 </p>
               </div>
 
@@ -75,7 +74,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                   <div className="space-y-3 rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-5">
                     <p className="font-sans text-sm/5 text-[#d1d5dc]">
                       Create visual, comparable demos using{' '}
-                      <span className="font-semibold text-[#f5f5f5]">Novita Model Arena</span>,
+                      <span className="font-semibold text-[#f5f5f5]">Novita Render Arena</span>,
                       focusing on Particle Effects.
                     </p>
 
@@ -118,7 +117,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                         <span className="text-2xl">🥇</span>
                         <span className="text-base font-bold text-[#fff085]">1st Place</span>
                       </div>
-                      <span className="text-base font-medium text-white">$500 Credits</span>
+                      <span className="text-base font-medium text-white">$800 Credits</span>
                     </div>
 
                     {/* 2nd Place */}
@@ -127,7 +126,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                         <span className="text-xl">🥈</span>
                         <span className="text-base font-medium text-[#d1d5dc]">2nd Place</span>
                       </div>
-                      <span className="text-base font-medium text-white">$200 Credits</span>
+                      <span className="text-base font-medium text-white">$300 Credits</span>
                     </div>
 
                     {/* 3rd Place */}
@@ -136,13 +135,13 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                         <span className="text-xl">🥉</span>
                         <span className="text-base font-medium text-[#ffd6a7]">3rd Place</span>
                       </div>
-                      <span className="text-base font-medium text-white">$100 Credits</span>
+                      <span className="text-base font-medium text-white">$200 Credits</span>
                     </div>
 
                     {/* 4th-10th Place */}
                     <div className="flex items-center justify-between rounded-[14px] border border-[rgba(255,255,255,0.05)] bg-[rgba(255,255,255,0.05)] p-3">
                       <span className="text-sm font-medium text-[#cbc9c4]">4th - 10th Place</span>
-                      <span className="text-base font-medium text-[#e7e6e2]">$50 Credits</span>
+                      <span className="text-base font-medium text-[#e7e6e2]">$100 Credits</span>
                     </div>
 
                     {/* Community Bonus */}
@@ -169,21 +168,21 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                     <p className="text-base font-bold tracking-[-0.31px] text-[#05df72]">
                       Build & Submit
                     </p>
-                    <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Day 0 – Day 14</p>
+                    <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Feb 28</p>
                   </div>
 
                   <div className="space-y-1 rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4 text-center">
                     <p className="text-base font-bold tracking-[-0.31px] text-[#51a2ff]">
                       Review Period
                     </p>
-                    <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Day 15 – Day 18</p>
+                    <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Mar 2 - Mar 4</p>
                   </div>
 
                   <div className="space-y-1 rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4 text-center">
                     <p className="text-base font-bold tracking-[-0.31px] text-[#c27aff]">
                       Winners Announced
                     </p>
-                    <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Day 18 – Day 21</p>
+                    <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Mar 5 - Mar 6</p>
                   </div>
                 </div>
               </div>
@@ -238,7 +237,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                         Post on X
                       </h4>
                       <p className="text-xs/4 text-[#99a1af]">
-                        Tag @Novita #NovitaArena #VibeCoding
+                        Tag @novita_labs #RenderArena <span className="italic">(required)</span>
                       </p>
                     </div>
                   </div>
