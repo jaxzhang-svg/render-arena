@@ -35,6 +35,7 @@ export default function HomePage() {
   const [typingSpeed, setTypingSpeed] = useState(50)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [galleryCategory, setGalleryCategory] = useState<GalleryCategoryId>('all')
+  const [participantCount, setParticipantCount] = useState<number>(120) // Default to 120
   const hasUserInteractedRef = useRef(false)
   const gallerySectionRef = useRef<HTMLElement>(null)
 
@@ -54,6 +55,23 @@ export default function HomePage() {
   const accordionId1 = useId()
   const accordionId2 = useId()
   const accordionId3 = useId()
+
+  // Fetch hackathon stats
+  // useEffect(() => {
+  //   const fetchHackathonStats = async () => {
+  //     try {
+  //       const response = await fetch('/api/hackathon/stats')
+  //       if (response.ok) {
+  //         const data = await response.json()
+  //         setParticipantCount(data.participants)
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to fetch hackathon stats:', error)
+  //     }
+  //   }
+
+  //   fetchHackathonStats()
+  // }, [])
 
   // Typewriter effect for placeholder
   useEffect(() => {
@@ -290,7 +308,7 @@ export default function HomePage() {
                     <p className="max-w-[570px] font-sans text-[18px] leading-6 font-normal text-[#cbc9c4]">
                       Render Arena focused on visual comparison, vibes, and shareability — not
                       machines but artistic vibes.
-                    </p>
+                    </p>{participantCount} Participants
                   </div>
 
                   {/* Stats Badges */}
