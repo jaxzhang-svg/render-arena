@@ -386,12 +386,16 @@ export function useModelGeneration({
             showToast.freeTierDisabled(errorMessage, isAuthenticated)
           } else if (errorCode === 'ALL_GENERATION_DISABLED') {
             showToast.allGenerationDisabled(errorMessage)
+          } else {
+            showToast.error(errorMessage || 'Generation failed. Please try again.')
           }
+        } else {
+          showToast.error('Network error or request timeout. Please try again.')
         }
 
         setResponse(prev => ({
           ...prev,
-          content: prev.content + '\n\nError: ' + err.message,
+          content: prev.content + '\n\nError: ' + (err.message || 'Generation failed'),
           loading: false,
           completed: true,
         }))

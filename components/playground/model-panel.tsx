@@ -268,7 +268,7 @@ export function ModelPanel({
             />
           ) : (
             <div className="text-muted-foreground flex h-full items-center justify-center">
-              {response.loading ? 'Generating HTML...' : 'No HTML available for preview'}
+              {response.loading ? 'Generating HTML...' : 'No HTML available for preview.'}
             </div>
           )}
         </div>

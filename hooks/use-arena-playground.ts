@@ -130,7 +130,7 @@ export function useArenaPlayground({
       return data.appId
     } catch (error) {
       console.error('Error creating app:', error)
-      showToast.error('创建失败，请稍后重试')
+      showToast.error('Failed to create. Please try again later.')
       return null
     }
   }, [prompt, category, modelA.selectedModel.id, modelB.selectedModel.id, urlTitle])
