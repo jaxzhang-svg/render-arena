@@ -5,9 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { playgroundModes } from '@/lib/config'
 import { cn } from '@/lib/utils'
-
-// Cloudflare Stream customer code
-const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || ''
+import { hasValidStreamVideo, getStreamIframeUrl } from '@/lib/cloudflare-stream'
 
 interface FeaturedCaseCardProps {
   mode: (typeof playgroundModes)[number]
@@ -21,11 +19,13 @@ function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
   const videoId = mode.videoUrl
   const coverImage = mode.coverImage
 
-  const hasVideo = !!videoId && !!CLOUDFLARE_CUSTOMER_CODE
-
-  const cfVideoUrl = hasVideo
-    ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoId}/iframe?muted=true&loop=true&autoplay=true&controls=false&preload=auto`
-    : null
+  const hasVideo = hasValidStreamVideo(videoId)
+  const cfVideoUrl = getStreamIframeUrl(videoId, {
+    muted: true,
+    loop: true,
+    autoplay: true,
+    controls: false,
+  })
 
   const handleCreate = (e: React.MouseEvent) => {
     e.stopPropagation()

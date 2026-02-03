@@ -9,6 +9,12 @@ import type { Metadata } from 'next'
 import { cache } from 'react'
 import { creativeWorkSchema, breadcrumbSchema } from '@/lib/structured-data'
 import Script from 'next/script'
+import {
+  hasValidStreamVideo,
+  getStreamThumbnailUrl,
+  getStreamIframeUrl,
+  getStreamWatchUrl,
+} from '@/lib/cloudflare-stream'
 
 interface GalleryPageProps {
   params: Promise<{ id: string }>
@@ -42,10 +48,15 @@ export async function generateMetadata({ params }: GalleryPageProps): Promise<Me
   
   const title = app.name || 'Gallery'
   const description = app.description || app.prompt || 'AI-generated visual creation comparing different models'
-  const ogImage = app.preview_video_url 
-    ? `${app.preview_video_url}/thumbnails/thumbnail.jpg?time=1s&height=630` 
-    : defaultOgImage
+  
+  // Check if video is available
+  const hasVideo = hasValidStreamVideo(app.preview_video_url)
+  
+  // Construct video URLs using utility functions
+  const ogImage = getStreamThumbnailUrl(app.preview_video_url, { time: '1s', height: 630 }) || defaultOgImage
   const url = `${siteUrl}/gallery/${id}`
+  const twitterPlayerUrl = getStreamIframeUrl(app.preview_video_url)
+  const videoStreamUrl = getStreamWatchUrl(app.preview_video_url)
   
   return {
     title,
@@ -68,15 +79,32 @@ export async function generateMetadata({ params }: GalleryPageProps): Promise<Me
       publishedTime: app.created_at,
       modifiedTime: app.updated_at,
       authors: [app.user_email || 'Anonymous'],
+      ...(hasVideo && videoStreamUrl && {
+        videos: [
+          {
+            url: videoStreamUrl,
+            width: 1920,
+            height: 1080,
+          },
+        ],
+      }),
     },
     
     twitter: {
-      card: 'summary_large_image',
+      card: hasVideo ? 'player' : 'summary_large_image',
       site: '@novita_labs',
       creator: '@novita_labs',
       title: `${title} | ${siteName}`,
       description,
       images: [ogImage],
+      ...(hasVideo && twitterPlayerUrl && videoStreamUrl && {
+        players: {
+          playerUrl: twitterPlayerUrl,
+          streamUrl: videoStreamUrl,
+          width: 1920,
+          height: 1080,
+        },
+      }),
     },
   }
 }

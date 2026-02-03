@@ -11,9 +11,7 @@ import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
 import { showToast } from '@/lib/toast'
 import { Skeleton } from '@/components/ui/skeleton'
 import { trackRemixStarted } from '@/lib/analytics'
-
-// Cloudflare Stream customer code
-const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || ''
+import { hasValidStreamVideo, getStreamIframeUrl, getStreamThumbnailUrl } from '@/lib/cloudflare-stream'
 
 interface GalleryGridProps {
   initialApps?: GalleryApp[]
@@ -53,13 +51,17 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   const modelB = getModelById(app.model_b)
 
   // Check if this app has a video preview
-  const hasVideo = !!app.preview_video_url && !!CLOUDFLARE_CUSTOMER_CODE
-  const videoUrl = hasVideo
-    ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/iframe?muted=true&loop=true&autoplay=true&controls=false&poster=https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/thumbnails/thumbnail.jpg`
-    : null
-  const thumbnailUrl = hasVideo
-    ? `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${app.preview_video_url}/thumbnails/thumbnail.jpg?time=1s`
-    : '/images/default-poster.png'
+  const hasVideo = hasValidStreamVideo(app.preview_video_url)
+  
+  // Construct video URLs using utility functions
+  const thumbnailUrl = getStreamThumbnailUrl(app.preview_video_url, { time: '1s' })
+  const videoUrl = getStreamIframeUrl(app.preview_video_url, {
+    muted: true,
+    loop: true,
+    autoplay: true,
+    controls: false,
+    poster: thumbnailUrl || undefined,
+  })
 
   const handleLike = useCallback(async () => {
     // 1. Optimistic Update
@@ -169,7 +171,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         {hasVideo ? (
           <div className="absolute inset-0 size-full origin-center transition-transform duration-700 ease-in-out group-hover/card:scale-110">
             <Image
-              src={thumbnailUrl}
+              src={thumbnailUrl || '/images/default-poster.png'}
               alt={app.name || 'App Preview'}
               fill
               className="h-full w-full object-contain"
