@@ -1,6 +1,6 @@
 /**
  * Cloudflare Stream utilities
- * 
+ *
  * Helper functions to construct Cloudflare Stream URLs from video UIDs
  */
 
@@ -32,7 +32,7 @@ function getBaseStreamUrl(videoUid: string): string {
 
 /**
  * Get the thumbnail URL for a video
- * 
+ *
  * @param videoUid - The Cloudflare Stream video UID
  * @param options - Optional thumbnail configuration
  * @returns The thumbnail URL
@@ -60,7 +60,7 @@ export function getStreamThumbnailUrl(
 
 /**
  * Get the iframe embed URL for a video
- * 
+ *
  * @param videoUid - The Cloudflare Stream video UID
  * @param options - Optional iframe configuration
  * @returns The iframe URL
@@ -92,7 +92,7 @@ export function getStreamIframeUrl(
 
 /**
  * Get the watch page URL for a video
- * 
+ *
  * @param videoUid - The Cloudflare Stream video UID
  * @returns The watch page URL
  */
@@ -106,7 +106,7 @@ export function getStreamWatchUrl(videoUid: string | null | undefined): string |
 
 /**
  * Get the manifest URL for a video
- * 
+ *
  * @param videoUid - The Cloudflare Stream video UID
  * @returns The manifest URL
  */
@@ -120,7 +120,7 @@ export function getStreamManifestUrl(videoUid: string | null | undefined): strin
 
 /**
  * Check if a video UID is valid and has Cloudflare Stream configured
- * 
+ *
  * @param videoUid - The video UID to check
  * @returns Whether the video can be used with Cloudflare Stream
  */

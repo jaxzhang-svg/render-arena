@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import {
-  getNovitaAccountBalance,
-  parseBalanceToInt,
-} from '@/lib/novita'
+import { getNovitaAccountBalance, parseBalanceToInt } from '@/lib/novita'
 import { invalidateSystemConfigCache } from '@/lib/dynamic-config'
 import { PAID_USER_BALANCE_THRESHOLD } from '@/lib/config'
 
@@ -46,9 +43,7 @@ export async function GET(request: NextRequest) {
     const availableBalance = parseBalanceToInt(balanceInfo.availableBalance)
     const cashBalance = parseBalanceToInt(balanceInfo.cashBalance)
 
-    console.log(
-      `[Balance Check] Available: ${availableBalance} units, Cash: ${cashBalance} units`
-    )
+    console.log(`[Balance Check] Available: ${availableBalance} units, Cash: ${cashBalance} units`)
 
     // Get admin client to update config
     const adminClient = await createAdminClient()

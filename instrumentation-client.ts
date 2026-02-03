@@ -14,7 +14,7 @@ Sentry.init({
   sendDefaultPii: true,
 
   integrations: [Sentry.browserTracingIntegration()],
-  tracePropagationTargets: ["localhost", /^https:\/\/renderarena\.novita\.ai\/api/]
+  tracePropagationTargets: ['localhost', /^https:\/\/renderarena\.novita\.ai\/api/],
 })
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart

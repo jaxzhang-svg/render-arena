@@ -53,7 +53,8 @@ const interphasesMono = localFont({
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://renderarena.novita.ai'
 const siteName = 'Novita Render Areana'
 const siteTitle = 'Novita Render Areana - Visual AI Battle | Open Source vs Proprietary Models'
-const siteDescription = 'Watch AI models compete in real-time visual generation. Compare open-source (DeepSeek, GLM, Minimax) vs proprietary (GPT, Claude, Gemini) models side-by-side. Create stunning interactive visuals from prompts.'
+const siteDescription =
+  'Watch AI models compete in real-time visual generation. Compare open-source (DeepSeek, GLM, Minimax) vs proprietary (GPT, Claude, Gemini) models side-by-side. Create stunning interactive visuals from prompts.'
 const ogImage = '/images/visual-cover.png'
 
 export const metadata: Metadata = {
@@ -63,11 +64,23 @@ export const metadata: Metadata = {
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
-  keywords: ['AI model comparison', 'visual generation', 'open source vs proprietary', 'DeepSeek', 'GLM', 'Minimax', 'GPT', 'Claude', 'Gemini', 'AI battle', 'model arena'],
+  keywords: [
+    'AI model comparison',
+    'visual generation',
+    'open source vs proprietary',
+    'DeepSeek',
+    'GLM',
+    'Minimax',
+    'GPT',
+    'Claude',
+    'Gemini',
+    'AI battle',
+    'model arena',
+  ],
   authors: [{ name: 'Novita AI', url: 'https://novita.ai' }],
   creator: 'Novita AI',
   publisher: 'Novita AI',
-  
+
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -84,7 +97,7 @@ export const metadata: Metadata = {
       },
     ],
   },
-  
+
   twitter: {
     card: 'summary_large_image',
     site: '@novita_labs',
@@ -93,13 +106,13 @@ export const metadata: Metadata = {
     description: siteDescription,
     images: [ogImage],
   },
-  
+
   // Facebook-specific metadata
   // If you have a Facebook App ID, uncomment and add it here:
   // facebook: {
   //   appId: 'YOUR_FACEBOOK_APP_ID',
   // },
-  
+
   robots: {
     index: true,
     follow: true,
@@ -111,19 +124,19 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  
+
   // Canonical URL - prevents duplicate content issues
   alternates: {
     canonical: siteUrl,
   },
-  
+
   // Verification tokens for search engines (add when available)
   // verification: {
   //   google: 'your-google-verification-token',
   //   yandex: 'your-yandex-verification-token',
   //   bing: 'your-bing-verification-token',
   // },
-  
+
   // Category for app stores/platforms
   category: 'Technology',
 }

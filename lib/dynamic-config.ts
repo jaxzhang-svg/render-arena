@@ -75,7 +75,7 @@ const fetchAllGenerationConfig = unstable_cache(
 /**
  * Get free tier disabled status from database with Next.js caching
  * Falls back to static config value if database is unavailable
- * 
+ *
  * Uses Next.js Data Cache with:
  * - 30 second revalidation period
  * - Tagged for selective cache invalidation
@@ -88,7 +88,7 @@ export async function getFreeTierDisabled(): Promise<boolean> {
 /**
  * Get all generation disabled status from database with Next.js caching
  * Falls back to static config value if database is unavailable
- * 
+ *
  * Uses Next.js Data Cache with:
  * - 30 second revalidation period
  * - Tagged for selective cache invalidation
@@ -102,7 +102,7 @@ export async function getAllGenerationDisabled(): Promise<boolean> {
  * Invalidate system config cache using Next.js cache revalidation
  * This triggers a revalidation of all routes that use the config
  * Call this after updating config in the database
- * 
+ *
  * @param specific - Optional specific cache to invalidate ('free-tier' or 'all-generation')
  */
 export async function invalidateSystemConfigCache(
@@ -113,7 +113,7 @@ export async function invalidateSystemConfigCache(
     // This will force them to re-fetch data on next request
     revalidatePath('/api/system-status', 'page')
     revalidatePath('/api/apps', 'layout') // Revalidate all app routes
-    
+
     console.log(`[Cache] Invalidated system config cache${specific ? `: ${specific}` : ''}`)
   } catch (error) {
     console.error('Error invalidating system config cache:', error)

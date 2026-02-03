@@ -11,7 +11,11 @@ import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
 import { showToast } from '@/lib/toast'
 import { Skeleton } from '@/components/ui/skeleton'
 import { trackRemixStarted } from '@/lib/analytics'
-import { hasValidStreamVideo, getStreamIframeUrl, getStreamThumbnailUrl } from '@/lib/cloudflare-stream'
+import {
+  hasValidStreamVideo,
+  getStreamIframeUrl,
+  getStreamThumbnailUrl,
+} from '@/lib/cloudflare-stream'
 
 interface GalleryGridProps {
   initialApps?: GalleryApp[]
@@ -52,7 +56,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
 
   // Check if this app has a video preview
   const hasVideo = hasValidStreamVideo(app.preview_video_url)
-  
+
   // Construct video URLs using utility functions
   const thumbnailUrl = getStreamThumbnailUrl(app.preview_video_url, { time: '1s' })
   const videoUrl = getStreamIframeUrl(app.preview_video_url, {

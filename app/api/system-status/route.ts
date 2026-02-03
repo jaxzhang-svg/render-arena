@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getFreeTierDisabled, getAllGenerationDisabled } from '@/lib/dynamic-config'
 
 // Next.js Route Segment Config
@@ -11,11 +11,11 @@ export const dynamic = 'force-dynamic' // Always fetch fresh data (bypasses cach
  * GET /api/system-status
  * Returns current system configuration status
  * Used by client components to determine feature availability
- * 
+ *
  * This endpoint uses Next.js caching under the hood via getFreeTierDisabled/getAllGenerationDisabled
  * which leverage unstable_cache with 30s revalidation
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const [freeTierDisabled, allGenerationDisabled] = await Promise.all([
       getFreeTierDisabled(),

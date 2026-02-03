@@ -1,6 +1,6 @@
 /**
  * JSON-LD Structured Data Helpers
- * 
+ *
  * Used to generate structured data for better SEO and rich snippets
  * @see https://schema.org/
  */
@@ -13,10 +13,7 @@ export const organizationSchema = {
   name: 'Novita AI',
   url: 'https://novita.ai',
   logo: `${siteUrl}/logo/novita-logo.png`,
-  sameAs: [
-    'https://twitter.com/novita_labs',
-    'https://github.com/novitalabs',
-  ],
+  sameAs: ['https://twitter.com/novita_labs', 'https://github.com/novitalabs'],
 }
 
 export const websiteSchema = {
@@ -24,7 +21,8 @@ export const websiteSchema = {
   '@type': 'WebSite',
   name: 'Novita Render Areana',
   url: siteUrl,
-  description: 'Watch AI models compete in real-time visual generation. Compare open-source vs proprietary models side-by-side.',
+  description:
+    'Watch AI models compete in real-time visual generation. Compare open-source vs proprietary models side-by-side.',
   publisher: {
     '@type': 'Organization',
     name: 'Novita AI',
@@ -70,7 +68,7 @@ export const creativeWorkSchema = (app: {
   },
   dateCreated: app.created_at,
   url: `${siteUrl}/gallery/${app.id}`,
-  thumbnailUrl: app.preview_video_url 
+  thumbnailUrl: app.preview_video_url
     ? `${app.preview_video_url}/thumbnails/thumbnail.jpg?time=1s&height=630`
     : `${siteUrl}/images/visual-cover.png`,
 })

@@ -27,41 +27,43 @@ const defaultOgImage = '/images/visual-cover.png'
 const getApp = cache(async (id: string) => {
   const adminClient = await createAdminClient()
   const { data: app, error } = await adminClient.from('apps').select('*').eq('id', id).single()
-  
+
   if (error || !app) {
     return null
   }
-  
+
   return app
 })
 
 export async function generateMetadata({ params }: GalleryPageProps): Promise<Metadata> {
   const { id } = await params
   const app = await getApp(id)
-  
+
   if (!app) {
     return {
       title: 'Gallery Not Found',
       description: 'The gallery item you are looking for could not be found.',
     }
   }
-  
+
   const title = app.name || 'Gallery'
-  const description = app.description || app.prompt || 'AI-generated visual creation comparing different models'
-  
+  const description =
+    app.description || app.prompt || 'AI-generated visual creation comparing different models'
+
   // Check if video is available
   const hasVideo = hasValidStreamVideo(app.preview_video_url)
-  
+
   // Construct video URLs using utility functions
-  const ogImage = getStreamThumbnailUrl(app.preview_video_url, { time: '1s', height: 630 }) || defaultOgImage
+  const ogImage =
+    getStreamThumbnailUrl(app.preview_video_url, { time: '1s', height: 630 }) || defaultOgImage
   const url = `${siteUrl}/gallery/${id}`
   const twitterPlayerUrl = getStreamIframeUrl(app.preview_video_url)
   const videoStreamUrl = getStreamWatchUrl(app.preview_video_url)
-  
+
   return {
     title,
     description,
-    
+
     openGraph: {
       type: 'article',
       url,
@@ -79,17 +81,18 @@ export async function generateMetadata({ params }: GalleryPageProps): Promise<Me
       publishedTime: app.created_at,
       modifiedTime: app.updated_at,
       authors: [app.user_email || 'Anonymous'],
-      ...(hasVideo && videoStreamUrl && {
-        videos: [
-          {
-            url: videoStreamUrl,
-            width: 1920,
-            height: 1080,
-          },
-        ],
-      }),
+      ...(hasVideo &&
+        videoStreamUrl && {
+          videos: [
+            {
+              url: videoStreamUrl,
+              width: 1920,
+              height: 1080,
+            },
+          ],
+        }),
     },
-    
+
     twitter: {
       card: hasVideo ? 'player' : 'summary_large_image',
       site: '@novita_labs',
@@ -97,14 +100,16 @@ export async function generateMetadata({ params }: GalleryPageProps): Promise<Me
       title: `${title} | ${siteName}`,
       description,
       images: [ogImage],
-      ...(hasVideo && twitterPlayerUrl && videoStreamUrl && {
-        players: {
-          playerUrl: twitterPlayerUrl,
-          streamUrl: videoStreamUrl,
-          width: 1920,
-          height: 1080,
-        },
-      }),
+      ...(hasVideo &&
+        twitterPlayerUrl &&
+        videoStreamUrl && {
+          players: {
+            playerUrl: twitterPlayerUrl,
+            streamUrl: videoStreamUrl,
+            width: 1920,
+            height: 1080,
+          },
+        }),
     },
   }
 }
@@ -119,7 +124,7 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  
+
   const app = await getApp(id)
   if (!app) {
     notFound()

@@ -248,69 +248,73 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
 
       <main ref={previewContainerRef} className="relative flex w-screen flex-1 overflow-hidden">
         <div className="flex w-full flex-1">
-          {arenaViewMode !== 'b' && (() => {
-            // Calculate comparison data for Model A
-            const comparisonData = arenaViewMode === 'split' && modelB.response.completed && modelB.response.tokens
-              ? {
-                  tokens: modelB.response.outputTokens ?? modelB.response.tokens,
-                  cost: calculateTokensAndCost(
-                    modelB.response.outputTokens ?? modelB.response.tokens,
-                    modelB.selectedModel.id
-                  ).cost,
-                  duration: modelB.response.duration,
-                }
-              : undefined
+          {arenaViewMode !== 'b' &&
+            (() => {
+              // Calculate comparison data for Model A
+              const comparisonData =
+                arenaViewMode === 'split' && modelB.response.completed && modelB.response.tokens
+                  ? {
+                      tokens: modelB.response.outputTokens ?? modelB.response.tokens,
+                      cost: calculateTokensAndCost(
+                        modelB.response.outputTokens ?? modelB.response.tokens,
+                        modelB.selectedModel.id
+                      ).cost,
+                      duration: modelB.response.duration,
+                    }
+                  : undefined
 
-            return (
-              <ModelPanel
-                className={arenaViewMode === 'split' ? 'w-1/2' : 'flex-1'}
-                selectedModel={modelA.selectedModel}
-                onModelChange={modelA.setSelectedModel}
-                response={modelA.response}
-                onResponseChange={modelA.setResponse}
-                viewMode={modelA.viewMode}
-                onViewModeChange={modelA.setViewMode}
-                settings={modelA.settings}
-                onSettingsChange={modelA.setSettings}
-                onRegenerate={handleGenerateModelA}
-                onToggleMaximize={() => setArenaViewMode(arenaViewMode === 'a' ? 'split' : 'a')}
-                showRightBorder={arenaViewMode === 'split'}
-                scrollButtonPosition={arenaViewMode === 'split' ? 'left' : 'right'}
-                comparisonData={comparisonData}
-              />
-            )
-          })()}
+              return (
+                <ModelPanel
+                  className={arenaViewMode === 'split' ? 'w-1/2' : 'flex-1'}
+                  selectedModel={modelA.selectedModel}
+                  onModelChange={modelA.setSelectedModel}
+                  response={modelA.response}
+                  onResponseChange={modelA.setResponse}
+                  viewMode={modelA.viewMode}
+                  onViewModeChange={modelA.setViewMode}
+                  settings={modelA.settings}
+                  onSettingsChange={modelA.setSettings}
+                  onRegenerate={handleGenerateModelA}
+                  onToggleMaximize={() => setArenaViewMode(arenaViewMode === 'a' ? 'split' : 'a')}
+                  showRightBorder={arenaViewMode === 'split'}
+                  scrollButtonPosition={arenaViewMode === 'split' ? 'left' : 'right'}
+                  comparisonData={comparisonData}
+                />
+              )
+            })()}
 
-          {arenaViewMode !== 'a' && (() => {
-            // Calculate comparison data for Model B
-            const comparisonData = arenaViewMode === 'split' && modelA.response.completed && modelA.response.tokens
-              ? {
-                  tokens: modelA.response.outputTokens ?? modelA.response.tokens,
-                  cost: calculateTokensAndCost(
-                    modelA.response.outputTokens ?? modelA.response.tokens,
-                    modelA.selectedModel.id
-                  ).cost,
-                  duration: modelA.response.duration,
-                }
-              : undefined
+          {arenaViewMode !== 'a' &&
+            (() => {
+              // Calculate comparison data for Model B
+              const comparisonData =
+                arenaViewMode === 'split' && modelA.response.completed && modelA.response.tokens
+                  ? {
+                      tokens: modelA.response.outputTokens ?? modelA.response.tokens,
+                      cost: calculateTokensAndCost(
+                        modelA.response.outputTokens ?? modelA.response.tokens,
+                        modelA.selectedModel.id
+                      ).cost,
+                      duration: modelA.response.duration,
+                    }
+                  : undefined
 
-            return (
-              <ModelPanel
-                className={arenaViewMode === 'split' ? 'w-1/2' : 'flex-1'}
-                selectedModel={modelB.selectedModel}
-                onModelChange={modelB.setSelectedModel}
-                response={modelB.response}
-                onResponseChange={modelB.setResponse}
-                viewMode={modelB.viewMode}
-                onViewModeChange={modelB.setViewMode}
-                settings={modelB.settings}
-                onSettingsChange={modelB.setSettings}
-                onRegenerate={handleGenerateModelB}
-                onToggleMaximize={() => setArenaViewMode(arenaViewMode === 'b' ? 'split' : 'b')}
-                comparisonData={comparisonData}
-              />
-            )
-          })()}
+              return (
+                <ModelPanel
+                  className={arenaViewMode === 'split' ? 'w-1/2' : 'flex-1'}
+                  selectedModel={modelB.selectedModel}
+                  onModelChange={modelB.setSelectedModel}
+                  response={modelB.response}
+                  onResponseChange={modelB.setResponse}
+                  viewMode={modelB.viewMode}
+                  onViewModeChange={modelB.setViewMode}
+                  settings={modelB.settings}
+                  onSettingsChange={modelB.setSettings}
+                  onRegenerate={handleGenerateModelB}
+                  onToggleMaximize={() => setArenaViewMode(arenaViewMode === 'b' ? 'split' : 'b')}
+                  comparisonData={comparisonData}
+                />
+              )
+            })()}
         </div>
 
         {showInputBar && (

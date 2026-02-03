@@ -124,7 +124,7 @@ export type LLMModel = {
   color: string
   icon: string
   group: string
-  inputPrice?: number  // Price per million tokens (Mt)
+  inputPrice?: number // Price per million tokens (Mt)
   outputPrice?: number // Price per million tokens (Mt)
 }
 
@@ -145,7 +145,7 @@ interface ModelGroup {
     name: string
     icon: string
     color: string
-    inputPrice: number  // Price per million tokens (Mt)
+    inputPrice: number // Price per million tokens (Mt)
     outputPrice: number // Price per million tokens (Mt)
   }>
 }
@@ -247,32 +247,32 @@ export const modelGroups: ModelGroup[] = [
         name: 'DeepSeek V3.2',
         icon: '/logo/models/deepseek-color.svg',
         color: '#4D6BFE',
-        inputPrice: 0.2690,
-        outputPrice: 0.4000,
+        inputPrice: 0.269,
+        outputPrice: 0.4,
       },
       {
         id: 'zai-org/glm-4.7',
         name: 'GLM 4.7',
         icon: '/logo/models/zai.svg',
         color: '#000',
-        inputPrice: 0.6000,
-        outputPrice: 2.2000,
+        inputPrice: 0.6,
+        outputPrice: 2.2,
       },
       {
         id: 'minimax/minimax-m2.1',
         name: 'Minimax M2.1',
         icon: '/logo/models/minimax-color.svg',
         color: '#F23F5D',
-        inputPrice: 0.3000,
-        outputPrice: 1.2000,
+        inputPrice: 0.3,
+        outputPrice: 1.2,
       },
       {
         id: 'moonshotai/kimi-k2.5',
         name: 'Kimi K2.5 Thinking',
         icon: '/logo/models/kimi-color.svg',
         color: '#000',
-        inputPrice: 0.6000,
-        outputPrice: 3.0000,
+        inputPrice: 0.6,
+        outputPrice: 3.0,
       },
     ],
   },
@@ -284,32 +284,32 @@ export const modelGroups: ModelGroup[] = [
         name: 'GPT 5.2',
         icon: '/logo/models/openai.svg',
         color: '#000',
-        inputPrice: 1.7500,
-        outputPrice: 14.0000,
+        inputPrice: 1.75,
+        outputPrice: 14.0,
       },
       {
         id: 'pa/claude-sonnet-4-5-20250929',
         name: 'Claude Sonnet 4.5',
         icon: '/logo/models/claude-color.svg',
         color: '#D97757',
-        inputPrice: 3.0000,
-        outputPrice: 15.0000,
+        inputPrice: 3.0,
+        outputPrice: 15.0,
       },
       {
         id: 'pa/gemini-3-pro-preview',
         name: 'Gemini 3 Pro',
         icon: '/logo/models/gemini-color.svg',
         color: '#FFF',
-        inputPrice: 2.0000,
-        outputPrice: 12.0000,
+        inputPrice: 2.0,
+        outputPrice: 12.0,
       },
       {
         id: 'pa/grok-4-1-fast-reasoning',
         name: 'Grok 4.1 Fast Reasoning',
         icon: '/logo/models/grok.svg',
         color: '#000',
-        inputPrice: 0.2000,
-        outputPrice: 0.5000,
+        inputPrice: 0.2,
+        outputPrice: 0.5,
       },
     ],
   },
@@ -356,14 +356,13 @@ export const HACKATHON_PARTICIPANTS = 1234
 export const NOVITA_BILLING_URL = 'https://novita.ai/billing'
 export const DISCORD_INVITE_URL = 'https://discord.gg/x9YbHHCptj'
 
-
 // External API
 export const KIMI_API_URL = 'https://api.moonshot.cn/v1/chat/completions'
 export const KIMI_EXTERNAL_ID = 'kimi-k2.5'
 export const ZAI_API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
 export const ZAI_EXTERNAL_ID = 'glm-4.7'
-export const MINIMAX_API_URL='https://api.minimax.io/v1/chat/completions'
-export const MINIMAX_EXTERNAL_ID='MiniMax-M2.1'
+export const MINIMAX_API_URL = 'https://api.minimax.io/v1/chat/completions'
+export const MINIMAX_EXTERNAL_ID = 'MiniMax-M2.1'
 
 // External API Configuration
 // Set to true to use vendor's direct API instead of Novita for specific models

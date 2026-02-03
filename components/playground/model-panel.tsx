@@ -3,7 +3,7 @@
 import React, { useId, useState, useEffect } from 'react'
 import { Button } from '@/components/base/button'
 import { Menu } from '@base-ui/react/menu'
-import { Maximize, RotateCcw, Zap, DollarSign, Clock } from 'lucide-react'
+import { Maximize, RotateCcw, DollarSign, Clock, CaseSensitive } from 'lucide-react'
 import Image from 'next/image'
 import { ModelSettingsPopover } from '@/components/playground/model-settings-modal'
 import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
@@ -70,36 +70,33 @@ export function ModelPanel({
 }: ModelPanelProps) {
   const menuTriggerId = useId()
   const [currentTime, setCurrentTime] = useState(0)
-  
+
   // Update current time during generation
   useEffect(() => {
     if (!response.loading || !response.startTime) return
-    
+
     const updateTime = () => {
       setCurrentTime((Date.now() - response.startTime!) / 1000)
     }
-    
+
     updateTime()
     const interval = setInterval(updateTime, 100)
-    
+
     return () => clearInterval(interval)
   }, [response.loading, response.startTime])
-  
+
   // Use duration when not loading
   const displayTime = response.loading ? currentTime : response.duration || 0
-  
+
   // Calculate tokens - estimate from content if no token data available
   const actualTokens = response.outputTokens ?? response.tokens
-  const estimatedTokens = actualTokens 
-    ? actualTokens 
-    : response.content 
+  const estimatedTokens = actualTokens
+    ? actualTokens
+    : response.content
       ? Math.ceil(response.content.length / 3) // Rough estimation: ~3.5 chars per token
       : null
-  
-  const { tokens, cost } = calculateTokensAndCost(
-    estimatedTokens,
-    selectedModel.id
-  )
+
+  const { tokens, cost } = calculateTokensAndCost(estimatedTokens, selectedModel.id)
 
   return (
     <div
@@ -136,7 +133,7 @@ export function ModelPanel({
                   {selectedModel.name}
                 </span>
                 {selectedModel.outputPrice !== undefined && (
-                  <span className="rounded-md bg-gradient-to-r from-blue-50 to-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
+                  <span className="rounded-md bg-gradient-to-r from-blue-50 to-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700 ring-1 ring-indigo-700/10 ring-inset">
                     ${selectedModel.outputPrice}/Mt
                   </span>
                 )}
@@ -209,58 +206,64 @@ export function ModelPanel({
           </div>
 
           {/* Status Indicator - Real-time metrics with comparison */}
-          {(response.loading || (response.completed && response.tokens)) && (() => {
-            // Calculate comparison ratios
-            const costRatio = comparisonData?.cost && cost && comparisonData.cost > 0 && cost > 0
-              ? comparisonData.cost / cost
-              : null
-            const durationRatio = comparisonData?.duration && displayTime && comparisonData.duration > 0 && displayTime > 0
-              ? comparisonData.duration / displayTime
-              : null
-            
-            const isCostWinner = costRatio && costRatio > 1.1 // At least 10% cheaper
-            const isDurationWinner = durationRatio && durationRatio >= 1.5 // At least 50% faster
+          {(response.loading || (response.completed && response.tokens)) &&
+            (() => {
+              // Calculate comparison ratios
+              const costRatio =
+                comparisonData?.cost && cost && comparisonData.cost > 0 && cost > 0
+                  ? comparisonData.cost / cost
+                  : null
+              const durationRatio =
+                comparisonData?.duration &&
+                displayTime &&
+                comparisonData.duration > 0 &&
+                displayTime > 0
+                  ? comparisonData.duration / displayTime
+                  : null
 
-            return (
-              <div className="flex items-center gap-2">
-                {response.loading && (
-                  <div className="size-4 animate-spin rounded-full border-2 border-[#23d57c] border-t-transparent" />
-                )}
-                
-                {/* Cost Badge */}
-                {cost !== null && (
-                  <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2.5 py-1 text-sm font-semibold text-green-700 ring-1 ring-inset ring-green-700/10">
-                    <DollarSign className="size-3.5" />
-                    <span>{cost.toFixed(4)}</span>
-                    {isCostWinner && costRatio && costRatio > 1.5 && (
-                      <span className="ml-0.5 text-xs text-green-600">
-                        {costRatio.toFixed(1)}x cheaper
+              const isCostWinner = costRatio && costRatio > 1.1 // At least 10% cheaper
+              const isDurationWinner = durationRatio && durationRatio >= 1.5 // At least 50% faster
+
+              return (
+                <div className="flex items-center gap-2">
+                  {response.loading && (
+                    <div className="size-4 animate-spin rounded-full border-2 border-[#23d57c] border-t-transparent" />
+                  )}
+
+                  {/* Cost Badge */}
+                  {cost !== null && (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2.5 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset">
+                      <DollarSign className="size-3.5" />
+                      <span>{cost.toFixed(4)}</span>
+                      {isCostWinner && costRatio && costRatio > 1.5 && (
+                        <span className="ml-0.5 text-xs text-green-600">
+                          {costRatio.toFixed(1)}x cheaper
+                        </span>
+                      )}
+                    </span>
+                  )}
+
+                  {/* Duration Badge */}
+                  <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 ring-1 ring-blue-700/10 ring-inset">
+                    <Clock className="size-3.5" />
+                    <span>{displayTime.toFixed(1)}s</span>
+                    {isDurationWinner && durationRatio && durationRatio > 1.5 && (
+                      <span className="ml-0.5 text-xs text-blue-600">
+                        {durationRatio.toFixed(1)}x faster
                       </span>
                     )}
                   </span>
-                )}
-                
-                {/* Duration Badge */}
-                <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                  <Clock className="size-3.5" />
-                  <span>{displayTime.toFixed(1)}s</span>
-                  {isDurationWinner && durationRatio && durationRatio > 1.5 && (
-                    <span className="ml-0.5 text-xs text-blue-600">
-                      {durationRatio.toFixed(1)}x faster
+
+                  {/* Token Badge - De-emphasized */}
+                  {tokens !== null && (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2.5 py-1 text-sm font-semibold text-gray-600 ring-1 ring-gray-600/10 ring-inset">
+                      <CaseSensitive className="size-3.5" />
+                      <span>{tokens.toLocaleString()} tokens</span>
                     </span>
                   )}
-                </span>
-                
-                {/* Token Badge - De-emphasized */}
-                {tokens !== null && (
-                  <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2.5 py-1 text-sm font-semibold text-gray-600 ring-1 ring-inset ring-gray-600/10">
-                    <Zap className="size-3.5" />
-                    <span>{tokens.toLocaleString()} tokens</span>
-                  </span>
-                )}
-              </div>
-            )
-          })()}
+                </div>
+              )
+            })()}
         </div>
 
         {/* Actions */}

@@ -7,16 +7,19 @@
 ### 1. 基础 Metadata (app/layout.tsx)
 
 #### Title 配置
+
 - ✅ **Title Template**: `%s | Novita Render Areana`
   - 允许每个页面自定义标题，同时保持品牌一致性
   - 首页使用完整标题：`Novita Render Areana - Visual AI Battle | Open Source vs Proprietary Models`
-  
+
 #### Meta Tags
+
 - ✅ **Description**: 150-160字符的描述文案
 - ✅ **Keywords**: 目标关键词数组
 - ✅ **Authors, Creator, Publisher**: 品牌信息
 
 #### Open Graph (Facebook, LinkedIn等)
+
 - ✅ **type**: 'website' (首页) / 'article' (详情页)
 - ✅ **locale**: 'en_US'
 - ✅ **siteName**: 品牌名称
@@ -25,15 +28,18 @@
 - ✅ **url**: 规范的页面URL
 
 #### Twitter Cards
+
 - ✅ **card**: 'summary_large_image'
 - ✅ **site, creator**: '@novita_labs'
 - ✅ **title, description, images**: 完整配置
 
 #### Facebook (可选)
+
 - 📝 预留了 `facebook.appId` 配置项（注释状态）
 - 当需要 Facebook Insights 时取消注释
 
 #### Robots
+
 - ✅ **index**: true (允许索引)
 - ✅ **follow**: true (允许跟踪链接)
 - ✅ **googleBot**: 特定的 Google 爬虫配置
@@ -42,14 +48,17 @@
   - max-snippet: -1
 
 #### Canonical URLs
+
 - ✅ **alternates.canonical**: 防止重复内容问题
 
 #### Viewport
+
 - ✅ **独立的 viewport 导出**
 - ✅ **width**: device-width
 - ✅ **themeColor**: 支持深色/浅色模式
 
 #### 搜索引擎验证 (可选)
+
 - 📝 预留了 `verification` 配置项
 - 待添加：Google、Bing、Yandex 验证码
 
@@ -58,14 +67,16 @@
 ### 2. 页面级 Metadata
 
 #### 首页 (app/page.tsx)
+
 - ✅ 继承全局 metadata
 - ✅ 完整的 title 和 description
 
 #### Gallery 详情页 (app/gallery/[id]/page.tsx)
+
 - ✅ **动态 generateMetadata**
 - ✅ **Title**: 使用作品名称
 - ✅ **Description**: 作品描述或 prompt
-- ✅ **OG Image**: 
+- ✅ **OG Image**:
   - 优先使用 video thumbnail (Cloudflare Stream)
   - 否则使用默认 visual-cover.png
 - ✅ **OpenGraph type**: 'article'
@@ -74,6 +85,7 @@
 - ✅ **使用 React cache()**: 避免重复数据库查询
 
 #### Playground 页面 (app/playground/[id]/page.tsx)
+
 - ✅ **动态 generateMetadata**
 - ✅ **robots.index = false**: 不索引编辑页面
 - ✅ 新建页面标题："New Battle"
@@ -122,16 +134,19 @@ Sitemap: https://renderarena.novita.ai/sitemap.xml
 ### 5. Structured Data / JSON-LD (lib/structured-data.ts)
 
 #### Organization Schema
+
 - ✅ 组织信息（Novita AI）
 - ✅ Logo、URL
 - ✅ Social profiles (Twitter, GitHub)
 
 #### Website Schema
+
 - ✅ 网站名称、描述
 - ✅ Publisher 信息
 - ✅ SearchAction (搜索功能)
 
 #### Creative Work Schema
+
 - ✅ 用于 Gallery 详情页
 - ✅ 作品名称、描述
 - ✅ Creator（作者）
@@ -139,15 +154,18 @@ Sitemap: https://renderarena.novita.ai/sitemap.xml
 - ✅ thumbnailUrl（缩略图）
 
 #### Breadcrumb Schema
+
 - ✅ 面包屑导航
 - ✅ Home > Gallery > [Item Name]
 - ✅ 帮助搜索引擎理解页面层级
 
 #### FAQ Schema (预留)
+
 - 📝 可用于首页 FAQ 部分
 - 📝 有助于出现在搜索结果的富文本片段
 
 **实施位置**:
+
 - Gallery 详情页已添加 CreativeWork + Breadcrumb schema
 
 ---
@@ -189,6 +207,7 @@ Sitemap: https://renderarena.novita.ai/sitemap.xml
 ### 为新页面添加 Metadata
 
 #### 方法 1: 静态 metadata
+
 ```typescript
 // app/new-page/page.tsx
 import type { Metadata } from 'next'
@@ -201,11 +220,12 @@ export const metadata: Metadata = {
 ```
 
 #### 方法 2: 动态 generateMetadata
+
 ```typescript
 // app/items/[id]/page.tsx
 export async function generateMetadata({ params }): Promise<Metadata> {
   const item = await fetchItem(params.id)
-  
+
   return {
     title: item.title,
     description: item.description,
@@ -224,7 +244,7 @@ import Script from 'next/script'
 
 export default function Page() {
   const schema = breadcrumbSchema([...])
-  
+
   return (
     <>
       <Script

@@ -54,8 +54,8 @@
 
 | 步骤 | 事件名称             |
 | :--- | :------------------- |
-| 1    | `generation_started`      |
-| 2    | `result_shared` |
+| 1    | `generation_started` |
+| 2    | `result_shared`      |
 
 ### 1.3. 路径探索分析 (Path Exploration Analysis)
 
@@ -65,6 +65,7 @@
 
 > **业务问题:** 用户通过分享链接访问后，会做什么？他们是会离开，还是会进行“Remix”或再次创作？
 > **配置方法:**
+>
 > 1.  选择 **“正向路径 (Forward path)”**。
 > 2.  **起点 (Starting point):** 事件 `shared_item_viewed`。
 > 3.  **分析:** 观察后续事件是否为 `remix_started` 或 `generation_started`，以评估分享带来的用户活跃度。如果流失率高，说明分享着陆页需要优化。
@@ -73,6 +74,7 @@
 
 > **业务问题:** 用户在使用核心功能“生成”后，最常见的后续行为是什么？不同等级的用户 (Guest vs. Registered) 行为有何差异？
 > **配置方法:**
+>
 > 1.  选择 **“正向路径 (Forward path)”**。
 > 2.  **起点 (Starting point):** 事件 `generation_started`。
 > 3.  **分析:** 使用 **`User Tier`** 作为过滤器，对比不同用户群体的行为路径，例如，`guest` 常见路径是耗尽额度 (`... -> login_started`)，而 `registered` 用户是否更倾向于分享 (`... -> result_shared`)。

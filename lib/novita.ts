@@ -61,9 +61,7 @@ export interface NovitaBalanceInfo {
   pendingCharges: string // unit is 0.0001 USD
   outstandingInvoices: string // unit is 0.0001 USD
 }
-export async function getNovitaAccountBalance(
-  apiKey?: string
-): Promise<NovitaBalanceInfo | null> {
+export async function getNovitaAccountBalance(apiKey?: string): Promise<NovitaBalanceInfo | null> {
   const key = apiKey || process.env.NEXT_NOVITA_API_KEY
 
   if (!key) {
