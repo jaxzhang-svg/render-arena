@@ -405,7 +405,7 @@ export function useModelGeneration({
             showToast.error(errorMessage || 'Generation failed. Please try again.')
           }
         } else {
-          showToast.error('Network error or request timeout. Please try again.')
+          showToast.error('Network error. Please try again.')
         }
 
         setResponse(prev => ({

@@ -3,7 +3,7 @@
 import React, { useId, useState, useEffect } from 'react'
 import { Button } from '@/components/base/button'
 import { Menu } from '@base-ui/react/menu'
-import { Maximize, RotateCcw, DollarSign, Clock, CaseSensitive } from 'lucide-react'
+import { Maximize, RotateCcw, DollarSign, Clock, Braces } from 'lucide-react'
 import Image from 'next/image'
 import { ModelSettingsPopover } from '@/components/playground/model-settings-modal'
 import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
@@ -257,7 +257,7 @@ export function ModelPanel({
                   {/* Token Badge - De-emphasized */}
                   {tokens !== null && (
                     <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2.5 py-1 text-sm font-semibold text-gray-600 ring-1 ring-gray-600/10 ring-inset">
-                      <CaseSensitive className="size-3.5" />
+                      <Braces className="size-3.5" />
                       <span>{tokens.toLocaleString()} tokens</span>
                     </span>
                   )}
@@ -354,7 +354,7 @@ export function ModelPanel({
             />
           ) : (
             <div className="text-muted-foreground flex h-full items-center justify-center">
-              {response.loading ? 'Generating HTML...' : 'No HTML available for preview.'}
+              {response.loading ? 'Rendering HTML...' : 'No HTML available for preview.'}
             </div>
           )}
         </div>

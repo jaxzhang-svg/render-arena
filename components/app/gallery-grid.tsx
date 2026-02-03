@@ -96,7 +96,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
           })
 
           if (response.status === 401) {
-            showToast.login('Please login to like')
+            showToast.login('Log in to like this post', 'like')
             // Revert code
             isLikedRef.current = serverLikedRef.current
             setIsLiked(serverLikedRef.current)

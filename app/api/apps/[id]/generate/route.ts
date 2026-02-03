@@ -125,7 +125,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       JSON.stringify({
         error: 'ALL_GENERATION_DISABLED',
         message:
-          'Due to overwhelming demand, our service is temporarily paused. We&apos;ll be back online soon!',
+          'Due to high demand, our service is temporarily paused. We&apos;ll be back online soon!',
       }),
       { status: 403, headers: { 'Content-Type': 'application/json' } }
     )
@@ -137,8 +137,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     if (!isPaidUser) {
       const message = user
-        ? 'Due to overwhelming demand, free tier access is temporarily paused. Please upgrade your account to continue generating.'
-        : 'Due to overwhelming demand, anonymous access is temporarily paused. Please login to continue.'
+        ? 'Due to high demand, free access is temporarily limited. Add balance to get instant access.'
+        : 'Due to high demand, anonymous access is temporarily paused. Log in and add balance to continue.'
 
       return new Response(JSON.stringify({ error: 'FREE_TIER_DISABLED', message }), {
         status: 403,
@@ -159,13 +159,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     let error, message
     if (!user) {
       error = 'QUOTA_EXCEEDED_T0'
-      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Please login to continue.`
+      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Log in to continue.`
     } else if (novitaBalance == null || novitaBalance < PAID_USER_BALANCE_THRESHOLD) {
       error = 'QUOTA_EXCEEDED_T1'
-      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Please upgrade your account tier to continue.`
+      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Add balance to get more generations.`
     } else if (novitaBalance > PAID_USER_BALANCE_THRESHOLD) {
       error = 'QUOTA_EXCEEDED_T2'
-      message = `You have reached your paid generation limit (${usedCount}/${quotaLimit}). Please contact support to increase your limit.`
+      message = `You have reached your paid generation limit (${usedCount}/${quotaLimit}). Need more? Contact us to increase your limit.`
     } else {
       error = 'QUOTA_EXCEEDED'
       message = `You have reached your generation limit (${usedCount}/${quotaLimit}).`

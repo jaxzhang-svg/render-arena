@@ -62,7 +62,7 @@ export const showToast = {
   },
   // Custom login toast
   login: (
-    message: string = 'Please login to continue',
+    message: string = 'Log in to continue',
     trigger?: 'publish' | 'like',
     options?: ToastOptions
   ) => {
@@ -84,12 +84,12 @@ export const showToast = {
       if (quotaType === 'T0') {
         trackLoginStarted('quota')
         // Anonymous user - show login button
-        buttonText = 'Login'
+        buttonText = 'Log in'
         buttonOnClick = () => loginWithNovita(window.location.pathname)
       } else if (quotaType === 'T1') {
         trackUpgradePromptDisplayed()
         // Authenticated user with low balance - show upgrade button
-        buttonText = 'Upgrade'
+        buttonText = 'Add balance'
         buttonOnClick = () => {
           trackUpgradeButtonClicked('quota_modal')
           window.open(NOVITA_BILLING_URL, '_blank')
@@ -120,7 +120,7 @@ export const showToast = {
   // Free tier disabled toast
   freeTierDisabled: (message: string, isAuthenticated: boolean, options?: ToastOptions) => {
     throttleToast('freeTierDisabled', () => {
-      const buttonText = isAuthenticated ? 'Upgrade' : 'Login'
+      const buttonText = isAuthenticated ? 'Add balance' : 'Log in'
       const buttonOnClick = isAuthenticated
         ? () => {
             trackUpgradeButtonClicked('overwhelming_banner')

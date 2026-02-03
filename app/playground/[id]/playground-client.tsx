@@ -190,7 +190,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                     {!isRecordingSupported
                       ? 'Screen recording is not supported in this browser'
                       : isGuest
-                        ? 'Please login first'
+                        ? 'Log in to record'
                         : 'Please wait for generation to complete'}
                   </Tooltip.Popup>
                 </Tooltip.Positioner>
@@ -216,7 +216,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                       return
                     }
                     if (isGuest) {
-                      showToast.login('Please login to share your creation', 'publish')
+                      showToast.login('Log in to share', 'publish')
                       return
                     }
                     if (recordedBlob) {
@@ -235,7 +235,7 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
               <Tooltip.Portal>
                 <Tooltip.Positioner sideOffset={4}>
                   <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
-                    {isGuest ? 'Please login first' : 'Please wait for generation to complete'}
+                    {isGuest ? 'Log in to share' : 'Please wait for generation to complete'}
                   </Tooltip.Popup>
                 </Tooltip.Positioner>
               </Tooltip.Portal>

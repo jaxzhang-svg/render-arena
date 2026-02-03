@@ -16,7 +16,7 @@ import {
   Share2,
   DollarSign,
   Clock,
-  CaseSensitive,
+  Braces,
 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -98,7 +98,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
         setLiked(data.liked)
         setLikeCount(data.likeCount)
       } else if (response.status === 401) {
-        showToast.login('Please login to like')
+        showToast.login('Log in to like this post', 'like')
       }
     } catch (error) {
       console.error('Like error:', error)
@@ -224,7 +224,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                   <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
                     {!isRecordingSupported
                       ? 'Screen recording is not supported in this browser'
-                      : 'Please login first'}
+                      : 'Log in to record'}
                   </Tooltip.Popup>
                 </Tooltip.Positioner>
               </Tooltip.Portal>
@@ -247,7 +247,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                   title={isGuest ? undefined : 'Share'}
                   onClick={() => {
                     if (isGuest) {
-                      showToast.login('Please login to share', 'publish')
+                      showToast.login('Log in to share', 'publish')
                       return
                     }
                     if (recordedBlob) {
@@ -266,7 +266,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
               <Tooltip.Portal>
                 <Tooltip.Positioner sideOffset={4}>
                   <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
-                    Please login first
+                    Log in to share
                   </Tooltip.Popup>
                 </Tooltip.Positioner>
               </Tooltip.Portal>
@@ -371,7 +371,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                           {/* Token Badge */}
                           {tokens !== null && (
                             <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2.5 py-1 text-sm font-semibold text-gray-600 ring-1 ring-gray-600/10 ring-inset">
-                              <CaseSensitive className="size-3.5" />
+                              <Braces className="size-3.5" />
                               <span>{tokens.toLocaleString()} tokens</span>
                             </span>
                           )}
@@ -468,7 +468,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                           {/* Token Badge */}
                           {tokens !== null && (
                             <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2.5 py-1 text-sm font-semibold text-gray-600 ring-1 ring-gray-600/10 ring-inset">
-                              <CaseSensitive className="size-3.5" />
+                              <Braces className="size-3.5" />
                               <span>{tokens.toLocaleString()} tokens</span>
                             </span>
                           )}

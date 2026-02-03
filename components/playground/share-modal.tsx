@@ -183,7 +183,7 @@ export function ShareModal({
       const errorMessage = error instanceof Error ? error.message : 'Upload failed'
       showToast.error(errorMessage)
       setUploadStatus('error')
-      setUploadError(errorMessage)
+      setUploadError("Upload failed. Please try again.")
       uploadedBlobRef.current = null // Allow retry
     }
   }, [videoBlob, appId, videoFormat, skipSaveToDatabase])
@@ -228,13 +228,12 @@ export function ShareModal({
         const data = await response.json()
         onPublishSuccess?.(data.category)
       } else {
-        console.error('Failed to publish')
-        showToast.error('Failed to publish')
+        showToast.error('Publishing failed. Please try again.')
         // Handle error (maybe show toast)
       }
     } catch (error) {
       console.error('Error publishing:', error)
-      showToast.error('Error publishing')
+      showToast.error('Publishing failed. Please try again.')
     } finally {
       setPublishLoading(false)
     }
@@ -263,7 +262,7 @@ export function ShareModal({
       await clipboardy.write(textToCopy)
     } catch (err) {
       console.error('Failed to copy text: ', err)
-      showToast.error('Failed to copy to clipboard')
+      showToast.error('Copy failed')
       return
     }
 

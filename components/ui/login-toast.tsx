@@ -21,7 +21,7 @@ export function LoginToast({ message }: LoginToastProps) {
         className="flex w-full items-center justify-center gap-2 rounded bg-[#23D57C] px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#1eb86b]"
       >
         <LogIn size={14} />
-        Login
+        Log in
       </button>
     </div>
   )

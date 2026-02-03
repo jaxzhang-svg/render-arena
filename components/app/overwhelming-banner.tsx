@@ -68,12 +68,11 @@ export function FreeTierBanner() {
           <p className="font-sans text-sm font-medium text-amber-900">
             {isFullDisabled ? (
               <>
-                Due to overwhelming demand, our service is temporarily paused. We&apos;ll be back
-                online soon!
+                Due to high demand, our service is temporarily paused. We&apos;ll be back online soon!
               </>
             ) : (
               <>
-                Due to overwhelming demand, free tier access is temporarily paused.{' '}
+                Due to high demand, free access is temporarily limited.{' '}
                 <a
                   href={NOVITA_BILLING_URL}
                   target="_blank"
@@ -83,9 +82,9 @@ export function FreeTierBanner() {
                     trackUpgradeButtonClicked('overwhelming_banner')
                   }}
                 >
-                  Upgrade
+                  Add balance
                 </a>{' '}
-                to continue generating.
+                to get instant access.
               </>
             )}
           </p>
