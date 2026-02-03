@@ -124,6 +124,8 @@ export type LLMModel = {
   color: string
   icon: string
   group: string
+  inputPrice?: number  // Price per million tokens (Mt)
+  outputPrice?: number // Price per million tokens (Mt)
 }
 
 interface LegacyModelGroup {
@@ -143,6 +145,8 @@ interface ModelGroup {
     name: string
     icon: string
     color: string
+    inputPrice: number  // Price per million tokens (Mt)
+    outputPrice: number // Price per million tokens (Mt)
   }>
 }
 
@@ -243,43 +247,69 @@ export const modelGroups: ModelGroup[] = [
         name: 'DeepSeek V3.2',
         icon: '/logo/models/deepseek-color.svg',
         color: '#4D6BFE',
+        inputPrice: 0.2690,
+        outputPrice: 0.4000,
       },
-      { id: 'zai-org/glm-4.7', name: 'GLM 4.7', icon: '/logo/models/zai.svg', color: '#000' },
+      {
+        id: 'zai-org/glm-4.7',
+        name: 'GLM 4.7',
+        icon: '/logo/models/zai.svg',
+        color: '#000',
+        inputPrice: 0.6000,
+        outputPrice: 2.2000,
+      },
       {
         id: 'minimax/minimax-m2.1',
         name: 'Minimax M2.1',
         icon: '/logo/models/minimax-color.svg',
         color: '#F23F5D',
+        inputPrice: 0.3000,
+        outputPrice: 1.2000,
       },
       {
         id: 'moonshotai/kimi-k2.5',
         name: 'Kimi K2.5 Thinking',
         icon: '/logo/models/kimi-color.svg',
         color: '#000',
+        inputPrice: 0.6000,
+        outputPrice: 3.0000,
       },
     ],
   },
   {
     group: 'Proprietary',
     items: [
-      { id: 'pa/gpt-5.2', name: 'GPT 5.2', icon: '/logo/models/openai.svg', color: '#000' },
+      {
+        id: 'pa/gpt-5.2',
+        name: 'GPT 5.2',
+        icon: '/logo/models/openai.svg',
+        color: '#000',
+        inputPrice: 1.7500,
+        outputPrice: 14.0000,
+      },
       {
         id: 'pa/claude-sonnet-4-5-20250929',
         name: 'Claude Sonnet 4.5',
         icon: '/logo/models/claude-color.svg',
         color: '#D97757',
+        inputPrice: 3.0000,
+        outputPrice: 15.0000,
       },
       {
         id: 'pa/gemini-3-pro-preview',
         name: 'Gemini 3 Pro',
         icon: '/logo/models/gemini-color.svg',
         color: '#FFF',
+        inputPrice: 2.0000,
+        outputPrice: 12.0000,
       },
       {
         id: 'pa/grok-4-1-fast-reasoning',
         name: 'Grok 4.1 Fast Reasoning',
         icon: '/logo/models/grok.svg',
         color: '#000',
+        inputPrice: 0.2000,
+        outputPrice: 0.5000,
       },
     ],
   },

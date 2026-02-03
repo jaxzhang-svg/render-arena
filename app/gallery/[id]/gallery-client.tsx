@@ -3,7 +3,21 @@
 import { useState, useCallback, useEffect, useId } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/base/button'
-import { ArrowLeft, Heart, Copy, ExternalLink, Maximize, Check, Loader2, Video, Square, Share2 } from 'lucide-react'
+import {
+  ArrowLeft,
+  Heart,
+  Copy,
+  ExternalLink,
+  Maximize,
+  Check,
+  Loader2,
+  Video,
+  Square,
+  Share2,
+  DollarSign,
+  Clock,
+  CaseSensitive,
+} from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { UserAvatar } from '@/components/app/user-avatar'
@@ -18,6 +32,7 @@ import { useScreenRecorder } from '@/hooks/use-screen-recorder'
 import { ShareModal } from '@/components/playground/share-modal'
 import { useAuth } from '@/hooks/use-auth'
 import { Tooltip } from '@base-ui/react/tooltip'
+import { calculateTokensAndCost } from '@/lib/pricing'
 
 interface GalleryClientProps {
   app: App & { isOwner: boolean; isLiked: boolean }
@@ -35,7 +50,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareMode, setShareMode] = useState<'video' | 'poster'>('poster')
   const [recordedFormat, setRecordedFormat] = useState<'webm' | 'mp4' | null>(null)
-  
+
   const { user, loading: authLoading } = useAuth()
   const recordTooltipId = useId()
   const shareTooltipId = useId()
@@ -310,15 +325,59 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                     className="size-4 rounded-sm"
                   />
                   <span className="text-sm font-medium text-[#4f4e4a]">{modelA.name}</span>
-                  {(app.duration_a || app.tokens_a) && (
-                    <div className="flex items-center gap-3 text-xs text-[#9e9c98]">
-                      {app.tokens_a && <span className="font-medium">{app.tokens_a} tokens</span>}
-                      {app.tokens_a && app.duration_a && <span className="text-[#e7e6e2]">•</span>}
-                      {app.duration_a && (
-                        <span className="font-medium">{app.duration_a.toFixed(1)}s</span>
-                      )}
-                    </div>
-                  )}
+                  {(app.duration_a || app.tokens_a) &&
+                    (() => {
+                      const { tokens, cost } = calculateTokensAndCost(app.tokens_a, app.model_a)
+                      const { cost: costB } = calculateTokensAndCost(app.tokens_b, app.model_b)
+
+                      // Calculate comparison ratios
+                      const costRatio = costB && cost && costB > 0 && cost > 0 ? costB / cost : null
+                      const durationRatio =
+                        app.duration_b && app.duration_a && app.duration_b > 0 && app.duration_a > 0
+                          ? app.duration_b / app.duration_a
+                          : null
+
+                      const isCostWinner = costRatio && costRatio > 1.1
+                      const isDurationWinner = durationRatio && durationRatio >= 1.5
+
+                      return (
+                        <div className="flex items-center gap-2">
+                          {/* Cost Badge */}
+                          {cost !== null && (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2.5 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset">
+                              <DollarSign className="size-3.5" />
+                              <span>{cost.toFixed(4)}</span>
+                              {isCostWinner && costRatio && costRatio > 1.5 && (
+                                <span className="ml-0.5 text-xs text-green-600">
+                                  {costRatio.toFixed(1)}x cheaper
+                                </span>
+                              )}
+                            </span>
+                          )}
+
+                          {/* Duration Badge */}
+                          {app.duration_a && (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 ring-1 ring-blue-700/10 ring-inset">
+                              <Clock className="size-3.5" />
+                              <span>{app.duration_a.toFixed(1)}s</span>
+                              {isDurationWinner && durationRatio && durationRatio > 1.5 && (
+                                <span className="ml-0.5 text-xs text-blue-600">
+                                  {durationRatio.toFixed(1)}x faster
+                                </span>
+                              )}
+                            </span>
+                          )}
+
+                          {/* Token Badge */}
+                          {tokens !== null && (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2.5 py-1 text-sm font-semibold text-gray-600 ring-1 ring-gray-600/10 ring-inset">
+                              <CaseSensitive className="size-3.5" />
+                              <span>{tokens.toLocaleString()} tokens</span>
+                            </span>
+                          )}
+                        </div>
+                      )
+                    })()}
                 </div>
 
                 <Button
@@ -363,15 +422,59 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                     className="size-4 rounded-sm"
                   />
                   <span className="text-sm font-medium text-[#4f4e4a]">{modelB.name}</span>
-                  {(app.duration_b || app.tokens_b) && (
-                    <div className="flex items-center gap-3 text-xs text-[#9e9c98]">
-                      {app.tokens_b && <span className="font-medium">{app.tokens_b} tokens</span>}
-                      {app.tokens_b && app.duration_b && <span className="text-[#e7e6e2]">•</span>}
-                      {app.duration_b && (
-                        <span className="font-medium">{app.duration_b.toFixed(1)}s</span>
-                      )}
-                    </div>
-                  )}
+                  {(app.duration_b || app.tokens_b) &&
+                    (() => {
+                      const { tokens, cost } = calculateTokensAndCost(app.tokens_b, app.model_b)
+                      const { cost: costA } = calculateTokensAndCost(app.tokens_a, app.model_a)
+
+                      // Calculate comparison ratios
+                      const costRatio = costA && cost && costA > 0 && cost > 0 ? costA / cost : null
+                      const durationRatio =
+                        app.duration_a && app.duration_b && app.duration_a > 0 && app.duration_b > 0
+                          ? app.duration_a / app.duration_b
+                          : null
+
+                      const isCostWinner = costRatio && costRatio > 1.1
+                      const isDurationWinner = durationRatio && durationRatio >= 1.5
+
+                      return (
+                        <div className="flex items-center gap-2">
+                          {/* Cost Badge */}
+                          {cost !== null && (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2.5 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset">
+                              <DollarSign className="size-3.5" />
+                              <span>{cost.toFixed(4)}</span>
+                              {isCostWinner && costRatio && costRatio > 1.5 && (
+                                <span className="ml-0.5 text-xs text-green-600">
+                                  {costRatio.toFixed(1)}x cheaper
+                                </span>
+                              )}
+                            </span>
+                          )}
+
+                          {/* Duration Badge */}
+                          {app.duration_b && (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 ring-1 ring-blue-700/10 ring-inset">
+                              <Clock className="size-3.5" />
+                              <span>{app.duration_b.toFixed(1)}s</span>
+                              {isDurationWinner && durationRatio && durationRatio > 1.5 && (
+                                <span className="ml-0.5 text-xs text-blue-600">
+                                  {durationRatio.toFixed(1)}x faster
+                                </span>
+                              )}
+                            </span>
+                          )}
+
+                          {/* Token Badge */}
+                          {tokens !== null && (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2.5 py-1 text-sm font-semibold text-gray-600 ring-1 ring-gray-600/10 ring-inset">
+                              <CaseSensitive className="size-3.5" />
+                              <span>{tokens.toLocaleString()} tokens</span>
+                            </span>
+                          )}
+                        </div>
+                      )
+                    })()}
                 </div>
 
                 <Button

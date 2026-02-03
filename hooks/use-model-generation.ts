@@ -48,6 +48,7 @@ export interface ModelResponse {
   completed: boolean
   html?: string
   tokens?: number
+  outputTokens?: number
   duration?: number
   startTime?: number
 }
@@ -288,6 +289,17 @@ export function useModelGeneration({
                 contentBufferRef.current += delta.content || ''
                 reasoningBufferRef.current += delta.reasoning_content || ''
               }
+
+              // 接收 usage 信息（只保存输出 token）
+              if (data.usage) {
+                const outputTokens = data.usage.completion_tokens || 0
+                console.log('Received output tokens:', data.usage, outputTokens)
+                setResponse(prev => ({
+                  ...prev,
+                  outputTokens,
+                  tokens: outputTokens,
+                }))
+              }
             } catch {
               // Ignore parsing errors
             }
@@ -313,7 +325,9 @@ export function useModelGeneration({
               const mergedReasoning = (prev.reasoning || '') + finalReasoning
               const html = extractHTMLFromMarkdown(mergedContent)
               const duration = (Date.now() - startTime) / 1000
-              const tokens = Math.floor(mergedContent.length / 4)
+              // 使用实际的 token 数据，如果没有则回退到估算
+              const tokens = prev.tokens || Math.floor(mergedContent.length / 3)
+              const outputTokens = prev.outputTokens || tokens
 
               // 如果当前模型生成了 HTML，则切换到预览模式
               if (html) {
@@ -351,6 +365,7 @@ export function useModelGeneration({
                 html: html || undefined,
                 duration,
                 tokens,
+                outputTokens,
               }
             })
           },

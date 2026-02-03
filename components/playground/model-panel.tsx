@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useId } from 'react'
+import React, { useId, useState, useEffect } from 'react'
 import { Button } from '@/components/base/button'
 import { Menu } from '@base-ui/react/menu'
-import { Maximize, RotateCcw } from 'lucide-react'
+import { Maximize, RotateCcw, Zap, DollarSign, Clock } from 'lucide-react'
 import Image from 'next/image'
 import { ModelSettingsPopover } from '@/components/playground/model-settings-modal'
 import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
@@ -12,6 +12,7 @@ import { LLMModel, modelGroups } from '@/lib/config'
 import { ModelResponse, ModelSettings, ViewMode } from '@/hooks/use-model-generation'
 import DOMPurify from 'isomorphic-dompurify'
 import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
+import { calculateTokensAndCost } from '@/lib/pricing'
 
 // Re-export types for convenience
 export type { ModelResponse, ModelSettings, ViewMode }
@@ -43,6 +44,12 @@ interface ModelPanelProps {
   className?: string
   /** 滚动到底部按钮的位置 */
   scrollButtonPosition?: 'left' | 'right'
+  /** 对比数据（用于显示相对性能） */
+  comparisonData?: {
+    tokens?: number
+    cost?: number | null
+    duration?: number
+  }
 }
 
 export function ModelPanel({
@@ -59,8 +66,40 @@ export function ModelPanel({
   showRightBorder = false,
   className,
   scrollButtonPosition = 'right',
+  comparisonData,
 }: ModelPanelProps) {
   const menuTriggerId = useId()
+  const [currentTime, setCurrentTime] = useState(0)
+  
+  // Update current time during generation
+  useEffect(() => {
+    if (!response.loading || !response.startTime) return
+    
+    const updateTime = () => {
+      setCurrentTime((Date.now() - response.startTime!) / 1000)
+    }
+    
+    updateTime()
+    const interval = setInterval(updateTime, 100)
+    
+    return () => clearInterval(interval)
+  }, [response.loading, response.startTime])
+  
+  // Use duration when not loading
+  const displayTime = response.loading ? currentTime : response.duration || 0
+  
+  // Calculate tokens - estimate from content if no token data available
+  const actualTokens = response.outputTokens ?? response.tokens
+  const estimatedTokens = actualTokens 
+    ? actualTokens 
+    : response.content 
+      ? Math.ceil(response.content.length / 3) // Rough estimation: ~3.5 chars per token
+      : null
+  
+  const { tokens, cost } = calculateTokensAndCost(
+    estimatedTokens,
+    selectedModel.id
+  )
 
   return (
     <div
@@ -96,6 +135,11 @@ export function ModelPanel({
                 <span className="font-sans text-[16px] font-medium text-[#4f4e4a]">
                   {selectedModel.name}
                 </span>
+                {selectedModel.outputPrice !== undefined && (
+                  <span className="rounded-md bg-gradient-to-r from-blue-50 to-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
+                    ${selectedModel.outputPrice}/Mt
+                  </span>
+                )}
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path
                     d="M5 7.5L10 12.5L15 7.5"
@@ -164,20 +208,59 @@ export function ModelPanel({
             </Menu.Root>
           </div>
 
-          {/* Status Indicator */}
-          {response.loading && (
-            <div className="flex items-center gap-2 text-sm text-[#9e9c98]">
-              <div className="size-4 animate-spin rounded-full border-2 border-[#23d57c] border-t-transparent" />
-              <span className="text-xs font-medium">Generating...</span>
-            </div>
-          )}
-          {!response.loading && response.completed && response.tokens && (
-            <div className="flex items-center gap-3 text-xs text-[#9e9c98]">
-              <span className="font-medium">{response.tokens} tokens</span>
-              <span className="text-[#e7e6e2]">•</span>
-              <span className="font-medium">{response.duration?.toFixed(1)}s</span>
-            </div>
-          )}
+          {/* Status Indicator - Real-time metrics with comparison */}
+          {(response.loading || (response.completed && response.tokens)) && (() => {
+            // Calculate comparison ratios
+            const costRatio = comparisonData?.cost && cost && comparisonData.cost > 0 && cost > 0
+              ? comparisonData.cost / cost
+              : null
+            const durationRatio = comparisonData?.duration && displayTime && comparisonData.duration > 0 && displayTime > 0
+              ? comparisonData.duration / displayTime
+              : null
+            
+            const isCostWinner = costRatio && costRatio > 1.1 // At least 10% cheaper
+            const isDurationWinner = durationRatio && durationRatio >= 1.5 // At least 50% faster
+
+            return (
+              <div className="flex items-center gap-2">
+                {response.loading && (
+                  <div className="size-4 animate-spin rounded-full border-2 border-[#23d57c] border-t-transparent" />
+                )}
+                
+                {/* Cost Badge */}
+                {cost !== null && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2.5 py-1 text-sm font-semibold text-green-700 ring-1 ring-inset ring-green-700/10">
+                    <DollarSign className="size-3.5" />
+                    <span>{cost.toFixed(4)}</span>
+                    {isCostWinner && costRatio && costRatio > 1.5 && (
+                      <span className="ml-0.5 text-xs text-green-600">
+                        {costRatio.toFixed(1)}x cheaper
+                      </span>
+                    )}
+                  </span>
+                )}
+                
+                {/* Duration Badge */}
+                <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                  <Clock className="size-3.5" />
+                  <span>{displayTime.toFixed(1)}s</span>
+                  {isDurationWinner && durationRatio && durationRatio > 1.5 && (
+                    <span className="ml-0.5 text-xs text-blue-600">
+                      {durationRatio.toFixed(1)}x faster
+                    </span>
+                  )}
+                </span>
+                
+                {/* Token Badge - De-emphasized */}
+                {tokens !== null && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2.5 py-1 text-sm font-semibold text-gray-600 ring-1 ring-inset ring-gray-600/10">
+                    <Zap className="size-3.5" />
+                    <span>{tokens.toLocaleString()} tokens</span>
+                  </span>
+                )}
+              </div>
+            )
+          })()}
         </div>
 
         {/* Actions */}
