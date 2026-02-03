@@ -19,14 +19,12 @@ import { showToast } from '@/lib/toast'
 import { getModeByCategory } from '@/lib/config'
 import { appendTrackingParamsToUrl } from '@/lib/tracking'
 import { trackResultShared } from '@/lib/analytics'
+import { getStreamWatchUrl } from '@/lib/cloudflare-stream'
 
 // Local Assets
 const imgLinkedin = '/logo/square-linkedin-brands-solid-full.svg'
 const imgTwitter = '/logo/square-x-twitter-brands-solid-full.svg'
 const imgFacebook = '/logo/square-facebook-brands-solid-full.svg'
-
-// Cloudflare Stream customer code - you can find this in your Cloudflare dashboard
-const CLOUDFLARE_CUSTOMER_CODE = process.env.NEXT_PUBLIC_CLOUDFLARE_CUSTOMER_CODE || ''
 
 type UploadStatus = 'idle' | 'uploading' | 'processing' | 'ready' | 'error'
 
@@ -42,6 +40,7 @@ interface ShareModalProps {
   isPublished?: boolean
   onPublishSuccess?: (category?: string | null) => void
   category?: string | null
+  skipSaveToDatabase?: boolean
 }
 
 export function ShareModal({
@@ -56,6 +55,7 @@ export function ShareModal({
   isPublished = false,
   onPublishSuccess,
   category,
+  skipSaveToDatabase = false,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false)
   const [agreedToPolicy, setAgreedToPolicy] = useState(false)
@@ -157,17 +157,19 @@ export function ShareModal({
         xhr.send(formData)
       })
 
-      // Step 3: Save video UID to database
+      // Step 3: Save video UID to database (skip if skipSaveToDatabase is true)
       setUploadStatus('processing')
 
-      const saveResponse = await fetch(`/api/apps/${appId}/video`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ videoUid: newVideoUid }),
-      })
+      if (!skipSaveToDatabase) {
+        const saveResponse = await fetch(`/api/apps/${appId}/video`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ videoUid: newVideoUid }),
+        })
 
-      if (!saveResponse.ok) {
-        throw new Error('Failed to save video')
+        if (!saveResponse.ok) {
+          throw new Error('Failed to save video')
+        }
       }
 
       // Step 4: Wait a moment for Cloudflare to start processing, then mark as ready
@@ -184,7 +186,15 @@ export function ShareModal({
       setUploadError(errorMessage)
       uploadedBlobRef.current = null // Allow retry
     }
-  }, [videoBlob, appId, videoFormat])
+  }, [videoBlob, appId, videoFormat, skipSaveToDatabase])
+
+  // Auto-upload video when modal opens for published content
+  useEffect(() => {
+    if (open && videoBlob && isPublished && uploadStatus === 'idle' && appId) {
+      console.log('Auto-uploading video for published gallery item...')
+      handleUploadVideo()
+    }
+  }, [open, videoBlob, isPublished, uploadStatus, appId, handleUploadVideo])
 
   /*
    * Handle Publish to Gallery
@@ -243,7 +253,7 @@ export function ShareModal({
   }
 
   const videoLink = useMemo(() => {
-    return `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoUid}/watch`
+    return getStreamWatchUrl(videoUid) || ''
   }, [videoUid])
 
   const handleCopy = async () => {
@@ -273,14 +283,7 @@ export function ShareModal({
     const truncatedPrompt =
       prompt.split(/\s+/).slice(0, 5).join(' ') + (prompt.split(/\s+/).length > 5 ? ' …' : '')
 
-    // Determine link
-    let finalLink = shareUrl
-    if (videoUid && CLOUDFLARE_CUSTOMER_CODE) {
-      finalLink = `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${videoUid}/watch`
-    }
-
-    // Append UTM tracking parameters
-    const linkWithUtm = appendTrackingParamsToUrl(finalLink, {
+    const linkToShare = appendTrackingParamsToUrl(shareUrl, {
       utm_source: 'renderarena',
       utm_medium: platform,
       utm_campaign: 'app_share',
@@ -288,7 +291,7 @@ export function ShareModal({
 
     const shareText = `Novita Render Arena — Side-by-Side\nPrompt: "${truncatedPrompt}"\n👉 Which model wins?\n`
 
-    const encodedUrl = encodeURIComponent(linkWithUtm)
+    const encodedUrl = encodeURIComponent(linkToShare)
     const encodedText = encodeURIComponent(shareText)
 
     let url = ''

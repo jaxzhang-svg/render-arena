@@ -80,7 +80,7 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
   }, [isRecording])
 
   const stopRecording = useCallback(() => {
-    if (recorderRef.current && isRecording) {
+    if (recorderRef.current) {
       recorderRef.current.stopRecording(() => {
         const blob = recorderRef.current!.getBlob()
         setRecordedBlob(blob)
@@ -93,7 +93,7 @@ export function useScreenRecorder(options: UseScreenRecorderOptions = {}): UseSc
         setRecordingTime(0)
       })
     }
-  }, [isRecording, onRecordingComplete])
+  }, [onRecordingComplete])
 
   const startRecording = useCallback(async () => {
     try {

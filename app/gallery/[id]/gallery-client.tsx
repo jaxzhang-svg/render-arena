@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useId } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/base/button'
-import { ArrowLeft, Heart, Copy, ExternalLink, Maximize, Check, Loader2 } from 'lucide-react'
+import { ArrowLeft, Heart, Copy, ExternalLink, Maximize, Check, Loader2, Video, Square, Share2 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { UserAvatar } from '@/components/app/user-avatar'
@@ -14,6 +14,10 @@ import DOMPurify from 'isomorphic-dompurify'
 import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
 import { showToast } from '@/lib/toast'
 import { trackRemixStarted, trackSharedItemViewed } from '@/lib/analytics'
+import { useScreenRecorder } from '@/hooks/use-screen-recorder'
+import { ShareModal } from '@/components/playground/share-modal'
+import { useAuth } from '@/hooks/use-auth'
+import { Tooltip } from '@base-ui/react/tooltip'
 
 interface GalleryClientProps {
   app: App & { isOwner: boolean; isLiked: boolean }
@@ -27,8 +31,39 @@ export default function GalleryClient({ app }: GalleryClientProps) {
   const [isLiking, setIsLiking] = useState(false)
   const [copied, setCopied] = useState(false)
 
+  // 录屏和分享相关状态
+  const [showShareModal, setShowShareModal] = useState(false)
+  const [shareMode, setShareMode] = useState<'video' | 'poster'>('poster')
+  const [recordedFormat, setRecordedFormat] = useState<'webm' | 'mp4' | null>(null)
+  
+  const { user, loading: authLoading } = useAuth()
+  const recordTooltipId = useId()
+  const shareTooltipId = useId()
+  const isGuest = !authLoading && !user
+
   const modelA = getModelById(app.model_a) || models[0]
   const modelB = getModelById(app.model_b) || models[1]
+
+  // 屏幕录制
+  const {
+    isRecording,
+    isRecordingSupported,
+    recordedBlob,
+    previewContainerRef,
+    startRecording,
+    stopRecording,
+  } = useScreenRecorder({
+    onRecordingComplete: (blob: Blob, format: 'webm') => {
+      setRecordedFormat(format)
+      setShareMode('video')
+      setTimeout(() => {
+        setShowShareModal(true)
+      }, 300)
+    },
+    onError: () => {
+      showToast.error('Recording failed')
+    },
+  })
 
   useEffect(() => {
     trackSharedItemViewed(app.id)
@@ -79,6 +114,25 @@ export default function GalleryClient({ app }: GalleryClientProps) {
     router.push(`/playground/new?${params.toString()}`)
   }, [app.id, app.prompt, app.category, router])
 
+  const handleRecordToggle = async () => {
+    if (!isRecordingSupported || isGuest || authLoading) {
+      return
+    }
+    if (isRecording) {
+      stopRecording()
+    } else {
+      if (
+        recordedBlob &&
+        !window.confirm(
+          'Starting a new recording will discard your previous recording. Do you want to continue?'
+        )
+      ) {
+        return
+      }
+      await startRecording()
+    }
+  }
+
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">
       {/* Header */}
@@ -117,7 +171,92 @@ export default function GalleryClient({ app }: GalleryClientProps) {
             )}
             <span>{likeCount}</span>
           </Button>
+          {/* 录屏按钮 */}
+          <Tooltip.Root>
+            <Tooltip.Trigger
+              id={recordTooltipId}
+              delay={100}
+              render={
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    'hover:text-primary hover:border-primary size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors',
+                    !isRecordingSupported || isGuest ? 'opacity-50' : ''
+                  )}
+                  onClick={handleRecordToggle}
+                  title={
+                    !isRecordingSupported
+                      ? 'Browser not supported'
+                      : isGuest
+                        ? undefined
+                        : isRecording
+                          ? 'Stop recording'
+                          : 'Start recording'
+                  }
+                >
+                  {isRecording ? (
+                    <Square className="size-4 fill-red-500 text-red-500" />
+                  ) : (
+                    <Video className="size-4" />
+                  )}
+                </Button>
+              }
+            />
+            {!isRecordingSupported || (isGuest && !authLoading) ? (
+              <Tooltip.Portal>
+                <Tooltip.Positioner sideOffset={4}>
+                  <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
+                    {!isRecordingSupported
+                      ? 'Screen recording is not supported in this browser'
+                      : 'Please login first'}
+                  </Tooltip.Popup>
+                </Tooltip.Positioner>
+              </Tooltip.Portal>
+            ) : null}
+          </Tooltip.Root>
 
+          {/* 分享按钮 */}
+          <Tooltip.Root>
+            <Tooltip.Trigger
+              id={shareTooltipId}
+              delay={100}
+              render={
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    'hover:text-primary hover:border-primary size-9 cursor-pointer rounded-lg border-[#e4e4e7] transition-colors',
+                    isGuest ? 'opacity-50' : ''
+                  )}
+                  title={isGuest ? undefined : 'Share'}
+                  onClick={() => {
+                    if (isGuest) {
+                      showToast.login('Please login to share', 'publish')
+                      return
+                    }
+                    if (recordedBlob) {
+                      setShareMode('video')
+                    } else {
+                      setShareMode('poster')
+                    }
+                    setShowShareModal(true)
+                  }}
+                >
+                  <Share2 className="size-4" />
+                </Button>
+              }
+            />
+            {isGuest && !authLoading ? (
+              <Tooltip.Portal>
+                <Tooltip.Positioner sideOffset={4}>
+                  <Tooltip.Popup className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-lg">
+                    Please login first
+                  </Tooltip.Popup>
+                </Tooltip.Positioner>
+              </Tooltip.Portal>
+            ) : null}
+          </Tooltip.Root>
           {/* 复制 Prompt */}
           <Button
             variant="outline"
@@ -154,7 +293,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
       </header>
 
       {/* Main Content - 左右分屏预览 */}
-      <main className="relative flex w-screen flex-1 overflow-hidden">
+      <main ref={previewContainerRef} className="relative flex w-screen flex-1 overflow-hidden">
         <div className="flex w-full flex-1">
           {/* Model A Preview */}
           {viewMode !== 'b' && (
@@ -263,6 +402,21 @@ export default function GalleryClient({ app }: GalleryClientProps) {
           )}
         </div>
       </main>
+
+      {/* 分享弹窗 */}
+      <ShareModal
+        open={showShareModal}
+        onOpenChange={setShowShareModal}
+        appId={app.id}
+        shareUrl={`${typeof window !== 'undefined' ? window.location.origin : ''}/gallery/${app.id}`}
+        videoBlob={recordedBlob}
+        videoFormat={recordedFormat}
+        showVideoSection={shareMode === 'video'}
+        isPublished={true}
+        prompt={app.prompt}
+        category={app.category}
+        skipSaveToDatabase={true}
+      />
     </div>
   )
 }
