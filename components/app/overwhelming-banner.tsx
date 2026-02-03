@@ -1,31 +1,62 @@
 'use client'
 
 import { trackUpgradeButtonClicked } from '@/lib/analytics'
-import { FREE_TIER_DISABLED, ALL_GENERATION_DISABLED, NOVITA_BILLING_URL } from '@/lib/config'
+import { NOVITA_BILLING_URL } from '@/lib/config'
 import { X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+interface SystemStatus {
+  freeTierDisabled: boolean
+  allGenerationDisabled: boolean
+}
 
 export function FreeTierBanner() {
-  const [isVisible, setIsVisible] = useState(() => {
-    // Initialize with localStorage check
-    if (typeof window !== 'undefined') {
-      const wasDismissed = localStorage.getItem('freeTierBannerDismissed')
-      return (FREE_TIER_DISABLED || ALL_GENERATION_DISABLED) && !wasDismissed
-    }
-    return FREE_TIER_DISABLED || ALL_GENERATION_DISABLED
+  const [systemStatus, setSystemStatus] = useState<SystemStatus>({
+    freeTierDisabled: false,
+    allGenerationDisabled: false,
   })
+  const [isLoading, setIsLoading] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    // Fetch system status from API
+    fetch('/api/system-status')
+      .then(res => res.json())
+      .then((data: SystemStatus) => {
+        setSystemStatus(data)
+        setIsLoading(false)
+
+        // Check localStorage for dismiss status
+        if (typeof window !== 'undefined') {
+          const wasDismissed = localStorage.getItem('freeTierBannerDismissed')
+          const shouldShow = (data.freeTierDisabled || data.allGenerationDisabled) && !wasDismissed
+          setIsVisible(shouldShow)
+        } else {
+          setIsVisible(data.freeTierDisabled || data.allGenerationDisabled)
+        }
+      })
+      .catch(error => {
+        console.error('Failed to fetch system status:', error)
+        setIsLoading(false)
+      })
+  }, [])
 
   const handleDismiss = () => {
     setIsVisible(false)
     localStorage.setItem('freeTierBannerDismissed', 'true')
   }
 
-  if ((!FREE_TIER_DISABLED && !ALL_GENERATION_DISABLED) || !isVisible) {
+  // Don't render anything while loading or if not visible
+  if (isLoading || !isVisible) {
+    return null
+  }
+
+  if (!systemStatus.freeTierDisabled && !systemStatus.allGenerationDisabled) {
     return null
   }
 
   // Show different message based on which mode is active
-  const isFullDisabled = ALL_GENERATION_DISABLED
+  const isFullDisabled = systemStatus.allGenerationDisabled
 
   return (
     <div className="relative w-full border-b border-amber-200 bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50">

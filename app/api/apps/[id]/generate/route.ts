@@ -7,13 +7,17 @@ import {
   AUTHENTICATED_QUOTA,
   PAID_QUOTA,
   PAID_USER_BALANCE_THRESHOLD,
-  FREE_TIER_DISABLED,
-  ALL_GENERATION_DISABLED,
   getAPIConfig,
 } from '@/lib/config'
+import { getFreeTierDisabled, getAllGenerationDisabled } from '@/lib/dynamic-config'
 import { checkAppOwnerPermission } from '@/lib/permissions'
 import { getNovitaBalance } from '@/lib/novita'
 import * as Sentry from '@sentry/nextjs'
+
+// Next.js Route Segment Config
+// This is a streaming endpoint, so we need edge-compatible settings
+export const runtime = 'nodejs' // Use Node.js runtime for Supabase and streaming
+export const dynamic = 'force-dynamic' // Always fresh data, no caching for generation requests
 
 function getClientIP(request: NextRequest): string {
   const headersList = request.headers
@@ -115,8 +119,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     identifier = clientIP
   }
 
-  // Check if all generation is disabled
-  if (ALL_GENERATION_DISABLED) {
+  const allGenerationDisabled = await getAllGenerationDisabled()
+  if (allGenerationDisabled) {
     return new Response(
       JSON.stringify({
         error: 'ALL_GENERATION_DISABLED',
@@ -127,8 +131,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     )
   }
 
-  // Check if free tier is disabled
-  if (FREE_TIER_DISABLED) {
+  const freeTierDisabled = await getFreeTierDisabled()
+  if (freeTierDisabled) {
     const isPaidUser = novitaBalance !== null && novitaBalance > PAID_USER_BALANCE_THRESHOLD
 
     if (!isPaidUser) {

@@ -10,8 +10,9 @@ export const FREE_TIER_DISABLED = false
 // Complete disable configuration - set to true to disable ALL users (including paid users)
 export const ALL_GENERATION_DISABLED = false
 
-const NOVITA_BALANCE_UNIT = 0.0001
-export const PAID_USER_BALANCE_THRESHOLD = 10 / NOVITA_BALANCE_UNIT
+// Novita balance threshold in integer units (1 unit = 0.0001 USD)
+// Example: 100000 units = 10 USD
+export const PAID_USER_BALANCE_THRESHOLD = 100000
 
 export const galleryCategories = [
   { id: 'all', label: 'All' },
