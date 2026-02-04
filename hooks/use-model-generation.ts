@@ -293,7 +293,6 @@ export function useModelGeneration({
               // 接收 usage 信息（只保存输出 token）
               if (data.usage) {
                 const outputTokens = data.usage.completion_tokens || 0
-                console.log('Received output tokens:', data.usage, outputTokens)
                 setResponse(prev => ({
                   ...prev,
                   outputTokens,

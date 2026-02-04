@@ -191,7 +191,6 @@ export function ShareModal({
   // Auto-upload video when modal opens for published content
   useEffect(() => {
     if (open && videoBlob && isPublished && uploadStatus === 'idle' && appId) {
-      console.log('Auto-uploading video for published gallery item...')
       handleUploadVideo()
     }
   }, [open, videoBlob, isPublished, uploadStatus, appId, handleUploadVideo])
