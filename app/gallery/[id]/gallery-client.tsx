@@ -344,7 +344,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                         <div className="flex items-center gap-2">
                           {/* Cost Badge */}
                           {cost !== null && (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2.5 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset">
+                            <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset">
                               <DollarSign className="size-3.5" />
                               <span>{cost.toFixed(4)}</span>
                               {isCostWinner && costRatio && costRatio > 1.5 && (
@@ -357,7 +357,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
 
                           {/* Duration Badge */}
                           {app.duration_a && (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 ring-1 ring-blue-700/10 ring-inset">
+                            <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2 py-1 text-sm font-semibold text-blue-700 ring-1 ring-blue-700/10 ring-inset">
                               <Clock className="size-3.5" />
                               <span>{app.duration_a.toFixed(1)}s</span>
                               {isDurationWinner && durationRatio && durationRatio > 1.5 && (
@@ -370,8 +370,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
 
                           {/* Token Badge */}
                           {tokens !== null && (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2.5 py-1 text-sm font-semibold text-gray-600 ring-1 ring-gray-600/10 ring-inset">
-                              <Braces className="size-3.5" />
+                            <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-2 py-1 text-sm font-semibold text-gray-600 ring-1 ring-gray-600/10 ring-inset">
                               <span>{tokens.toLocaleString()} tokens</span>
                             </span>
                           )}
