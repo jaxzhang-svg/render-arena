@@ -330,6 +330,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
 export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridProps) {
   const [apps, setApps] = useState<GalleryApp[]>(initialApps)
   const [loading, setLoading] = useState(initialApps.length === 0)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [, setTotal] = useState(0)
@@ -338,7 +339,11 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
 
   const fetchApps = useCallback(async (pageNum: number, cat: GalleryCategoryId, append = false) => {
     try {
-      setLoading(true)
+      if (append) {
+        setLoadingMore(true)
+      } else {
+        setLoading(true)
+      }
       const response = await fetch(`/api/apps?category=${cat}&page=${pageNum}&limit=6`, {
         cache: 'no-store',
       })
@@ -356,6 +361,7 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
       showToast.error('Failed to fetch apps')
     } finally {
       setLoading(false)
+      setLoadingMore(false)
     }
   }, [])
 
@@ -433,10 +439,10 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
             <div className="mt-16 flex justify-center">
               <button
                 onClick={handleLoadMore}
-                disabled={loading}
+                disabled={loadingMore}
                 className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-8 font-medium text-gray-900 transition-colors hover:bg-gray-100 disabled:opacity-50"
               >
-                {loading ? (
+                {loadingMore ? (
                   <>
                     <div className="size-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
                     Loading...
