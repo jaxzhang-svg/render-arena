@@ -189,6 +189,14 @@ export const legacyModelGroups: LegacyModelGroup[] = [
     ],
   },
   {
+    group: 'Qwen',
+    icon: '/logo/models/qwen-color.svg',
+    color: '#615CED',
+    items: [
+      { id: 'qwen/qwen3-coder-next', name: 'Qwen3 Coder Next' },
+    ],
+  },
+  {
     group: 'GPT',
     icon: '/logo/models/openai.svg',
     color: '#000',
@@ -274,6 +282,14 @@ export const modelGroups: ModelGroup[] = [
         inputPrice: 0.6,
         outputPrice: 3.0,
       },
+      {
+        id: 'qwen/qwen3-coder-next',
+        name: 'Qwen3 Coder Next',
+        icon: '/logo/models/qwen-color.svg',
+        color: '#615CED',
+        inputPrice: 0.2,
+        outputPrice: 1.5,
+      }
     ],
   },
   {
