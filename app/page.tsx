@@ -26,6 +26,7 @@ import {
 } from '@/lib/config'
 import { ModelSelector } from '@/components/base/model-selector'
 import { trackHackathonJoinClicked } from '@/lib/analytics'
+import { useJoinWaitlist } from '@/hooks/use-join-waitlist'
 
 export default function HomePage() {
   const router = useRouter()
@@ -38,6 +39,13 @@ export default function HomePage() {
   const [participantCount, setParticipantCount] = useState<number>(120) // Default to 120
   const hasUserInteractedRef = useRef(false)
   const gallerySectionRef = useRef<HTMLElement>(null)
+  const {
+    user,
+    authLoading,
+    isSubmitting: isWaitlistSubmitting,
+    hasJoined: hasJoinedWaitlist,
+    joinWaitlist: handleJoinWaitlist,
+  } = useJoinWaitlist({ source: 'event_page', plan: 'coding_plan', redirectHash: 'waitlist' })
 
   // Static placeholder text for typewriter effect
   const STATIC_PLACEHOLDER = 'Enter a prompt to start the Arena battle.'
@@ -123,7 +131,7 @@ export default function HomePage() {
   const handleModeClick = (mode: (typeof playgroundModes)[number]) => {
     // Fill textarea with a random prompt from this mode
     if (mode.prompts && mode.prompts.length > 0) {
-      /* eslint-disable-next-line */
+      // eslint-disable-next-line react-hooks/purity
       const randomIndex = Math.floor(Math.random() * mode.prompts.length)
       setUserPrompt(mode.prompts[randomIndex])
       hasUserInteractedRef.current = true
@@ -353,6 +361,59 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Coding Plan Waitlist */}
+        <section id="waitlist" className="px-6 py-6">
+          <div className="mx-auto max-w-5xl">
+            <div className="flex flex-col items-center gap-6 rounded-[24px] border border-[#e7e6e2] bg-white px-8 py-10 text-center shadow-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#b9f8cf] bg-[#f0fdf4] px-3 py-1">
+                <span className="font-['Inter',sans-serif] text-xs font-medium text-[#00a63e]">
+                  Coding Plan · Waitlist
+                </span>
+              </div>
+
+              <h2 className="max-w-[760px] font-sans text-[36px] leading-[44px] font-semibold tracking-[-0.72px] text-[#292827]">
+                Get early access to the newest open-source models
+              </h2>
+
+              <p className="max-w-[760px] font-sans text-base/6 text-[#4f4e4a]">
+                Join the Coding Plan waitlist for priority access and pricing advantages compared
+                to Claude Code. We&apos;ll notify you first.
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-[#4f4e4a]">
+                <span className="rounded-full border border-[#e7e6e2] bg-[#fafafa] px-3 py-1">
+                  Early access
+                </span>
+                <span className="rounded-full border border-[#e7e6e2] bg-[#fafafa] px-3 py-1">
+                  Pricing advantage
+                </span>
+                <span className="rounded-full border border-[#e7e6e2] bg-[#fafafa] px-3 py-1">
+                  Latest open-source models
+                </span>
+              </div>
+
+              <div className="flex flex-col items-center gap-2">
+                <Button
+                  onClick={handleJoinWaitlist}
+                  disabled={isWaitlistSubmitting || hasJoinedWaitlist || authLoading}
+                  className="flex items-center justify-center gap-2 rounded-2xl bg-black px-6 py-2.5 font-mono text-base font-normal text-white transition-all hover:scale-[1.02] hover:bg-black/90 hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none"
+                >
+                  {hasJoinedWaitlist
+                    ? 'You are on the waitlist'
+                    : authLoading
+                      ? 'Checking...'
+                      : user
+                        ? 'Join waitlist'
+                        : 'Log in to join'}
+                </Button>
+                <p className="text-xs text-[#9e9c98]">
+                  We&apos;ll use your registered email. One click to confirm.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
         {/* Gallery Grid */}
         <section id="gallery" ref={gallerySectionRef} className="pt-16 pb-20">
           <div className="mx-auto max-w-7xl px-6">
