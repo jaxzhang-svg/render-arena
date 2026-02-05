@@ -275,7 +275,7 @@ export default function HomePage() {
               {/* Content */}
               <div className="relative flex h-full flex-col p-12">
                 {/* Prize Pool Badge */}
-                <div className="relative mb-6 ml-4 inline-flex h-[42px] w-fit items-center rounded-full border border-[#05df72]/30 bg-[#05df72]/10 py-2 pr-6 backdrop-blur-sm">
+                <div className="relative mb-3 ml-4 inline-flex h-[42px] w-fit items-center rounded-full border border-[#05df72]/30 bg-[#05df72]/10 py-1 pr-6 backdrop-blur-sm">
                   <Image
                     src="/logo/prize-pool.png"
                     alt="Prize Pool"
@@ -297,7 +297,7 @@ export default function HomePage() {
                   </h2>
 
                   {/* Subheading */}
-                  <div className="mb-6 flex flex-wrap items-center gap-x-2 font-sans text-[32px] leading-[40px] font-semibold tracking-[-0.64px]">
+                  <div className="mb-4 flex flex-wrap items-center gap-x-2 font-sans text-[32px] leading-[40px] font-semibold tracking-[-0.64px]">
                     <span className="text-[#d1d5dc]">Build it.</span>
                     <span className="text-[#f3f4f6]">Compare it.</span>
                     <span className="text-[#05df72]">Make it glow.</span>
@@ -308,7 +308,7 @@ export default function HomePage() {
                     <p className="max-w-[570px] font-sans text-[18px] leading-6 font-normal text-[#cbc9c4]">
                       Render Arena focused on visual comparison, vibes, and shareability — not
                       machines but artistic vibes.
-                    </p>{participantCount} Participants
+                    </p>
                   </div>
 
                   {/* Stats Badges */}
