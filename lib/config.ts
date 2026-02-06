@@ -211,6 +211,7 @@ export const legacyModelGroups: LegacyModelGroup[] = [
     icon: '/logo/models/claude-color.svg',
     color: '#D97757',
     items: [
+      { id: 'pa/claude-opus-4-6', name: 'Claude Opus 4.6' },
       { id: 'pa/claude-opus-4-5-20251101', name: 'Claude Opus 4.5' },
       { id: 'pa/claude-sonnet-4-5-20250929', name: 'Claude Sonnet 4.5' },
       { id: 'pa/claude-haiku-4-5-20251001', name: 'Claude Haiku 4.5' },
@@ -304,12 +305,12 @@ export const modelGroups: ModelGroup[] = [
         outputPrice: 14.0,
       },
       {
-        id: 'pa/claude-sonnet-4-5-20250929',
-        name: 'Claude Sonnet 4.5',
+        id: 'pa/claude-opus-4-6',
+        name: 'Claude Opus 4.6',
         icon: '/logo/models/claude-color.svg',
         color: '#D97757',
-        inputPrice: 3.0,
-        outputPrice: 15.0,
+        inputPrice: 6.0,
+        outputPrice: 30.0,
       },
       {
         id: 'pa/gemini-3-pro-preview',
@@ -357,7 +358,7 @@ export const models: LLMModel[] = Array.from(
   new Map([...allModelsFromGroups, ...legacyModels].map(m => [m.id, m])).values()
 )
 
-export const defaultModelAId = 'pa/claude-sonnet-4-5-20250929'
+export const defaultModelAId = 'pa/claude-opus-4-6'
 export const defaultModelBId = 'moonshotai/kimi-k2.5'
 
 export function getModelById(modelId: string): LLMModel | undefined {
