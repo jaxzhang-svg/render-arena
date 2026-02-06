@@ -55,7 +55,7 @@ const siteName = 'Novita Render Arena'
 const siteTitle = 'Novita Render Arena - Visual AI Battle | Open Source vs Proprietary Models'
 const siteDescription =
   'Watch AI models compete in real-time visual generation. Compare open-source (DeepSeek, GLM, Minimax) vs proprietary (GPT, Claude, Gemini) models side-by-side. Create stunning interactive visuals from prompts.'
-const ogImage = '/images/visual-cover.png'
+const ogImage = '/images/og-cover.png'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
