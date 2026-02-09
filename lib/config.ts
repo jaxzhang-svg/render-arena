@@ -192,9 +192,7 @@ export const legacyModelGroups: LegacyModelGroup[] = [
     group: 'Qwen',
     icon: '/logo/models/qwen-color.svg',
     color: '#615CED',
-    items: [
-      { id: 'qwen/qwen3-coder-next', name: 'Qwen3 Coder Next' },
-    ],
+    items: [{ id: 'qwen/qwen3-coder-next', name: 'Qwen3 Coder Next' }],
   },
   {
     group: 'GPT',
@@ -290,7 +288,7 @@ export const modelGroups: ModelGroup[] = [
         color: '#615CED',
         inputPrice: 0.2,
         outputPrice: 1.5,
-      }
+      },
     ],
   },
   {

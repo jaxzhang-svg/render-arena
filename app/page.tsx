@@ -1,13 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { Header } from '@/components/app/header'
 import { Footer } from '@/components/app/footer'
 import { ArenaBattleModal } from '@/components/app/arena-battle-modal'
 import { GalleryGrid } from '@/components/app/gallery-grid'
 import { FreeTierBanner } from '@/components/app/overwhelming-banner'
-import { Clock, ArrowRight, ChevronUp, Users, Zap } from 'lucide-react'
+import { CodingPackageBanner } from '@/components/app/coding-package-banner'
+import { HackathonBanner } from '@/components/app/hackathon-banner'
+import { ArrowRight, ChevronUp } from 'lucide-react'
 import { Accordion } from '@base-ui/react/accordion'
 
 import { useState, useEffect, useId, useRef } from 'react'
@@ -25,7 +26,6 @@ import {
   getModelById,
 } from '@/lib/config'
 import { ModelSelector } from '@/components/base/model-selector'
-import { trackHackathonJoinClicked } from '@/lib/analytics'
 import { useJoinWaitlist } from '@/hooks/use-join-waitlist'
 
 export default function HomePage() {
@@ -249,115 +249,11 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Hackathon Banner */}
+        {/* Hackathon & Coding Package Banners - Side by Side */}
         <section id="hackathon" className="px-6 py-4">
-          <div className="mx-auto max-w-[1254px]">
-            <div className="relative h-[380px] overflow-hidden rounded-[32px] border border-white/10 bg-black shadow-2xl">
-              {/* Background container image (grid/line pattern) */}
-              <div className="absolute top-0 left-0 h-[368px] w-[1253px] opacity-40">
-                <Image
-                  alt=""
-                  className="pointer-events-none absolute inset-0 size-full max-w-none object-cover opacity-70"
-                  src="/images/hackathon-bg-container.png"
-                  width={1253}
-                  height={368}
-                  priority
-                />
-              </div>
-
-              {/* Main artistic background image */}
-              <div className="absolute top-1/2 left-1/2 h-[380px] w-[1248px] -translate-x-1/2 -translate-y-1/2 rounded-md">
-                <div className="absolute inset-0 rounded-md bg-black" />
-                <Image
-                  alt=""
-                  className="absolute size-full max-w-none rounded-md object-cover opacity-60"
-                  src="/images/hackathon-bg-main.png"
-                  width={1248}
-                  height={380}
-                  priority
-                />
-                {/* Green Blur Effect */}
-                <div className="pointer-events-none absolute inset-0 bg-[rgba(0,188,125,0.05)] blur-[120px]" />
-              </div>
-
-              {/* Content */}
-              <div className="relative flex h-full flex-col p-12">
-                {/* Prize Pool Badge */}
-                <div className="relative mb-3 ml-4 inline-flex h-[42px] w-fit items-center rounded-full border border-[#05df72]/30 bg-[#05df72]/10 py-1 pr-6 backdrop-blur-sm">
-                  <Image
-                    src="/logo/prize-pool.png"
-                    alt="Prize Pool"
-                    width={40}
-                    height={40}
-                    className="absolute bottom-2 left-2 max-w-none drop-shadow-md"
-                    priority
-                  />
-                  <div className="flex items-center gap-1 pl-12 font-sans text-sm font-medium">
-                    <span className="text-[#05df72]">Prize Pool:</span>
-                    <span className="text-white">$2,000 Credits</span>
-                  </div>
-                </div>
-
-                <div className="max-w-[700px]">
-                  {/* Heading */}
-                  <h2 className="mb-2 font-sans text-[56px] leading-[56px] font-semibold tracking-[-1.12px] text-white">
-                    Novita Render Arena
-                  </h2>
-
-                  {/* Subheading */}
-                  <div className="mb-4 flex flex-wrap items-center gap-x-2 font-sans text-[32px] leading-[40px] font-semibold tracking-[-0.64px]">
-                    <span className="text-[#d1d5dc]">Build it.</span>
-                    <span className="text-[#f3f4f6]">Compare it.</span>
-                    <span className="text-[#05df72]">Make it glow.</span>
-                  </div>
-
-                  {/* Description */}
-                  <div className="mb-8 border-l-2 border-[#00c950]/30 pl-4">
-                    <p className="max-w-[570px] font-sans text-[18px] leading-6 font-normal text-[#cbc9c4]">
-                      Render Arena focused on visual comparison, vibes, and shareability — not
-                      machines but artistic vibes.
-                    </p>
-                  </div>
-
-                  {/* Stats Badges */}
-                  <div className="flex items-center gap-4">
-                    {/* Time Left */}
-                    <div className="flex h-[34px] items-center gap-2 rounded-[10px] border border-white/10 bg-white/5 px-3 py-1.5">
-                      <Clock className="text-primary size-4" />
-                      <span className="font-sans text-[16px] font-medium text-[#f5f5f5]">
-                        Coming soon
-                      </span>
-                    </div>
-
-                    {/* Participants */}
-                    <div className="flex h-[34px] items-center gap-2 rounded-[10px] border border-white/10 bg-white/5 px-3 py-1.5">
-                      <Users className="text-primary size-4" />
-                      <span className="font-sans text-[16px] font-medium text-[#f5f5f5]">
-                        120 Interested
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Join Button - Bottom Right */}
-                <div className="absolute right-12 bottom-12">
-                  <button
-                    onClick={() => {
-                      trackHackathonJoinClicked()
-                      setIsModalOpen(true)
-                    }}
-                    className="flex cursor-pointer items-center justify-center gap-2 rounded-[14px] border border-white/20 px-8 py-3.5 text-base leading-6 font-normal text-black transition-all hover:brightness-110"
-                    style={{
-                      background: 'linear-gradient(90deg, #05DF72 0%, #5EE9B5 100%)',
-                      boxShadow: '0 0 20px 0 rgba(34, 197, 94, 0.15)',
-                    }}
-                  >
-                    <span>Join Now</span>
-                    <Zap className="size-5" />
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div className="mx-auto grid max-w-[1256px] grid-cols-1 gap-4 lg:grid-cols-2">
+            <HackathonBanner onJoinClick={() => setIsModalOpen(true)} />
+            <CodingPackageBanner />
           </div>
         </section>
 
@@ -376,8 +272,8 @@ export default function HomePage() {
               </h2>
 
               <p className="max-w-[760px] font-sans text-base/6 text-[#4f4e4a]">
-                Join the Coding Plan waitlist for priority access and pricing advantages compared
-                to Claude Code. We&apos;ll notify you first.
+                Join the Coding Plan waitlist for priority access and pricing advantages compared to
+                Claude Code. We&apos;ll notify you first.
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-[#4f4e4a]">
@@ -413,7 +309,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        
+
         {/* Gallery Grid */}
         <section id="gallery" ref={gallerySectionRef} className="pt-16 pb-20">
           <div className="mx-auto max-w-7xl px-6">

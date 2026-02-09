@@ -55,3 +55,7 @@ export function trackRemixStarted(contentId: string) {
 export function trackHackathonJoinClicked() {
   trackEvent('hackathon_join_clicked')
 }
+
+export function trackCodingPlanWaitlistClicked() {
+  trackEvent('coding_plan_waitlist_clicked')
+}
