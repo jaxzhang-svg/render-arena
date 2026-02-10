@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { Clock, Users, Zap } from 'lucide-react'
+import { Clock, Users } from 'lucide-react'
 import { trackHackathonJoinClicked } from '@/lib/analytics'
 
 interface HackathonBannerProps {

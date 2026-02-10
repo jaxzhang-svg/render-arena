@@ -14,6 +14,11 @@ export const ALL_GENERATION_DISABLED = false
 // Example: 100000 units = 10 USD
 export const PAID_USER_BALANCE_THRESHOLD = 100000
 
+// Coding Plan resource package name (for subscription detection)
+// Set to undefined to accept any active resource package
+// Set to specific name to check for exact resource package match
+export const CODING_PLAN_PACKAGE_NAME: string | undefined = undefined
+
 export const galleryCategories = [
   { id: 'all', label: 'All' },
   { id: 'physics', label: 'Physics' },
@@ -366,6 +371,53 @@ export function getModelById(modelId: string): LLMModel | undefined {
 // Hackathon Configuration
 export const HACKATHON_END_TIME = '2026-02-14T23:59:59Z' // Hardcoded date for now
 export const HACKATHON_PARTICIPANTS = 1234
+
+// Coding Plan Configuration
+// Toggle between 'waitlist' and 'live' mode
+export const CODING_PLAN_MODE: 'waitlist' | 'live' = 'live'
+
+export const NOVITA_CODING_PLAN_URL = 'https://novita.ai/coding-plan'
+
+export const codingPlanConfig = {
+  waitlist: {
+    badge: 'CODING PLAN · WAITLIST',
+    title: {
+      normal: 'Get early access to the',
+      highlight: 'newest open-source models',
+    },
+    description:
+      'Join the Coding Plan waitlist for priority access and pricing advantages compared to Claude Code.',
+    features: [
+      { icon: '/logo/early-access.svg', label: 'Early access' },
+      { icon: '/logo/pricing-advantage.svg', label: 'Pricing advantage' },
+      { icon: '/logo/latest-open-source-models.svg', label: 'Latest models' },
+    ],
+    button: {
+      default: 'Join waitlist',
+      checking: 'Checking...',
+      joined: 'Joined',
+      login: 'Log in to join',
+    },
+  },
+  live: {
+    badge: 'CODING PLAN · LIVE',
+    title: {
+      normal: 'Get early access to the ',
+      highlight: 'newest open-source model \n at lower cost',
+    },
+    description:
+      'Access multiple cutting-edge models with flexible billing. Pay as you go, cancel anytime.',
+    features: [
+      { icon: '/logo/latest-open-source-models.svg', label: 'Latest models' },
+      { icon: '/logo/pricing-advantage.svg', label: 'Lower cost' },
+      { icon: '/logo/early-access.svg', label: 'Flexible billing' },
+    ],
+    button: {
+      text: 'View Plans',
+    },
+    url: NOVITA_CODING_PLAN_URL,
+  },
+} as const
 
 // External Links
 export const NOVITA_BILLING_URL = 'https://novita.ai/billing'

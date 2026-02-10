@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import {
-  ANONYMOUS_QUOTA,
-  AUTHENTICATED_QUOTA,
-  PAID_QUOTA,
-  PAID_USER_BALANCE_THRESHOLD,
-} from '@/lib/config'
+import { ANONYMOUS_QUOTA, AUTHENTICATED_QUOTA, PAID_QUOTA } from '@/lib/config'
 import { getNovitaBalance } from '@/lib/novita'
+import { isPaidUser } from '@/lib/permissions'
 import type { UserInfoResponse } from '@/types'
 
 function getClientIP(request: NextRequest): string {
@@ -74,11 +70,9 @@ export async function GET(request: NextRequest) {
       novitaTokenExpired = true
     }
 
-    const quotaLimit = getQuotaLimit(true, novitaBalance)
-    const quotaType =
-      novitaBalance !== null && novitaBalance > PAID_USER_BALANCE_THRESHOLD
-        ? 'paid'
-        : 'authenticated'
+    const isPaid = await isPaidUser(novitaBalance)
+    const quotaLimit = getQuotaLimit(true, isPaid)
+    const quotaType = isPaid ? 'paid' : 'authenticated'
 
     const { data: quotaData } = await adminClient
       .from('generation_quotas')
@@ -108,11 +102,11 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function getQuotaLimit(isAuthenticated: boolean, novitaBalance: number | null): number {
+function getQuotaLimit(isAuthenticated: boolean, isPaid: boolean): number {
   if (!isAuthenticated) {
     return ANONYMOUS_QUOTA
   }
-  if (novitaBalance !== null && novitaBalance > PAID_USER_BALANCE_THRESHOLD) {
+  if (isPaid) {
     return PAID_QUOTA
   }
   return AUTHENTICATED_QUOTA

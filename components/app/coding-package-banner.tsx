@@ -1,19 +1,45 @@
 'use client'
 
 import Image from 'next/image'
-import { ArrowRight } from 'lucide-react'
-import { trackCodingPlanWaitlistClicked } from '@/lib/analytics'
+import { useJoinWaitlist } from '@/hooks/use-join-waitlist'
+import { CODING_PLAN_MODE, codingPlanConfig } from '@/lib/config'
 
-interface CodingPackageBannerProps {
-  onWaitlistClick?: () => void
-}
+export function CodingPackageBanner() {
+  const mode = CODING_PLAN_MODE
+  const config = codingPlanConfig[mode]
 
-export function CodingPackageBanner({ onWaitlistClick }: CodingPackageBannerProps) {
-  const handleWaitlistClick = () => {
-    trackCodingPlanWaitlistClicked()
-    if (onWaitlistClick) {
-      onWaitlistClick()
+  // Only use waitlist hook if in waitlist mode
+  const waitlistHook = useJoinWaitlist({
+    source: 'coding_package_banner',
+    plan: 'coding_plan',
+  })
+
+  const isWaitlistMode = mode === 'waitlist'
+  const isLoading = isWaitlistMode
+    ? waitlistHook.authLoading || waitlistHook.isCheckingStatus || waitlistHook.isSubmitting
+    : false
+  const isDisabled = isWaitlistMode ? isLoading || waitlistHook.hasJoined : false
+
+  const handleButtonClick = () => {
+    if (mode === 'live') {
+      const liveConfig = codingPlanConfig.live
+      window.open(liveConfig.url, '_blank')
+    } else {
+      waitlistHook.joinWaitlist()
     }
+  }
+
+  const getButtonText = () => {
+    if (mode === 'live') {
+      return codingPlanConfig.live.button.text
+    }
+
+    // Waitlist mode
+    const waitlistConfig = codingPlanConfig.waitlist
+    if (waitlistHook.hasJoined) return waitlistConfig.button.joined
+    if (waitlistHook.isCheckingStatus) return waitlistConfig.button.checking
+    if (waitlistHook.user) return waitlistConfig.button.default
+    return waitlistConfig.button.login
   }
 
   return (
@@ -61,15 +87,15 @@ export function CodingPackageBanner({ onWaitlistClick }: CodingPackageBannerProp
         >
           <div className="size-2 rounded-full bg-[#8E51FF]" />
           <span className="font-sans text-[12px] font-bold tracking-[0.3px] text-[#C4B4FF] uppercase">
-            CODING PLAN . WAITLIST
+            {config.badge}
           </span>
         </div>
 
         {/* Main Content */}
         <div>
           {/* Heading */}
-          <h2 className="mb-[18px] font-sans text-[36px] leading-[34px] font-bold tracking-[-0.72px] text-white">
-            Get early access to the
+          <h2 className="mb-[18px] font-sans text-[36px] leading-[34px] font-bold tracking-[-0.72px] whitespace-pre-line text-white">
+            {config.title.normal}
             <br />
             <span
               className="bg-gradient-to-r from-[#C4B4FF] via-[#F6CFFF] to-[#A2F4FD] bg-clip-text text-transparent"
@@ -77,56 +103,39 @@ export function CodingPackageBanner({ onWaitlistClick }: CodingPackageBannerProp
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              newest open-
-              <br />
-              source models
+              {config.title.highlight}
             </span>
           </h2>
 
           {/* Description */}
           <p className="mb-[22px] w-[455px] font-sans text-[14px] leading-6 font-normal text-[#CBC9C4]">
-            Join the Coding Plan waitlist for priority access and pricing advantages compared to
-            Claude Code. We&apos;ll notify you first.
+            {config.description}
           </p>
 
           {/* Feature List */}
           <div className="mb-6 flex gap-3">
-            <div className="flex h-[34px] items-center gap-2 rounded-[10px] border border-white/10 bg-white/5 px-3">
-              <Image width={16} height={16} src="/logo/early-access.svg" alt="Early Access" />
-              <span className="font-sans text-[14px] font-normal text-[#f5f5f5]">Early access</span>
-            </div>
-            <div className="flex h-[34px] items-center gap-2 rounded-[10px] border border-white/10 bg-white/5 px-3">
-              <Image
-                width={16}
-                height={16}
-                src="/logo/pricing-advantage.svg"
-                alt="Pricing Advantage"
-              />
-              <span className="font-sans text-[14px] font-normal text-[#f5f5f5]">
-                Pricing advantage
-              </span>
-            </div>
-            <div className="flex h-[34px] items-center gap-2 rounded-[10px] border border-white/10 bg-white/5 px-3">
-              <Image
-                width={16}
-                height={16}
-                src="/logo/latest-open-source-models.svg"
-                alt="Open Source"
-              />
-              <span className="font-sans text-[14px] font-normal text-[#f5f5f5]">
-                Latest open-source models
-              </span>
-            </div>
+            {config.features.map((feature, index) => (
+              <div
+                key={index}
+                className="flex h-[34px] items-center gap-2 rounded-[10px] border border-white/10 bg-white/5 px-3"
+              >
+                <Image width={16} height={16} src={feature.icon} alt={feature.label} />
+                <span className="font-sans text-[14px] font-normal text-[#f5f5f5]">
+                  {feature.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Join Waitlist Button - Bottom Right */}
+        {/* Action Button - Bottom Right */}
         <div className="absolute right-12 bottom-[30px]">
           <button
-            onClick={handleWaitlistClick}
-            className="flex cursor-pointer items-center justify-center gap-2 rounded-[12px] bg-white px-[26px] py-3 text-base leading-6 font-medium text-black transition-all hover:bg-gray-100 hover:shadow-xl active:scale-[0.98]"
+            onClick={handleButtonClick}
+            disabled={isDisabled}
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-[12px] bg-white px-[26px] py-3 text-base leading-6 font-medium text-black transition-all hover:bg-gray-100 hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:scale-100 disabled:hover:bg-white disabled:hover:shadow-none"
           >
-            <span>Join waitlist</span>
+            <span>{getButtonText()}</span>
           </button>
         </div>
       </div>

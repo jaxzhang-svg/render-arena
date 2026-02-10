@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { useAuth, loginWithNovita } from '@/hooks/use-auth'
 import { showToast } from '@/lib/toast'
 
@@ -15,6 +15,7 @@ interface UseJoinWaitlistReturn {
   authLoading: ReturnType<typeof useAuth>['loading']
   isSubmitting: boolean
   hasJoined: boolean
+  isCheckingStatus: boolean
   joinWaitlist: () => Promise<void>
 }
 
@@ -23,6 +24,7 @@ export function useJoinWaitlist(options: UseJoinWaitlistOptions = {}): UseJoinWa
   const { user, loading: authLoading } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasJoined, setHasJoined] = useState(false)
+  const [isCheckingStatus, setIsCheckingStatus] = useState(false)
 
   const getNextPath = useCallback(() => {
     if (typeof window === 'undefined') {
@@ -32,6 +34,30 @@ export function useJoinWaitlist(options: UseJoinWaitlistOptions = {}): UseJoinWa
     const hash = redirectHash ? `#${redirectHash}` : ''
     return `${window.location.pathname}${window.location.search}${hash}`
   }, [redirectHash])
+
+  // Check waitlist status when user is loaded
+  useEffect(() => {
+    if (!user || authLoading) {
+      return
+    }
+
+    const checkStatus = async () => {
+      setIsCheckingStatus(true)
+      try {
+        const response = await fetch('/api/waitlist/status')
+        if (response.ok) {
+          const data = await response.json()
+          setHasJoined(data.joined)
+        }
+      } catch (error) {
+        console.error('Failed to check waitlist status:', error)
+      } finally {
+        setIsCheckingStatus(false)
+      }
+    }
+
+    checkStatus()
+  }, [user, authLoading])
 
   const joinWaitlist = useCallback(async () => {
     if (authLoading) {
@@ -87,6 +113,7 @@ export function useJoinWaitlist(options: UseJoinWaitlistOptions = {}): UseJoinWa
     authLoading,
     isSubmitting,
     hasJoined,
+    isCheckingStatus,
     joinWaitlist,
   }
 }

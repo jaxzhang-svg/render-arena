@@ -6,11 +6,10 @@ import {
   ANONYMOUS_QUOTA,
   AUTHENTICATED_QUOTA,
   PAID_QUOTA,
-  PAID_USER_BALANCE_THRESHOLD,
   getAPIConfig,
 } from '@/lib/config'
 import { getFreeTierDisabled, getAllGenerationDisabled } from '@/lib/dynamic-config'
-import { checkAppOwnerPermission } from '@/lib/permissions'
+import { checkAppOwnerPermission, isPaidUser } from '@/lib/permissions'
 import { getNovitaBalance } from '@/lib/novita'
 import * as Sentry from '@sentry/nextjs'
 
@@ -35,11 +34,11 @@ function getClientIP(request: NextRequest): string {
   return '127.0.0.1'
 }
 
-function getQuotaLimit(isAuthenticated: boolean, novitaBalance: number | null): number {
+function getQuotaLimit(isAuthenticated: boolean, isPaid: boolean): number {
   if (!isAuthenticated) {
     return ANONYMOUS_QUOTA
   }
-  if (novitaBalance !== null && novitaBalance > PAID_USER_BALANCE_THRESHOLD) {
+  if (isPaid) {
     return PAID_QUOTA
   }
   return AUTHENTICATED_QUOTA
@@ -109,13 +108,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   let quotaLimit: number
   let novitaBalance: number | null = null
   let identifier: string
+  let isPaid = false
 
   if (user) {
     novitaBalance = await getNovitaBalance()
-    quotaLimit = getQuotaLimit(true, novitaBalance)
+    isPaid = await isPaidUser(novitaBalance)
+    quotaLimit = getQuotaLimit(true, isPaid)
     identifier = user.id
   } else {
-    quotaLimit = getQuotaLimit(false, null)
+    quotaLimit = getQuotaLimit(false, false)
     identifier = clientIP
   }
 
@@ -133,9 +134,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   const freeTierDisabled = await getFreeTierDisabled()
   if (freeTierDisabled) {
-    const isPaidUser = novitaBalance !== null && novitaBalance > PAID_USER_BALANCE_THRESHOLD
-
-    if (!isPaidUser) {
+    if (!isPaid) {
       const message = user
         ? 'Due to high demand, free access is temporarily limited. Add balance to get instant access.'
         : 'Due to high demand, anonymous access is temporarily paused. Log in and add balance to continue.'
@@ -160,15 +159,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!user) {
       error = 'QUOTA_EXCEEDED_T0'
       message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Log in to continue.`
-    } else if (novitaBalance == null || novitaBalance < PAID_USER_BALANCE_THRESHOLD) {
+    } else if (!isPaid) {
       error = 'QUOTA_EXCEEDED_T1'
-      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Add balance to get more generations.`
-    } else if (novitaBalance > PAID_USER_BALANCE_THRESHOLD) {
+      message = `You have reached your generation limit (${usedCount}/${quotaLimit}). Add balance or subscribe to get more generations.`
+    } else {
       error = 'QUOTA_EXCEEDED_T2'
       message = `You have reached your paid generation limit (${usedCount}/${quotaLimit}). Need more? Contact us to increase your limit.`
-    } else {
-      error = 'QUOTA_EXCEEDED'
-      message = `You have reached your generation limit (${usedCount}/${quotaLimit}).`
     }
     return new Response(JSON.stringify({ error, message }), {
       status: 403,

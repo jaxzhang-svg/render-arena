@@ -414,7 +414,7 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
             </div>
           ))}
         </div>
-      ) : apps.length === 0 ? (
+      ) : apps?.length === 0 ? (
         /* Empty State */
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <Box className="text-muted-foreground/40 mb-4 size-16" />
@@ -425,7 +425,7 @@ export function GalleryGrid({ initialApps = [], selectedCategory }: GalleryGridP
         /* Apps Grid */
         <>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {apps.map((app, index) => (
+            {apps?.map((app, index) => (
               <GalleryAppCard
                 key={app.id}
                 app={app}

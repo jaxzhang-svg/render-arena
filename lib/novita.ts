@@ -99,3 +99,97 @@ export async function getNovitaAccountBalance(apiKey?: string): Promise<NovitaBa
 export function parseBalanceToInt(balance: string): number {
   return parseInt(balance, 10)
 }
+
+/**
+ * Novita Resource Package (Subscription) Information
+ */
+export interface NovitaResourcePackage {
+  id: string
+  userId: string
+  pkgSpecsId: string
+  instanceId: string
+  amount: string
+  parentInstanceId: string
+  billingCycle: string
+  tier: string
+  quota: string
+  usedQuota: string
+  effectiveTime: string
+  expiryTime: string
+  type: string
+  status: number
+  pkgName: string
+}
+
+export interface NovitaResourcePackageResponse {
+  data: NovitaResourcePackage[]
+}
+
+/**
+ * Get user's resource packages (subscriptions) from Novita API
+ * Returns list of active resource packages
+ */
+export async function getNovitaResourcePackages(): Promise<NovitaResourcePackage[] | null> {
+  const cookieStore = await cookies()
+  const tokenCookie = cookieStore.get('token')
+
+  if (!tokenCookie) {
+    console.warn('Novita token cookie not found')
+    return null
+  }
+
+  try {
+    const response = await fetch(`https://api-server.novita.ai/v1/asset/resource-pack/user/list`, {
+      headers: {
+        Authorization: `Bearer ${tokenCookie.value}`,
+      },
+    })
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        console.warn('Novita token expired or invalid - user needs to relogin')
+        return null
+      }
+      console.error(
+        'Failed to fetch Novita resource packages:',
+        response.status,
+        response.statusText
+      )
+      return null
+    }
+
+    const data: NovitaResourcePackageResponse = await response.json()
+    return data.data || []
+  } catch (error) {
+    console.error('Failed to fetch Novita resource packages:', error)
+    return null
+  }
+}
+
+/**
+ * Check if user has an active Coding Plan subscription
+ * Returns true if user has at least one active Coding Plan resource package
+ */
+export async function hasActiveCodingPlan(codingPlanName?: string): Promise<boolean> {
+  const packages = await getNovitaResourcePackages()
+
+  if (!packages || packages.length === 0) {
+    return false
+  }
+
+  // Filter for active packages (status = 1)
+  const activePackages = packages.filter(pkg => pkg.status === 1)
+
+  if (!activePackages.length) {
+    return false
+  }
+
+  // If specific plan name is provided, check for exact match
+  if (codingPlanName) {
+    return activePackages.some(pkg => pkg.pkgName === codingPlanName)
+  }
+
+  // Otherwise, check if user has any active resource package
+  // (Assuming any active package qualifies for paid tier)
+  return true
+}
