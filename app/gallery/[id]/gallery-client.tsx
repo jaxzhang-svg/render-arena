@@ -24,8 +24,7 @@ import { UserAvatar } from '@/components/app/user-avatar'
 import { cn } from '@/lib/utils'
 import { getModelById, models } from '@/lib/models'
 import type { App } from '@/types'
-import DOMPurify from 'isomorphic-dompurify'
-import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
+
 import { showToast } from '@/lib/toast'
 import { trackRemixStarted, trackSharedItemViewed } from '@/lib/analytics'
 import { useScreenRecorder } from '@/hooks/use-screen-recorder'
@@ -392,10 +391,11 @@ export default function GalleryClient({ app }: GalleryClientProps) {
               <div className="relative flex-1 overflow-hidden">
                 {app.html_content_a ? (
                   <iframe
-                    srcDoc={DOMPurify.sanitize(app.html_content_a, DOMPURIFY_CONFIG)}
+                    srcDoc={app.html_content_a}
                     className="size-full border-0"
                     title="Model A Preview"
-                    sandbox="allow-scripts"
+                    sandbox="allow-scripts allow-forms"
+                    allow="autoplay; fullscreen; clipboard-write; web-share"
                   />
                 ) : (
                   <div className="text-muted-foreground flex h-full items-center justify-center">
@@ -489,10 +489,11 @@ export default function GalleryClient({ app }: GalleryClientProps) {
               <div className="relative flex-1 overflow-hidden">
                 {app.html_content_b ? (
                   <iframe
-                    srcDoc={DOMPurify.sanitize(app.html_content_b, DOMPURIFY_CONFIG)}
+                    srcDoc={app.html_content_b}
                     className="size-full border-0"
                     title="Model B Preview"
-                    sandbox="allow-scripts"
+                    sandbox="allow-scripts allow-forms"
+                    allow="autoplay; fullscreen; clipboard-write; web-share"
                   />
                 ) : (
                   <div className="text-muted-foreground flex h-full items-center justify-center">

@@ -3,15 +3,13 @@
 import React, { useId, useState, useEffect } from 'react'
 import { Button } from '@/components/base/button'
 import { Menu } from '@base-ui/react/menu'
-import { Maximize, RotateCcw, DollarSign, Clock, Braces } from 'lucide-react'
+import { Maximize, RotateCcw, DollarSign, Clock } from 'lucide-react'
 import Image from 'next/image'
 import { ModelSettingsPopover } from '@/components/playground/model-settings-modal'
 import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
 import { cn } from '@/lib/utils'
 import { LLMModel, modelGroups } from '@/lib/config'
 import { ModelResponse, ModelSettings, ViewMode } from '@/hooks/use-model-generation'
-import DOMPurify from 'isomorphic-dompurify'
-import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
 import { calculateTokensAndCost } from '@/lib/pricing'
 
 // Re-export types for convenience
@@ -346,10 +344,11 @@ export function ModelPanel({
         <div className={cn('absolute inset-0', viewMode === 'preview' ? 'block' : 'hidden')}>
           {response.html ? (
             <iframe
-              srcDoc={DOMPurify.sanitize(response.html, DOMPURIFY_CONFIG)}
+              srcDoc={response.html}
               className="size-full border-0"
               title="Preview"
-              sandbox="allow-scripts"
+              sandbox="allow-scripts allow-forms"
+              allow="autoplay; fullscreen; clipboard-write; web-share"
             />
           ) : (
             <div className="text-muted-foreground flex h-full items-center justify-center">

@@ -6,8 +6,7 @@ import Image from 'next/image'
 import { getModelById, playgroundModes, type GalleryCategoryId } from '@/lib/config'
 import { useRouter } from 'next/navigation'
 import type { GalleryApp } from '@/types'
-import DOMPurify from 'isomorphic-dompurify'
-import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
+
 import { showToast } from '@/lib/toast'
 import { Skeleton } from '@/components/ui/skeleton'
 import { trackRemixStarted } from '@/lib/analytics'
@@ -199,10 +198,11 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
             <div className="absolute inset-0 flex h-full w-full">
               <div className="relative h-full w-1/2 overflow-hidden">
                 <iframe
-                  srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${DOMPurify.sanitize(app.html_content_a || '', DOMPURIFY_CONFIG)}`}
+                  srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${app.html_content_a || ''}`}
                   className="absolute inset-0 h-full w-full border-0 bg-white"
                   title={app.name || 'App Preview'}
-                  sandbox="allow-scripts"
+                  sandbox="allow-scripts allow-forms"
+                  allow="autoplay; fullscreen; clipboard-write; web-share"
                   style={{
                     pointerEvents: 'none',
                     transform: 'scale(0.25)',
@@ -214,10 +214,11 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               </div>
               <div className="relative h-full w-1/2 overflow-hidden">
                 <iframe
-                  srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${DOMPurify.sanitize(app.html_content_b || '', DOMPURIFY_CONFIG)}`}
+                  srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${app.html_content_b || ''}`}
                   className="absolute inset-0 h-full w-full border-0 bg-white"
                   title={app.name || 'App Preview'}
-                  sandbox="allow-scripts"
+                  sandbox="allow-scripts allow-forms"
+                  allow="autoplay; fullscreen; clipboard-write; web-share"
                   style={{
                     pointerEvents: 'none',
                     transform: 'scale(0.25)',

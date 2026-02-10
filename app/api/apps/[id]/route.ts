@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import type { AppDetailResponse } from '@/types'
-import DOMPurify from 'isomorphic-dompurify'
-import { DOMPURIFY_CONFIG } from '@/lib/sanitizer'
+
 import { checkAppOwnerPermission } from '@/lib/permissions'
 
 /**
@@ -123,9 +122,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       if (body[field] !== undefined) {
         let value = body[field]
         // Sanitize string fields
-        if (typeof value === 'string') {
-          value = DOMPurify.sanitize(value, DOMPURIFY_CONFIG)
-        }
+
         updateData[field] = value
       }
     }

@@ -12,8 +12,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  serverExternalPackages: ['jsdom'],
-  transpilePackages: ['isomorphic-dompurify', '@exodus/bytes'],
   async headers() {
     return [
       {
