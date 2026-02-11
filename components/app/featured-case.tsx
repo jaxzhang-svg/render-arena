@@ -62,7 +62,8 @@ function FeaturedCaseCard({ mode }: FeaturedCaseCardProps) {
               'absolute inset-0 size-full border-0 transition-opacity duration-300',
               isHovering ? 'opacity-100' : 'opacity-0'
             )}
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            sandbox="allow-scripts allow-forms"
+            allow="accelerometer; autoplay; fullscreen; clipboard-write; web-share; encrypted-media; gyroscope;"
             style={{ pointerEvents: 'none' }}
           />
         )}

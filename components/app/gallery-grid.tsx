@@ -187,7 +187,8 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                 className={`pointer-events-none absolute inset-0 h-full w-full border-0 transition-opacity duration-300 ${
                   isHovered ? 'opacity-100' : 'opacity-0'
                 }`}
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                sandbox="allow-scripts allow-forms"
+                allow="accelerometer; autoplay; fullscreen; clipboard-write; web-share; encrypted-media; gyroscope;"
                 data-note="Video loads on first hover and persists to avoid reload flash"
                 allowFullScreen
               />
@@ -202,7 +203,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                   className="absolute inset-0 h-full w-full border-0 bg-white"
                   title={app.name || 'App Preview'}
                   sandbox="allow-scripts allow-forms"
-                  allow="autoplay; fullscreen; clipboard-write; web-share"
+                  allow="accelerometer; autoplay; fullscreen; clipboard-write; web-share; encrypted-media; gyroscope;"
                   style={{
                     pointerEvents: 'none',
                     transform: 'scale(0.25)',
@@ -218,7 +219,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
                   className="absolute inset-0 h-full w-full border-0 bg-white"
                   title={app.name || 'App Preview'}
                   sandbox="allow-scripts allow-forms"
-                  allow="autoplay; fullscreen; clipboard-write; web-share"
+                  allow="accelerometer; autoplay; fullscreen; clipboard-write; web-share; encrypted-media; gyroscope;"
                   style={{
                     pointerEvents: 'none',
                     transform: 'scale(0.25)',

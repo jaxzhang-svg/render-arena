@@ -395,7 +395,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                     className="size-full border-0"
                     title="Model A Preview"
                     sandbox="allow-scripts allow-forms"
-                    allow="autoplay; fullscreen; clipboard-write; web-share"
+                    allow="accelerometer; autoplay; fullscreen; clipboard-write; web-share; encrypted-media; gyroscope;"
                   />
                 ) : (
                   <div className="text-muted-foreground flex h-full items-center justify-center">
@@ -493,7 +493,7 @@ export default function GalleryClient({ app }: GalleryClientProps) {
                     className="size-full border-0"
                     title="Model B Preview"
                     sandbox="allow-scripts allow-forms"
-                    allow="autoplay; fullscreen; clipboard-write; web-share"
+                    allow="accelerometer; autoplay; fullscreen; clipboard-write; web-share; encrypted-media; gyroscope;"
                   />
                 ) : (
                   <div className="text-muted-foreground flex h-full items-center justify-center">

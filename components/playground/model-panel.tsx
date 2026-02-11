@@ -3,7 +3,7 @@
 import React, { useId, useState, useEffect } from 'react'
 import { Button } from '@/components/base/button'
 import { Menu } from '@base-ui/react/menu'
-import { Maximize, RotateCcw, DollarSign, Clock } from 'lucide-react'
+import { Maximize, RotateCcw, DollarSign, Clock, Code2, Eye } from 'lucide-react'
 import Image from 'next/image'
 import { ModelSettingsPopover } from '@/components/playground/model-settings-modal'
 import { StreamingCodeDisplay } from '@/components/playground/streaming-code-display'
@@ -270,26 +270,28 @@ export function ModelPanel({
             <button
               onClick={() => onViewModeChange('code')}
               className={cn(
-                'cursor-pointer rounded-md px-3 py-1 text-xs font-medium transition-all',
+                'cursor-pointer rounded-md px-2 py-1 transition-all',
                 viewMode === 'code'
                   ? 'bg-white text-black shadow-sm'
                   : 'text-[#666] hover:text-black'
               )}
+              title="Code"
             >
-              Code
+              <Code2 className="size-4" />
             </button>
             <button
               onClick={() => onViewModeChange('preview')}
               disabled={response.loading}
               className={cn(
-                'cursor-pointer rounded-md px-3 py-1 text-xs font-medium transition-all',
+                'cursor-pointer rounded-md px-2 py-1 transition-all',
                 viewMode === 'preview'
                   ? 'bg-white text-black shadow-sm'
                   : 'text-[#666] hover:text-black',
                 response.loading && 'cursor-not-allowed opacity-50'
               )}
+              title="Preview"
             >
-              Preview
+              <Eye className="size-4" />
             </button>
           </div>
 
@@ -348,7 +350,7 @@ export function ModelPanel({
               className="size-full border-0"
               title="Preview"
               sandbox="allow-scripts allow-forms"
-              allow="autoplay; fullscreen; clipboard-write; web-share"
+              allow="accelerometer; autoplay; fullscreen; clipboard-write; web-share; encrypted-media; gyroscope;"
             />
           ) : (
             <div className="text-muted-foreground flex h-full items-center justify-center">
