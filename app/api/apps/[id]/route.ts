@@ -120,7 +120,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     for (const field of allowedFields) {
       if (body[field] !== undefined) {
-        let value = body[field]
+        const value = body[field]
         // Sanitize string fields
 
         updateData[field] = value

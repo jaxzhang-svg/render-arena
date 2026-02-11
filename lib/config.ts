@@ -400,13 +400,13 @@ export const codingPlanConfig = {
     },
   },
   live: {
-    badge: 'CODING PLAN · LIVE',
+    badge: 'CODING PLAN · 1000 Slots',
     title: {
-      normal: 'Get early access to the ',
-      highlight: 'newest open-source model \n at lower cost',
+      normal: 'More tokens.',
+      highlight: 'Lower cost.',
     },
     description:
-      'Access multiple cutting-edge models with flexible billing. Pay as you go, cancel anytime.',
+      'Get more tokens per dollar with our coding plan. Access cutting-edge open-source models at unbeatable prices.',
     features: [
       { icon: '/logo/latest-open-source-models.svg', label: 'Latest models' },
       { icon: '/logo/pricing-advantage.svg', label: 'Lower cost' },

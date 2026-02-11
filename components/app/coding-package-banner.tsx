@@ -86,7 +86,7 @@ export function CodingPackageBanner() {
           }}
         >
           <div className="size-2 rounded-full bg-[#8E51FF]" />
-          <span className="font-sans text-[12px] font-bold tracking-[0.3px] text-[#C4B4FF] uppercase">
+          <span className="font-sans text-[12px] font-bold tracking-[0.3px] text-[#C4B4FF]">
             {config.badge}
           </span>
         </div>
@@ -108,7 +108,7 @@ export function CodingPackageBanner() {
           </h2>
 
           {/* Description */}
-          <p className="mb-[22px] w-[455px] font-sans text-[14px] leading-6 font-normal text-[#CBC9C4]">
+          <p className="mb-[22px] w-[380px] font-sans text-[14px] leading-6 font-normal text-[#CBC9C4]">
             {config.description}
           </p>
 

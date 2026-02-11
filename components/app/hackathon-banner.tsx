@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Clock, Users } from 'lucide-react'
 import { trackHackathonJoinClicked } from '@/lib/analytics'
@@ -8,7 +9,30 @@ interface HackathonBannerProps {
   onJoinClick?: () => void
 }
 
+interface HackathonStats {
+  participants: number
+  totalApps: number
+}
+
 export function HackathonBanner({ onJoinClick }: HackathonBannerProps) {
+  const [stats, setStats] = useState<HackathonStats | null>(null)
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/hackathon/stats')
+        if (response.ok) {
+          const data = await response.json()
+          setStats(data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch hackathon stats:', error)
+      }
+    }
+
+    fetchStats()
+  }, [])
+
   const handleJoinClick = () => {
     trackHackathonJoinClicked()
     if (onJoinClick) {
@@ -73,14 +97,14 @@ export function HackathonBanner({ onJoinClick }: HackathonBannerProps) {
             {/* Time Left */}
             <div className="flex h-[34px] items-center gap-2 rounded-[10px] border border-white/10 bg-white/5 px-[13px] py-px">
               <Clock className="size-4 text-[#00FF7F]" />
-              <span className="font-sans text-[12px] font-medium text-[#f5f5f5]">10 days left</span>
+              <span className="font-sans text-[12px] font-medium text-[#f5f5f5]">Live</span>
             </div>
 
             {/* Participants */}
             <div className="flex h-[34px] items-center gap-2 rounded-[10px] border border-white/10 bg-white/5 px-[13px] py-px">
               <Users className="size-4 text-[#00FF7F]" />
               <span className="font-sans text-[12px] font-medium text-[#f5f5f5]">
-                1,234 participants
+                {stats ? stats.participants : 'N/A'} participants
               </span>
             </div>
           </div>

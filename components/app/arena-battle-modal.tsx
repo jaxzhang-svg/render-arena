@@ -169,7 +169,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                     <p className="text-base font-bold tracking-[-0.31px] text-[#05df72]">
                       Build & Submit
                     </p>
-                    <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Feb 28</p>
+                    <p className="text-sm tracking-[-0.15px] text-[#99a1af]">Ends Feb 28</p>
                   </div>
 
                   <div className="space-y-1 rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] p-4 text-center">
@@ -208,7 +208,7 @@ export function ArenaBattleModal({ open, onOpenChange }: ArenaBattleModalProps) 
                         Use Arena
                       </h4>
                       <p className="text-xs/4 text-[#99a1af]">
-                        Compare at least 2 models (e.g. GLM 5.0 vs Minimax 2.5)
+                        Compare at least 2 models (e.g. GLM 5.0 vs Claude Opus 4.6)
                       </p>
                     </div>
                   </div>
