@@ -81,7 +81,7 @@ export function CodingPackageBanner() {
           style={{
             borderRadius: '17px',
             border: '1px solid rgba(142, 81, 255, 0.30)',
-            background: 'rgba(142, 81, 255, 0.10)',
+            background: '#8e51ff1a',
             boxShadow: '0 0 15px 0 rgba(139, 92, 246, 0.15)',
           }}
         >
@@ -94,7 +94,7 @@ export function CodingPackageBanner() {
         {/* Main Content */}
         <div>
           {/* Heading */}
-          <h2 className="mb-[18px] font-sans text-[36px] leading-[34px] font-bold tracking-[-0.72px] whitespace-pre-line text-white">
+          <h2 className="mb-[18px] font-sans text-[36px] leading-[40px] font-bold tracking-[-0.72px] whitespace-pre-line text-white">
             {config.title.normal}
             <br />
             <span
@@ -108,7 +108,7 @@ export function CodingPackageBanner() {
           </h2>
 
           {/* Description */}
-          <p className="mb-[22px] w-[380px] font-sans text-[14px] leading-6 font-normal text-[#CBC9C4]">
+          <p className="border-l-2 border-[#8e51ff]/40 pl-4 mb-[22px] w-[455px] font-sans text-[14px] leading-6 font-normal text-[#CBC9C4] whitespace-pre-line">
             {config.description}
           </p>
 

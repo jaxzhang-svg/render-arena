@@ -406,7 +406,7 @@ export const codingPlanConfig = {
       highlight: 'Lower cost.',
     },
     description:
-      'Get more tokens per dollar with our coding plan. Access cutting-edge open-source models at unbeatable prices.',
+      'Get more tokens per dollar with novita coding plan.\nAccess cutting-edge SOTA open-source models at unbeatable prices.',
     features: [
       { icon: '/logo/latest-open-source-models.svg', label: 'Latest models' },
       { icon: '/logo/pricing-advantage.svg', label: 'Lower cost' },
