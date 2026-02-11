@@ -222,7 +222,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const messages = [
     {
       role: 'system',
-      content: `You are an expert web developer. Your goal is to generate a single, self-contained HTML file for user's prompt. The HTML will run in a sandboxed iframe (allow-scripts, allow-forms).`,
+      content: `You are an expert web developer. Generate a self-contained HTML file based on the user's prompt. The HTML will run in a sandboxed iframe (allow-scripts, allow-forms). Do not use localStorage, sessionStorage, or cookies.`,
     },
     { role: 'user', content: app.prompt },
   ]
