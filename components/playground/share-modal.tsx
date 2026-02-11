@@ -311,12 +311,12 @@ export function ShareModal({
     }
 
     const modelTags = generateModelTags()
-    const baseHashtags = '#RenderArena #VibeCoding #NovitaAI'
+    const baseHashtags = '#RenderArena'
     const allTags = modelTags ? `${baseHashtags} ${modelTags}` : baseHashtags
 
     const shareText =
       platform === 'twitter'
-        ? `Novita Render Arena — Side-by-Side\nPrompt: "${truncatedPrompt}"\n👉 Which model wins?\n\n${allTags}`
+        ? `Novita Render Arena @novita_labs — Side-by-Side\nPrompt: "${truncatedPrompt}"\n👉 Which model wins?\n\n${allTags}`
         : `Novita Render Arena — Side-by-Side\nPrompt: "${truncatedPrompt}"\n👉 Which model wins?\n`
 
     const encodedUrl = encodeURIComponent(linkToShare)
