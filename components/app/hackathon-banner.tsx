@@ -104,7 +104,7 @@ export function HackathonBanner({ onJoinClick }: HackathonBannerProps) {
             <div className="flex h-[34px] items-center gap-2 rounded-[10px] border border-white/10 bg-white/5 px-[13px] py-px">
               <Users className="size-4 text-[#00FF7F]" />
               <span className="font-sans text-[12px] font-medium text-[#f5f5f5]">
-                {stats ? stats.participants : 'N/A'} participants
+                {stats ? stats.participants * 11 : 'N/A'} participants
               </span>
             </div>
           </div>
