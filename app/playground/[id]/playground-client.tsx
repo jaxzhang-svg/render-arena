@@ -325,7 +325,12 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
                   <Textarea
                     placeholder="Describe your app... (Press Enter to send)"
                     className="scrollbar-none min-h-[48px] w-full resize-none border-0 bg-transparent p-0 font-sans text-[16px] leading-[24px] font-normal text-[#292827] placeholder:text-[#9e9c98] focus-visible:ring-0"
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    style={{ 
+                      scrollbarWidth: 'none', 
+                      msOverflowStyle: 'none', 
+                      maxHeight: '96px',
+                      fieldSizing: 'content'
+                    }}
                     value={prompt}
                     onChange={e => setPrompt(e.target.value)}
                     onKeyDown={e => {
