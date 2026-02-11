@@ -64,6 +64,8 @@ export function ShareModal({
   const [copied, setCopied] = useState(false)
   const [agreedToPolicy, setAgreedToPolicy] = useState(false)
   const [publishLoading, setPublishLoading] = useState(false)
+  const [sharingPlatform, setSharingPlatform] = useState<'twitter' | 'linkedin' | 'facebook' | null>(null)
+  const [sharingStep, setSharingStep] = useState<'ready' | 'opening' | null>(null)
 
   // Upload state
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle')
@@ -101,6 +103,9 @@ export function ShareModal({
         setVideoUid(null)
         setUploadError(null)
       }
+    } else {
+      setSharingPlatform(null)
+      setSharingStep(null)
     }
   }, [open, videoBlob, appId])
 
@@ -280,7 +285,9 @@ export function ShareModal({
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'facebook') => {
+  const handleSocialShare = async (platform: 'twitter' | 'linkedin' | 'facebook') => {
+    if (sharingPlatform) return
+
     // Truncate prompt to 5 words
     const truncatedPrompt =
       prompt.split(/\s+/).slice(0, 5).join(' ') + (prompt.split(/\s+/).length > 5 ? ' …' : '')
@@ -326,19 +333,40 @@ export function ShareModal({
       share_method: platform === 'twitter' ? 'x' : platform,
     })
 
-    switch (platform) {
-      case 'twitter':
-        url = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`
-        break
-      case 'linkedin':
+    // LinkedIn and Facebook don't support pre-filled text via URL parameters
+    if (platform === 'linkedin' || platform === 'facebook') {
+      setSharingPlatform(platform)
+      setSharingStep('ready')
+      
+      try {
+        const socialShareText = `${shareText}\n\n${linkToShare}`
+        await clipboardy.write(socialShareText)
+      } catch (err) {
+        console.error('Failed to copy text: ', err)
+        setSharingPlatform(null)
+        setSharingStep(null)
+        return
+      }
+      
+      if (platform === 'linkedin') {
         url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
-        break
-      case 'facebook':
-        url = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`
-        break
+      } else {
+        url = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`
+      }
+      
+      setTimeout(() => {
+        setSharingStep('opening')
+        
+        setTimeout(() => {
+          window.open(url, '_blank', 'width=600,height=400')
+          setSharingPlatform(null)
+          setSharingStep(null)
+        }, 1000)
+      }, 1000)
+    } else if (platform === 'twitter') {
+      url = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`
+      window.open(url, '_blank', 'width=600,height=400')
     }
-
-    window.open(url, '_blank', 'width=600,height=400')
   }
 
   // Render upload status overlay
@@ -530,38 +558,80 @@ export function ShareModal({
 
                     <button
                       onClick={() => handleSocialShare('linkedin')}
-                      className="flex h-[82px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-[#f3f4f6] p-1 transition-colors hover:bg-gray-50"
+                      disabled={sharingPlatform === 'linkedin'}
+                      className="flex h-[82px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-[#f3f4f6] p-1 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      <div className="relative size-8">
-                        <Image
-                          alt="LinkedIn"
-                          className="block size-full max-w-none"
-                          src={imgLinkedin}
-                          width={32}
-                          height={32}
-                        />
-                      </div>
-                      <span className="text-[12px] leading-4 font-medium text-[#4a5565]">
-                        LinkedIn
-                      </span>
+                      {sharingPlatform === 'linkedin' ? (
+                        sharingStep === 'ready' ? (
+                          <>
+                            <Check className="size-6 text-green-500" />
+                            <span className="text-[12px] leading-4 font-medium text-green-600">
+                              Text Copied
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Loader2 className="size-6 animate-spin text-[#0077b5]" />
+                            <span className="text-[12px] leading-4 font-medium text-[#4a5565]">
+                              Opening...
+                            </span>
+                          </>
+                        )
+                      ) : (
+                        <>
+                          <div className="relative size-8">
+                            <Image
+                              alt="LinkedIn"
+                              className="block size-full max-w-none"
+                              src={imgLinkedin}
+                              width={32}
+                              height={32}
+                            />
+                          </div>
+                          <span className="text-[12px] leading-4 font-medium text-[#4a5565]">
+                            LinkedIn
+                          </span>
+                        </>
+                      )}
                     </button>
 
                     <button
                       onClick={() => handleSocialShare('facebook')}
-                      className="flex h-[82px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-[#f3f4f6] p-1 transition-colors hover:bg-gray-50"
+                      disabled={sharingPlatform === 'facebook'}
+                      className="flex h-[82px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-[#f3f4f6] p-1 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      <div className="flex size-8 items-center justify-center overflow-hidden rounded-full">
-                        <Image
-                          src={imgFacebook}
-                          alt="Facebook"
-                          width={32}
-                          height={32}
-                          className="size-full object-cover"
-                        />
-                      </div>
-                      <span className="text-[12px] leading-4 font-medium text-[#4a5565]">
-                        Facebook
-                      </span>
+                      {sharingPlatform === 'facebook' ? (
+                        sharingStep === 'ready' ? (
+                          <>
+                            <Check className="size-6 text-green-500" />
+                            <span className="text-[12px] leading-4 font-medium text-green-600">
+                              Text Copied
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Loader2 className="size-6 animate-spin text-[#1877f2]" />
+                            <span className="text-[12px] leading-4 font-medium text-[#4a5565]">
+                              Opening...
+                            </span>
+                          </>
+                        )
+                      ) : (
+                        <>
+                          <div className="flex size-8 items-center justify-center overflow-hidden rounded-full">
+                            <Image
+                              src={imgFacebook}
+                              alt="Facebook"
+                              width={32}
+                              height={32}
+                              className="size-full object-cover"
+                            />
+                          </div>
+                          <span className="text-[12px] leading-4 font-medium text-[#4a5565]">
+                            Facebook
+                          </span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
