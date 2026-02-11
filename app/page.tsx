@@ -179,7 +179,7 @@ export default function HomePage() {
                         handleGenerate()
                       }
                     }}
-                    className="w-full resize-none bg-transparent font-sans text-base font-normal text-[#4f4e4a] outline-none placeholder:text-[#9e9c98]"
+                    className="w-full h-[120px] resize-none bg-transparent font-sans text-base font-normal text-[#4f4e4a] outline-none placeholder:text-[#9e9c98]"
                     spellCheck={false}
                   />
                 </div>
