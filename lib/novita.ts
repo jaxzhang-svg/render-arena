@@ -177,8 +177,14 @@ export async function hasActiveCodingPlan(codingPlanName?: string): Promise<bool
     return false
   }
 
-  // Filter for active packages (status = 1)
-  const activePackages = packages.filter(pkg => pkg.status === 1)
+  const now = new Date()
+
+  // Filter for active packages (status = 1 and not expired)
+  const activePackages = packages.filter(pkg => {
+    // Check if package has not expired
+    const expiryDate = new Date(pkg.expiryTime)
+    return expiryDate > now
+  })
 
   if (!activePackages.length) {
     return false
