@@ -420,8 +420,8 @@ export default function PlaygroundClient({ initialApp, appId }: PlaygroundClient
         }}
         prompt={prompt}
         category={appCategory}
-        modelAName={modelA.selectedModel.name}
-        modelBName={modelB.selectedModel.name}
+        modelA={modelA.selectedModel}
+        modelB={modelB.selectedModel}
       />
     </div>
   )

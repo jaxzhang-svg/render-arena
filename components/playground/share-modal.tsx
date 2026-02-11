@@ -16,7 +16,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import Image from 'next/image'
 import clipboardy from 'clipboardy'
 import { showToast } from '@/lib/toast'
-import { getModeByCategory } from '@/lib/config'
+import { getModeByCategory, LLMModel } from '@/lib/config'
 import { appendTrackingParamsToUrl } from '@/lib/tracking'
 import { trackResultShared } from '@/lib/analytics'
 import { getStreamWatchUrl } from '@/lib/cloudflare-stream'
@@ -41,8 +41,8 @@ interface ShareModalProps {
   onPublishSuccess?: (category?: string | null) => void
   category?: string | null
   skipSaveToDatabase?: boolean
-  modelAName?: string
-  modelBName?: string
+  modelA?: LLMModel
+  modelB?: LLMModel
 }
 
 export function ShareModal({
@@ -58,8 +58,8 @@ export function ShareModal({
   onPublishSuccess,
   category,
   skipSaveToDatabase = false,
-  modelAName,
-  modelBName,
+  modelA,
+  modelB,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false)
   const [agreedToPolicy, setAgreedToPolicy] = useState(false)
@@ -301,20 +301,17 @@ export function ShareModal({
     // Generate model tags for Twitter
     const generateModelTags = () => {
       const tags: string[] = []
-      if (modelAName) {
-        // Convert model name to hashtag (remove spaces, special chars)
-        const tag = modelAName.replace(/[^a-zA-Z0-9]/g, '')
-        tags.push(`#${tag}`)
+      if (modelA?.socialTag) {
+        tags.push(`#${modelA.socialTag}`)
       }
-      if (modelBName && modelBName !== modelAName) {
-        const tag = modelBName.replace(/[^a-zA-Z0-9]/g, '')
-        tags.push(`#${tag}`)
+      if (modelB?.socialTag && modelB.socialTag !== modelA?.socialTag) {
+        tags.push(`#${modelB.socialTag}`)
       }
       return tags.join(' ')
     }
 
     const modelTags = generateModelTags()
-    const baseHashtags = '#Hackathon #AI #RenderArena #VibeCoding #NovitaAI'
+    const baseHashtags = '#RenderArena #VibeCoding #NovitaAI'
     const allTags = modelTags ? `${baseHashtags} ${modelTags}` : baseHashtags
 
     const shareText =

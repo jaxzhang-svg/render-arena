@@ -22,7 +22,7 @@ interface GalleryPageProps {
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://renderarena.novita.ai'
 const siteName = 'Novita Render Arena'
-const defaultOgImage = '/images/og-cover.png'
+const defaultOgImage = '/images/og-cover-v2.png'
 
 const getApp = cache(async (id: string) => {
   const adminClient = await createAdminClient()

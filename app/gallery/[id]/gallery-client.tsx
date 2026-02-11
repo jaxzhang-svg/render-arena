@@ -577,8 +577,8 @@ export default function GalleryClient({ app }: GalleryClientProps) {
         prompt={app.prompt}
         category={app.category}
         skipSaveToDatabase={true}
-        modelAName={modelA.name}
-        modelBName={modelB.name}
+        modelA={modelA}
+        modelB={modelB}
       />
     </div>
   )
