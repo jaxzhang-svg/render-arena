@@ -40,10 +40,30 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch apps' }, { status: 500 })
     }
 
-    // apps 表已包含 user_email，直接返回
+    // 查询当前用户的点赞状态
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    let userLikes: Set<string> = new Set()
+    if (user && apps && apps.length > 0) {
+      const appIds = apps.map(app => app.id)
+      const { data: likes } = await adminClient
+        .from('likes')
+        .select('app_id')
+        .eq('user_id', user.id)
+        .in('app_id', appIds)
+
+      if (likes) {
+        userLikes = new Set(likes.map(like => like.app_id))
+      }
+    }
+
+    // apps 表已包含 user_email，添加用户点赞状态
     const appsWithLikeStatus: GalleryApp[] = (apps || []).map((app: App) => ({
       ...app,
-      isLiked: false, // TODO: 需要单独查询用户点赞状态
+      isLiked: userLikes.has(app.id),
     }))
 
     const response: GalleryResponse = {
