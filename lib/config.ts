@@ -376,7 +376,7 @@ export const HACKATHON_PARTICIPANTS = 1234
 // Toggle between 'waitlist' and 'live' mode
 export const CODING_PLAN_MODE: 'waitlist' | 'live' = 'live'
 
-export const NOVITA_CODING_PLAN_URL = 'https://novita-home-git-main-novita-ai.vercel.app/coding-plan'
+export const NOVITA_CODING_PLAN_URL = 'https://novita.ai/coding-plan'
 
 export const codingPlanConfig = {
   waitlist: {
