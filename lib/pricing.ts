@@ -1,4 +1,4 @@
-import { modelGroups } from './config'
+import { models } from './config'
 
 /**
  * 计算基于输出 token 的费用
@@ -10,7 +10,7 @@ export function calculateTokenCost(outputTokens: number, modelId: string): numbe
   if (outputTokens <= 0) return null
 
   // 查找当前模型的价格信息
-  const model = modelGroups.flatMap(g => g.items).find(m => m.id === modelId)
+  const model = models.find(m => m.id === modelId)
 
   // 计算费用（只根据输出 token）
   if (model?.outputPrice !== undefined) {

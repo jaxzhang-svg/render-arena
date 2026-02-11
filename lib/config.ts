@@ -274,8 +274,8 @@ const allModels: LLMModel[] = [
     icon: '/logo/models/claude-color.svg',
     color: '#D97757',
     group: 'Claude',
-    inputPrice: 1.5,
-    outputPrice: 7.5,
+    inputPrice: 3,
+    outputPrice: 15,
   },
   {
     id: 'pa/claude-haiku-4-5-20251001',
