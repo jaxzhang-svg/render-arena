@@ -41,6 +41,8 @@ interface ShareModalProps {
   onPublishSuccess?: (category?: string | null) => void
   category?: string | null
   skipSaveToDatabase?: boolean
+  modelAName?: string
+  modelBName?: string
 }
 
 export function ShareModal({
@@ -56,6 +58,8 @@ export function ShareModal({
   onPublishSuccess,
   category,
   skipSaveToDatabase = false,
+  modelAName,
+  modelBName,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false)
   const [agreedToPolicy, setAgreedToPolicy] = useState(false)
@@ -287,7 +291,29 @@ export function ShareModal({
       utm_campaign: 'app_share',
     })
 
-    const shareText = `Novita Render Arena — Side-by-Side\nPrompt: "${truncatedPrompt}"\n👉 Which model wins?\n`
+    // Generate model tags for Twitter
+    const generateModelTags = () => {
+      const tags: string[] = []
+      if (modelAName) {
+        // Convert model name to hashtag (remove spaces, special chars)
+        const tag = modelAName.replace(/[^a-zA-Z0-9]/g, '')
+        tags.push(`#${tag}`)
+      }
+      if (modelBName && modelBName !== modelAName) {
+        const tag = modelBName.replace(/[^a-zA-Z0-9]/g, '')
+        tags.push(`#${tag}`)
+      }
+      return tags.join(' ')
+    }
+
+    const modelTags = generateModelTags()
+    const baseHashtags = '#Hackathon #AI #RenderArena #VibeCoding #NovitaAI'
+    const allTags = modelTags ? `${baseHashtags} ${modelTags}` : baseHashtags
+
+    const shareText =
+      platform === 'twitter'
+        ? `Novita Render Arena — Side-by-Side\nPrompt: "${truncatedPrompt}"\n👉 Which model wins?\n\n${allTags}`
+        : `Novita Render Arena — Side-by-Side\nPrompt: "${truncatedPrompt}"\n👉 Which model wins?\n`
 
     const encodedUrl = encodeURIComponent(linkToShare)
     const encodedText = encodeURIComponent(shareText)
