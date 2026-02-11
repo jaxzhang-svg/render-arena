@@ -3,6 +3,7 @@
 import React, { useId, useState, useEffect } from 'react'
 import { Button } from '@/components/base/button'
 import { Menu } from '@base-ui/react/menu'
+import { Tooltip } from '@base-ui/react/tooltip'
 import { Maximize, RotateCcw, DollarSign, Clock, Code2, Eye } from 'lucide-react'
 import Image from 'next/image'
 import { ModelSettingsPopover } from '@/components/playground/model-settings-modal'
@@ -115,7 +116,7 @@ export function ModelPanel({
                 openOnHover
                 className={cn(
                   'inline-flex items-center justify-center rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
-                  'h-8 cursor-pointer gap-2 bg-white px-3 py-1.5',
+                  'h-8 cursor-pointer gap-2 bg-white px-3 py-1.5 w-auto',
                   'hover:bg-[#F5F5F5]',
                   'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
                 )}
@@ -130,11 +131,6 @@ export function ModelPanel({
                 <span className="font-sans text-[16px] font-medium text-[#4f4e4a]">
                   {selectedModel.name}
                 </span>
-                {selectedModel.outputPrice !== undefined && (
-                  <span className="rounded-md bg-gradient-to-r from-blue-50 to-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700 ring-1 ring-indigo-700/10 ring-inset">
-                    ${selectedModel.outputPrice}/Mt
-                  </span>
-                )}
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path
                     d="M5 7.5L10 12.5L15 7.5"
@@ -228,17 +224,46 @@ export function ModelPanel({
                     <div className="size-4 animate-spin rounded-full border-2 border-[#23d57c] border-t-transparent" />
                   )}
 
-                  {/* Cost Badge */}
+                  {/* Cost Badge with Tooltip */}
                   {cost !== null && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset">
-                      <DollarSign className="size-3.5" />
-                      <span>{cost.toFixed(4)}</span>
-                      {isCostWinner && costRatio && costRatio > 1.5 && (
-                        <span className="ml-0.5 text-xs text-green-600">
-                          {costRatio.toFixed(1)}x cheaper
-                        </span>
-                      )}
-                    </span>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger
+                        delay={100}
+                        className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset cursor-default hover:bg-green-100 transition-colors"
+                      >
+                        <DollarSign className="size-3.5" />
+                        <span>{cost.toFixed(4)}</span>
+                        {isCostWinner && costRatio && costRatio > 1.5 && (
+                          <span className="ml-0.5 text-xs text-green-600">
+                            {costRatio.toFixed(1)}x cheaper
+                          </span>
+                        )}
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Positioner sideOffset={8}>
+                          <Tooltip.Popup className="z-50 min-w-[180px] rounded-lg border border-[#e7e6e2] bg-white p-2 shadow-lg">
+                            <div className="flex flex-col gap-1.5 text-sm">
+                              {selectedModel.inputPrice !== undefined && (
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[#666]">Input Price</span>
+                                  <span className="font-medium text-[#292827]">
+                                    ${selectedModel.inputPrice}/Mt
+                                  </span>
+                                </div>
+                              )}
+                              {selectedModel.outputPrice !== undefined && (
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[#666]">Output Price</span>
+                                  <span className="font-medium text-[#292827]">
+                                    ${selectedModel.outputPrice}/Mt
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </Tooltip.Popup>
+                        </Tooltip.Positioner>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
                   )}
 
                   {/* Duration Badge */}

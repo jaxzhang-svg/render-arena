@@ -133,16 +133,250 @@ export type LLMModel = {
   outputPrice?: number // Price per million tokens (Mt)
 }
 
-interface LegacyModelGroup {
+// Complete model list with all fields - single source of truth
+const allModels: LLMModel[] = [
+  // DeepSeek
+  {
+    id: 'deepseek/deepseek-v3.2',
+    name: 'DeepSeek V3.2',
+    icon: '/logo/models/deepseek-color.svg',
+    color: '#4D6BFE',
+    group: 'DeepSeek',
+    inputPrice: 0.269,
+    outputPrice: 0.4,
+  },
+  {
+    id: 'deepseek/deepseek-v3.1',
+    name: 'DeepSeek V3.1',
+    icon: '/logo/models/deepseek-color.svg',
+    color: '#4D6BFE',
+    group: 'DeepSeek',
+    inputPrice: 0.269,
+    outputPrice: 0.4,
+  },
+  // GLM
+  {
+    id: 'zai-org/glm-4.7',
+    name: 'GLM 4.7',
+    icon: '/logo/models/zai.svg',
+    color: '#000',
+    group: 'GLM',
+    inputPrice: 0.6,
+    outputPrice: 2.2,
+  },
+  {
+    id: 'zai-org/glm-4.6',
+    name: 'GLM 4.6',
+    icon: '/logo/models/zai.svg',
+    color: '#000',
+    group: 'GLM',
+    inputPrice: 0.6,
+    outputPrice: 2.2,
+  },
+  // Minimax
+  {
+    id: 'minimax/minimax-m2.1',
+    name: 'Minimax M2.1',
+    icon: '/logo/models/minimax-color.svg',
+    color: '#F23F5D',
+    group: 'Minimax',
+    inputPrice: 0.3,
+    outputPrice: 1.2,
+  },
+  {
+    id: 'minimax/minimax-m2',
+    name: 'Minimax M2',
+    icon: '/logo/models/minimax-color.svg',
+    color: '#F23F5D',
+    group: 'Minimax',
+    inputPrice: 0.3,
+    outputPrice: 1.2,
+  },
+  // Kimi
+  {
+    id: 'moonshotai/kimi-k2.5',
+    name: 'Kimi K2.5 Thinking',
+    icon: '/logo/models/kimi-color.svg',
+    color: '#000',
+    group: 'Kimi',
+    inputPrice: 0.6,
+    outputPrice: 3.0,
+  },
+  {
+    id: 'moonshotai/kimi-k2-thinking',
+    name: 'Kimi K2 Thinking',
+    icon: '/logo/models/kimi-color.svg',
+    color: '#000',
+    group: 'Kimi',
+    inputPrice: 0.6,
+    outputPrice: 3.0,
+  },
+  // Qwen
+  {
+    id: 'qwen/qwen3-coder-next',
+    name: 'Qwen3 Coder Next',
+    icon: '/logo/models/qwen-color.svg',
+    color: '#615CED',
+    group: 'Qwen',
+    inputPrice: 0.2,
+    outputPrice: 1.5,
+  },
+  // GPT
+  {
+    id: 'pa/gpt-5.2',
+    name: 'GPT 5.2',
+    icon: '/logo/models/openai.svg',
+    color: '#000',
+    group: 'GPT',
+    inputPrice: 1.75,
+    outputPrice: 14.0,
+  },
+  {
+    id: 'pa/gpt-5.1-codex',
+    name: 'GPT 5.1 Codex',
+    icon: '/logo/models/openai.svg',
+    color: '#000',
+    group: 'GPT',
+    inputPrice: 1.5,
+    outputPrice: 12.0,
+  },
+  {
+    id: 'pa/gt-4.1',
+    name: 'GPT 4.1',
+    icon: '/logo/models/openai.svg',
+    color: '#000',
+    group: 'GPT',
+    inputPrice: 1.0,
+    outputPrice: 8.0,
+  },
+  // Claude
+  {
+    id: 'pa/claude-opus-4-6',
+    name: 'Claude Opus 4.6',
+    icon: '/logo/models/claude-color.svg',
+    color: '#D97757',
+    group: 'Claude',
+    inputPrice: 5.0,
+    outputPrice: 25.0,
+  },
+  {
+    id: 'pa/claude-opus-4-5-20251101',
+    name: 'Claude Opus 4.5',
+    icon: '/logo/models/claude-color.svg',
+    color: '#D97757',
+    group: 'Claude',
+    inputPrice: 4.0,
+    outputPrice: 20.0,
+  },
+  {
+    id: 'pa/claude-sonnet-4-5-20250929',
+    name: 'Claude Sonnet 4.5',
+    icon: '/logo/models/claude-color.svg',
+    color: '#D97757',
+    group: 'Claude',
+    inputPrice: 1.5,
+    outputPrice: 7.5,
+  },
+  {
+    id: 'pa/claude-haiku-4-5-20251001',
+    name: 'Claude Haiku 4.5',
+    icon: '/logo/models/claude-color.svg',
+    color: '#D97757',
+    group: 'Claude',
+    inputPrice: 0.5,
+    outputPrice: 2.5,
+  },
+  // Gemini
+  {
+    id: 'pa/gemini-3-pro-preview',
+    name: 'Gemini 3 Pro',
+    icon: '/logo/models/gemini-color.svg',
+    color: '#FFF',
+    group: 'Gemini',
+    inputPrice: 2.0,
+    outputPrice: 12.0,
+  },
+  {
+    id: 'pa/gemini-3-flash-preview',
+    name: 'Gemini 3 Flash',
+    icon: '/logo/models/gemini-color.svg',
+    color: '#FFF',
+    group: 'Gemini',
+    inputPrice: 0.5,
+    outputPrice: 3.0,
+  },
+  // Grok
+  {
+    id: 'pa/grok-4-1-fast-reasoning',
+    name: 'Grok 4.1 Fast Reasoning',
+    icon: '/logo/models/grok.svg',
+    color: '#000',
+    group: 'Grok',
+    inputPrice: 0.2,
+    outputPrice: 0.5,
+  },
+  {
+    id: 'pa/grok-code-fast-1',
+    name: 'Grok Code Fast 1',
+    icon: '/logo/models/grok.svg',
+    color: '#000',
+    group: 'Grok',
+    inputPrice: 0.15,
+    outputPrice: 0.4,
+  },
+  // Doubao
+  {
+    id: 'pa/doubao-1-5-pro-32k-250115',
+    name: 'Doubao 1.5 Pro',
+    icon: '/logo/models/doubao-color.svg',
+    color: '#FFF',
+    group: 'Doubao',
+    inputPrice: 0.8,
+    outputPrice: 2.0,
+  },
+  {
+    id: 'pa/doubao-seed-1.6',
+    name: 'Doubao Seed 1.6',
+    icon: '/logo/models/doubao-color.svg',
+    color: '#FFF',
+    group: 'Doubao',
+    inputPrice: 0.5,
+    outputPrice: 1.5,
+  },
+]
+
+// Create a map for quick lookup
+const modelMap = new Map(allModels.map(m => [m.id, m]))
+
+// UI selector group configuration - only declares structure and IDs
+interface ModelGroupConfig {
   group: string
-  icon: string
-  color: string
-  items: Array<{
-    id: string
-    name: string
-  }>
+  modelIds: string[]
 }
 
+const modelGroupConfigs: ModelGroupConfig[] = [
+  {
+    group: 'Open Source',
+    modelIds: [
+      'deepseek/deepseek-v3.2',
+      'zai-org/glm-4.7',
+      'minimax/minimax-m2.1',
+      'moonshotai/kimi-k2.5',
+      'qwen/qwen3-coder-next',
+    ],
+  },
+  {
+    group: 'Proprietary',
+    modelIds: [
+      'pa/gpt-5.2',
+      'pa/claude-opus-4-6',
+      'pa/gemini-3-pro-preview',
+      'pa/grok-4-1-fast-reasoning',
+    ],
+  },
+]
+
+// Generate model groups with full data from allModels
 interface ModelGroup {
   group: string
   items: Array<{
@@ -150,216 +384,34 @@ interface ModelGroup {
     name: string
     icon: string
     color: string
-    inputPrice: number // Price per million tokens (Mt)
-    outputPrice: number // Price per million tokens (Mt)
+    inputPrice: number
+    outputPrice: number
   }>
 }
 
-// Legacy model groups - kept for existing apps that reference these models
-export const legacyModelGroups: LegacyModelGroup[] = [
-  {
-    group: 'DeepSeek',
-    icon: '/logo/models/deepseek-color.svg',
-    color: '#4D6BFE',
-    items: [
-      { id: 'deepseek/deepseek-v3.2', name: 'DeepSeek V3.2' },
-      { id: 'deepseek/deepseek-v3.1', name: 'DeepSeek V3.1' },
-    ],
-  },
-  {
-    group: 'GLM',
-    icon: '/logo/models/zai.svg',
-    color: '#000',
-    items: [
-      { id: 'zai-org/glm-4.7', name: 'GLM 4.7' },
-      { id: 'zai-org/glm-4.6', name: 'GLM 4.6' },
-    ],
-  },
-  {
-    group: 'Minimax',
-    icon: '/logo/models/minimax-color.svg',
-    color: '#F23F5D',
-    items: [
-      { id: 'minimax/minimax-m2.1', name: 'Minimax M2.1' },
-      { id: 'minimax/minimax-m2', name: 'Minimax M2' },
-    ],
-  },
-  {
-    group: 'Kimi',
-    icon: '/logo/models/kimi-color.svg',
-    color: '#000',
-    items: [
-      { id: 'moonshotai/kimi-k2.5', name: 'Kimi K2.5 Thinking' },
-      { id: 'moonshotai/kimi-k2-thinking', name: 'Kimi K2 Thinking' },
-    ],
-  },
-  {
-    group: 'Qwen',
-    icon: '/logo/models/qwen-color.svg',
-    color: '#615CED',
-    items: [{ id: 'qwen/qwen3-coder-next', name: 'Qwen3 Coder Next' }],
-  },
-  {
-    group: 'GPT',
-    icon: '/logo/models/openai.svg',
-    color: '#000',
-    items: [
-      { id: 'pa/gpt-5.2', name: 'GPT 5.2' },
-      { id: 'pa/gpt-5.1-codex', name: 'GPT 5.1 Codex' },
-      { id: 'pa/gt-4.1', name: 'GPT 4.1' },
-    ],
-  },
-  {
-    group: 'Claude',
-    icon: '/logo/models/claude-color.svg',
-    color: '#D97757',
-    items: [
-      { id: 'pa/claude-opus-4-6', name: 'Claude Opus 4.6' },
-      { id: 'pa/claude-opus-4-5-20251101', name: 'Claude Opus 4.5' },
-      { id: 'pa/claude-sonnet-4-5-20250929', name: 'Claude Sonnet 4.5' },
-      { id: 'pa/claude-haiku-4-5-20251001', name: 'Claude Haiku 4.5' },
-    ],
-  },
-  {
-    group: 'Gemini',
-    icon: '/logo/models/gemini-color.svg',
-    color: '#FFF',
-    items: [
-      { id: 'pa/gemini-3-pro-preview', name: 'Gemini 3 Pro' },
-      { id: 'pa/gemini-3-flash-preview', name: 'Gemini 3 Flash' },
-    ],
-  },
-  {
-    group: 'Grok',
-    icon: '/logo/models/grok.svg',
-    color: '#000',
-    items: [
-      { id: 'pa/grok-4-1-fast-reasoning', name: 'Grok 4.1 Fast Reasoning' },
-      { id: 'pa/grok-code-fast-1', name: 'Grok Code Fast 1' },
-    ],
-  },
-  {
-    group: 'Doubao',
-    icon: '/logo/models/doubao-color.svg',
-    color: '#FFF',
-    items: [
-      { id: 'pa/doubao-1-5-pro-32k-250115', name: 'Doubao 1.5 Pro' },
-      { id: 'pa/doubao-seed-1.6', name: 'Doubao Seed 1.6' },
-    ],
-  },
-]
+export const modelGroups: ModelGroup[] = modelGroupConfigs.map(config => ({
+  group: config.group,
+  items: config.modelIds
+    .map(id => {
+      const model = modelMap.get(id)
+      if (!model) {
+        console.warn(`Model ${id} not found in allModels`)
+        return null
+      }
+      return {
+        id: model.id,
+        name: model.name,
+        icon: model.icon,
+        color: model.color,
+        inputPrice: model.inputPrice ?? 0,
+        outputPrice: model.outputPrice ?? 0,
+      }
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null),
+}))
 
-// New simplified model groups for the UI selector
-export const modelGroups: ModelGroup[] = [
-  {
-    group: 'Open Source',
-    items: [
-      {
-        id: 'deepseek/deepseek-v3.2',
-        name: 'DeepSeek V3.2',
-        icon: '/logo/models/deepseek-color.svg',
-        color: '#4D6BFE',
-        inputPrice: 0.269,
-        outputPrice: 0.4,
-      },
-      {
-        id: 'zai-org/glm-4.7',
-        name: 'GLM 4.7',
-        icon: '/logo/models/zai.svg',
-        color: '#000',
-        inputPrice: 0.6,
-        outputPrice: 2.2,
-      },
-      {
-        id: 'minimax/minimax-m2.1',
-        name: 'Minimax M2.1',
-        icon: '/logo/models/minimax-color.svg',
-        color: '#F23F5D',
-        inputPrice: 0.3,
-        outputPrice: 1.2,
-      },
-      {
-        id: 'moonshotai/kimi-k2.5',
-        name: 'Kimi K2.5 Thinking',
-        icon: '/logo/models/kimi-color.svg',
-        color: '#000',
-        inputPrice: 0.6,
-        outputPrice: 3.0,
-      },
-      {
-        id: 'qwen/qwen3-coder-next',
-        name: 'Qwen3 Coder Next',
-        icon: '/logo/models/qwen-color.svg',
-        color: '#615CED',
-        inputPrice: 0.2,
-        outputPrice: 1.5,
-      },
-    ],
-  },
-  {
-    group: 'Proprietary',
-    items: [
-      {
-        id: 'pa/gpt-5.2',
-        name: 'GPT 5.2',
-        icon: '/logo/models/openai.svg',
-        color: '#000',
-        inputPrice: 1.75,
-        outputPrice: 14.0,
-      },
-      {
-        id: 'pa/claude-opus-4-6',
-        name: 'Claude Opus 4.6',
-        icon: '/logo/models/claude-color.svg',
-        color: '#D97757',
-        inputPrice: 6.0,
-        outputPrice: 30.0,
-      },
-      {
-        id: 'pa/gemini-3-pro-preview',
-        name: 'Gemini 3 Pro',
-        icon: '/logo/models/gemini-color.svg',
-        color: '#FFF',
-        inputPrice: 2.0,
-        outputPrice: 12.0,
-      },
-      {
-        id: 'pa/grok-4-1-fast-reasoning',
-        name: 'Grok 4.1 Fast Reasoning',
-        icon: '/logo/models/grok.svg',
-        color: '#000',
-        inputPrice: 0.2,
-        outputPrice: 0.5,
-      },
-    ],
-  },
-]
-
-// Combine both for backward compatibility
-const allModelsFromGroups = legacyModelGroups.flatMap(group =>
-  group.items.map(item => ({
-    id: item.id,
-    name: item.name,
-    group: group.group,
-    color: group.color ?? group.color ?? '#000',
-    icon: group.icon ?? group.icon ?? '',
-  }))
-)
-
-const legacyModels = legacyModelGroups.flatMap(group =>
-  group.items.map(item => ({
-    id: item.id,
-    name: item.name,
-    group: group.group,
-    color: group.color ?? '#000',
-    icon: group.icon ?? '',
-  }))
-)
-
-// Unique models by ID
-export const models: LLMModel[] = Array.from(
-  new Map([...allModelsFromGroups, ...legacyModels].map(m => [m.id, m])).values()
-)
+// Export all models for backward compatibility
+export const models: LLMModel[] = allModels
 
 export const defaultModelAId = 'pa/claude-opus-4-6'
 export const defaultModelBId = 'moonshotai/kimi-k2.5'

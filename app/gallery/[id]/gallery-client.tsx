@@ -341,17 +341,46 @@ export default function GalleryClient({ app }: GalleryClientProps) {
 
                       return (
                         <div className="flex items-center gap-2">
-                          {/* Cost Badge */}
+                          {/* Cost Badge with Tooltip */}
                           {cost !== null && (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset">
-                              <DollarSign className="size-3.5" />
-                              <span>{cost.toFixed(4)}</span>
-                              {isCostWinner && costRatio && costRatio > 1.5 && (
-                                <span className="ml-0.5 text-xs text-green-600">
-                                  {costRatio.toFixed(1)}x cheaper
-                                </span>
-                              )}
-                            </span>
+                            <Tooltip.Root>
+                              <Tooltip.Trigger
+                                delay={100}
+                                className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset cursor-default hover:bg-green-100 transition-colors"
+                              >
+                                <DollarSign className="size-3.5" />
+                                <span>{cost.toFixed(4)}</span>
+                                {isCostWinner && costRatio && costRatio > 1.5 && (
+                                  <span className="ml-0.5 text-xs text-green-600">
+                                    {costRatio.toFixed(1)}x cheaper
+                                  </span>
+                                )}
+                              </Tooltip.Trigger>
+                              <Tooltip.Portal>
+                                <Tooltip.Positioner sideOffset={8}>
+                                  <Tooltip.Popup className="z-50 min-w-[180px] rounded-lg border border-[#e7e6e2] bg-white p-2 shadow-lg">
+                                    <div className="flex flex-col gap-1.5 text-sm">
+                                      {modelA.inputPrice !== undefined && (
+                                        <div className="flex items-center justify-between">
+                                          <span className="text-[#666]">Input Price</span>
+                                          <span className="font-medium text-[#292827]">
+                                            ${modelA.inputPrice}/Mt
+                                          </span>
+                                        </div>
+                                      )}
+                                      {modelA.outputPrice !== undefined && (
+                                        <div className="flex items-center justify-between">
+                                          <span className="text-[#666]">Output Price</span>
+                                          <span className="font-medium text-[#292827]">
+                                            ${modelA.outputPrice}/Mt
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </Tooltip.Popup>
+                                </Tooltip.Positioner>
+                              </Tooltip.Portal>
+                            </Tooltip.Root>
                           )}
 
                           {/* Duration Badge */}
@@ -438,17 +467,46 @@ export default function GalleryClient({ app }: GalleryClientProps) {
 
                       return (
                         <div className="flex items-center gap-2">
-                          {/* Cost Badge */}
+                          {/* Cost Badge with Tooltip */}
                           {cost !== null && (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2.5 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset">
-                              <DollarSign className="size-3.5" />
-                              <span>{cost.toFixed(4)}</span>
-                              {isCostWinner && costRatio && costRatio > 1.5 && (
-                                <span className="ml-0.5 text-xs text-green-600">
-                                  {costRatio.toFixed(1)}x cheaper
-                                </span>
-                              )}
-                            </span>
+                            <Tooltip.Root>
+                              <Tooltip.Trigger
+                                delay={100}
+                                className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2.5 py-1 text-sm font-semibold text-green-700 ring-1 ring-green-700/10 ring-inset cursor-default hover:bg-green-100 transition-colors"
+                              >
+                                <DollarSign className="size-3.5" />
+                                <span>{cost.toFixed(4)}</span>
+                                {isCostWinner && costRatio && costRatio > 1.5 && (
+                                  <span className="ml-0.5 text-xs text-green-600">
+                                    {costRatio.toFixed(1)}x cheaper
+                                  </span>
+                                )}
+                              </Tooltip.Trigger>
+                              <Tooltip.Portal>
+                                <Tooltip.Positioner sideOffset={8}>
+                                  <Tooltip.Popup className="z-50 min-w-[180px] rounded-lg border border-[#e7e6e2] bg-white p-2 shadow-lg">
+                                    <div className="flex flex-col gap-1.5 text-sm">
+                                      {modelB.inputPrice !== undefined && (
+                                        <div className="flex items-center justify-between">
+                                          <span className="text-[#666]">Input Price</span>
+                                          <span className="font-medium text-[#292827]">
+                                            ${modelB.inputPrice}/Mt
+                                          </span>
+                                        </div>
+                                      )}
+                                      {modelB.outputPrice !== undefined && (
+                                        <div className="flex items-center justify-between">
+                                          <span className="text-[#666]">Output Price</span>
+                                          <span className="font-medium text-[#292827]">
+                                            ${modelB.outputPrice}/Mt
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </Tooltip.Popup>
+                                </Tooltip.Positioner>
+                              </Tooltip.Portal>
+                            </Tooltip.Root>
                           )}
 
                           {/* Duration Badge */}

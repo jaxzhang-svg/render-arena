@@ -50,7 +50,7 @@ export function CodingPackageBanner() {
         className="absolute inset-0 top-0 left-0 h-[420px] w-full opacity-30"
         style={{
           background:
-            'linear-gradient(90deg, rgba(34, 197, 94, 0.10) 0.08%, rgba(0, 0, 0, 0.00) 0.08%), linear-gradient(180deg, rgba(34, 197, 94, 0.10) 0.26%, rgba(0, 0, 0, 0.00) 0.26%);',
+            'linear-gradient(90deg, rgba(34, 197, 94, 0.10) 0.08%, rgba(0, 0, 0, 0.00) 0.08%), linear-gradient(180deg, rgba(34, 197, 94, 0.10) 0.26%, rgba(0, 0, 0, 0.00) 0.26%)',
         }}
       >
         <Image
