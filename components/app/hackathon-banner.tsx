@@ -85,10 +85,9 @@ export function HackathonBanner({ onJoinClick }: HackathonBannerProps) {
           </div>
 
           {/* Description */}
-          <div className="mb-[53px] border-l-2 border-[#00FF7F]/40 pl-4">
+          <div className="mb-[78px] border-l-2 border-[#00FF7F]/40 pl-4">
             <p className="max-w-[380px] font-sans text-[14px] leading-6 font-normal text-[#d4d4d4]">
-              A 14-day fully remote battle. Arena battle focused on visual comparison, vibes, and
-              shareability — not machines but artistic vibes.
+              Render Arena focused on visual comparison, vibes, and shareability — not machines but artistic vibes.
             </p>
           </div>
 

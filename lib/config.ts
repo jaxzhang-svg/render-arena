@@ -178,6 +178,16 @@ const allModels: LLMModel[] = [
     inputPrice: 0.6,
     outputPrice: 2.2,
   },
+  {
+    id: 'zai-org/glm-5',
+    name: 'GLM 5',
+    icon: '/logo/models/zai.svg',
+    color: '#000',
+    group: 'GLM',
+    socialTag: 'GLM',
+    inputPrice: 0.6,
+    outputPrice: 2.2,
+  },
   // Minimax
   {
     id: 'minimax/minimax-m2.1',
@@ -382,7 +392,7 @@ const modelGroupConfigs: ModelGroupConfig[] = [
     group: 'Open Source',
     modelIds: [
       'deepseek/deepseek-v3.2',
-      'zai-org/glm-4.7',
+      'zai-org/glm-5',
       'minimax/minimax-m2.1',
       'moonshotai/kimi-k2.5',
       'qwen/qwen3-coder-next',
@@ -437,7 +447,7 @@ export const modelGroups: ModelGroup[] = modelGroupConfigs.map(config => ({
 export const models: LLMModel[] = allModels
 
 export const defaultModelAId = 'pa/claude-opus-4-6'
-export const defaultModelBId = 'moonshotai/kimi-k2.5'
+export const defaultModelBId = 'zai-org/glm-5'
 
 export function getModelById(modelId: string): LLMModel | undefined {
   return models.find(m => m.id === modelId)
