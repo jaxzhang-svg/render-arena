@@ -50,12 +50,12 @@ export async function generateMetadata({ params }: GalleryPageProps): Promise<Me
   const description =
     app.description || app.prompt || 'AI-generated visual creation comparing different models'
 
-  // Check if video is available
   const hasVideo = hasValidStreamVideo(app.preview_video_url)
 
-  // Construct video URLs using utility functions
-  const ogImage =
-    getStreamThumbnailUrl(app.preview_video_url, { time: '1s', height: 630 }) || defaultOgImage
+  const hasCoverImage = !!app.cover_image_url
+  const fallbackOgImage = !hasCoverImage
+    ? getStreamThumbnailUrl(app.preview_video_url, { time: '1s', height: 630 }) || defaultOgImage
+    : null
   const url = `${siteUrl}/gallery/${id}`
   const twitterPlayerUrl = getStreamIframeUrl(app.preview_video_url)
   const videoStreamUrl = getStreamWatchUrl(app.preview_video_url)
@@ -70,14 +70,17 @@ export async function generateMetadata({ params }: GalleryPageProps): Promise<Me
       title: `${title} | ${siteName}`,
       description,
       siteName,
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      // Only set images explicitly when no cover image (otherwise opengraph-image.tsx handles it)
+      ...(fallbackOgImage && {
+        images: [
+          {
+            url: fallbackOgImage,
+            width: 1200,
+            height: 630,
+            alt: title,
+          },
+        ],
+      }),
       publishedTime: app.created_at,
       modifiedTime: app.updated_at,
       authors: [app.user_email || 'Anonymous'],
@@ -99,7 +102,7 @@ export async function generateMetadata({ params }: GalleryPageProps): Promise<Me
       creator: '@novita_labs',
       title: `${title} | ${siteName}`,
       description,
-      images: [ogImage],
+      ...(fallbackOgImage && { images: [fallbackOgImage] }),
       ...(hasVideo &&
         twitterPlayerUrl &&
         videoStreamUrl && {

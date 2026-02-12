@@ -51,6 +51,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
   const [iframeALoaded, setIframeALoaded] = useState(false)
   const [iframeBLoaded, setIframeBLoaded] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const modelA = getModelById(app.model_a)
   const modelB = getModelById(app.model_b)
@@ -171,9 +172,19 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         }}
         onMouseEnter={() => {
           setIsHovered(true)
-          setHasHovered(true)
+          // Delay iframe loading to distinguish intentional hover from mouse pass-over
+          if (!hasHovered) {
+            hoverTimerRef.current = setTimeout(() => setHasHovered(true), 800)
+          }
         }}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseLeave={() => {
+          setIsHovered(false)
+          // Cancel pending iframe load if user left before the delay
+          if (hoverTimerRef.current) {
+            clearTimeout(hoverTimerRef.current)
+            hoverTimerRef.current = null
+          }
+        }}
         className="group/card relative flex aspect-[8/3] w-full cursor-pointer overflow-hidden rounded-2xl bg-[#ececf0]"
       >
         {/* Preview: Priority 1: Video > Priority 2: Cover Image > Priority 3: Live Iframe */}
