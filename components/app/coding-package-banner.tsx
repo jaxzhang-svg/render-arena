@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useJoinWaitlist } from '@/hooks/use-join-waitlist'
 import { CODING_PLAN_MODE, codingPlanConfig } from '@/lib/config'
+import { trackCodingPlanWaitlistClicked } from '@/lib/analytics'
 
 export function CodingPackageBanner() {
   const mode = CODING_PLAN_MODE
@@ -27,6 +28,7 @@ export function CodingPackageBanner() {
     } else {
       waitlistHook.joinWaitlist()
     }
+    trackCodingPlanWaitlistClicked()
   }
 
   const getButtonText = () => {
