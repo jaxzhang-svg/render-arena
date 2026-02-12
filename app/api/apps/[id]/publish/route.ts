@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { generateCoverImage } from '@/lib/cover-image'
 
 /**
  * POST /api/apps/[id]/publish
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // 获取 App 并验证权限
     const { data: app, error: fetchError } = await adminClient
       .from('apps')
-      .select('user_id, is_public, prompt, name')
+      .select('user_id, is_public, prompt, name, cover_image_url')
       .eq('id', id)
       .single()
 
@@ -123,6 +124,13 @@ Return JSON: { "category": "xxx", "title": "xxx" }`,
     if (updateError) {
       console.error('Error publishing app:', updateError)
       return NextResponse.json({ error: 'Failed to publish app' }, { status: 500 })
+    }
+
+    // Fire-and-forget: trigger async cover image generation if not already present
+    if (!app.cover_image_url && app.prompt) {
+      generateCoverImage(id, app.prompt).catch(err =>
+        console.error(`[publish] Background cover image generation failed for app ${id}:`, err)
+      )
     }
 
     return NextResponse.json({

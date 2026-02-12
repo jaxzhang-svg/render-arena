@@ -26,6 +26,7 @@ export interface App {
   html_content_a: string | null
   html_content_b: string | null
   preview_video_url: string | null
+  cover_image_url: string | null
   like_count: number
   view_count: number
   is_public: boolean

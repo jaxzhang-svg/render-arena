@@ -48,6 +48,8 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
 
   const [isHovered, setIsHovered] = useState(false)
   const [hasHovered, setHasHovered] = useState(false)
+  const [iframeALoaded, setIframeALoaded] = useState(false)
+  const [iframeBLoaded, setIframeBLoaded] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   const modelA = getModelById(app.model_a)
@@ -55,6 +57,10 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
 
   // Check if this app has a video preview
   const hasVideo = hasValidStreamVideo(app.preview_video_url)
+  const hasCoverImage = !!app.cover_image_url
+
+  // Whether both hover iframes are loaded and ready to display
+  const iframesReady = iframeALoaded && iframeBLoaded
 
   // Construct video URLs using utility functions
   const thumbnailUrl = getStreamThumbnailUrl(app.preview_video_url, { time: '1s' })
@@ -170,7 +176,7 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
         onMouseLeave={() => setIsHovered(false)}
         className="group/card relative flex aspect-[8/3] w-full cursor-pointer overflow-hidden rounded-2xl bg-[#ececf0]"
       >
-        {/* Video or Image Preview or Iframe */}
+        {/* Preview: Priority 1: Video > Priority 2: Cover Image > Priority 3: Live Iframe */}
         {hasVideo ? (
           <div className="absolute inset-0 size-full origin-center transition-transform duration-700 ease-in-out group-hover/card:scale-110">
             <Image
@@ -194,7 +200,72 @@ function GalleryAppCard({ app, currentCategory }: GalleryAppCardProps) {
               />
             )}
           </div>
+        ) : hasCoverImage ? (
+          <div className="absolute inset-0 size-full origin-center transition-transform duration-700 ease-in-out group-hover/card:scale-110">
+            {/* Cover image (always rendered) */}
+            <Image
+              src={app.cover_image_url!}
+              alt={app.name || 'App Preview'}
+              fill
+              className={`h-full w-full object-cover transition-opacity duration-300 ${
+                isHovered && iframesReady ? 'opacity-0' : 'opacity-100'
+              }`}
+              unoptimized
+            />
+
+            {/* Loading indicator — subtle shimmer bar at bottom when hovering but iframes not ready */}
+            {isHovered && !iframesReady && (
+              <div className="absolute right-0 bottom-0 left-0 z-20 h-0.5 overflow-hidden">
+                <div className="animate-shimmer h-full w-full bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+              </div>
+            )}
+
+            {/* Lazy-loaded dual iframes on hover */}
+            {hasHovered && (
+              <div
+                className={`absolute inset-0 flex h-full w-full transition-opacity duration-300 ${
+                  isHovered && iframesReady ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                <div className="relative h-full w-1/2 overflow-hidden">
+                  <iframe
+                    srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${app.html_content_a || ''}`}
+                    className="absolute inset-0 h-full w-full border-0 bg-white"
+                    title={app.name || 'App Preview A'}
+                    sandbox="allow-scripts allow-forms"
+                    allow="accelerometer; autoplay; fullscreen; clipboard-write; web-share; encrypted-media; gyroscope;"
+                    onLoad={() => setIframeALoaded(true)}
+                    style={{
+                      pointerEvents: 'none',
+                      transform: 'scale(0.25)',
+                      transformOrigin: '0px 0px',
+                      width: '400%',
+                      height: '400%',
+                    }}
+                  />
+                </div>
+                <div className="relative h-full w-1/2 overflow-hidden">
+                  <iframe
+                    srcDoc={`<style>html,body{margin:0;padding:0;overflow:hidden;}</style>${app.html_content_b || ''}`}
+                    className="absolute inset-0 h-full w-full border-0 bg-white"
+                    title={app.name || 'App Preview B'}
+                    sandbox="allow-scripts allow-forms"
+                    allow="accelerometer; autoplay; fullscreen; clipboard-write; web-share; encrypted-media; gyroscope;"
+                    onLoad={() => setIframeBLoaded(true)}
+                    style={{
+                      pointerEvents: 'none',
+                      transform: 'scale(0.25)',
+                      transformOrigin: '0px 0px',
+                      width: '400%',
+                      height: '400%',
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         ) : (
+          /* Fallback: live dual iframe preview (no cover image, no video) */
           <div className="absolute inset-0 size-full origin-center transition-transform duration-700 ease-in-out group-hover/card:scale-110">
             <div className="absolute inset-0 flex h-full w-full">
               <div className="relative h-full w-1/2 overflow-hidden">

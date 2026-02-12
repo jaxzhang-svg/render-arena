@@ -115,6 +115,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       'tokens_a',
       'duration_b',
       'tokens_b',
+      'cover_image_url',
     ]
     const updateData: Record<string, unknown> = {}
 
