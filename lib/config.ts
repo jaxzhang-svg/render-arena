@@ -200,6 +200,16 @@ const allModels: LLMModel[] = [
     outputPrice: 1.2,
   },
   {
+    id: 'minimax/minimax-m2.5',
+    name: 'Minimax M2.5',
+    icon: '/logo/models/minimax-color.svg',
+    color: '#F23F5D',
+    group: 'Minimax',
+    socialTag: 'Minimax',
+    inputPrice: 0.3,
+    outputPrice: 1.2,
+  },
+  {
     id: 'minimax/minimax-m2',
     name: 'Minimax M2',
     icon: '/logo/models/minimax-color.svg',
@@ -393,7 +403,7 @@ const modelGroupConfigs: ModelGroupConfig[] = [
     modelIds: [
       'deepseek/deepseek-v3.2',
       'zai-org/glm-5',
-      'minimax/minimax-m2.1',
+      'minimax/minimax-m2.5',
       'moonshotai/kimi-k2.5',
       'qwen/qwen3-coder-next',
     ],
@@ -447,7 +457,7 @@ export const modelGroups: ModelGroup[] = modelGroupConfigs.map(config => ({
 export const models: LLMModel[] = allModels
 
 export const defaultModelAId = 'pa/claude-opus-4-6'
-export const defaultModelBId = 'zai-org/glm-5'
+export const defaultModelBId = 'minimax/minimax-m2.5'
 
 export function getModelById(modelId: string): LLMModel | undefined {
   return models.find(m => m.id === modelId)
