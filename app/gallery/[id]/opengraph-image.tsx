@@ -178,39 +178,13 @@ export default async function OGImage({ params }: { params: Promise<{ id: string
           </div>
 
           {/* Bottom-left: Title — dark glass panel */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '32px',
-              left: '32px',
-              display: 'flex',
-              ...glassStyle,
-              borderRadius: '14px',
-              padding: '14px 26px',
-              maxWidth: '700px',
-            }}
-          >
-            <div
-              style={{
-                color: 'white',
-                fontSize: '36px',
-                fontWeight: 600,
-                lineHeight: 1.2,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {title}
-            </div>
-          </div>
 
-          {/* Bottom-right: Model A VS Model B — dark glass panel */}
+          {/* Top-right: Model A VS Model B — dark glass panel */}
           {(modelA || modelB) && (
             <div
               style={{
                 position: 'absolute',
-                bottom: '32px',
+                top: '28px',
                 right: '32px',
                 display: 'flex',
                 alignItems: 'center',
