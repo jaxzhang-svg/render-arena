@@ -516,7 +516,7 @@ export const codingPlanConfig = {
 
 // External Links
 export const NOVITA_BILLING_URL = 'https://novita.ai/billing'
-export const DISCORD_INVITE_URL = 'https://discord.gg/x9YbHHCptj'
+export const DISCORD_INVITE_URL = 'https://discord.gg/MU2hWB4sYd'
 
 // External API
 export const KIMI_API_URL = 'https://api.moonshot.cn/v1/chat/completions'
