@@ -251,6 +251,16 @@ const allModels: LLMModel[] = [
     inputPrice: 0.2,
     outputPrice: 1.5,
   },
+  {
+    id: 'qwen/qwen3.5-397b-a17b',
+    name: 'Qwen3.5-397B-A17B',
+    icon: '/logo/models/qwen-color.svg',
+    color: '#615CED',
+    group: 'Qwen',
+    socialTag: 'Qwen',
+    inputPrice: 0.6,
+    outputPrice: 3.6,
+  },
   // GPT
   {
     id: 'pa/gpt-5.2',
@@ -405,7 +415,7 @@ const modelGroupConfigs: ModelGroupConfig[] = [
       'zai-org/glm-5',
       'minimax/minimax-m2.5',
       'moonshotai/kimi-k2.5',
-      'qwen/qwen3-coder-next',
+      'qwen/qwen3.5-397b-a17b',
     ],
   },
   {
@@ -457,7 +467,7 @@ export const modelGroups: ModelGroup[] = modelGroupConfigs.map(config => ({
 export const models: LLMModel[] = allModels
 
 export const defaultModelAId = 'pa/claude-opus-4-6'
-export const defaultModelBId = 'minimax/minimax-m2.5'
+export const defaultModelBId = 'qwen/qwen3.5-397b-a17b'
 
 export function getModelById(modelId: string): LLMModel | undefined {
   return models.find(m => m.id === modelId)
