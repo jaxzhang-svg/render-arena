@@ -204,7 +204,7 @@ export default function HomePage() {
                       }}
                       variant="default"
                       size="small"
-                      className="w-[196px]"
+                      className="w-[210px]"
                     />
                   </div>
 
